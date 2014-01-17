@@ -79,17 +79,17 @@ class Tracker
 
     public function getUserId()
     {
-        return (string) UUID::uuid4();
+        return 1; //(string) UUID::uuid4();
     }
 
     public function getDeviceId()
     {
-        return (string) UUID::uuid4();
+        return 1; //(string) UUID::uuid4();
     }
 
     public function getAgentId()
     {
-        return (string) UUID::uuid4();
+        return 1; //(string) UUID::uuid4();
     }
 
 

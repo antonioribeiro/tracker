@@ -52,9 +52,9 @@ class Repository implements RepositoryInterface {
 			$model = $this->sessionRepository->create(
 														array(
 																'session_uuid' => $data['session_uuid'],
-																'agent_uuid' => $data['agent_uuid'],
-																'device_uuid' => $data['device_uuid'],
-																'user_uuid' => $data['user_uuid'],
+																'agent_id' => $data['agent_id'],
+																'device_id' => $data['device_id'],
+																'user_id' => $data['user_id'],
 															)
 				);
 		}
