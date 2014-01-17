@@ -1,6 +1,6 @@
-<?php namespace PragmaRX\Steroids\Vendor\Laravel;
+<?php namespace PragmaRX\Devices\Vendor\Laravel;
 /**
- * Part of the Steroids package.
+ * Part of the Devices package.
  *
  * NOTICE OF LICENSE
  *
@@ -10,7 +10,7 @@
  * bundled with this package in the LICENSE file.  It is also available at
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
- * @package    Steroids
+ * @package    Devices
  * @version    1.0.0
  * @author     Antonio Carlos Ribeiro @ PragmaRX
  * @license    BSD License (3-clause)
@@ -29,7 +29,7 @@ class Facade extends IlluminateFacade {
      */
     protected static function getFacadeAccessor()
     {
-        return 'steroids';
+        return 'devices';
     }
 
 }

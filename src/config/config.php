@@ -1,6 +1,6 @@
 <?php
 /**
- * Part of the Steroids package.
+ * Part of the Devices package.
  *
  * NOTICE OF LICENSE
  *
@@ -10,7 +10,7 @@
  * bundled with this package in the LICENSE file.  It is also available at
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
- * @package    Steroids
+ * @package    Devices
  * @version    1.0.0
  * @author     Antonio Carlos Ribeiro @ PragmaRX
  * @license    BSD License (3-clause)
@@ -20,9 +20,9 @@
 
 return array(
 
-    'create_steroids_alias' => true,
+    'create_devices_alias' => true,
 
-    'steroids_alias' => 'Steroids',
+    'devices_alias' => 'Devices',
 
     'enabled' => true,
 

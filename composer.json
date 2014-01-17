@@ -1,5 +1,5 @@
 {
-    "name": "pragmarx/steroids",
+    "name": "pragmarx/devices",
 
     "description": "A Laravel 4.1+ automatic application deployment package via git webhooks",
 
@@ -27,7 +27,7 @@
 
     "autoload": {
         "psr-4": {
-            "PragmaRX\\Steroids\\": "src/"
+            "PragmaRX\\Devices\\": "src/"
         }
     },
 

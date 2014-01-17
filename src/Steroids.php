@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of the Steroids package.
+ * Part of the Devices package.
  *
  * NOTICE OF LICENSE
  *
@@ -11,7 +11,7 @@
  * bundled with this package in the LICENSE file.  It is also available at
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
- * @package    Steroids
+ * @package    Devices
  * @version    1.0.0
  * @author     Antonio Carlos Ribeiro @ PragmaRX
  * @license    BSD License (3-clause)
@@ -19,22 +19,22 @@
  * @link       http://pragmarx.com
  */
 
-namespace PragmaRX\Steroids;
+namespace PragmaRX\Devices;
 
-use PragmaRX\Steroids\Support\Config;
+use PragmaRX\Devices\Support\Config;
 
-use PragmaRX\Steroids\Deployers\Github;
-use PragmaRX\Steroids\Deployers\Bitbucket;
+use PragmaRX\Devices\Deployers\Github;
+use PragmaRX\Devices\Deployers\Bitbucket;
 
 use Illuminate\Http\Request;
 use Illuminate\Log\Writer;
 
-class Steroids
+class Devices
 {
     private $config;
 
     /**
-     * Initialize Steroids object
+     * Initialize Devices object
      * 
      * @param Locale $locale
      */
