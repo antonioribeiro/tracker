@@ -15,7 +15,7 @@ class CreateAccessesTable extends Migration {
 			$table->increments('id');
 			
 			$table->string('session_id');
-			$table->string('uri');
+			$table->string('path_info');
 
 			$table->timestamps();
 		});	

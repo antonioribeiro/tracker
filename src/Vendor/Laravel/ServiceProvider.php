@@ -77,7 +77,8 @@ class ServiceProvider extends IlluminateServiceProvider {
             return new Tracker(
                                     $app['tracker.config'],
                                     $app['session.store'],
-                                    $app['tracker.repositories']
+                                    $app['tracker.repositories'],
+                                    $app['request']
                                 );
         });
     }

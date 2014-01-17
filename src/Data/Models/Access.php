@@ -27,6 +27,6 @@ class Access extends Eloquent {
 
 	protected $table = 'tracker_accesses';
 
-	protected $fillable = array('name', 'platform', 'platform_version', 'browser', 'browser_version');
+	protected $fillable = array('session_id', 'path_info');
 
 }

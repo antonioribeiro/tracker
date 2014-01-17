@@ -25,6 +25,7 @@ use PragmaRX\Tracker\Support\Config as Config;
 use PragmaRX\Tracker\Data\Repository as DataRepository;
 
 use Illuminate\Session\Store as Session;
+use Illuminate\Http\Request;
 
 use Rhumsaa\Uuid\Uuid as UUID;
 
@@ -42,13 +43,15 @@ class Tracker
 
     private $deviceUUID;
 
-    public function __construct(Config $config, Session $session, DataRepository $dataRepository)
+    public function __construct(Config $config, Session $session, DataRepository $dataRepository, Request $request)
     {
         $this->config = $config;
 
         $this->session = $session;
 
         $this->dataRepository = $dataRepository;
+
+        $this->request = $request;
     }
 
     public function boot()
@@ -61,7 +64,12 @@ class Tracker
 
     public function recordAccess()
     {
-        $this->access = $this->dataRepository->createAccess(array('session_id' => $this->getSessionId()));
+        $this->access = $this->dataRepository->createAccess(
+                                                                array(
+                                                                        'session_id' => $this->getSessionId(),
+                                                                        'path_info' => $this->request->path(),
+                                                                    )
+                                                            );
     }
 
     public function getSessionId()
@@ -72,7 +80,7 @@ class Tracker
                                                                     'user_id' => $this->getUserId(),
                                                                     'device_id' => $this->getDeviceId(),
                                                                     'agent_id' => $this->getAgentId(),
-                                                                    'client_ip' => $this->getAgentId(),
+                                                                    'client_ip' => $this->request->getClientIp(),
                                                                 )
                                                         );
     }

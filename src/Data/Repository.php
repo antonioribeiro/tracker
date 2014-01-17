@@ -49,14 +49,7 @@ class Repository implements RepositoryInterface {
 	{
 		if (! $model = $this->sessionRepository->where('session_uuid', $data['session_uuid'])->first())
 		{
-			$model = $this->sessionRepository->create(
-														array(
-																'session_uuid' => $data['session_uuid'],
-																'agent_id' => $data['agent_id'],
-																'device_id' => $data['device_id'],
-																'user_id' => $data['user_id'],
-															)
-				);
+			$model = $this->sessionRepository->create($data);
 		}
 
 		return $model;

@@ -27,6 +27,6 @@ class Session extends Eloquent {
 
 	protected $table = 'tracker_sessions';
 
-	protected $fillable = array('session_uuid', 'user_id', 'agent_id', 'device_id');
+	protected $fillable = array('session_uuid', 'user_id', 'agent_id', 'device_id', 'client_ip');
 
 }
