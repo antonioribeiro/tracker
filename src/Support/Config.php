@@ -21,77 +21,22 @@
 
 namespace PragmaRX\Tracker\Support;
 
-use PragmaRX\Tracker\Support\Filesystem;
+use Illuminate\Config\Repository as IlluminateConfig;
 
 class Config {
 
     protected $config;
 
-    protected $isAppConfig = false;
-
-    /**
-     * Create a new configuration repository
-     * 
-     * @param Filesystem $files 
-     * @param void
-     */
-    public function __construct(Filesystem $files, $app = null)
+    public function __construct(IlluminateConfig $config, $namespace)
     {
-        $this->app = $app;
+        $this->config = $config;
 
-        $this->files = $files;
-
-        $this->loadConfig();
+        $this->namespace = $namespace;
     }
 
-    /**
-     * Get the specified configuration value
-     * @param  string $key     
-     * @param  string $default value
-     * @return string
-     */
     public function get($key, $default = null)
     {
-        if($this->isAppConfig)
-        {
-            return $this->app['config']["pragmarx/tracker::$key"]; // is there a better way than hard coding this?
-        }
-
-        return $this->getLocalConfig($key, $default);
+        return $this->config->get($this->namespace.'::'.$key);
     }
 
-    public function getLocalConfig($key, $default = null)
-    {
-        if ( ! isset($this->config[$key]))
-        {
-            return $default;
-        }
-
-        return $this->config[$key];
-    }
-
-    /**
-     * Load the configuration group
-     * 
-     * @return void
-     */
-    public function loadConfig()
-    {
-        $this->loadLocalConfig();
-
-        if (isset($this->app) && $this->app['config'])
-        {
-            $this->isAppConfig = true;
-        }
-    }
-
-    public function loadLocalConfig()
-    {
-        if (isset($this->config))
-        {
-            return;
-        }
-
-        $this->config = $this->files->getRequire(__DIR__.'/../config/config.php');        
-    }
 }

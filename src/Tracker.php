@@ -21,8 +21,10 @@
 
 namespace PragmaRX\Tracker;
 
-use PragmaRX\Tracker\Support\Config;
-use Illuminate\Session\SessionManager;
+use PragmaRX\Tracker\Support\Config as Config;
+use PragmaRX\Tracker\Data\Repository as DataRepository;
+
+use Illuminate\Session\Store as Session;
 
 class Tracker
 {
@@ -30,41 +32,45 @@ class Tracker
 
     private $session;
 
+    private $sessionUUID = null;
+
+    private $userUUID = null;
+
+    private $deviceUUID = null;
+
     /**
      * Initialize Tracker object
      * 
      * @param Locale $locale
      */
-    public function __construct(Config $config, SessionManager $session)
+    public function __construct(Config $config, Session $session, DataRepository $dataRepository)
     {
         $this->config = $config;
 
         $this->session = $session;
+
+        $this->dataRepository = $dataRepository;
     }
 
+    public function boot()
+    {
+        if ($this->config->get('enabled'))
+        {
+            $this->recordAccess();
+        }
+    }
 
- //         private $sessionUUID = null;
- //         private $userUUID = null;
- //         private $deviceUUID = null;
+    public function recordAccess($sessionUUID = null, $userUUID = null, $deviceUUID = null)
+    {
+            $agentId = Agent::getCurrentAgentId();
 
-        // public function start()
-        // {
-        //         $this->recordAccess();
-
-        //         dd(Session::all());
-        // }
-
-        // public function recordAccess($sessionUUID = null, $userUUID = null, $deviceUUID = null)
-        // {
-        //         $agentId = Agent::getCurrentAgentId();
-
-        //         Access::record(
-        //                                         $this->getsessionUUID($sessionUUID), 
-        //                                         $this->getUserUUID($userUUID), 
-        //                                         $this->getDeviceUUID($deviceUUID), 
-        //                                         $agentId
-        //                                 );
-        // }
+            Access::record(
+                            $this->getsessionUUID($sessionUUID), 
+                            $this->getUserUUID($userUUID), 
+                            $this->getDeviceUUID($deviceUUID), 
+                            $agentId
+                        );
+    }
 
         // /**
         //  * Get or set and get a Session id that will change at every Session

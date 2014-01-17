@@ -11,7 +11,7 @@ class CreateTrackerTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('tracker', function($table) {
+		Schema::create('tracker_devices', function($table) {
 			$table->increments('id');
 			
 			$table->string('kind');
@@ -31,7 +31,7 @@ class CreateTrackerTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('tracker');
+		Schema::drop('tracker_devices');
 	}
 
 }

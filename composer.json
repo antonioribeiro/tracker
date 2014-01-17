@@ -18,7 +18,8 @@
     "require": {
         "php": ">=5.3.7",
         "illuminate/foundation": "4.*",
-        "illuminate/support": "4.*"
+        "illuminate/support": "4.*",
+        "rhumsaa/uuid": "dev-master"
     },
 
     "require-dev": {
