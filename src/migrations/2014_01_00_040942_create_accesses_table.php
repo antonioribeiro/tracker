@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTrackerTable extends Migration {
+class CreateAccessesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -11,17 +11,14 @@ class CreateTrackerTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('tracker_devices', function($table) {
+		Schema::create('tracker_accesses', function($table) {
 			$table->increments('id');
 			
-			$table->string('kind');
-			$table->string('model');
-			$table->boolean('mobile');
-
-			$table->unique(['kind', 'model']);
+			$table->string('session_id');
+			$table->string('uri');
 
 			$table->timestamps();
-		});
+		});	
 	}
 
 	/**
@@ -31,7 +28,7 @@ class CreateTrackerTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('tracker_devices');
+		Schema::drop('tracker_accesses');
 	}
 
 }

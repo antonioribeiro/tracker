@@ -26,23 +26,22 @@ use PragmaRX\Tracker\Data\Repository as DataRepository;
 
 use Illuminate\Session\Store as Session;
 
+use Rhumsaa\Uuid\Uuid as UUID;
+
 class Tracker
 {
     private $config;
 
     private $session;
 
-    private $sessionUUID = null;
+    private $agentUUID;
 
-    private $userUUID = null;
+    private $sessionUUID;
 
-    private $deviceUUID = null;
+    private $userUUID;
 
-    /**
-     * Initialize Tracker object
-     * 
-     * @param Locale $locale
-     */
+    private $deviceUUID;
+
     public function __construct(Config $config, Session $session, DataRepository $dataRepository)
     {
         $this->config = $config;
@@ -60,17 +59,39 @@ class Tracker
         }
     }
 
-    public function recordAccess($sessionUUID = null, $userUUID = null, $deviceUUID = null)
+    public function recordAccess()
     {
-            $agentId = Agent::getCurrentAgentId();
-
-            Access::record(
-                            $this->getsessionUUID($sessionUUID), 
-                            $this->getUserUUID($userUUID), 
-                            $this->getDeviceUUID($deviceUUID), 
-                            $agentId
-                        );
+        $this->access = $this->dataRepository->createAccess(array('session_id' => $this->getSessionId()));
     }
+
+    public function getSessionId()
+    {
+        return $this->dataRepository->findOrCreateSession(
+                                                            array(
+                                                                    'session_uuid' => $this->session->getId(),
+                                                                    'user_id' => $this->getUserId(),
+                                                                    'device_id' => $this->getDeviceId(),
+                                                                    'agent_id' => $this->getAgentId(),
+                                                                    'client_ip' => $this->getAgentId(),
+                                                                )
+                                                        );
+    }
+
+    public function getUserId()
+    {
+        return (string) UUID::uuid4();
+    }
+
+    public function getDeviceId()
+    {
+        return (string) UUID::uuid4();
+    }
+
+    public function getAgentId()
+    {
+        return (string) UUID::uuid4();
+    }
+
 
         // /**
         //  * Get or set and get a Session id that will change at every Session

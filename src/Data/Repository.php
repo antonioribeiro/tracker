@@ -23,4 +23,42 @@ namespace PragmaRX\Tracker\Data;
 
 class Repository implements RepositoryInterface {
 
+	public function __construct(
+									$sessionRepositoryClass,
+									$accessRepositoryClass,
+									$agentRepositoryClass, 
+									$userRepositoryClass
+								)
+	{
+		$this->sessionRepository = new $sessionRepositoryClass;
+		$this->accessRepository = new $accessRepositoryClass;
+		$this->agentRepository = new $agentRepositoryClass;
+		$this->userRepository = new $userRepositoryClass;
+	}
+
+	public function createAccess($data)
+	{
+		return $this->accessRepository->create(
+												array(
+														'session_id' => $data['session_id'],
+													)
+											);
+	}
+
+	public function findOrCreateSession($data)
+	{
+		if (! $model = $this->sessionRepository->where('session_uuid', $data['session_uuid'])->first())
+		{
+			$model = $this->sessionRepository->create(
+														array(
+																'session_uuid' => $data['session_uuid'],
+																'agent_uuid' => $data['agent_uuid'],
+																'device_uuid' => $data['device_uuid'],
+																'user_uuid' => $data['user_uuid'],
+															)
+				);
+		}
+
+		return $model;
+	}
 }

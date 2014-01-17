@@ -86,7 +86,12 @@ class ServiceProvider extends IlluminateServiceProvider {
     {
         $this->app['tracker.repositories'] = $this->app->share(function($app)
         {
-            return new DataRepository;
+            return new DataRepository(
+                                        'PragmaRX\Tracker\Data\Models\Session',
+                                        'PragmaRX\Tracker\Data\Models\Access',
+                                        'PragmaRX\Tracker\Data\Models\Agent',
+                                        $this->getConfig('user_model')
+                                    );
         });
     }
 
