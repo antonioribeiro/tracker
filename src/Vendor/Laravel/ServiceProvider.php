@@ -1,12 +1,12 @@
-<?php namespace PragmaRX\Devices\Vendor\Laravel;
+<?php namespace PragmaRX\Tracker\Vendor\Laravel;
  
-use PragmaRX\Devices\Devices;
+use PragmaRX\Tracker\Tracker;
 
-use PragmaRX\Devices\Support\Config;
-use PragmaRX\Devices\Support\Filesystem;
+use PragmaRX\Tracker\Support\Config;
+use PragmaRX\Tracker\Support\Filesystem;
 
-use PragmaRX\Devices\Deployers\Github;
-use PragmaRX\Devices\Deployers\Bitbucket;
+use PragmaRX\Tracker\Deployers\Github;
+use PragmaRX\Tracker\Deployers\Bitbucket;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
@@ -27,13 +27,13 @@ class ServiceProvider extends IlluminateServiceProvider {
      */
     public function boot()
     {
-        $this->package('pragmarx/devices', 'pragmarx/devices', __DIR__.'/../..');
+        $this->package('pragmarx/tracker', 'pragmarx/tracker', __DIR__.'/../..');
 
-        if( $this->getConfig('create_devices_alias') )
+        if( $this->getConfig('create_tracker_alias') )
         {
             IlluminateAliasLoader::getInstance()->alias(
-                                                            $this->getConfig('devices_alias'), 
-                                                            'PragmaRX\Devices\Vendor\Laravel\Facade'
+                                                            $this->getConfig('tracker_alias'), 
+                                                            'PragmaRX\Tracker\Vendor\Laravel\Facade'
                                                         );
         }    
     }
@@ -49,7 +49,7 @@ class ServiceProvider extends IlluminateServiceProvider {
 
         $this->registerConfig();
 
-        $this->registerDevices();
+        $this->registerTracker();
 
         $this->extendBlade();
 
@@ -67,45 +67,45 @@ class ServiceProvider extends IlluminateServiceProvider {
     }
 
     /**
-     * Register the Filesystem driver used by Devices
+     * Register the Filesystem driver used by Tracker
      * 
      * @return void
      */
     private function registerFileSystem()
     {
-        $this->app['devices.fileSystem'] = $this->app->share(function($app)
+        $this->app['tracker.fileSystem'] = $this->app->share(function($app)
         {
             return new Filesystem;
         });
     }
 
     /**
-     * Register the Config driver used by Devices
+     * Register the Config driver used by Tracker
      * 
      * @return void
      */
     private function registerConfig()
     {
-        $this->app['devices.config'] = $this->app->share(function($app)
+        $this->app['tracker.config'] = $this->app->share(function($app)
         {
-            return new Config($app['devices.fileSystem'], $app);
+            return new Config($app['tracker.fileSystem'], $app);
         });
     }
 
     /**
-     * Takes all the components of Devices and glues them
-     * together to create Devices.
+     * Takes all the components of Tracker and glues them
+     * together to create Tracker.
      *
      * @return void
      */
-    private function registerDevices()
+    private function registerTracker()
     {
-        $this->app['devices'] = $this->app->share(function($app)
+        $this->app['tracker'] = $this->app->share(function($app)
         {
-            $app['devices.loaded'] = true;
+            $app['tracker.loaded'] = true;
 
-            return new Devices(
-                                    $app['devices.config']
+            return new Tracker(
+                                    $app['tracker.config']
                                 );
         });
     }
@@ -116,15 +116,15 @@ class ServiceProvider extends IlluminateServiceProvider {
 
         $blade->extend(function ($view) 
         {
-            return $this->app['devices']->process($view);
+            return $this->app['tracker']->process($view);
         });
     }
 
     private function disableViewCache()
     {
-        if ($this->app['devices.config']->getLocalConfig('disable_view_cache'))
+        if ($this->app['tracker.config']->getLocalConfig('disable_view_cache'))
         {
-            $this->app['devices.fileSystem']
+            $this->app['tracker.fileSystem']
                 ->deleteDirectory($this->app['path.storage'].'/views', true);
         }
     }
@@ -137,6 +137,6 @@ class ServiceProvider extends IlluminateServiceProvider {
      */
     public function getConfig($key)
     {
-        return $this->app['config']["pragmarx/devices::$key"];
+        return $this->app['config']["pragmarx/tracker::$key"];
     }
 }

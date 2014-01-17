@@ -1,5 +1,5 @@
 {
-    "name": "pragmarx/devices",
+    "name": "pragmarx/tracker",
 
     "description": "A Laravel 4.1+ automatic application deployment package via git webhooks",
 
@@ -27,7 +27,7 @@
 
     "autoload": {
         "psr-4": {
-            "PragmaRX\\Devices\\": "src/"
+            "PragmaRX\\Tracker\\": "src/"
         }
     },
 

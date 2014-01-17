@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDevicesTable extends Migration {
+class CreateTrackerTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -11,7 +11,7 @@ class CreateDevicesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('devices', function($table) {
+		Schema::create('tracker', function($table) {
 			$table->increments('id');
 			
 			$table->string('kind');
@@ -31,7 +31,7 @@ class CreateDevicesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('devices');
+		Schema::drop('tracker');
 	}
 
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Part of the Devices package.
+ * Part of the Tracker package.
  *
  * NOTICE OF LICENSE
  *
@@ -10,7 +10,7 @@
  * bundled with this package in the LICENSE file.  It is also available at
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
- * @package    Devices
+ * @package    Tracker
  * @version    1.0.0
  * @author     Antonio Carlos Ribeiro @ PragmaRX
  * @license    BSD License (3-clause)
@@ -20,9 +20,9 @@
 
 return array(
 
-    'create_devices_alias' => true,
+    'create_tracker_alias' => true,
 
-    'devices_alias' => 'Devices',
+    'tracker_alias' => 'Tracker',
 
     'enabled' => true,
 
