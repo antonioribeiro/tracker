@@ -16,7 +16,8 @@ class CreateDevicesTable extends Migration {
 			
 			$table->string('kind');
 			$table->string('model');
-			$table->boolean('mobile');
+			$table->boolean('is_mobile');
+			$table->string('agent_id');
 
 			$table->unique(['kind', 'model']);
 

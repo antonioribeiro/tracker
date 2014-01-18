@@ -23,20 +23,6 @@ namespace PragmaRX\Tracker\Support;
 
 use Illuminate\Config\Repository as IlluminateConfig;
 
-class Config {
-
-    protected $config;
-
-    public function __construct(IlluminateConfig $config, $namespace)
-    {
-        $this->config = $config;
-
-        $this->namespace = $namespace;
-    }
-
-    public function get($key, $default = null)
-    {
-        return $this->config->get($this->namespace.'::'.$key);
-    }
+class MobileDetect extends MobileDetect {
 
 }

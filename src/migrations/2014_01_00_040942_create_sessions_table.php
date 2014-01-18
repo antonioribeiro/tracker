@@ -17,7 +17,6 @@ class CreateSessionsTable extends Migration {
 			$table->string('session_uuid');
 			$table->string('user_id');
 			$table->string('device_id');
-			$table->string('agent_id');
 			$table->string('client_ip');
 
 			$table->timestamps();

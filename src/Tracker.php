@@ -92,12 +92,12 @@ class Tracker
 
     public function getDeviceId()
     {
-        return 1; //(string) UUID::uuid4();
+        return $this->dataRepository->findOrCreateDevice($this->dataRepository->getCurrentDevice());
     }
 
     public function getAgentId()
     {
-        return 1; //(string) UUID::uuid4();
+        return $this->dataRepository->findOrCreateAgent($this->dataRepository->getCurrentAgent());
     }
 
 
