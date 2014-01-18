@@ -21,12 +21,15 @@
 
 namespace PragmaRX\Tracker\Data;
 
+use PragmaRX\Tracker\Support\MobileDetect;
+
 class Repository implements RepositoryInterface {
 
 	public function __construct(
 									$sessionRepositoryClass,
 									$accessRepositoryClass,
 									$agentRepositoryClass, 
+									$deviceRepositoryClass,
 									$userRepositoryClass,
 									MobileDetect $mobileDetect
 								)
@@ -36,6 +39,8 @@ class Repository implements RepositoryInterface {
 		$this->accessRepository = new $accessRepositoryClass;
 
 		$this->agentRepository = new $agentRepositoryClass;
+
+		$this->deviceRepository = new $deviceRepositoryClass;
 
 		$this->userRepository = new $userRepositoryClass;
 
@@ -76,10 +81,15 @@ class Repository implements RepositoryInterface {
 
 	public function findOrCreateDevice($data)
 	{
-		return return $this->findOrCreateGeneric($data, 'deviceRepository', array('kind', 'model'));
+		return $this->findOrCreateGeneric($data, 'deviceRepository', array('kind', 'model'));
 	}
 
-	private function getCurrentAgent()
+    public function getAgentId()
+    {
+        return $this->findOrCreateAgent($this->getCurrentAgent());
+    }
+
+	public function getCurrentAgent()
 	{
 		if ( ! isset($_SERVER['HTTP_USER_AGENT']))
 		{
@@ -105,13 +115,12 @@ class Repository implements RepositoryInterface {
 					);
 	}
 
-	private function getCurrentDeviceProperties()
+	public function getCurrentDeviceProperties()
 	{
-		$deviceProperties = $this->mobileDetect->detectDevice();
+		$properties = $this->mobileDetect->detectDevice();
 
-		return array(
-					'kind' => $deviceProperties['kind'],
-					'model' => $deviceProperties['model']
-				);
+		$properties['agent_id'] = $this->getAgentId();
+
+		return $properties;
 	}
 }

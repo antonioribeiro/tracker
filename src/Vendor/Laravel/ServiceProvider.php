@@ -2,6 +2,7 @@
  
 use PragmaRX\Tracker\Tracker;
 use PragmaRX\Tracker\Support\Config;
+use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Data\Repository as DataRepository;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
@@ -91,7 +92,9 @@ class ServiceProvider extends IlluminateServiceProvider {
                                         'PragmaRX\Tracker\Data\Models\Session',
                                         'PragmaRX\Tracker\Data\Models\Access',
                                         'PragmaRX\Tracker\Data\Models\Agent',
-                                        $this->getConfig('user_model')
+                                        'PragmaRX\Tracker\Data\Models\Device',
+                                        $this->getConfig('user_model'),
+                                        new MobileDetect
                                     );
         });
     }

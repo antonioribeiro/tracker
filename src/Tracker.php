@@ -79,7 +79,6 @@ class Tracker
                                                                     'session_uuid' => $this->session->getId(),
                                                                     'user_id' => $this->getUserId(),
                                                                     'device_id' => $this->getDeviceId(),
-                                                                    'agent_id' => $this->getAgentId(),
                                                                     'client_ip' => $this->request->getClientIp(),
                                                                 )
                                                         );
@@ -92,14 +91,8 @@ class Tracker
 
     public function getDeviceId()
     {
-        return $this->dataRepository->findOrCreateDevice($this->dataRepository->getCurrentDevice());
+        return $this->dataRepository->findOrCreateDevice($this->dataRepository->getCurrentDeviceProperties());
     }
-
-    public function getAgentId()
-    {
-        return $this->dataRepository->findOrCreateAgent($this->dataRepository->getCurrentAgent());
-    }
-
 
         // /**
         //  * Get or set and get a Session id that will change at every Session
