@@ -1,8 +1,12 @@
 <?php namespace PragmaRX\Tracker\Vendor\Laravel;
  
 use PragmaRX\Tracker\Tracker;
+
 use PragmaRX\Tracker\Support\Config;
 use PragmaRX\Tracker\Support\MobileDetect;
+use PragmaRX\Tracker\Support\UserAgentParser;
+use PragmaRX\Tracker\Support\FileSystem;
+
 use PragmaRX\Tracker\Data\Repository as DataRepository;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
@@ -45,7 +49,9 @@ class ServiceProvider extends IlluminateServiceProvider {
      * @return void
      */
     public function register()
-    {
+    {   
+        new UserAgentParser($this->app->make('path.base'));
+
         $this->registerConfig();
 
         $this->registerRepositories();
@@ -94,7 +100,8 @@ class ServiceProvider extends IlluminateServiceProvider {
                                         'PragmaRX\Tracker\Data\Models\Agent',
                                         'PragmaRX\Tracker\Data\Models\Device',
                                         $this->getConfig('user_model'),
-                                        new MobileDetect
+                                        new MobileDetect,
+                                        new UserAgentParser($app->make('path.base'))
                                     );
         });
     }

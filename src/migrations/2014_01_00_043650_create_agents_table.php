@@ -15,8 +15,6 @@ class CreateAgentsTable extends Migration {
 			$table->increments('id');
 			
 			$table->string('name')->unique();
-			$table->string('platform');
-			$table->string('platform_version');
 			$table->string('browser');
 			$table->string('browser_version');
 

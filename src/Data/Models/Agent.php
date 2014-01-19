@@ -28,8 +28,6 @@ class Agent extends Eloquent {
 	protected $table = 'tracker_agents';
 
 	protected $fillable = array('name', 
-								'platform', 
-								'platform_version', 
 								'browser', 
 								'browser_version');
 

@@ -16,10 +16,12 @@ class CreateDevicesTable extends Migration {
 			
 			$table->string('kind');
 			$table->string('model');
+			$table->string('platform');
+			$table->string('platform_version');
 			$table->boolean('is_mobile');
 			$table->string('agent_id');
 
-			$table->unique(['kind', 'model']);
+			$table->unique(['kind', 'model', 'platform', 'platform_version']);
 
 			$table->timestamps();
 		});

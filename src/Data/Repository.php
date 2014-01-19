@@ -22,6 +22,7 @@
 namespace PragmaRX\Tracker\Data;
 
 use PragmaRX\Tracker\Support\MobileDetect;
+use PragmaRX\Tracker\Support\UserAgentParser;
 
 class Repository implements RepositoryInterface {
 
@@ -31,7 +32,8 @@ class Repository implements RepositoryInterface {
 									$agentRepositoryClass, 
 									$deviceRepositoryClass,
 									$userRepositoryClass,
-									MobileDetect $mobileDetect
+									MobileDetect $mobileDetect,
+                                    UserAgentParser $userAgentParser
 								)
 	{
 		$this->sessionRepository = new $sessionRepositoryClass;
@@ -45,6 +47,8 @@ class Repository implements RepositoryInterface {
 		$this->userRepository = new $userRepositoryClass;
 
 		$this->mobileDetect = $mobileDetect;
+
+		$this->userAgentParser = $userAgentParser;
 	}
 
 	public function createAccess($data)
@@ -81,7 +85,7 @@ class Repository implements RepositoryInterface {
 
 	public function findOrCreateDevice($data)
 	{
-		return $this->findOrCreateGeneric($data, 'deviceRepository', array('kind', 'model'));
+		return $this->findOrCreateGeneric($data, 'deviceRepository', array('kind', 'model', 'platform', 'platform_version'));
 	}
 
     public function getAgentId()
@@ -91,27 +95,12 @@ class Repository implements RepositoryInterface {
 
 	public function getCurrentAgent()
 	{
-		if ( ! isset($_SERVER['HTTP_USER_AGENT']))
-		{
-			return array(
-							'name' => 'not available',
-							'platform' => 'not available',
-							'platform_version' => 'not available',
-							'browser' => 'not available',
-							'browser_version' => 'not available',
-						);
-		}
-
-		$browser = get_browser(null, true);
-
-		$name = $_SERVER['HTTP_USER_AGENT'];
-
 		return array(
-						'name' => $name,
-						'platform' => $browser['platform'],
-						'platform_version' => $browser['platform_version'],
-						'browser' => $browser['browser'],
-						'browser_version' => $browser['version']
+						'name' => $this->userAgentParser->originalUserAgent ?: 'Other',
+
+						'browser' => $this->userAgentParser->userAgent->family,
+
+						'browser_version' => $this->userAgentParser->getUserAgentVersion(),
 					);
 	}
 
@@ -120,6 +109,10 @@ class Repository implements RepositoryInterface {
 		$properties = $this->mobileDetect->detectDevice();
 
 		$properties['agent_id'] = $this->getAgentId();
+
+		$properties['platform'] = $this->userAgentParser->operatingSystem->family;
+
+		$properties['platform_version'] = $this->userAgentParser->getOperatingSystemVersion();
 
 		return $properties;
 	}

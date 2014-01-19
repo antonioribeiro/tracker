@@ -27,6 +27,13 @@ class Device extends Eloquent {
 
 	protected $table = 'tracker_devices';
 
-	protected $fillable = array('kind', 'model', 'is_mobile', 'agent_id');
+	protected $fillable = array(
+									'kind', 
+									'model', 
+									'platform', 
+									'platform_version', 									
+									'is_mobile', 
+									'agent_id'
+								);
 
 }
