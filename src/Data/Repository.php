@@ -23,6 +23,9 @@ namespace PragmaRX\Tracker\Data;
 
 use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Support\UserAgentParser;
+use PragmaRX\Tracker\Support\Config;
+
+use Illuminate\Session\Store as Session;
 
 class Repository implements RepositoryInterface {
 
@@ -31,9 +34,11 @@ class Repository implements RepositoryInterface {
 									$accessRepositoryClass,
 									$agentRepositoryClass, 
 									$deviceRepositoryClass,
-									$userRepositoryClass,
+									$authentication,
 									MobileDetect $mobileDetect,
-                                    UserAgentParser $userAgentParser
+                                    UserAgentParser $userAgentParser,
+                                    Session $session,
+									Config $config
 								)
 	{
 		$this->sessionRepository = new $sessionRepositoryClass;
@@ -44,11 +49,15 @@ class Repository implements RepositoryInterface {
 
 		$this->deviceRepository = new $deviceRepositoryClass;
 
-		$this->userRepository = new $userRepositoryClass;
+		$this->authentication = $authentication;
 
 		$this->mobileDetect = $mobileDetect;
 
 		$this->userAgentParser = $userAgentParser;
+
+		$this->session = $session;
+
+		$this->config = $config;
 	}
 
 	public function createAccess($data)
@@ -116,4 +125,79 @@ class Repository implements RepositoryInterface {
 
 		return $properties;
 	}
+
+	public function getCurrentUserId()
+	{
+		return $this->authentication->getCurrentUserId();
+	}
+
+    public function getSessionId($sessionInfo)
+    {
+        // $this->session->forget($this->config->get('tracker_session_name'));
+        // dd('forgot');
+
+    	$sessionInfo['session_uuid'] = $this->session->getId();
+
+        $this->sessionInfo = $sessionInfo;
+        
+        if ($this->sessionIsKnownOrCreateSession())
+        {
+            $this->ensureSessionDataIsComplete();
+        }
+
+        return $this->sessionGetId();
+    }
+
+    private function sessionIsKnownOrCreateSession()
+    {
+        $known = $this->session->has($this->config->get('tracker_session_name')) &&
+                    $this->session->get($this->config->get('tracker_session_name'))['session_uuid'] == $this->session->getId();
+
+        if (! $known)
+        {
+            $this->sessionSetId($this->findOrCreateSession($this->sessionInfo));
+        }
+        else
+        {
+        	$this->sessionInfo['id'] = $this->session->get($this->config->get('tracker_session_name'))['id'];
+        }
+
+        return $known;
+    }
+
+    private function ensureSessionDataIsComplete()
+    {
+    	$sessionData = $this->session->get($this->config->get('tracker_session_name'));
+
+    	foreach ($this->sessionInfo as $key => $value) {
+    		if ($sessionData[$key] !== $value)
+    		{
+    			if ( ! isset($model))
+    			{
+		    		$model = $this->sessionRepository->find($this->sessionInfo['id']);
+    			}
+
+    			$model->{$key} = $value;
+    			$model->save();
+    		}
+    	}
+    }
+
+    private function sessionGetId()
+    {
+        return $this->sessionInfo['id'];
+    }
+
+    private function sessionSetId($id)
+    {
+        $this->sessionInfo['id'] = $id;
+
+        $this->storeSession();
+    }
+
+    private function storeSession()
+    {
+        $this->session->put($this->config->get('tracker_session_name'), $this->sessionInfo);
+    }
+
 }

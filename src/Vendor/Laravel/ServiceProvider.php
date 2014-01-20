@@ -2,6 +2,8 @@
  
 use PragmaRX\Tracker\Tracker;
 
+use PragmaRX\Tracker\Services\Authentication;
+
 use PragmaRX\Tracker\Support\Config;
 use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Support\UserAgentParser;
@@ -54,6 +56,8 @@ class ServiceProvider extends IlluminateServiceProvider {
 
         $this->registerConfig();
 
+        $this->registerAuthentication();
+
         $this->registerRepositories();
 
         $this->registerTracker();
@@ -83,7 +87,6 @@ class ServiceProvider extends IlluminateServiceProvider {
 
             return new Tracker(
                                     $app['tracker.config'],
-                                    $app['session.store'],
                                     $app['tracker.repositories'],
                                     $app['request']
                                 );
@@ -99,10 +102,20 @@ class ServiceProvider extends IlluminateServiceProvider {
                                         'PragmaRX\Tracker\Data\Models\Access',
                                         'PragmaRX\Tracker\Data\Models\Agent',
                                         'PragmaRX\Tracker\Data\Models\Device',
-                                        $this->getConfig('user_model'),
+                                        $app['tracker.authentication'],
                                         new MobileDetect,
-                                        new UserAgentParser($app->make('path.base'))
+                                        new UserAgentParser($app->make('path.base')),
+                                        $app['session.store'],
+                                        $app['tracker.config']
                                     );
+        });
+    }
+
+    public function registerAuthentication()
+    {
+        $this->app['tracker.authentication'] = $this->app->share(function($app)
+        {
+            return new Authentication($app['tracker.config'], $app);
         });
     }
 

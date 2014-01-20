@@ -28,4 +28,18 @@ return array(
 
     'user_model' => 'PragmaRX\Tracker\Data\Models\User',
 
+    'log_accesses' => false,
+
+    'authentication_ioc_binding' => 'auth',
+
+    'authenticated_check_method' => 'check',
+
+    'authenticated_user_method' => 'user',
+
+    'authenticated_user_id_column' => 'id',
+
+    'tracker_session_name' => 'tracker_session',
+
+    'tracker_cookie_name' => 'please_change_this_cookie_name',
+
 );

@@ -21,10 +21,9 @@
 
 namespace PragmaRX\Tracker;
 
-use PragmaRX\Tracker\Support\Config as Config;
+use PragmaRX\Tracker\Support\Config;
 use PragmaRX\Tracker\Data\Repository as DataRepository;
 
-use Illuminate\Session\Store as Session;
 use Illuminate\Http\Request;
 
 use Rhumsaa\Uuid\Uuid as UUID;
@@ -43,11 +42,13 @@ class Tracker
 
     private $deviceUUID;
 
-    public function __construct(Config $config, Session $session, DataRepository $dataRepository, Request $request)
+    public function __construct(
+                                    Config $config, 
+                                    DataRepository $dataRepository, 
+                                    Request $request
+                                )
     {
         $this->config = $config;
-
-        $this->session = $session;
 
         $this->dataRepository = $dataRepository;
 
@@ -64,29 +65,38 @@ class Tracker
 
     public function recordAccess()
     {
-        $this->access = $this->dataRepository->createAccess(
-                                                                array(
-                                                                        'session_id' => $this->getSessionId(),
-                                                                        'path_info' => $this->request->path(),
-                                                                    )
-                                                            );
+        $sessionId = $this->getSessionId();
+
+        if ($this->config->get('log_accesses'))
+        {
+            $this->access = $this->dataRepository->createAccess(
+                                                                    array(
+                                                                            'session_id' => $sessionId,
+                                                                            'path_info' => $this->request->path(),
+                                                                        )
+                                                                );
+        }
     }
 
     public function getSessionId()
     {
-        return $this->dataRepository->findOrCreateSession(
-                                                            array(
-                                                                    'session_uuid' => $this->session->getId(),
-                                                                    'user_id' => $this->getUserId(),
-                                                                    'device_id' => $this->getDeviceId(),
-                                                                    'client_ip' => $this->request->getClientIp(),
-                                                                )
-                                                        );
+        return $this->dataRepository->getSessionId(
+                                                    array(
+                                                        'user_id' => $this->getUserId(),
+                                                        'device_id' => $this->getDeviceId(),
+                                                        'client_ip' => $this->request->getClientIp(),
+                                                        'cookie_id' => $this->getCookieId(),
+                                                    ));
     }
 
     public function getUserId()
     {
-        return 1; //(string) UUID::uuid4();
+        return $this->dataRepository->getCurrentUserId();
+    }
+
+    public function getCookieId()
+    {
+        return 10;
     }
 
     public function getDeviceId()
