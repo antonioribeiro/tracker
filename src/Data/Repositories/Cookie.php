@@ -27,15 +27,25 @@ use PragmaRX\Tracker\Support\Config;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Cookie\CookieJar;
+
 use Rhumsaa\Uuid\Uuid as UUID;
 
 class Cookie extends Repository {
 
-    public function __construct($model, Config $config, Request $request)
+	private $config;
+
+	private $request;
+
+	private $cookieJar;
+
+    public function __construct($model, Config $config, Request $request, CookieJar $cookieJar)
     {
         $this->config = $config;
 
         $this->request = $request;
+
+        $this->cookieJar = $cookieJar;
 
         parent::__construct($model);
     }

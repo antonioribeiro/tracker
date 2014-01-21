@@ -126,7 +126,8 @@ class ServiceProvider extends IlluminateServiceProvider {
 
                                         new Cookie(new $cookieModel,
                                                     $app['tracker.config'],
-                                                    $app['request']),
+                                                    $app['request'],
+                                                    $app['cookie']),
 
                                         new MobileDetect,
 
@@ -136,11 +137,7 @@ class ServiceProvider extends IlluminateServiceProvider {
 
                                         $app['session.store'],
 
-                                        $app['tracker.config'],
-
-                                        $app['cookie'],
-
-                                        $app['request']
+                                        $app['tracker.config']
                                     );
         });
     }

@@ -34,8 +34,6 @@ use PragmaRX\Tracker\Data\Repositories\Cookie;
 use PragmaRX\Tracker\Services\Authentication;
 
 use Illuminate\Session\Store as IlluminateSession;
-use Illuminate\Cookie\CookieJar;
-use Illuminate\Http\Request;
 
 use Rhumsaa\Uuid\Uuid as UUID;
 
@@ -51,9 +49,7 @@ class RepositoryManager implements RepositoryManagerInterface {
                                     UserAgentParser $userAgentParser,
                                     Authentication $authentication,
                                     IlluminateSession $session,
-                                    Config $config,
-                                    CookieJar $cookieJar,
-                                    Request $request
+                                    Config $config
                                 )
     {
         $this->sessionRepository = $sessionRepository;
@@ -75,10 +71,6 @@ class RepositoryManager implements RepositoryManagerInterface {
         $this->session = $session;
 
         $this->config = $config;
-
-        $this->request = $request;
-
-        $this->cookieJar = $cookieJar;
     }
 
     public function createAccess($data)

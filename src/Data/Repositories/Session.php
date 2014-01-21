@@ -71,11 +71,12 @@ class Session extends Repository {
 
     private function sessionIsReliable()
     {
-        return $data = $this->getSessionData()
-                && isset($data['client_ip']) 
-                && $data['client_ip'] == $this->sessionInfo['client_ip']
-                && isset($data['user_agent']) 
-                && $data['user_agent'] == $this->sessionInfo['user_agent'];
+        $data = $this->getSessionData();
+
+        return  isset($data['client_ip']) &&
+                $data['client_ip'] === $this->sessionInfo['client_ip'] &&
+                isset($data['user_agent']) &&
+                $data['user_agent'] === $this->sessionInfo['user_agent'];
     }
 
     private function sessionIsKnownOrCreateSession()
@@ -123,7 +124,6 @@ class Session extends Repository {
         {
             $this->storeSession();
         }
-
     }
 
     private function sessionGetId()
