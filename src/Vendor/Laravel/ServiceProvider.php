@@ -9,7 +9,13 @@ use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Support\UserAgentParser;
 use PragmaRX\Tracker\Support\FileSystem;
 
-use PragmaRX\Tracker\Data\Repository as DataRepository;
+use PragmaRX\Tracker\Data\Repositories\Session;
+use PragmaRX\Tracker\Data\Repositories\Access;
+use PragmaRX\Tracker\Data\Repositories\Agent;
+use PragmaRX\Tracker\Data\Repositories\Device;
+use PragmaRX\Tracker\Data\Repositories\Cookie;
+
+use PragmaRX\Tracker\Data\RepositoryManager;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
@@ -52,6 +58,10 @@ class ServiceProvider extends IlluminateServiceProvider {
      */
     public function register()
     {   
+        // Unfortunately, we are stuck with PHP session, because
+        // Laravel's Session ID changes every time user logs in.
+        session_start(); 
+
         new UserAgentParser($this->app->make('path.base'));
 
         $this->registerConfig();
@@ -97,16 +107,40 @@ class ServiceProvider extends IlluminateServiceProvider {
     {
         $this->app['tracker.repositories'] = $this->app->share(function($app)
         {
-            return new DataRepository(
-                                        'PragmaRX\Tracker\Data\Models\Session',
-                                        'PragmaRX\Tracker\Data\Models\Access',
-                                        'PragmaRX\Tracker\Data\Models\Agent',
-                                        'PragmaRX\Tracker\Data\Models\Device',
-                                        $app['tracker.authentication'],
+            $sessionModel = $this->getConfig('session_model');
+            $accessModel = $this->getConfig('access_model');
+            $agentModel = $this->getConfig('agent_model');
+            $deviceModel = $this->getConfig('device_model');
+            $cookieModel = $this->getConfig('cookie_model');
+
+            return new RepositoryManager(
+                                        new Session(new $sessionModel, 
+                                                    $app['tracker.config'], 
+                                                    $app['session.store']),
+
+                                        new Access(new $accessModel),
+
+                                        new Agent(new $agentModel),
+
+                                        new Device(new $deviceModel),
+
+                                        new Cookie(new $cookieModel,
+                                                    $app['tracker.config'],
+                                                    $app['request']),
+
                                         new MobileDetect,
+
                                         new UserAgentParser($app->make('path.base')),
+
+                                        $app['tracker.authentication'],
+
                                         $app['session.store'],
-                                        $app['tracker.config']
+
+                                        $app['tracker.config'],
+
+                                        $app['cookie'],
+
+                                        $app['request']
                                     );
         });
     }

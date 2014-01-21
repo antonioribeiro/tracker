@@ -14,7 +14,7 @@ class CreateSessionsTable extends Migration {
 		Schema::create('tracker_sessions', function($table) {
 			$table->increments('id');
 			
-			$table->string('session_uuid')->unique();
+			$table->string('uuid')->unique();
 			$table->string('user_id')->nullable();
 			$table->string('device_id');
 			$table->string('client_ip');

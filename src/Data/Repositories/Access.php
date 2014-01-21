@@ -19,14 +19,10 @@
  * @link       http://pragmarx.com
  */
 
-namespace PragmaRX\Tracker\Data\Models;
+namespace PragmaRX\Tracker\Data\Repositories;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class Session extends Eloquent {
-
-	protected $table = 'tracker_sessions';
-
-	protected $fillable = array('session_uuid', 'user_id', 'device_id', 'client_ip', 'cookie_id');
+class Access extends Repository {
 
 }

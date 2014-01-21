@@ -19,12 +19,8 @@
  * @link       http://pragmarx.com
  */
 
-namespace PragmaRX\Tracker\Data\Models;
+namespace PragmaRX\Tracker\Data;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-
-class User extends Eloquent {
-
-	protected $table = 'users';
+interface RepositoryManagerInterface {
 
 }

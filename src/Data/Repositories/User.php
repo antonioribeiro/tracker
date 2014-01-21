@@ -19,21 +19,11 @@
  * @link       http://pragmarx.com
  */
 
-namespace PragmaRX\Tracker\Data\Models;
+namespace PragmaRX\Tracker\Data\Repositories;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class Device extends Eloquent {
+class User extends Repository {
 
-	protected $table = 'tracker_devices';
-
-	protected $fillable = array(
-									'kind', 
-									'model', 
-									'platform', 
-									'platform_version', 									
-									'is_mobile', 
-									'agent_id'
-								);
 
 }

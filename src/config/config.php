@@ -26,9 +26,25 @@ return array(
 
     'enabled' => true,
 
-    'user_model' => 'PragmaRX\Tracker\Data\Models\User',
-
     'log_accesses' => false,
+
+    'store_cookie_tracker' => true,
+
+    'tracker_session_name' => 'tracker_session',
+
+    'tracker_cookie_name' => 'please_change_this_cookie_name',
+
+    'user_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\User',
+
+    'session_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Session',
+
+    'access_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Access',
+
+    'agent_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Agent',
+
+    'device_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Device',
+
+    'cookie_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Cookie',
 
     'authentication_ioc_binding' => 'auth',
 
@@ -37,9 +53,5 @@ return array(
     'authenticated_user_method' => 'user',
 
     'authenticated_user_id_column' => 'id',
-
-    'tracker_session_name' => 'tracker_session',
-
-    'tracker_cookie_name' => 'please_change_this_cookie_name',
 
 );
