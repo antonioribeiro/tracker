@@ -19,8 +19,8 @@
         "php": ">=5.3.7",
         "illuminate/foundation": "4.*",
         "illuminate/support": "4.*",
-        "rhumsaa/uuid": "2.6.*@dev",
-        "mobiledetect/mobiledetectlib": "dev-master",
+        "rhumsaa/uuid": "2.*",
+        "mobiledetect/mobiledetectlib": "2.*",
         "tobie/ua-parser" : "dev-master"
     },
 
