@@ -17,10 +17,10 @@
 
     "require": {
         "php": ">=5.3.7",
-        "illuminate/foundation": "4.*",
-        "illuminate/support": "4.*",
-        "rhumsaa/uuid": "2.*",
-        "mobiledetect/mobiledetectlib": "2.*",
+        "illuminate/foundation": "4.1.*",
+        "illuminate/support": "4.1.*",
+        "rhumsaa/uuid": "dev-master",
+        "mobiledetect/mobiledetectlib": "dev-master",
         "tobie/ua-parser" : "dev-master"
     },
 
