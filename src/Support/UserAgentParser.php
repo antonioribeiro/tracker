@@ -44,7 +44,7 @@ class UserAgentParser {
 			$userAgent = $_SERVER['HTTP_USER_AGENT'];
 		}
 
-		$this->parser = with(new Parser(__DIR__.'/regexes.php'))->parse($userAgent);
+		$this->parser = Parser::create(__DIR__.'/regexes.php')->parse($userAgent);
 
 		$this->userAgent = $this->parser->ua;
 
