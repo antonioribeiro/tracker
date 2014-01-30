@@ -1,9 +1,9 @@
 {
     "name": "pragmarx/tracker",
 
-    "description": "A Laravel 4.1+ automatic application deployment package via git webhooks",
+    "description": "A Laravel 4.1+ user activity tracker",
 
-    "keywords": ["deploy", "deployment", "laravel"],
+    "keywords": ["tracking", "logging", "user agent", "mobile detection", "laravel"],
 
     "license": "MIT",
 
