@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDevicesTable extends Migration {
+class CreateTrackerDevicesTable extends Migration {
 
 	/**
 	 * Run the migrations.

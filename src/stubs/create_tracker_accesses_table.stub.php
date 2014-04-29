@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAgentsTable extends Migration {
+class CreateTrackerAccessesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -11,15 +11,14 @@ class CreateAgentsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('tracker_agents', function($table) {
+		Schema::create('tracker_accesses', function($table) {
 			$table->increments('id');
 			
-			$table->string('name')->unique();
-			$table->string('browser');
-			$table->string('browser_version');
+			$table->string('session_id');
+			$table->string('path_info');
 
 			$table->timestamps();
-		});
+		});	
 	}
 
 	/**
@@ -29,7 +28,7 @@ class CreateAgentsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('tracker_agents');
+		Schema::drop('tracker_accesses');
 	}
 
 }

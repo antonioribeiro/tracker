@@ -7,7 +7,6 @@ use PragmaRX\Tracker\Services\Authentication;
 use PragmaRX\Tracker\Support\Config;
 use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Support\UserAgentParser;
-use PragmaRX\Tracker\Support\FileSystem;
 
 use PragmaRX\Tracker\Data\Repositories\Session;
 use PragmaRX\Tracker\Data\Repositories\Access;
@@ -16,6 +15,8 @@ use PragmaRX\Tracker\Data\Repositories\Device;
 use PragmaRX\Tracker\Data\Repositories\Cookie;
 
 use PragmaRX\Tracker\Data\RepositoryManager;
+
+use PragmaRX\Tracker\Vendor\Laravel\Artisan\Tables as TablesCommand;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
@@ -71,6 +72,10 @@ class ServiceProvider extends IlluminateServiceProvider {
         $this->registerRepositories();
 
         $this->registerTracker();
+
+	    $this->registerTablesCommand();
+
+	    $this->commands('tracker.tables.command');
     }
 
     /**
@@ -167,5 +172,13 @@ class ServiceProvider extends IlluminateServiceProvider {
     {
         return $this->app['config']->get(self::PACKAGE_NAMESPACE.'::'.$key);
     }
+
+	private function registerTablesCommand()
+	{
+		$this->app['tracker.tables.command'] = $this->app->share(function($app)
+		{
+			return new TablesCommand();
+		});
+	}
 
 }

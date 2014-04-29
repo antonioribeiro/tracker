@@ -24,9 +24,9 @@ return array(
 
     'tracker_alias' => 'Tracker',
 
-    'enabled' => true,
+	'enabled' => false,
 
-    'log_accesses' => false,
+	'log_accesses' => false,
 
     'store_cookie_tracker' => true,
 

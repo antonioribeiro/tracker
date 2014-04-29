@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSessionsTable extends Migration {
+class CreateTrackerSessionsTable extends Migration {
 
 	/**
 	 * Run the migrations.

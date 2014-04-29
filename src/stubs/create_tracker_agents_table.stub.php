@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCookiesTable extends Migration {
+class CreateTrackerAgentsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -11,10 +11,12 @@ class CreateCookiesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('tracker_cookies', function($table) {
+		Schema::create('tracker_agents', function($table) {
 			$table->increments('id');
 			
-			$table->string('uuid')->unique();
+			$table->string('name')->unique();
+			$table->string('browser');
+			$table->string('browser_version');
 
 			$table->timestamps();
 		});
@@ -27,7 +29,7 @@ class CreateCookiesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('tracker_cookies');
+		Schema::drop('tracker_agents');
 	}
 
 }

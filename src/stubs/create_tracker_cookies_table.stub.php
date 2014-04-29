@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAccessesTable extends Migration {
+class CreateTrackerCookiesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -11,14 +11,13 @@ class CreateAccessesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('tracker_accesses', function($table) {
+		Schema::create('tracker_cookies', function($table) {
 			$table->increments('id');
 			
-			$table->string('session_id');
-			$table->string('path_info');
+			$table->string('uuid')->unique();
 
 			$table->timestamps();
-		});	
+		});
 	}
 
 	/**
@@ -28,7 +27,7 @@ class CreateAccessesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('tracker_accesses');
+		Schema::drop('tracker_cookies');
 	}
 
 }
