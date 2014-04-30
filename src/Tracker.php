@@ -63,7 +63,7 @@ class Tracker
 
     public function recordAccess()
     {
-        $sessionId = $this->getSessionId();
+        $sessionId = $this->getSessionId(true);
 
         if ($this->config->get('log_accesses'))
         {
@@ -76,16 +76,18 @@ class Tracker
         }
     }
 
-    public function getSessionId()
+    public function getSessionId($updateLastActivity = false)
     {
         return $this->dataRepositoryManager->getSessionId(
-                                                    array(
-                                                        'user_id' => $this->getUserId(),
-                                                        'device_id' => $this->getDeviceId(),
-                                                        'client_ip' => $this->request->getClientIp(),
-                                                        'user_agent' => $this->dataRepositoryManager->getCurrentUserAgent(),
-                                                        'cookie_id' => $this->getCookieId(),
-                                                    ));
+            array(
+                'user_id' => $this->getUserId(),
+                'device_id' => $this->getDeviceId(),
+                'client_ip' => $this->request->getClientIp(),
+                'user_agent' => $this->dataRepositoryManager->getCurrentUserAgent(),
+                'cookie_id' => $this->getCookieId(),
+            ),
+            $updateLastActivity
+        );
     }
 
     public function getUserId()

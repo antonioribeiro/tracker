@@ -21,8 +21,6 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-
 use PragmaRX\Tracker\Support\Config;
 
 use Illuminate\Session\Store as IlluminateSession;
@@ -67,6 +65,8 @@ class Session extends Repository {
         }
 
         $this->sessionInfo['uuid'] = $this->getSystemSessionId();
+
+        $this->sessionInfo['last_activity'] = \Carbon\Carbon::now();
     }
 
     private function sessionIsReliable()

@@ -132,9 +132,9 @@ class RepositoryManager implements RepositoryManagerInterface {
         return $this->authentication->getCurrentUserId();
     }
 
-    public function getSessionId($sessionInfo)
+    public function getSessionId($sessionInfo, $updateLastActivity)
     {
-        return $this->sessionRepository->getCurrentId($sessionInfo);
+        return $this->sessionRepository->getCurrentId($sessionInfo, $updateLastActivity);
     }
 
     public function getCookieId()
