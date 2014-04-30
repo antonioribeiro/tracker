@@ -10,11 +10,7 @@ class Tables extends Base {
 	protected $name = 'tracker:tables';
 
 	private $tables = [
-		'create_tracker_accesses_table',
-		'create_tracker_sessions_table',
-		'create_tracker_agents_table',
-		'create_tracker_cookies_table',
-		'create_tracker_devices_table',
+		'create_tracker_tables',
 	];
 
 	/**
@@ -22,7 +18,7 @@ class Tables extends Base {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Create all migrations for the Tracker database columns';
+	protected $description = 'Create the migrations for Tracker database tables and columns';
 
 	/**
 	 * Execute the command.

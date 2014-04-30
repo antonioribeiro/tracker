@@ -11,14 +11,7 @@ class CreateTrackerAccessesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('tracker_accesses', function($table) {
-			$table->increments('id');
-			
-			$table->string('session_id');
-			$table->string('path_info');
 
-			$table->timestamps();
-		});	
 	}
 
 	/**
@@ -28,7 +21,6 @@ class CreateTrackerAccessesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('tracker_accesses');
 	}
 
 }

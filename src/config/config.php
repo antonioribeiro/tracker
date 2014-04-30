@@ -30,6 +30,8 @@ return array(
 
     'store_cookie_tracker' => true,
 
+    'connection' => null,
+
     'tracker_session_name' => 'tracker_session',
 
     'tracker_cookie_name' => 'please_change_this_cookie_name',

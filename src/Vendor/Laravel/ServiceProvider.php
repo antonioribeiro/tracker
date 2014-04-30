@@ -8,6 +8,8 @@ use PragmaRX\Tracker\Support\Config;
 use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Support\UserAgentParser;
 
+use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
+
 use PragmaRX\Tracker\Data\Repositories\Session;
 use PragmaRX\Tracker\Data\Repositories\Access;
 use PragmaRX\Tracker\Data\Repositories\Agent;
@@ -69,6 +71,8 @@ class ServiceProvider extends IlluminateServiceProvider {
 
         $this->registerAuthentication();
 
+        $this->registerMigrator();
+
         $this->registerRepositories();
 
         $this->registerTracker();
@@ -103,7 +107,8 @@ class ServiceProvider extends IlluminateServiceProvider {
             return new Tracker(
                                     $app['tracker.config'],
                                     $app['tracker.repositories'],
-                                    $app['request']
+                                    $app['request'],
+                                    $app['tracker.migrator']
                                 );
         });
     }
@@ -160,6 +165,16 @@ class ServiceProvider extends IlluminateServiceProvider {
         $this->app['tracker.config'] = $this->app->share(function($app)
         {
             return new Config($app['config'], self::PACKAGE_NAMESPACE);
+        });
+    }
+
+    public function registerMigrator()
+    {
+        $this->app['tracker.migrator'] = $this->app->share(function($app)
+        {
+            $connection = $this->getConfig('connection');
+
+            return new Migrator($app['db']->connection($connection)->getSchemaBuilder());
         });
     }
 

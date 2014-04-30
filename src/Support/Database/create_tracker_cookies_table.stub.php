@@ -11,13 +11,6 @@ class CreateTrackerCookiesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('tracker_cookies', function($table) {
-			$table->increments('id');
-			
-			$table->string('uuid')->unique();
-
-			$table->timestamps();
-		});
 	}
 
 	/**
@@ -27,7 +20,6 @@ class CreateTrackerCookiesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('tracker_cookies');
 	}
 
 }

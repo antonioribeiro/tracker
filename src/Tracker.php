@@ -22,7 +22,10 @@
 namespace PragmaRX\Tracker;
 
 use PragmaRX\Tracker\Support\Config;
+
 use PragmaRX\Tracker\Data\RepositoryManager as DataRepositoryManager;
+
+use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
 
 use Illuminate\Http\Request;
 
@@ -37,7 +40,8 @@ class Tracker
     public function __construct(
                                     Config $config, 
                                     DataRepositoryManager $dataRepositoryManager, 
-                                    Request $request
+                                    Request $request,
+                                    Migrator $migrator
                                 )
     {
         $this->config = $config;
@@ -45,6 +49,8 @@ class Tracker
         $this->dataRepositoryManager = $dataRepositoryManager;
 
         $this->request = $request;
+
+        $this->migrator = $migrator;
     }
 
     public function boot()
@@ -97,6 +103,11 @@ class Tracker
         return $this
                 ->dataRepositoryManager
                 ->findOrCreateDevice($this->dataRepositoryManager->getCurrentDeviceProperties());
+    }
+
+    public function getMigrator()
+    {
+        return $this->migrator;
     }
 
 }
