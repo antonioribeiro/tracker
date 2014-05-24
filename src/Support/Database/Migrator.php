@@ -33,18 +33,52 @@ class Migrator
 
     public function up()
     {
-        $this->schema->create('tracker_accesses', function($table) {
+        $this->schema->create('tracker_log', function($table) {
             $table->increments('id');
-            
-            $table->string('session_id');
-            $table->string('path_info');
+
+            $table->integer('session_id')->unsigned();
+            $table->integer('path_id')->unsigned();
+	        $table->integer('query_id')->unsigned();
+	        $table->string('method',10);
+	        $table->string('route_name');
+	        $table->string('route_action');
+	        $table->boolean('is_ajax');
+	        $table->boolean('is_secure');
+	        $table->boolean('is_json');
+	        $table->boolean('wants_json');
 
             $table->timestamps();
         });
 
+	    $this->schema->create('tracker_path', function($table) {
+		    $table->increments('id');
+
+		    $table->text('path');
+
+		    $table->timestamps();
+	    });
+
+	    $this->schema->create('tracker_query', function($table) {
+		    $table->increments('id');
+
+		    $table->text('query');
+
+		    $table->timestamps();
+	    });
+
+	    $this->schema->create('tracker_query_arguments', function($table) {
+		    $table->increments('id');
+
+		    $table->integer('query_id')->unsigned();
+		    $table->text('argument');
+		    $table->text('value');
+
+		    $table->timestamps();
+	    });
+
         $this->schema->create('tracker_agents', function($table) {
             $table->increments('id');
-            
+
             $table->string('name')->unique();
             $table->string('browser');
             $table->string('browser_version');
@@ -54,7 +88,7 @@ class Migrator
 
         $this->schema->create('tracker_cookies', function($table) {
             $table->increments('id');
-            
+
             $table->string('uuid')->unique();
 
             $table->timestamps();
@@ -62,7 +96,7 @@ class Migrator
 
         $this->schema->create('tracker_devices', function($table) {
             $table->increments('id');
-            
+
             $table->string('kind');
             $table->string('model');
             $table->string('platform');
@@ -77,7 +111,7 @@ class Migrator
 
         $this->schema->create('tracker_sessions', function($table) {
             $table->increments('id');
-            
+
             $table->string('uuid')->unique();
             $table->string('user_id')->nullable();
             $table->string('device_id');
@@ -99,7 +133,13 @@ class Migrator
 
         $this->schema->drop('tracker_agents');
 
-        $this->schema->drop('tracker_accesses');
+	    $this->schema->drop('tracker_query_arguments');
+
+	    $this->schema->drop('tracker_query');
+
+	    $this->schema->drop('tracker_path');
+
+        $this->schema->drop('tracker_log');
     }
 
 }
