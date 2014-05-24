@@ -113,13 +113,4 @@ class Base extends Command {
 		return array_keys((array) $items);
 	}
 
-	/**
-	 * Base procedures to prepare the command to be run.
-	 *
-	 */
-	public function fire()
-	{
-		$this->laravel->select->setConnection($this->input->getOption('database'));
-	}
-
 }

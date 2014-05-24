@@ -26,7 +26,7 @@ return array(
 
 	'enabled' => false,
 
-	'log_accesses' => false,
+	'log_enabled' => false,
 
     'store_cookie_tracker' => true,
 
@@ -40,7 +40,7 @@ return array(
 
     'session_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Session',
 
-    'access_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Access',
+    'log_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Log',
 
     'agent_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Agent',
 

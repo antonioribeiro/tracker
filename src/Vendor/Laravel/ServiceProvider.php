@@ -1,5 +1,5 @@
 <?php namespace PragmaRX\Tracker\Vendor\Laravel;
- 
+
 use PragmaRX\Tracker\Tracker;
 
 use PragmaRX\Tracker\Services\Authentication;
@@ -11,7 +11,7 @@ use PragmaRX\Tracker\Support\UserAgentParser;
 use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
 
 use PragmaRX\Tracker\Data\Repositories\Session;
-use PragmaRX\Tracker\Data\Repositories\Access;
+use PragmaRX\Tracker\Data\Repositories\Log;
 use PragmaRX\Tracker\Data\Repositories\Agent;
 use PragmaRX\Tracker\Data\Repositories\Device;
 use PragmaRX\Tracker\Data\Repositories\Cookie;
@@ -60,10 +60,10 @@ class ServiceProvider extends IlluminateServiceProvider {
      * @return void
      */
     public function register()
-    {   
+    {
         // Unfortunately, we are stuck with PHP session, because
         // Laravel's Session ID changes every time user logs in.
-        session_start(); 
+        session_start();
 
         new UserAgentParser($this->app->make('path.base'));
 
@@ -118,17 +118,17 @@ class ServiceProvider extends IlluminateServiceProvider {
         $this->app['tracker.repositories'] = $this->app->share(function($app)
         {
             $sessionModel = $this->getConfig('session_model');
-            $accessModel = $this->getConfig('access_model');
+            $logModel = $this->getConfig('log_model');
             $agentModel = $this->getConfig('agent_model');
             $deviceModel = $this->getConfig('device_model');
             $cookieModel = $this->getConfig('cookie_model');
 
             return new RepositoryManager(
-                                        new Session(new $sessionModel, 
-                                                    $app['tracker.config'], 
+                                        new Session(new $sessionModel,
+                                                    $app['tracker.config'],
                                                     $app['session.store']),
 
-                                        new Access(new $accessModel),
+                                        new Log(new $logModel),
 
                                         new Agent(new $agentModel),
 

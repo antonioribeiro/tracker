@@ -26,7 +26,7 @@ use PragmaRX\Tracker\Support\UserAgentParser;
 use PragmaRX\Tracker\Support\Config;
 
 use PragmaRX\Tracker\Data\Repositories\Session;
-use PragmaRX\Tracker\Data\Repositories\Access;
+use PragmaRX\Tracker\Data\Repositories\Log;
 use PragmaRX\Tracker\Data\Repositories\Agent;
 use PragmaRX\Tracker\Data\Repositories\Device;
 use PragmaRX\Tracker\Data\Repositories\Cookie;
@@ -41,8 +41,8 @@ class RepositoryManager implements RepositoryManagerInterface {
 
     public function __construct(
                                     Session $sessionRepository,
-                                    Access $accessRepository,
-                                    Agent $agentRepository, 
+                                    Log $logRepository,
+                                    Agent $agentRepository,
                                     Device $deviceRepository,
                                     Cookie $cookieRepository,
                                     MobileDetect $mobileDetect,
@@ -54,7 +54,7 @@ class RepositoryManager implements RepositoryManagerInterface {
     {
         $this->sessionRepository = $sessionRepository;
 
-        $this->accessRepository = $accessRepository;
+        $this->logRepository = $logRepository;
 
         $this->agentRepository = $agentRepository;
 
@@ -73,9 +73,9 @@ class RepositoryManager implements RepositoryManagerInterface {
         $this->config = $config;
     }
 
-    public function createAccess($data)
+    public function createLog($data)
     {
-        return $this->accessRepository->create($data);
+        return $this->logRepository->create($data);
     }
 
     public function findOrCreateSession($data)

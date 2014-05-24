@@ -38,8 +38,8 @@ class Tracker
     private $session;
 
     public function __construct(
-                                    Config $config, 
-                                    DataRepositoryManager $dataRepositoryManager, 
+                                    Config $config,
+                                    DataRepositoryManager $dataRepositoryManager,
                                     Request $request,
                                     Migrator $migrator
                                 )
@@ -57,22 +57,22 @@ class Tracker
     {
         if ($this->config->get('enabled'))
         {
-            $this->recordAccess();
+            $this->log();
         }
     }
 
-    public function recordAccess()
+    public function log()
     {
         $sessionId = $this->getSessionId(true);
 
-        if ($this->config->get('log_accesses'))
+        if ($this->config->get('log_enabled'))
         {
-            $this->access = $this->dataRepositoryManager->createAccess(
-                                                                    array(
-                                                                            'session_id' => $sessionId,
-                                                                            'path_info' => $this->request->path(),
-                                                                        )
-                                                                );
+            $this->dataRepositoryManager->createLog(
+                array(
+                        'session_id' => $sessionId,
+                        'path_info' => $this->request->path(),
+                    )
+            );
         }
     }
 

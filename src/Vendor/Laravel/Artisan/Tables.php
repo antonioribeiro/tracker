@@ -27,8 +27,6 @@ class Tables extends Base {
 	 */
 	public function fire()
 	{
-		parent::fire();
-
 		foreach($this->tables as $table)
 		{
 			$fullPath = $this->createBaseMigration($table);

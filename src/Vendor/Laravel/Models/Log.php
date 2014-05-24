@@ -23,10 +23,10 @@ namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class Access extends Eloquent {
+class Log extends Eloquent {
 
-	protected $table = 'tracker_accesses';
+	protected $table = 'tracker_log';
 
-	protected $fillable = array('session_id', 
+	protected $fillable = array('session_id',
 								'path_info');
 }
