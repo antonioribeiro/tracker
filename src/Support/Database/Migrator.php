@@ -38,10 +38,10 @@ class Migrator
 
             $table->integer('session_id')->unsigned();
             $table->integer('path_id')->unsigned();
-	        $table->integer('query_id')->unsigned();
+	        $table->integer('query_id')->unsigned()->nullable();
 	        $table->string('method',10);
-	        $table->string('route_name');
-	        $table->string('route_action');
+	        $table->string('route_name')->nullable();
+	        $table->string('route_action')->nullable();
 	        $table->boolean('is_ajax');
 	        $table->boolean('is_secure');
 	        $table->boolean('is_json');
@@ -50,18 +50,18 @@ class Migrator
             $table->timestamps();
         });
 
-	    $this->schema->create('tracker_path', function($table) {
+	    $this->schema->create('tracker_paths', function($table) {
 		    $table->increments('id');
 
-		    $table->text('path');
+		    $table->text('path')->index();
 
 		    $table->timestamps();
 	    });
 
-	    $this->schema->create('tracker_query', function($table) {
+	    $this->schema->create('tracker_queries', function($table) {
 		    $table->increments('id');
 
-		    $table->text('query');
+		    $table->text('query')->index();
 
 		    $table->timestamps();
 	    });
@@ -69,7 +69,7 @@ class Migrator
 	    $this->schema->create('tracker_query_arguments', function($table) {
 		    $table->increments('id');
 
-		    $table->integer('query_id')->unsigned();
+		    $table->integer('query_id')->unsigned()->index();
 		    $table->text('argument');
 		    $table->text('value');
 
@@ -102,21 +102,40 @@ class Migrator
             $table->string('platform');
             $table->string('platform_version');
             $table->boolean('is_mobile');
-            $table->string('agent_id');
+            $table->integer('agent_id')->unsigned();
 
             $table->unique(['kind', 'model', 'platform', 'platform_version']);
 
             $table->timestamps();
         });
 
-        $this->schema->create('tracker_sessions', function($table) {
+	    $this->schema->create('tracker_referers', function($table) {
+		    $table->increments('id');
+
+		    $table->integer('domain_id')->unsigned()->index();
+
+		    $table->text('referer')->index();
+
+		    $table->timestamps();
+	    });
+
+	    $this->schema->create('tracker_domains', function($table) {
+		    $table->increments('id');
+
+		    $table->string('domain')->index();
+
+		    $table->timestamps();
+	    });
+
+	    $this->schema->create('tracker_sessions', function($table) {
             $table->increments('id');
 
             $table->string('uuid')->unique();
-            $table->string('user_id')->nullable();
-            $table->string('device_id');
+            $table->integer('user_id')->nullable()->unsigned();
+            $table->integer('device_id')->unsigned();
             $table->string('client_ip');
-            $table->string('cookie_id')->nullable();
+	        $table->integer('referer_id')->unsigned()->nullable();
+            $table->integer('cookie_id')->nullable()->unsigned();
             $table->timestamp('last_activity');
 
             $table->timestamps();
@@ -127,6 +146,10 @@ class Migrator
     {
         $this->schema->drop('tracker_sessions');
 
+	    $this->schema->drop('tracker_referers');
+
+	    $this->schema->drop('tracker_domains');
+
         $this->schema->drop('tracker_devices');
 
         $this->schema->drop('tracker_cookies');
@@ -135,9 +158,9 @@ class Migrator
 
 	    $this->schema->drop('tracker_query_arguments');
 
-	    $this->schema->drop('tracker_query');
+	    $this->schema->drop('tracker_queries');
 
-	    $this->schema->drop('tracker_path');
+	    $this->schema->drop('tracker_paths');
 
         $this->schema->drop('tracker_log');
     }

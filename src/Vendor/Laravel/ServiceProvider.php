@@ -12,6 +12,9 @@ use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
 
 use PragmaRX\Tracker\Data\Repositories\Session;
 use PragmaRX\Tracker\Data\Repositories\Log;
+use PragmaRX\Tracker\Data\Repositories\Path;
+use PragmaRX\Tracker\Data\Repositories\Query;
+use PragmaRX\Tracker\Data\Repositories\QueryArgument;
 use PragmaRX\Tracker\Data\Repositories\Agent;
 use PragmaRX\Tracker\Data\Repositories\Device;
 use PragmaRX\Tracker\Data\Repositories\Cookie;
@@ -79,6 +82,8 @@ class ServiceProvider extends IlluminateServiceProvider {
 
 	    $this->registerTablesCommand();
 
+	    $this->registerExecutionCallBack();
+
 	    $this->commands('tracker.tables.command');
     }
 
@@ -108,6 +113,7 @@ class ServiceProvider extends IlluminateServiceProvider {
                                     $app['tracker.config'],
                                     $app['tracker.repositories'],
                                     $app['request'],
+                                    $app['router'],
                                     $app['tracker.migrator']
                                 );
         });
@@ -122,6 +128,9 @@ class ServiceProvider extends IlluminateServiceProvider {
             $agentModel = $this->getConfig('agent_model');
             $deviceModel = $this->getConfig('device_model');
             $cookieModel = $this->getConfig('cookie_model');
+	        $pathModel = $this->getConfig('path_model');
+			$queryModel = $this->getConfig('query_model');
+			$queryArgumentModel = $this->getConfig('query_argument_model');
 
             return new RepositoryManager(
                                         new Session(new $sessionModel,
@@ -129,6 +138,12 @@ class ServiceProvider extends IlluminateServiceProvider {
                                                     $app['session.store']),
 
                                         new Log(new $logModel),
+
+                                        new Path(new $pathModel),
+
+                                        new Query(new $queryModel),
+
+                                        new QueryArgument(new $queryArgumentModel),
 
                                         new Agent(new $agentModel),
 
@@ -196,4 +211,13 @@ class ServiceProvider extends IlluminateServiceProvider {
 		});
 	}
 
+	private function registerExecutionCallBack()
+	{
+		$me = $this;
+
+		$this->app['events']->listen('router.matched', function() use ($me)
+		{
+			$me->app['tracker']->routerMatched();
+		});
+	}
 }

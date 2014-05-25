@@ -60,7 +60,7 @@ class Tables extends Base {
 	 */
 	protected function getMigrationStub($name)
 	{
-		$stub = file_get_contents(__DIR__."/../../../stubs/$name.stub.php");
+		$stub = file_get_contents(__DIR__."/../../../stubs/$name.stub");
 
 		return $stub;
 	}

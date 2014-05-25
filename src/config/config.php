@@ -42,7 +42,13 @@ return array(
 
     'log_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Log',
 
-    'agent_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Agent',
+	'path_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Path',
+
+	'query_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Query',
+
+	'query_argument_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\QueryArgument',
+
+	'agent_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Agent',
 
     'device_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Device',
 

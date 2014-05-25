@@ -27,6 +27,9 @@ use PragmaRX\Tracker\Support\Config;
 
 use PragmaRX\Tracker\Data\Repositories\Session;
 use PragmaRX\Tracker\Data\Repositories\Log;
+use PragmaRX\Tracker\Data\Repositories\Path;
+use PragmaRX\Tracker\Data\Repositories\Query;
+use PragmaRX\Tracker\Data\Repositories\QueryArgument;
 use PragmaRX\Tracker\Data\Repositories\Agent;
 use PragmaRX\Tracker\Data\Repositories\Device;
 use PragmaRX\Tracker\Data\Repositories\Cookie;
@@ -39,9 +42,28 @@ use Rhumsaa\Uuid\Uuid as UUID;
 
 class RepositoryManager implements RepositoryManagerInterface {
 
-    public function __construct(
+	/**
+	 * @var Path
+	 */
+	private $pathRepository;
+
+	/**
+	 * @var Query
+	 */
+
+	private $queryRepository;
+	/**
+	 * @var QueryArgument
+	 */
+
+	private $queryArgumentRepository;
+
+	public function __construct(
                                     Session $sessionRepository,
                                     Log $logRepository,
+									Path $pathRepository,
+									Query $queryRepository,
+									QueryArgument $queryArgumentRepository,
                                     Agent $agentRepository,
                                     Device $deviceRepository,
                                     Cookie $cookieRepository,
@@ -55,6 +77,12 @@ class RepositoryManager implements RepositoryManagerInterface {
         $this->sessionRepository = $sessionRepository;
 
         $this->logRepository = $logRepository;
+
+	    $this->pathRepository = $pathRepository;
+
+	    $this->queryRepository = $queryRepository;
+
+	    $this->queryArgumentRepository = $queryArgumentRepository;
 
         $this->agentRepository = $agentRepository;
 
@@ -82,6 +110,11 @@ class RepositoryManager implements RepositoryManagerInterface {
     {
         return $this->sessionRepository->findOrCreate($data, array('uuid'));
     }
+
+	public function findOrCreatePath($path)
+	{
+		return $this->pathRepository->findOrCreate($path, array('path'));
+	}
 
     public function findOrCreateAgent($data)
     {
@@ -142,4 +175,18 @@ class RepositoryManager implements RepositoryManagerInterface {
         return $this->cookieRepository->getId();
     }
 
+	public function getQueryId($query)
+	{
+		if ( ! $query)
+		{
+			return;
+		}
+
+		return $this->findOrCreateQuery($query);
+	}
+
+	public function findOrCreateQuery($data)
+	{
+		return $this->queryRepository->findOrCreate($data, array('query'));
+	}
 }

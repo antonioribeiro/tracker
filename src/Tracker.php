@@ -22,25 +22,26 @@
 namespace PragmaRX\Tracker;
 
 use PragmaRX\Tracker\Support\Config;
-
 use PragmaRX\Tracker\Data\RepositoryManager as DataRepositoryManager;
-
 use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
-
 use Illuminate\Http\Request;
-
-use Rhumsaa\Uuid\Uuid as UUID;
+use Illuminate\Routing\Router;
 
 class Tracker
 {
     private $config;
 
     private $session;
+	/**
+	 * @var \Illuminate\Routing\Router
+	 */
+	private $route;
 
-    public function __construct(
+	public function __construct(
                                     Config $config,
                                     DataRepositoryManager $dataRepositoryManager,
                                     Request $request,
+                                    Router $route,
                                     Migrator $migrator
                                 )
     {
@@ -51,6 +52,8 @@ class Tracker
         $this->request = $request;
 
         $this->migrator = $migrator;
+
+	    $this->route = $route;
     }
 
     public function boot()
@@ -63,15 +66,21 @@ class Tracker
 
     public function log()
     {
-        $sessionId = $this->getSessionId(true);
-
         if ($this->config->get('log_enabled'))
         {
             $this->dataRepositoryManager->createLog(
                 array(
-                        'session_id' => $sessionId,
-                        'path_info' => $this->request->path(),
-                    )
+                    'log' => array(
+                        'session_id' => $this->getSessionId(true),
+                        'method' => $this->request->method(),
+                        'path_id' => $this->getPathId(),
+                        'query_id' => $this->getQueryId(),
+                        'is_ajax' => $this->request->ajax(),
+                        'is_secure' => $this->request->isSecure(),
+                        'is_json' => $this->request->isJson(),
+                        'wants_json' => $this->request->wantsJson(),
+                    ),
+                )
             );
         }
     }
@@ -102,14 +111,41 @@ class Tracker
 
     public function getDeviceId()
     {
-        return $this
-                ->dataRepositoryManager
-                ->findOrCreateDevice($this->dataRepositoryManager->getCurrentDeviceProperties());
+        return $this->dataRepositoryManager->findOrCreateDevice(
+	        $this->dataRepositoryManager->getCurrentDeviceProperties()
+        );
     }
+
+	public function getPathId()
+	{
+		return $this->dataRepositoryManager->findOrCreatePath(
+			array(
+				'path' => $this->request->path()
+			)
+		);
+	}
+
+	public function getQueryId()
+	{
+		$arguments = $this->request->query();
+
+		return $this->dataRepositoryManager->getQueryId(
+			array(
+				'query' => array_implode('=', '|', $arguments),
+				'arguments' => $arguments
+			)
+		);
+	}
 
     public function getMigrator()
     {
         return $this->migrator;
     }
+
+	public function routerMatched()
+	{
+//	                        'route_name' => $this->route->currentRouteName(),
+//	                        'route_action' => $this->route->currentRouteAction(),
+	}
 
 }

@@ -21,8 +21,6 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-
 class User extends Repository {
 
 

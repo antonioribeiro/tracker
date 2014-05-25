@@ -91,7 +91,7 @@ abstract class Repository implements RepositoryInterface {
 		return $this->result->save();
 	}
 
-    public function findOrCreate($attributes, $keys = null)
+    public function findOrCreate($attributes, $keys = null, &$created = false)
     {
         $model = $this->model->newQuery();
 

@@ -105,7 +105,8 @@ class Session extends Repository {
 
         $wasComplete = true;
 
-        foreach ($this->sessionInfo as $key => $value) {
+        foreach ($this->sessionInfo as $key => $value)
+        {
             if ($sessionData[$key] !== $value)
             {
                 if ( ! isset($model))
@@ -114,6 +115,7 @@ class Session extends Repository {
                 }
 
                 $model->setAttribute($key, $value);
+
                 $model->save();
 
                 $wasComplete = false;

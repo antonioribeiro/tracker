@@ -21,6 +21,16 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-class Device extends Repository {
+class Query extends Repository {
+
+	public function findOrCreate($data, $keys = null, &$created = false)
+	{
+		$id = parent::findOrCreate($data, $keys, $created);
+
+		if ($created)
+		{
+			dd('create arguments!!!!!!!');
+		}
+	}
 
 }

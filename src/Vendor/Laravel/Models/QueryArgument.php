@@ -23,18 +23,16 @@ namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class Log extends Eloquent {
+use PragmaRX\Tracker\Data\Repositories\Agent as AgentRepository;
 
-	protected $table = 'tracker_log';
+class QueryArgument extends Eloquent {
+
+	protected $table = 'tracker_query_arguments';
 
 	protected $fillable = array(
-		'session_id',
-		'method',
-		'path_id',
 		'query_id',
-		'is_ajax',
-		'is_secure',
-		'is_json',
-		'wants_json',
+		'argument',
+		'value',
 	);
+
 }
