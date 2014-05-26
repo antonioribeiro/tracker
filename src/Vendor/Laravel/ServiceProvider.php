@@ -23,6 +23,7 @@ use PragmaRX\Tracker\Data\Repositories\Referer;
 use PragmaRX\Tracker\Data\Repositories\Route;
 use PragmaRX\Tracker\Data\Repositories\RoutePath;
 use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
+use PragmaRX\Tracker\Data\Repositories\Error;
 
 use PragmaRX\Tracker\Data\RepositoryManager;
 
@@ -89,6 +90,8 @@ class ServiceProvider extends IlluminateServiceProvider {
 
 	    $this->registerExecutionCallBack();
 
+	    $this->registerErrorHandler();
+
 	    $this->commands('tracker.tables.command');
     }
 
@@ -141,6 +144,7 @@ class ServiceProvider extends IlluminateServiceProvider {
 	        $routeModel = $this->getConfig('route_model');
 	        $routePathModel = $this->getConfig('route_path_model');
 	        $routePathParameterModel = $this->getConfig('route_path_parameter_model');
+	        $errorModel = $this->getConfig('error_model');
 
             return new RepositoryManager(
                                         new Session(new $sessionModel,
@@ -173,6 +177,8 @@ class ServiceProvider extends IlluminateServiceProvider {
                                         new RoutePath(new $routePathModel),
 
                                         new RoutePathParameter(new $routePathParameterModel),
+
+                                        new Error(new $errorModel),
 
                                         new MobileDetect,
 
@@ -238,6 +244,16 @@ class ServiceProvider extends IlluminateServiceProvider {
 		$this->app['events']->listen('router.matched', function() use ($me)
 		{
 			$me->app['tracker']->routerMatched();
+		});
+	}
+
+	private function registerErrorHandler()
+	{
+		$me = $this;
+
+		$this->app->error(function(\Exception $exception, $code) use ($me)
+		{
+			$me->app['tracker']->handleException($exception, $code);
 		});
 	}
 }

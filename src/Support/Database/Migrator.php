@@ -46,6 +46,7 @@ class Migrator
 	        $table->boolean('is_secure');
 	        $table->boolean('is_json');
 	        $table->boolean('wants_json');
+	        $table->integer('error_id')->nullable()->unsigned();
 
             $table->timestamps();
         });
@@ -180,10 +181,22 @@ class Migrator
 
             $table->timestamps();
         });
+
+	    $this->schema->create('tracker_errors', function($table)
+	    {
+		    $table->increments('id');
+
+		    $table->string('code');
+		    $table->text('message');
+
+		    $table->timestamps();
+	    });
     }
 
     public function down()
     {
+	    $this->schema->drop('tracker_errors');
+
         $this->schema->drop('tracker_sessions');
 
 	    $this->schema->drop('tracker_referers');

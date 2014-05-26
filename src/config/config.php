@@ -58,6 +58,8 @@ return array(
 
 	'referer_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Referer',
 
+	'error_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Error',
+
 	'authentication_ioc_binding' => 'auth',
 
     'authenticated_check_method' => 'check',

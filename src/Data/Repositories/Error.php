@@ -21,26 +21,6 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-class Log extends Repository {
-
-	public function updateRoute($route_path_id)
-	{
-		if ($this->model->id)
-		{
-			$this->model->route_path_id = $route_path_id;
-
-			$this->model->save();
-		}
-	}
-
-	public function updateError($error_id)
-	{
-		if ($this->model->id)
-		{
-			$this->model->error_id = $error_id;
-
-			$this->model->save();
-		}
-	}
+class Error extends Repository {
 
 }

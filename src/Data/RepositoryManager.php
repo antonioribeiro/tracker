@@ -38,12 +38,11 @@ use PragmaRX\Tracker\Data\Repositories\Referer;
 use PragmaRX\Tracker\Data\Repositories\Route;
 use PragmaRX\Tracker\Data\Repositories\RoutePath;
 use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
+use PragmaRX\Tracker\Data\Repositories\Error;
 
 use PragmaRX\Tracker\Services\Authentication;
 
 use Illuminate\Session\Store as IlluminateSession;
-
-use Rhumsaa\Uuid\Uuid as UUID;
 
 class RepositoryManager implements RepositoryManagerInterface {
 
@@ -82,6 +81,10 @@ class RepositoryManager implements RepositoryManagerInterface {
 	 * @var Repositories\RoutePathParameter
 	 */
 	private $routePathParameterRepository;
+	/**
+	 * @var Error
+	 */
+	private $errorRepository;
 
 	public function __construct(
                                     Session $sessionRepository,
@@ -97,6 +100,7 @@ class RepositoryManager implements RepositoryManagerInterface {
                                     Route $routeRepository,
                                     RoutePath $routePathRepository,
                                     RoutePathParameter $routePathParameterRepository,
+                                    Error $errorRepository,
                                     MobileDetect $mobileDetect,
                                     UserAgentParser $userAgentParser,
                                     Authentication $authentication,
@@ -129,6 +133,8 @@ class RepositoryManager implements RepositoryManagerInterface {
 	    $this->routePathRepository = $routePathRepository;
 
 	    $this->routePathParameterRepository = $routePathParameterRepository;
+
+	    $this->errorRepository = $errorRepository;
 
         $this->authentication = $authentication;
 
@@ -283,8 +289,8 @@ class RepositoryManager implements RepositoryManagerInterface {
 	public function getRoutePathId($route, $request)
 	{
 		$route_id = $this->getRouteId(
-			$route->currentRouteName(),
-			$route->currentRouteAction()
+			$route->currentRouteName() ?: '',
+			$route->currentRouteAction() ?: 'closure'
 		);
 
 		$created = false;
@@ -314,7 +320,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 		);
 	}
 
-	private function getRoutePath($route_id, $path, $created)
+	private function getRoutePath($route_id, $path, &$created = null)
 	{
 		return $this->routePathRepository->findOrCreate(
 			array('route_id' => $route_id, 'path' => $path),
@@ -332,6 +338,16 @@ class RepositoryManager implements RepositoryManagerInterface {
 				'value' => $value,
 			)
 		);
+	}
+
+	public function handleException($exception, $code)
+	{
+		$error_id = $this->errorRepository->findOrCreate(
+			array('message' => $exception->getMessage(), 'code' => $code),
+			array('message', 'code')
+		);
+
+		return $this->logRepository->updateError($error_id);
 	}
 
 }
