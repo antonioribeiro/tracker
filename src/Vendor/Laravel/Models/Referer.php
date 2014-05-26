@@ -23,18 +23,16 @@ namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class Session extends Eloquent {
+use PragmaRX\Tracker\Data\Repositories\Agent as AgentRepository;
 
-	protected $table = 'tracker_sessions';
+class Referer extends Eloquent {
+
+	protected $table = 'tracker_referers';
 
 	protected $fillable = array(
-		'uuid',
-		'user_id',
-		'device_id',
-		'client_ip',
-		'cookie_id',
-		'referer_id',
-		'last_activity'
+		'referer',
+		'host',
+		'domain_id',
 	);
 
 }

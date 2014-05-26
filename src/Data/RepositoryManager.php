@@ -33,6 +33,11 @@ use PragmaRX\Tracker\Data\Repositories\QueryArgument;
 use PragmaRX\Tracker\Data\Repositories\Agent;
 use PragmaRX\Tracker\Data\Repositories\Device;
 use PragmaRX\Tracker\Data\Repositories\Cookie;
+use PragmaRX\Tracker\Data\Repositories\Domain;
+use PragmaRX\Tracker\Data\Repositories\Referer;
+use PragmaRX\Tracker\Data\Repositories\Route;
+use PragmaRX\Tracker\Data\Repositories\RoutePath;
+use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
 
 use PragmaRX\Tracker\Services\Authentication;
 
@@ -57,6 +62,26 @@ class RepositoryManager implements RepositoryManagerInterface {
 	 */
 
 	private $queryArgumentRepository;
+	/**
+	 * @var Domain
+	 */
+	private $domainRepository;
+	/**
+	 * @var Referer
+	 */
+	private $refererRepository;
+	/**
+	 * @var Repositories\Route
+	 */
+	private $routeRepository;
+	/**
+	 * @var Repositories\RoutePath
+	 */
+	private $routePathRepository;
+	/**
+	 * @var Repositories\RoutePathParameter
+	 */
+	private $routePathParameterRepository;
 
 	public function __construct(
                                     Session $sessionRepository,
@@ -67,6 +92,11 @@ class RepositoryManager implements RepositoryManagerInterface {
                                     Agent $agentRepository,
                                     Device $deviceRepository,
                                     Cookie $cookieRepository,
+                                    Domain $domainRepository,
+                                    Referer $refererRepository,
+                                    Route $routeRepository,
+                                    RoutePath $routePathRepository,
+                                    RoutePathParameter $routePathParameterRepository,
                                     MobileDetect $mobileDetect,
                                     UserAgentParser $userAgentParser,
                                     Authentication $authentication,
@@ -89,6 +119,16 @@ class RepositoryManager implements RepositoryManagerInterface {
         $this->deviceRepository = $deviceRepository;
 
         $this->cookieRepository = $cookieRepository;
+
+	    $this->domainRepository = $domainRepository;
+
+	    $this->refererRepository = $refererRepository;
+
+	    $this->routeRepository = $routeRepository;
+
+	    $this->routePathRepository = $routePathRepository;
+
+	    $this->routePathParameterRepository = $routePathParameterRepository;
 
         $this->authentication = $authentication;
 
@@ -187,6 +227,111 @@ class RepositoryManager implements RepositoryManagerInterface {
 
 	public function findOrCreateQuery($data)
 	{
-		return $this->queryRepository->findOrCreate($data, array('query'));
+		$id = $this->queryRepository->findOrCreate($data, array('query'), $created);
+
+		if ($created)
+		{
+			foreach ($data['arguments'] as $argument => $value)
+			{
+				$this->queryArgumentRepository->create(
+					array(
+						'query_id' => $id,
+						'argument' => $argument,
+						'value' => $value,
+					)
+				);
+			}
+		}
+
+		return $id;
 	}
+
+	public function updateRoute($route_id)
+	{
+		return $this->logRepository->updateRoute($route_id);
+	}
+
+	public function getDomainId($domain)
+	{
+		return $this->domainRepository->findOrCreate(
+			array('domain' => $domain),
+			array('domain')
+		);
+	}
+
+	public function getRefererId($referer)
+	{
+		if ($referer)
+		{
+			$url = parse_url($referer);
+
+			$parts = explode(".", $url['host']);
+
+			$domain_id = $this->getDomainId($parts[count($parts)-2] . "." . $parts[count($parts)-1]);
+
+			return $this->refererRepository->findOrCreate(
+				array(
+					'referer' => $referer,
+					'host' => $url['host'],
+					'domain_id' => $domain_id,
+				),
+				array('referer')
+			);
+		}
+	}
+
+	public function getRoutePathId($route, $request)
+	{
+		$route_id = $this->getRouteId(
+			$route->currentRouteName(),
+			$route->currentRouteAction()
+		);
+
+		$created = false;
+
+		$route_path_id = $this->getRoutePath(
+			$route_id,
+			$request->path(),
+			$created
+		);
+
+		if ($created)
+		{
+			foreach($route->current()->parameters() as $parameter => $value)
+			{
+				$this->createRoutePathParameter($route_path_id, $parameter, $value);
+			}
+		}
+
+		return $route_path_id;
+	}
+
+	private function getRouteId($name, $action)
+	{
+		return $this->routeRepository->findOrCreate(
+			array('name' => $name, 'action' => $action),
+			array('name', 'action')
+		);
+	}
+
+	private function getRoutePath($route_id, $path, $created)
+	{
+		return $this->routePathRepository->findOrCreate(
+			array('route_id' => $route_id, 'path' => $path),
+			array('route_id', 'path'),
+			$created
+		);
+	}
+
+	private function createRoutePathParameter($route_path_id, $parameter, $value)
+	{
+		return $this->routePathParameterRepository->create(
+			array(
+				'route_path_id' => $route_path_id,
+				'parameter' => $parameter,
+				'value' => $value,
+			)
+		);
+	}
+
 }

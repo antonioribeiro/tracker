@@ -54,7 +54,11 @@ return array(
 
     'cookie_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Cookie',
 
-    'authentication_ioc_binding' => 'auth',
+	'domain_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Domain',
+
+	'referer_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Referer',
+
+	'authentication_ioc_binding' => 'auth',
 
     'authenticated_check_method' => 'check',
 

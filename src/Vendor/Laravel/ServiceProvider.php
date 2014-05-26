@@ -18,6 +18,11 @@ use PragmaRX\Tracker\Data\Repositories\QueryArgument;
 use PragmaRX\Tracker\Data\Repositories\Agent;
 use PragmaRX\Tracker\Data\Repositories\Device;
 use PragmaRX\Tracker\Data\Repositories\Cookie;
+use PragmaRX\Tracker\Data\Repositories\Domain;
+use PragmaRX\Tracker\Data\Repositories\Referer;
+use PragmaRX\Tracker\Data\Repositories\Route;
+use PragmaRX\Tracker\Data\Repositories\RoutePath;
+use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
 
 use PragmaRX\Tracker\Data\RepositoryManager;
 
@@ -131,6 +136,11 @@ class ServiceProvider extends IlluminateServiceProvider {
 	        $pathModel = $this->getConfig('path_model');
 			$queryModel = $this->getConfig('query_model');
 			$queryArgumentModel = $this->getConfig('query_argument_model');
+	        $domainModel = $this->getConfig('domain_model');
+	        $refererModel = $this->getConfig('referer_model');
+	        $routeModel = $this->getConfig('route_model');
+	        $routePathModel = $this->getConfig('route_path_model');
+	        $routePathParameterModel = $this->getConfig('route_path_parameter_model');
 
             return new RepositoryManager(
                                         new Session(new $sessionModel,
@@ -153,6 +163,16 @@ class ServiceProvider extends IlluminateServiceProvider {
                                                     $app['tracker.config'],
                                                     $app['request'],
                                                     $app['cookie']),
+
+                                        new Domain(new $domainModel),
+
+                                        new Referer(new $refererModel),
+
+                                        new Route(new $routeModel),
+
+                                        new RoutePath(new $routePathModel),
+
+                                        new RoutePathParameter(new $routePathParameterModel),
 
                                         new MobileDetect,
 

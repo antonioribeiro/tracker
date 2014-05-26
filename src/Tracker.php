@@ -70,16 +70,14 @@ class Tracker
         {
             $this->dataRepositoryManager->createLog(
                 array(
-                    'log' => array(
-                        'session_id' => $this->getSessionId(true),
-                        'method' => $this->request->method(),
-                        'path_id' => $this->getPathId(),
-                        'query_id' => $this->getQueryId(),
-                        'is_ajax' => $this->request->ajax(),
-                        'is_secure' => $this->request->isSecure(),
-                        'is_json' => $this->request->isJson(),
-                        'wants_json' => $this->request->wantsJson(),
-                    ),
+                    'session_id' => $this->getSessionId(true),
+                    'method' => $this->request->method(),
+                    'path_id' => $this->getPathId(),
+                    'query_id' => $this->getQueryId(),
+                    'is_ajax' => $this->request->ajax(),
+                    'is_secure' => $this->request->isSecure(),
+                    'is_json' => $this->request->isJson(),
+                    'wants_json' => $this->request->wantsJson(),
                 )
             );
         }
@@ -93,6 +91,7 @@ class Tracker
                 'device_id' => $this->getDeviceId(),
                 'client_ip' => $this->request->getClientIp(),
                 'user_agent' => $this->dataRepositoryManager->getCurrentUserAgent(),
+	            'referer_id' => $this->getRefererId(),
                 'cookie_id' => $this->getCookieId(),
             ),
             $updateLastActivity
@@ -127,14 +126,15 @@ class Tracker
 
 	public function getQueryId()
 	{
-		$arguments = $this->request->query();
-
-		return $this->dataRepositoryManager->getQueryId(
-			array(
-				'query' => array_implode('=', '|', $arguments),
-				'arguments' => $arguments
-			)
-		);
+		if (count($arguments = $this->request->query()))
+		{
+			return $this->dataRepositoryManager->getQueryId(
+				array(
+					'query' => array_implode('=', '|', $arguments),
+					'arguments' => $arguments
+				)
+			);
+		}
 	}
 
     public function getMigrator()
@@ -144,8 +144,28 @@ class Tracker
 
 	public function routerMatched()
 	{
-//	                        'route_name' => $this->route->currentRouteName(),
-//	                        'route_action' => $this->route->currentRouteAction(),
+		if ($this->config->get('enabled'))
+		{
+			return $this->dataRepositoryManager->updateRoute(
+				$this->getRoutePathId($this->route->current())
+			);
+		}
 	}
 
+	private function getRefererId()
+	{
+		return $this->dataRepositoryManager->getRefererId(
+			$this->request->headers->get('referer')
+		);
+	}
+
+	public function getDomainId($domain)
+	{
+		return $this->dataRepositoryManager->getDomainId($domain);
+	}
+
+	private function getRoutePathId()
+	{
+		return $this->dataRepositoryManager->getRoutePathId($this->route, $this->request);
+	}
 }

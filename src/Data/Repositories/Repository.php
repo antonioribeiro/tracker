@@ -66,7 +66,7 @@ abstract class Repository implements RepositoryInterface {
 
 	public function create($attributes)
 	{
-		$this->result = $this->model->create($attributes);
+		$this->model = $this->model->create($attributes);
 
 		return $this;
 	}
@@ -105,8 +105,13 @@ abstract class Repository implements RepositoryInterface {
         if (! $model = $model->first())
         {
             $model = $this->model->create($attributes);
+
+	        $created = true;
         }
-	
-        return $model->id;
+
+	    $this->model = $model;
+
+        return $this->model->id;
     }
+
 }
