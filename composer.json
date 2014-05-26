@@ -38,10 +38,10 @@
             "component": "package",
             "frameworks": ["Laravel 4"],
             "versions": {
-                    "0.1.0": "master"
+                    "0.2.0": "master"
             },
             "branch-alias": {
-                    "dev-master": "0.1.0-dev"
+                    "dev-master": "0.2.0-dev"
             }
     },
 
