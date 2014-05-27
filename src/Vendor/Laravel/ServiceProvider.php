@@ -131,54 +131,54 @@ class ServiceProvider extends IlluminateServiceProvider {
     {
         $this->app['tracker.repositories'] = $this->app->share(function($app)
         {
-            $sessionModel = $this->getConfig('session_model');
-            $logModel = $this->getConfig('log_model');
-            $agentModel = $this->getConfig('agent_model');
-            $deviceModel = $this->getConfig('device_model');
-            $cookieModel = $this->getConfig('cookie_model');
-	        $pathModel = $this->getConfig('path_model');
-			$queryModel = $this->getConfig('query_model');
-			$queryArgumentModel = $this->getConfig('query_argument_model');
-	        $domainModel = $this->getConfig('domain_model');
-	        $refererModel = $this->getConfig('referer_model');
-	        $routeModel = $this->getConfig('route_model');
-	        $routePathModel = $this->getConfig('route_path_model');
-	        $routePathParameterModel = $this->getConfig('route_path_parameter_model');
-	        $errorModel = $this->getConfig('error_model');
+            $sessionModel = $this->instantiateModel('session_model');
+            $logModel = $this->instantiateModel('log_model');
+            $agentModel = $this->instantiateModel('agent_model');
+            $deviceModel = $this->instantiateModel('device_model');
+            $cookieModel = $this->instantiateModel('cookie_model');
+	        $pathModel = $this->instantiateModel('path_model');
+			$queryModel = $this->instantiateModel('query_model');
+			$queryArgumentModel = $this->instantiateModel('query_argument_model');
+	        $domainModel = $this->instantiateModel('domain_model');
+	        $refererModel = $this->instantiateModel('referer_model');
+	        $routeModel = $this->instantiateModel('route_model');
+	        $routePathModel = $this->instantiateModel('route_path_model');
+	        $routePathParameterModel = $this->instantiateModel('route_path_parameter_model');
+	        $errorModel = $this->instantiateModel('error_model');
 
             return new RepositoryManager(
                                         new Session(new $sessionModel,
                                                     $app['tracker.config'],
                                                     $app['session.store']),
 
-                                        new Log(new $logModel),
+                                        new Log($logModel),
 
-                                        new Path(new $pathModel),
+                                        new Path($pathModel),
 
-                                        new Query(new $queryModel),
+                                        new Query($queryModel),
 
-                                        new QueryArgument(new $queryArgumentModel),
+                                        new QueryArgument($queryArgumentModel),
 
-                                        new Agent(new $agentModel),
+                                        new Agent($agentModel),
 
-                                        new Device(new $deviceModel),
+                                        new Device($deviceModel),
 
-                                        new Cookie(new $cookieModel,
+                                        new Cookie($cookieModel,
                                                     $app['tracker.config'],
                                                     $app['request'],
                                                     $app['cookie']),
 
-                                        new Domain(new $domainModel),
+                                        new Domain($domainModel),
 
-                                        new Referer(new $refererModel),
+                                        new Referer($refererModel),
 
-                                        new Route(new $routeModel),
+                                        new Route($routeModel),
 
-                                        new RoutePath(new $routePathModel),
+                                        new RoutePath($routePathModel),
 
-                                        new RoutePathParameter(new $routePathParameterModel),
+                                        new RoutePathParameter($routePathParameterModel),
 
-                                        new Error(new $errorModel),
+                                        new Error($errorModel),
 
                                         new MobileDetect,
 
@@ -256,4 +256,21 @@ class ServiceProvider extends IlluminateServiceProvider {
 			$me->app['tracker']->handleException($exception, $code);
 		});
 	}
+
+	private function instantiateModel($modelName)
+	{
+		$model = $this->getConfig($modelName);
+
+		if ( ! $model)
+		{
+			$message = "Tracker: Model not found for '$modelName'.";
+
+			$this->app['log']->error($message);
+
+			throw new Execption($message);
+		}
+
+		return new $model;
+	}
+
 }
