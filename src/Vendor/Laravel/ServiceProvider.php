@@ -31,9 +31,6 @@ use PragmaRX\Tracker\Vendor\Laravel\Artisan\Tables as TablesCommand;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
-use Rhumsaa\Uuid\Console\Exception;
-
-use Exception;
 
 class ServiceProvider extends IlluminateServiceProvider {
 
@@ -270,7 +267,7 @@ class ServiceProvider extends IlluminateServiceProvider {
 
 			$this->app['log']->error($message);
 
-			throw new Exception($message);
+			throw new \Exception($message);
 		}
 
 		return new $model;
