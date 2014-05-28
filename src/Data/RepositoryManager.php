@@ -257,8 +257,8 @@ class RepositoryManager implements RepositoryManagerInterface {
 	public function getDomainId($domain)
 	{
 		return $this->domainRepository->findOrCreate(
-			array('domain' => $domain),
-			array('domain')
+			array('name' => $domain),
+			array('name')
 		);
 	}
 
@@ -274,11 +274,11 @@ class RepositoryManager implements RepositoryManagerInterface {
 
 			return $this->refererRepository->findOrCreate(
 				array(
-					'referer' => $referer,
+					'url' => $referer,
 					'host' => $url['host'],
 					'domain_id' => $domain_id,
 				),
-				array('referer')
+				array('url')
 			);
 		}
 	}

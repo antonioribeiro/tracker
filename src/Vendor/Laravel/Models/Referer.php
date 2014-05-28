@@ -28,13 +28,13 @@ class Referer extends Base {
 	protected $table = 'tracker_referers';
 
 	protected $fillable = array(
-		'referer',
+		'url',
 		'host',
 		'domain_id',
 	);
 
 	public function domain()
 	{
-		return $this->hasMany($this->getConfig()->get('domain_model'));
+		return $this->belongsTo($this->getConfig()->get('domain_model'));
 	}
 }

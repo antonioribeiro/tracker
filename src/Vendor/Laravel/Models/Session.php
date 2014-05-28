@@ -56,6 +56,11 @@ class Session extends Base {
 		return $this->belongsTo($this->getConfig()->get('agent_model'));
 	}
 
+	public function referer()
+	{
+		return $this->belongsTo($this->getConfig()->get('referer_model'));
+	}
+
 	public function log()
 	{
 		return $this->hasMany($this->getConfig()->get('log_model'));

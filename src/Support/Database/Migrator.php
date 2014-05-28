@@ -151,7 +151,7 @@ class Migrator
 		    $table->increments('id');
 
 		    $table->integer('domain_id')->unsigned()->index();
-		    $table->string('referer')->index();
+		    $table->string('url')->index();
 		    $table->string('host');
 
 		    $table->timestamps();
@@ -161,7 +161,7 @@ class Migrator
 	    {
 		    $table->increments('id');
 
-		    $table->string('domain')->index();
+		    $table->string('name')->index();
 
 		    $table->timestamps();
 	    });
