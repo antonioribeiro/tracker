@@ -2,7 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/pragmarx/tracker/v/stable.png)](https://packagist.org/packages/pragmarx/tracker) [![License](https://poser.pugx.org/pragmarx/tracker/license.png)](https://packagist.org/packages/pragmarx/tracker)
 
-# THIS IS A WORK IN PROGRESS, THIS PACKAGE WORKS FOR ME BUT IS NOT DONE YET.
+# THIS IS A WORK IN PROGRESS, IT WORKS BUT IS NOT DONE YET.
 
 ## A Laravel User Tracker/Logger package
 
