@@ -22,7 +22,6 @@
 namespace PragmaRX\Tracker\Data;
 
 use PragmaRX\Tracker\Support\MobileDetect;
-use PragmaRX\Tracker\Support\UserAgentParser;
 use PragmaRX\Tracker\Support\Config;
 
 use PragmaRX\Tracker\Data\Repositories\Session;
@@ -102,7 +101,7 @@ class RepositoryManager implements RepositoryManagerInterface {
                                     RoutePathParameter $routePathParameterRepository,
                                     Error $errorRepository,
                                     MobileDetect $mobileDetect,
-                                    UserAgentParser $userAgentParser,
+                                    $userAgentParser,
                                     Authentication $authentication,
                                     IlluminateSession $session,
                                     Config $config
@@ -348,9 +347,14 @@ class RepositoryManager implements RepositoryManagerInterface {
 		return $this->logRepository->updateError($error_id);
 	}
 
-	public function getOpenSessions()
+	public function getLastSessions($minutes)
 	{
-		return $this->sessionRepository->getOpenSessions();
+		return $this->sessionRepository->last($minutes);
+	}
+
+	public function getAllSessions()
+	{
+		return $this->sessionRepository->all();
 	}
 
 }

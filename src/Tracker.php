@@ -182,9 +182,14 @@ class Tracker
 		}
 	}
 
-    public function openSessions()
+    public function lastSessions($minutes = 1440)
     {
-        return $this->dataRepositoryManager->getOpenSessions();
+        return $this->dataRepositoryManager->getLastSessions($minutes);
+    }
+
+    public function allSessions()
+    {
+        return $this->dataRepositoryManager->getAllSessions();
     }
 
 }

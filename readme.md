@@ -63,6 +63,10 @@ Publish tracker configuration:
 
 	php artisan config:publish pragmarx/tracker
 
+Create the UA Parser regex file (every time you run `composer update` you must also execute this command):
+
+    php artisan tracker:updateparser
+
 And edit the file `app/config/packages/pragmarx/tracker/config.php` to enable Tracker.
 
 	'enabled' => true,

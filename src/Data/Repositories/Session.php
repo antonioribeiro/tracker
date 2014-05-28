@@ -184,8 +184,21 @@ class Session extends Repository {
         return $this->config->get('tracker_session_name');
     }
 
-    public function getOpenSessions()
+    private function getSessions()
     {
-        return $this->model->orderBy('updated_at', 'desc')->get();
+        return $this->model->orderBy('updated_at', 'desc');
+    }
+
+    public function all()
+    {
+        return $this->getSessions()->get();
+    }
+    
+    public function last($minutes)
+    {
+        $hour = \Carbon\Carbon::now()->subMinutes($minutes);
+
+        return $this->getSessions()->where('updated_at', '>=', $hour)->get();
     }
 }
+

@@ -28,6 +28,7 @@ use PragmaRX\Tracker\Data\Repositories\Error;
 use PragmaRX\Tracker\Data\RepositoryManager;
 
 use PragmaRX\Tracker\Vendor\Laravel\Artisan\Tables as TablesCommand;
+use PragmaRX\Tracker\Vendor\Laravel\Artisan\UpdateParser as UpdateParserCommand;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
@@ -74,8 +75,6 @@ class ServiceProvider extends IlluminateServiceProvider {
         // Laravel's Session ID changes every time user logs in.
         session_start();
 
-        new UserAgentParser($this->app->make('path.base'));
-
         $this->registerConfig();
 
         $this->registerAuthentication();
@@ -88,11 +87,15 @@ class ServiceProvider extends IlluminateServiceProvider {
 
 	    $this->registerTablesCommand();
 
+        $this->registerUpdateParserCommand();
+
 	    $this->registerExecutionCallBack();
 
 	    $this->registerErrorHandler();
 
 	    $this->commands('tracker.tables.command');
+
+        $this->commands('tracker.updateparser.command');
     }
 
     /**
@@ -131,6 +134,15 @@ class ServiceProvider extends IlluminateServiceProvider {
     {
         $this->app['tracker.repositories'] = $this->app->share(function($app)
         {
+            try 
+            {
+                $uaParser = new UserAgentParser($app->make('path.base'));
+            }
+            catch (\UAParser\Exception\Exception $exception) 
+            {
+                $uaParser = null;
+            }
+
             $sessionModel = $this->instantiateModel('session_model');
             $logModel = $this->instantiateModel('log_model');
             $agentModel = $this->instantiateModel('agent_model');
@@ -182,7 +194,7 @@ class ServiceProvider extends IlluminateServiceProvider {
 
                                         new MobileDetect,
 
-                                        new UserAgentParser($app->make('path.base')),
+                                        $uaParser,
 
                                         $app['tracker.authentication'],
 
@@ -236,6 +248,14 @@ class ServiceProvider extends IlluminateServiceProvider {
 			return new TablesCommand();
 		});
 	}
+
+    private function registerUpdateParserCommand()
+    {
+        $this->app['tracker.updateparser.command'] = $this->app->share(function($app)
+        {
+            return new UpdateParserCommand();
+        });
+    }
 
 	private function registerExecutionCallBack()
 	{
