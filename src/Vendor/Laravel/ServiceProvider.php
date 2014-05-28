@@ -125,7 +125,8 @@ class ServiceProvider extends IlluminateServiceProvider {
                                     $app['tracker.repositories'],
                                     $app['request'],
                                     $app['router'],
-                                    $app['tracker.migrator']
+                                    $app['tracker.migrator'],
+                                    $app['log']
                                 );
         });
     }
@@ -138,7 +139,7 @@ class ServiceProvider extends IlluminateServiceProvider {
             {
                 $uaParser = new UserAgentParser($app->make('path.base'));
             }
-            catch (\UAParser\Exception\Exception $exception) 
+            catch (\Exception $exception) 
             {
                 $uaParser = null;
             }

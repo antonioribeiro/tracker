@@ -357,4 +357,8 @@ class RepositoryManager implements RepositoryManagerInterface {
 		return $this->sessionRepository->all();
 	}
 
+	public function parserIsAvailable()
+	{
+		return ! empty($this->userAgentParser);
+	}
 }

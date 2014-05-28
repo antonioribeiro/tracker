@@ -26,6 +26,7 @@ use PragmaRX\Tracker\Data\RepositoryManager as DataRepositoryManager;
 use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
+use Illuminate\Log\Writer as Logger;
 
 class Tracker
 {
@@ -37,12 +38,15 @@ class Tracker
 	 */
 	private $route;
 
+    private $logger;
+
 	public function __construct(
                                     Config $config,
                                     DataRepositoryManager $dataRepositoryManager,
                                     Request $request,
                                     Router $route,
-                                    Migrator $migrator
+                                    Migrator $migrator,
+                                    Logger $logger
                                 )
     {
         $this->config = $config;
@@ -54,11 +58,13 @@ class Tracker
         $this->migrator = $migrator;
 
 	    $this->route = $route;
+
+        $this->logger = $logger;
     }
 
     public function boot()
     {
-        if ($this->config->get('enabled'))
+        if ($this->config->get('enabled') && $this->parserIsAvailable())
         {
             $this->log();
         }
@@ -66,10 +72,7 @@ class Tracker
 
     public function log()
     {
-        if ($this->config->get('log_enabled'))
-        {
-            $this->dataRepositoryManager->createLog(
-                array(
+        $log = array(
                     'session_id' => $this->getSessionId(true),
                     'method' => $this->request->method(),
                     'path_id' => $this->getPathId(),
@@ -78,8 +81,11 @@ class Tracker
                     'is_secure' => $this->request->isSecure(),
                     'is_json' => $this->request->isJson(),
                     'wants_json' => $this->request->wantsJson(),
-                )
-            );
+                );
+
+        if ($this->config->get('log_enabled'))
+        {
+            $this->dataRepositoryManager->createLog($log);
         }
     }
 
@@ -190,6 +196,18 @@ class Tracker
     public function allSessions()
     {
         return $this->dataRepositoryManager->getAllSessions();
+    }
+
+    public function parserIsAvailable()
+    {
+        if ( ! $this->dataRepositoryManager->parserIsAvailable() )
+        {
+            $this->logger->error('Tracker: uaparser regex file not available. "Execute php artisan tracker:updateparser" to generate it.');
+
+            return false;
+        }
+
+        return true;
     }
 
 }
