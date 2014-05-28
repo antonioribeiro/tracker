@@ -8,19 +8,19 @@
 
 Tracker gathers information from your requests to store identify:
 
-- Device (computer, smartphone, tablet...)
-- Browser (Chrome, Mozilla Firefox, Safari, Internet Explorer...)
-- Operating Systems (iOS, Mac OS, Linux, Windows...)
+- **Device** (computer, smartphone, tablet...)
+- **Browser** (Chrome, Mozilla Firefox, Safari, Internet Explorer...)
+- **Operating System** (iOS, Mac OS, Linux, Windows...)
 
 It also has tha ability to log your site accesses, by recording:
 
-- Session
-- User
-- User device (by keeping a cookie on each device)
-- Routes and all its parameters
-- Queries and all its arguments
-- Referer
-- Errors
+- **Session**
+- **User**
+- **User device** (by keeping a cookie on each device)
+- **Routes and all its parameters**
+- **Queries and all its arguments**
+- **Referer**
+- **Exceptions/Errors**
 
 ## Tables
 
