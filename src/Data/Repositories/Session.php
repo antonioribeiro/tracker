@@ -183,4 +183,8 @@ class Session extends Repository {
         return $this->config->get('tracker_session_name');
     }
 
+    public function getOpenSessions()
+    {
+        return $this->model->orderBy('updated_at', 'desc')->get();
+    }
 }

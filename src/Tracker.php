@@ -180,4 +180,9 @@ class Tracker
 			catch (\Exception $e) {}
 		}
 	}
+
+    public function openSessions()
+    {
+        return $this->dataRepositoryManager->getOpenSessions();
+    }
 }

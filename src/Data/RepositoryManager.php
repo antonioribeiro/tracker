@@ -350,4 +350,8 @@ class RepositoryManager implements RepositoryManagerInterface {
 		return $this->logRepository->updateError($error_id);
 	}
 
+	public function getOpenSessions()
+	{
+		return $this->sessionRepository->getOpenSessions();
+	}
 }
