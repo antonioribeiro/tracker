@@ -147,7 +147,7 @@ class ServiceProvider extends IlluminateServiceProvider {
 	        $errorModel = $this->instantiateModel('error_model');
 
             return new RepositoryManager(
-                                        new Session(new $sessionModel,
+                                        new Session($sessionModel,
                                                     $app['tracker.config'],
                                                     $app['session.store']),
 
@@ -270,7 +270,14 @@ class ServiceProvider extends IlluminateServiceProvider {
 			throw new \Exception($message);
 		}
 
-		return new $model;
+        $model = new $model;
+
+        // $model->setConfig($this->app['tracker.config']);
+        // $model->setApp($this->app);
+        
+        $model->config = $this->app['tracker.config'];
+
+		return $model;
 	}
 
 }

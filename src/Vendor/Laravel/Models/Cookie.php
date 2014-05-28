@@ -21,9 +21,7 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-
-class Cookie extends Eloquent {
+class Cookie extends Base {
 
 	protected $table = 'tracker_cookies';
 

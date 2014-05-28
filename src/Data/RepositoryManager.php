@@ -354,4 +354,5 @@ class RepositoryManager implements RepositoryManagerInterface {
 	{
 		return $this->sessionRepository->getOpenSessions();
 	}
+
 }

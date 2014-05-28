@@ -21,9 +21,7 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-
-class Session extends Eloquent {
+class Session extends Base {
 
 	protected $table = 'tracker_sessions';
 
@@ -37,4 +35,28 @@ class Session extends Eloquent {
 		'last_activity'
 	);
 
+	public function __construct(array $attributes = array())
+	{
+		parent::__construct($attributes);
+	}
+
+	public function user()
+	{
+		return $this->belongsTo($this->getConfig()->get('user_model'));
+	}
+
+	public function device()
+	{
+		return $this->belongsTo($this->getConfig()->get('device_model'));
+	}
+
+	public function log()
+	{
+		return $this->hasMany($this->getConfig()->get('log_model'));
+	}
+
+	public function getHitsAttribute()
+	{
+		return $this->log()->count();
+	}
 }

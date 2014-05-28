@@ -21,9 +21,7 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-
-class Device extends Eloquent {
+class Device extends Base {
 	
 	protected $table = 'tracker_devices';
 
@@ -35,4 +33,10 @@ class Device extends Eloquent {
 									'is_mobile', 
 									'agent_id'
 								);
+
+	public function agent()
+	{
+		return $this->belongsTo($this->getConfig()->get('agent_model'));
+	}
+
 }

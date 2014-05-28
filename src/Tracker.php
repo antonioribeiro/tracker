@@ -185,4 +185,5 @@ class Tracker
     {
         return $this->dataRepositoryManager->getOpenSessions();
     }
+
 }

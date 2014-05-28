@@ -21,9 +21,7 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-
-class Log extends Eloquent {
+class Log extends Base {
 
 	protected $table = 'tracker_log';
 
@@ -32,9 +30,32 @@ class Log extends Eloquent {
 		'method',
 		'path_id',
 		'query_id',
+		'route_path_id',
 		'is_ajax',
 		'is_secure',
 		'is_json',
 		'wants_json',
+		'error_id',
 	);
+
+	public function session()
+	{
+		return $this->belongsTo($this->getConfig()->get('session_model'));
+	}
+
+	public function path()
+	{
+		return $this->belongsTo($this->getConfig()->get('path_model'));
+	}
+
+	public function logQuery()
+	{
+		return $this->belongsTo($this->getConfig()->get('query_model'));
+	}
+
+	public function route()
+	{
+		return $this->belongsTo($this->getConfig()->get('route_path_model'));
+	}
+
 }

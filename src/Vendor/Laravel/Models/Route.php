@@ -21,11 +21,9 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-
 use PragmaRX\Tracker\Data\Repositories\Agent as AgentRepository;
 
-class Route extends Eloquent {
+class Route extends Base {
 
 	protected $table = 'tracker_routes';
 
@@ -34,4 +32,9 @@ class Route extends Eloquent {
 		'action',
 	);
 
+	public function paths()
+	{
+		return $this->hasMany($this->getConfig()->get('route_path_model'));
+	}
+	
 }

@@ -21,11 +21,9 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-
 use PragmaRX\Tracker\Data\Repositories\Agent as AgentRepository;
 
-class Referer extends Eloquent {
+class Referer extends Base {
 
 	protected $table = 'tracker_referers';
 
@@ -35,4 +33,8 @@ class Referer extends Eloquent {
 		'domain_id',
 	);
 
+	public function domain()
+	{
+		return $this->hasMany($this->getConfig()->get('domain_model'));
+	}
 }

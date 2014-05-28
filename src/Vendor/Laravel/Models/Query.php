@@ -21,16 +21,19 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-
 use PragmaRX\Tracker\Data\Repositories\Agent as AgentRepository;
 
-class Query extends Eloquent {
+class Query extends Base {
 
 	protected $table = 'tracker_queries';
 
 	protected $fillable = array(
 		'query',
 	);
+
+	public function arguments()
+	{
+		return $this->hasMany($this->getConfig()->get('query_argument_model'));
+	}
 
 }
