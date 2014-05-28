@@ -197,8 +197,6 @@ class RepositoryManager implements RepositoryManagerInterface {
     {
         $properties = $this->mobileDetect->detectDevice();
 
-        $properties['agent_id'] = $this->getAgentId();
-
         $properties['platform'] = $this->userAgentParser->operatingSystem->family;
 
         $properties['platform_version'] = $this->userAgentParser->getOperatingSystemVersion();

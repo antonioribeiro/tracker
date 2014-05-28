@@ -140,7 +140,6 @@ class Migrator
             $table->string('platform');
             $table->string('platform_version');
             $table->boolean('is_mobile');
-            $table->integer('agent_id')->unsigned();
 
             $table->unique(['kind', 'model', 'platform', 'platform_version']);
 
@@ -174,6 +173,7 @@ class Migrator
             $table->string('uuid')->unique();
             $table->integer('user_id')->nullable()->unsigned();
             $table->integer('device_id')->unsigned();
+            $table->integer('agent_id')->unsigned();
             $table->string('client_ip');
 	        $table->integer('referer_id')->unsigned()->nullable();
             $table->integer('cookie_id')->nullable()->unsigned();

@@ -31,12 +31,6 @@ class Device extends Base {
 									'platform', 
 									'platform_version', 									
 									'is_mobile', 
-									'agent_id'
 								);
-
-	public function agent()
-	{
-		return $this->belongsTo($this->getConfig()->get('agent_model'));
-	}
 
 }

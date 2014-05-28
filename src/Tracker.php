@@ -90,6 +90,7 @@ class Tracker
                 'user_id' => $this->getUserId(),
                 'device_id' => $this->getDeviceId(),
                 'client_ip' => $this->request->getClientIp(),
+                'agent_id' => $this->dataRepositoryManager->getAgentId(),
                 'user_agent' => $this->dataRepositoryManager->getCurrentUserAgent(),
 	            'referer_id' => $this->getRefererId(),
                 'cookie_id' => $this->getCookieId(),

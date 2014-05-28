@@ -96,7 +96,8 @@ class Session extends Repository {
     private function sessionIsKnown()
     {
         return $this->session->has($this->getSessioIdentifier()) 
-                && $this->getSessionData('uuid') == $this->getSystemSessionId();
+                && $this->getSessionData('uuid') == $this->getSystemSessionId()
+                && $this->where('uuid', $this->getSessionData('uuid'))->first();
     }
 
     private function ensureSessionDataIsComplete()

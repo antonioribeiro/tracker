@@ -29,6 +29,7 @@ class Session extends Base {
 		'uuid',
 		'user_id',
 		'device_id',
+		'agent_id',
 		'client_ip',
 		'cookie_id',
 		'referer_id',
@@ -50,6 +51,11 @@ class Session extends Base {
 		return $this->belongsTo($this->getConfig()->get('device_model'));
 	}
 
+	public function agent()
+	{
+		return $this->belongsTo($this->getConfig()->get('agent_model'));
+	}
+
 	public function log()
 	{
 		return $this->hasMany($this->getConfig()->get('log_model'));
@@ -59,4 +65,5 @@ class Session extends Base {
 	{
 		return $this->log()->count();
 	}
+
 }
