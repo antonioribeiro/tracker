@@ -1,14 +1,16 @@
 # Laravel Tracker
 
-[![Latest Stable Version](https://poser.pugx.org/pragmarx/zipcode/v/stable.png)](https://packagist.org/packages/pragmarx/zipcode) [![License](https://poser.pugx.org/pragmarx/zipcode/license.png)](https://packagist.org/packages/pragmarx/zipcode)
+[![Latest Stable Version](https://poser.pugx.org/pragmarx/tracker/v/stable.png)](https://packagist.org/packages/pragmarx/tracker) [![License](https://poser.pugx.org/pragmarx/tracker/license.png)](https://packagist.org/packages/pragmarx/tracker)
+
+# THIS IS A WORK IN PROGRESS, THIS PACKAGE WORKS FOR ME BUT IS NOT DONE YET.
 
 ## A Laravel User Tracker/Logger package
 
 Tracker gathers information from your requests to store identify:
 
-- Devices
-- Browsers and its versions
-- Operating Systems and its versions
+- Device (computer, smartphone, tablet...)
+- Browser (Chrome, Mozilla Firefox, Safari, Internet Explorer...)
+- Operating Systems (iOS, Mac OS, Linux, Windows...)
 
 It also has tha ability to log your site accesses, by recording:
 
@@ -31,14 +33,14 @@ Here's a view of tables contents after
 
 ## Installing
 
-Require the `zipcode` package by **executing** the following command in your command line:
+Require the `tracker` package by **executing** the following command in your command line:
 
-    composer require "pragmarx/zipcode" "~1.0"
+    composer require "pragmarx/tracker" "~1.0"
 
 **Or** add to your composer.json:
 
     "require": {
-        "pragmarx/zipcode": "~1.0"
+        "pragmarx/tracker": "~1.0"
     }
 
 And execute
@@ -47,7 +49,27 @@ And execute
 
 Add the service provider to your app/config/app.php:
 
-    'PragmaRX\ZIPcode\Vendor\Laravel\ServiceProvider',
+    'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
+
+Create the migration:
+
+	php artisan tracker:tables
+
+Migrate it
+
+	php artisan migrate
+
+Publish tracker configuration:
+
+	php artisan config:publish pragmarx/tracker
+
+And edit the file `app/config/packages/pragmarx/tracker/config.php` to enable Tracker.
+
+	'enabled' => true,
+
+Note that the logging function is disabled by default, because it may write too much data to your database, but you can enable it by changing:
+
+	'log_enabled' => true,
 
 ## Author
 
@@ -55,7 +77,7 @@ Add the service provider to your app/config/app.php:
 
 ## License
 
-ZIPcode is licensed under the BSD 3-Clause License - see the `LICENSE` file for details
+Tracker is licensed under the BSD 3-Clause License - see the `LICENSE` file for details
 
 ## Contributing
 
