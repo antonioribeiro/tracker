@@ -55,7 +55,7 @@ class Migrator
 	    {
 		    $table->increments('id');
 
-		    $table->text('path')->index();
+		    $table->string('path')->index();
 
 		    $table->timestamps();
 	    });
@@ -64,7 +64,7 @@ class Migrator
 	    {
 		    $table->increments('id');
 
-		    $table->text('query')->index();
+		    $table->string('query')->index();
 
 		    $table->timestamps();
 	    });
@@ -74,8 +74,8 @@ class Migrator
 		    $table->increments('id');
 
 		    $table->integer('query_id')->unsigned()->index();
-		    $table->text('argument');
-		    $table->text('value');
+		    $table->string('argument');
+		    $table->string('value');
 
 		    $table->timestamps();
 	    });
@@ -95,7 +95,7 @@ class Migrator
 		    $table->increments('id');
 
 		    $table->string('route_id')->index();
-		    $table->text('path');
+		    $table->string('path');
 
 		    $table->timestamps();
 	    });
@@ -105,8 +105,8 @@ class Migrator
 		    $table->increments('id');
 
 		    $table->integer('route_path_id')->unsigned()->index();
-		    $table->text('parameter');
-		    $table->text('value');
+		    $table->string('parameter');
+		    $table->string('value');
 
 		    $table->timestamps();
 	    });
@@ -152,8 +152,8 @@ class Migrator
 		    $table->increments('id');
 
 		    $table->integer('domain_id')->unsigned()->index();
-		    $table->text('referer')->index();
-		    $table->text('host');
+		    $table->string('referer')->index();
+		    $table->string('host');
 
 		    $table->timestamps();
 	    });
@@ -187,7 +187,7 @@ class Migrator
 		    $table->increments('id');
 
 		    $table->string('code');
-		    $table->text('message');
+		    $table->string('message');
 
 		    $table->timestamps();
 	    });
