@@ -381,8 +381,6 @@ class RepositoryManager implements RepositoryManagerInterface {
 	{
 		$id = null;
 
-		$clientIp = '173.194.118.142';
-
 		if($geoip = $this->geoIp->byAddr($clientIp))
 		{
 			$id = $this->geoIpRepository->findOrCreate(
