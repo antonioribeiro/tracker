@@ -32,7 +32,6 @@ class Tracker
 {
     private $config;
 
-    private $session;
 	/**
 	 * @var \Illuminate\Routing\Router
 	 */
@@ -72,16 +71,7 @@ class Tracker
 
     public function track()
     {
-        $log = array(
-                    'session_id' => $this->getSessionId(true),
-                    'method' => $this->request->method(),
-                    'path_id' => $this->getPathId(),
-                    'query_id' => $this->getQueryId(),
-                    'is_ajax' => $this->request->ajax(),
-                    'is_secure' => $this->request->isSecure(),
-                    'is_json' => $this->request->isJson(),
-                    'wants_json' => $this->request->wantsJson(),
-                );
+        $log = $this->getLogData();
 
         if ($this->config->get('log_enabled'))
         {
@@ -92,15 +82,7 @@ class Tracker
     public function getSessionId($updateLastActivity = false)
     {
         return $this->dataRepositoryManager->getSessionId(
-            array(
-                'user_id' => $this->getUserId(),
-                'device_id' => $this->getDeviceId(),
-                'client_ip' => $this->request->getClientIp(),
-                'agent_id' => $this->dataRepositoryManager->getAgentId(),
-                'user_agent' => $this->dataRepositoryManager->getCurrentUserAgent(),
-	            'referer_id' => $this->getRefererId(),
-                'cookie_id' => $this->getCookieId(),
-            ),
+            $this->getSessionData(),
             $updateLastActivity
         );
     }
@@ -215,6 +197,39 @@ class Tracker
 		return ! in_array(
 			$this->request->getClientIp(),
 			$this->config->get('do_no_track')
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getLogData()
+	{
+		return array(
+			'session_id' => $this->getSessionId(true),
+			'method' => $this->request->method(),
+			'path_id' => $this->getPathId(),
+			'query_id' => $this->getQueryId(),
+			'is_ajax' => $this->request->ajax(),
+			'is_secure' => $this->request->isSecure(),
+			'is_json' => $this->request->isJson(),
+			'wants_json' => $this->request->wantsJson(),
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getSessionData()
+	{
+		return array(
+			'user_id' => $this->getUserId(),
+			'device_id' => $this->getDeviceId(),
+			'client_ip' => $this->request->getClientIp(),
+			'agent_id' => $this->dataRepositoryManager->getAgentId(),
+			'user_agent' => $this->dataRepositoryManager->getCurrentUserAgent(),
+			'referer_id' => $this->getRefererId(),
+			'cookie_id' => $this->getCookieId(),
 		);
 	}
 
