@@ -21,7 +21,8 @@
         "illuminate/support": ">=4.1",
         "rhumsaa/uuid": "dev-master",
         "mobiledetect/mobiledetectlib": "dev-master",
-        "tobie/ua-parser" : "dev-master"
+        "tobie/ua-parser" : "dev-master",
+        "geoip/geoip": "~1.14"
     },
 
     "require-dev": {
