@@ -68,6 +68,8 @@ return array(
 
 	'error_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Error',
 
+	'geoip_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\GeoIp',
+
 	'authentication_ioc_binding' => 'auth',
 
     'authenticated_check_method' => 'check',

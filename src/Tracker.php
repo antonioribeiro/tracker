@@ -226,6 +226,7 @@ class Tracker
 			'user_id' => $this->getUserId(),
 			'device_id' => $this->getDeviceId(),
 			'client_ip' => $this->request->getClientIp(),
+			'geoip_id' => $this->dataRepositoryManager->getGeoIpId($this->request->getClientIp()),
 			'agent_id' => $this->dataRepositoryManager->getAgentId(),
 			'user_agent' => $this->dataRepositoryManager->getCurrentUserAgent(),
 			'referer_id' => $this->getRefererId(),

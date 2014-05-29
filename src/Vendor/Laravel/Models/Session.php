@@ -33,7 +33,7 @@ class Session extends Base {
 		'client_ip',
 		'cookie_id',
 		'referer_id',
-		'last_activity'
+		'geoip_id'
 	);
 
 	public function __construct(array $attributes = array())
@@ -59,6 +59,11 @@ class Session extends Base {
 	public function referer()
 	{
 		return $this->belongsTo($this->getConfig()->get('referer_model'));
+	}
+
+	public function geoIp()
+	{
+		return $this->belongsTo($this->getConfig()->get('geoip_model'), 'geoip_id');
 	}
 
 	public function log()

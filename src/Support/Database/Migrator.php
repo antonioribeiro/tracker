@@ -41,12 +41,12 @@ class Migrator
             $table->integer('path_id')->unsigned();
 	        $table->integer('query_id')->unsigned()->nullable();
 	        $table->string('method',10);
-	        $table->integer('route_path_id')->nullable()->unsigned();
+	        $table->integer('route_path_id')->unsigned()->nullable();
 	        $table->boolean('is_ajax');
 	        $table->boolean('is_secure');
 	        $table->boolean('is_json');
 	        $table->boolean('wants_json');
-	        $table->integer('error_id')->nullable()->unsigned();
+	        $table->integer('error_id')->unsigned()->nullable();
 
             $table->timestamps();
         });
@@ -171,13 +171,13 @@ class Migrator
             $table->increments('id');
 
             $table->string('uuid')->unique();
-            $table->integer('user_id')->nullable()->unsigned();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->integer('device_id')->unsigned();
             $table->integer('agent_id')->unsigned();
             $table->string('client_ip');
 	        $table->integer('referer_id')->unsigned()->nullable();
-            $table->integer('cookie_id')->nullable()->unsigned();
-            $table->timestamp('last_activity');
+            $table->integer('cookie_id')->unsigned()->nullable();
+		    $table->integer('geoip_id')->unsigned()->nullable();
 
             $table->timestamps();
         });
@@ -188,6 +188,27 @@ class Migrator
 
 		    $table->string('code');
 		    $table->string('message');
+
+		    $table->timestamps();
+	    });
+
+	    $this->schema->create('tracker_geoip', function($table)
+	    {
+		    $table->increments('id');
+
+		    $table->float('latitude')->nullable()->index();
+		    $table->float('longitude')->nullable()->index();
+
+		    $table->string('country_code', 2)->nullable();
+		    $table->string('country_code3', 3)->nullable();
+		    $table->string('country_name')->nullable();
+		    $table->string('region', 2)->nullable();
+		    $table->string('city', 50)->nullable();
+		    $table->string('postal_code', 20)->nullable();
+		    $table->integer('area_code')->nullable();
+		    $table->float('dma_code')->nullable();
+		    $table->float('metro_code')->nullable();
+		    $table->string('continent_code', 2)->nullable();
 
 		    $table->timestamps();
 	    });

@@ -38,8 +38,11 @@ use PragmaRX\Tracker\Data\Repositories\Route;
 use PragmaRX\Tracker\Data\Repositories\RoutePath;
 use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
 use PragmaRX\Tracker\Data\Repositories\Error;
+use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
 
 use PragmaRX\Tracker\Services\Authentication;
+
+use PragmaRX\Support\GeoIp;
 
 use Illuminate\Session\Store as IlluminateSession;
 
@@ -84,6 +87,12 @@ class RepositoryManager implements RepositoryManagerInterface {
 	 * @var Error
 	 */
 	private $errorRepository;
+	/**
+	 * @var GeoIP
+	 */
+	private $geoIp;
+
+	private $geoIpRepository;
 
 	public function __construct(
                                     Session $sessionRepository,
@@ -100,6 +109,8 @@ class RepositoryManager implements RepositoryManagerInterface {
                                     RoutePath $routePathRepository,
                                     RoutePathParameter $routePathParameterRepository,
                                     Error $errorRepository,
+                                    GeoIpRepository $geoIpRepository,
+                                    GeoIP $geoIp,
                                     MobileDetect $mobileDetect,
                                     $userAgentParser,
                                     Authentication $authentication,
@@ -144,6 +155,10 @@ class RepositoryManager implements RepositoryManagerInterface {
         $this->session = $session;
 
         $this->config = $config;
+
+	    $this->geoIp = $geoIp;
+
+	    $this->geoIpRepository = $geoIpRepository;
     }
 
     public function createLog($data)
@@ -360,5 +375,22 @@ class RepositoryManager implements RepositoryManagerInterface {
 	public function parserIsAvailable()
 	{
 		return ! empty($this->userAgentParser);
+	}
+
+	public function getGeoIpId($clientIp)
+	{
+		$id = null;
+
+		$clientIp = '173.194.118.142';
+
+		if($geoip = $this->geoIp->byAddr($clientIp))
+		{
+			$id = $this->geoIpRepository->findOrCreate(
+				$this->geoIp->byAddr($clientIp),
+				array('latitude', 'longitude')
+			);
+		}
+
+		return $id;
 	}
 }

@@ -27,6 +27,8 @@ use Illuminate\Session\Store as IlluminateSession;
 
 use Rhumsaa\Uuid\Uuid as UUID;
 
+use Carbon\Carbon;
+
 class Session extends Repository {
 
     public function __construct($model, Config $config, IlluminateSession $session)
@@ -65,8 +67,6 @@ class Session extends Repository {
         }
 
         $this->sessionInfo['uuid'] = $this->getSystemSessionId();
-
-        $this->sessionInfo['last_activity'] = \Carbon\Carbon::now();
     }
 
     private function sessionIsReliable()
@@ -87,6 +87,12 @@ class Session extends Repository {
         }
         else
         {
+	        $session = $this->model->find($this->getSessionData('id'));
+
+	        $session->updated_at = Carbon::now();
+
+	        $session->save();
+
             $this->sessionInfo['id'] = $this->getSessionData('id');
         }
 
@@ -95,7 +101,7 @@ class Session extends Repository {
 
     private function sessionIsKnown()
     {
-        return $this->session->has($this->getSessioIdentifier()) 
+        return $this->session->has($this->getSessioIdentifier())
                 && $this->getSessionData('uuid') == $this->getSystemSessionId()
                 && $this->where('uuid', $this->getSessionData('uuid'))->first();
     }
@@ -150,8 +156,8 @@ class Session extends Repository {
     {
         $sessionData = $this->getSessionData();
 
-        return isset($sessionData['uuid']) 
-                ? $sessionData['uuid'] 
+        return isset($sessionData['uuid'])
+                ? $sessionData['uuid']
                 : (string) UUID::uuid4();
     }
 
@@ -193,10 +199,10 @@ class Session extends Repository {
     {
         return $this->getSessions()->get();
     }
-    
+
     public function last($minutes)
     {
-        $hour = \Carbon\Carbon::now()->subMinutes($minutes);
+        $hour = Carbon::now()->subMinutes($minutes);
 
         return $this->getSessions()->where('updated_at', '>=', $hour)->get();
     }

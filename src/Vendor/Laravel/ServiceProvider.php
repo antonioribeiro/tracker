@@ -24,11 +24,14 @@ use PragmaRX\Tracker\Data\Repositories\Route;
 use PragmaRX\Tracker\Data\Repositories\RoutePath;
 use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
 use PragmaRX\Tracker\Data\Repositories\Error;
+use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
 
 use PragmaRX\Tracker\Data\RepositoryManager;
 
 use PragmaRX\Tracker\Vendor\Laravel\Artisan\Tables as TablesCommand;
 use PragmaRX\Tracker\Vendor\Laravel\Artisan\UpdateParser as UpdateParserCommand;
+
+use PragmaRX\Support\GeoIp;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
@@ -158,6 +161,7 @@ class ServiceProvider extends IlluminateServiceProvider {
 	        $routePathModel = $this->instantiateModel('route_path_model');
 	        $routePathParameterModel = $this->instantiateModel('route_path_parameter_model');
 	        $errorModel = $this->instantiateModel('error_model');
+	        $geoipModel = $this->instantiateModel('geoip_model');
 
             return new RepositoryManager(
                                         new Session($sessionModel,
@@ -192,6 +196,10 @@ class ServiceProvider extends IlluminateServiceProvider {
                                         new RoutePathParameter($routePathParameterModel),
 
                                         new Error($errorModel),
+
+                                        new GeoIpRepository($geoipModel),
+
+                                        new GeoIp(),
 
                                         new MobileDetect,
 
