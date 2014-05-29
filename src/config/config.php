@@ -30,6 +30,8 @@ return array(
 
     'store_cookie_tracker' => true,
 
+	'do_no_track' => array('127.0.0.1'),
+
     'connection' => null,
 
     'tracker_session_name' => 'tracker_session',

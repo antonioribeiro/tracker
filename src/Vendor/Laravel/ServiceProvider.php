@@ -293,9 +293,6 @@ class ServiceProvider extends IlluminateServiceProvider {
 
         $model = new $model;
 
-        // $model->setConfig($this->app['tracker.config']);
-        // $model->setApp($this->app);
-        
         $model->config = $this->app['tracker.config'];
 
 		return $model;

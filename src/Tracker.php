@@ -64,13 +64,13 @@ class Tracker
 
     public function boot()
     {
-        if ($this->config->get('enabled') && $this->parserIsAvailable())
+        if ($this->config->get('enabled') && $this->parserIsAvailable() && $this->ipIsTrackable())
         {
-            $this->log();
+            $this->track();
         }
     }
 
-    public function log()
+    public function track()
     {
         $log = array(
                     'session_id' => $this->getSessionId(true),
@@ -209,5 +209,13 @@ class Tracker
 
         return true;
     }
+
+	private function ipIsTrackable()
+	{
+		return ! in_array(
+			$this->request->getClientIp(),
+			$this->config->get('do_no_track')
+		);
+	}
 
 }
