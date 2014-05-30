@@ -32,27 +32,28 @@ abstract class Repository implements RepositoryInterface {
 	public function __construct($model)
 	{
 		$this->model = $model;
-
-		$this->newQuery();
 	}
 
-	public function newQuery()
+	public function getBuilder()
 	{
-		$this->builder = $this->model->newQuery();
+		if ( ! $this->builder)
+		{
+			$this->builder = $this->model->newQuery();	
+		}
 
-		return $this;
+		return $this->builder;
 	}
 
 	public function where($key, $operation, $value = null)
 	{
-		$this->builder = $this->builder->where($key, $operation, $value = null);
+		$this->builder = $this->getBuilder()->where($key, $operation, $value = null);
 
 		return $this;
 	}
 
 	public function first()
 	{
-		$this->result = $this->builder->first();
+		$this->result = $this->getBuilder()->first();
 
 		return $this->result ? $this : null;
 	}

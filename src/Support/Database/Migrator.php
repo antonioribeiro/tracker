@@ -21,19 +21,24 @@
 
 namespace PragmaRX\Tracker\Support\Database;
 
-use Illuminate\Database\Schema\Builder as Schema;
+use Illuminate\Database\DatabaseManager;
 
 class Migrator
 {
+    private $manager;
+    
+    private $connection;
 
-    public function __construct(Schema $schema)
+    public function __construct(DatabaseManager $manager, $connection)
     {
-        $this->schema = $schema;
+        $this->manager = $manager;
+
+        $this->connection = $connection;
     }
 
     public function up()
     {
-        $this->schema->create('tracker_log', function($table)
+        $this->getSchemaBuilder()->create('tracker_log', function($table)
         {
             $table->increments('id');
 
@@ -51,7 +56,7 @@ class Migrator
             $table->timestamps();
         });
 
-	    $this->schema->create('tracker_paths', function($table)
+	    $this->getSchemaBuilder()->create('tracker_paths', function($table)
 	    {
 		    $table->increments('id');
 
@@ -60,7 +65,7 @@ class Migrator
 		    $table->timestamps();
 	    });
 
-	    $this->schema->create('tracker_queries', function($table)
+	    $this->getSchemaBuilder()->create('tracker_queries', function($table)
 	    {
 		    $table->increments('id');
 
@@ -69,7 +74,7 @@ class Migrator
 		    $table->timestamps();
 	    });
 
-	    $this->schema->create('tracker_query_arguments', function($table)
+	    $this->getSchemaBuilder()->create('tracker_query_arguments', function($table)
 	    {
 		    $table->increments('id');
 
@@ -80,7 +85,7 @@ class Migrator
 		    $table->timestamps();
 	    });
 
-	    $this->schema->create('tracker_routes', function($table)
+	    $this->getSchemaBuilder()->create('tracker_routes', function($table)
 	    {
 		    $table->increments('id');
 
@@ -90,7 +95,7 @@ class Migrator
 		    $table->timestamps();
 	    });
 
-	    $this->schema->create('tracker_route_paths', function($table)
+	    $this->getSchemaBuilder()->create('tracker_route_paths', function($table)
 	    {
 		    $table->increments('id');
 
@@ -100,7 +105,7 @@ class Migrator
 		    $table->timestamps();
 	    });
 
-	    $this->schema->create('tracker_route_path_parameters', function($table)
+	    $this->getSchemaBuilder()->create('tracker_route_path_parameters', function($table)
 	    {
 		    $table->increments('id');
 
@@ -111,7 +116,7 @@ class Migrator
 		    $table->timestamps();
 	    });
 
-        $this->schema->create('tracker_agents', function($table)
+        $this->getSchemaBuilder()->create('tracker_agents', function($table)
         {
             $table->increments('id');
 
@@ -122,7 +127,7 @@ class Migrator
             $table->timestamps();
         });
 
-        $this->schema->create('tracker_cookies', function($table)
+        $this->getSchemaBuilder()->create('tracker_cookies', function($table)
         {
             $table->increments('id');
 
@@ -131,7 +136,7 @@ class Migrator
             $table->timestamps();
         });
 
-        $this->schema->create('tracker_devices', function($table)
+        $this->getSchemaBuilder()->create('tracker_devices', function($table)
         {
             $table->increments('id');
 
@@ -146,7 +151,7 @@ class Migrator
             $table->timestamps();
         });
 
-	    $this->schema->create('tracker_referers', function($table)
+	    $this->getSchemaBuilder()->create('tracker_referers', function($table)
 	    {
 		    $table->increments('id');
 
@@ -157,7 +162,7 @@ class Migrator
 		    $table->timestamps();
 	    });
 
-	    $this->schema->create('tracker_domains', function($table)
+	    $this->getSchemaBuilder()->create('tracker_domains', function($table)
 	    {
 		    $table->increments('id');
 
@@ -166,7 +171,7 @@ class Migrator
 		    $table->timestamps();
 	    });
 
-	    $this->schema->create('tracker_sessions', function($table)
+	    $this->getSchemaBuilder()->create('tracker_sessions', function($table)
 	    {
             $table->increments('id');
 
@@ -182,7 +187,7 @@ class Migrator
             $table->timestamps();
         });
 
-	    $this->schema->create('tracker_errors', function($table)
+	    $this->getSchemaBuilder()->create('tracker_errors', function($table)
 	    {
 		    $table->increments('id');
 
@@ -192,7 +197,7 @@ class Migrator
 		    $table->timestamps();
 	    });
 
-	    $this->schema->create('tracker_geoip', function($table)
+	    $this->getSchemaBuilder()->create('tracker_geoip', function($table)
 	    {
 		    $table->increments('id');
 
@@ -216,33 +221,38 @@ class Migrator
 
     public function down()
     {
-	    $this->schema->drop('tracker_errors');
+	    $this->getSchemaBuilder()->drop('tracker_errors');
 
-        $this->schema->drop('tracker_sessions');
+        $this->getSchemaBuilder()->drop('tracker_sessions');
 
-	    $this->schema->drop('tracker_referers');
+	    $this->getSchemaBuilder()->drop('tracker_referers');
 
-	    $this->schema->drop('tracker_domains');
+	    $this->getSchemaBuilder()->drop('tracker_domains');
 
-	    $this->schema->drop('tracker_routes');
+	    $this->getSchemaBuilder()->drop('tracker_routes');
 
-	    $this->schema->drop('tracker_route_paths');
+	    $this->getSchemaBuilder()->drop('tracker_route_paths');
 
-	    $this->schema->drop('tracker_route_path_parameters');
+	    $this->getSchemaBuilder()->drop('tracker_route_path_parameters');
 
-        $this->schema->drop('tracker_devices');
+        $this->getSchemaBuilder()->drop('tracker_devices');
 
-        $this->schema->drop('tracker_cookies');
+        $this->getSchemaBuilder()->drop('tracker_cookies');
 
-        $this->schema->drop('tracker_agents');
+        $this->getSchemaBuilder()->drop('tracker_agents');
 
-	    $this->schema->drop('tracker_query_arguments');
+	    $this->getSchemaBuilder()->drop('tracker_query_arguments');
 
-	    $this->schema->drop('tracker_queries');
+	    $this->getSchemaBuilder()->drop('tracker_queries');
 
-	    $this->schema->drop('tracker_paths');
+	    $this->getSchemaBuilder()->drop('tracker_paths');
 
-        $this->schema->drop('tracker_log');
+        $this->getSchemaBuilder()->drop('tracker_log');
+    }
+
+    public function getSchemaBuilder()
+    {
+        return $this->manager->connection($this->connection)->getSchemaBuilder();
     }
 
 }

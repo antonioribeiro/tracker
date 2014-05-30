@@ -236,7 +236,7 @@ class ServiceProvider extends IlluminateServiceProvider {
         {
             $connection = $this->getConfig('connection');
 
-            return new Migrator($app['db']->connection($connection)->getSchemaBuilder());
+            return new Migrator($app['db'], $connection);
         });
     }
 
