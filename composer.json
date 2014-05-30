@@ -20,7 +20,7 @@
         "laravel/framework": ">=4.1",
         "pragmarx/support": "0.2.*",
         "rhumsaa/uuid": "2.7.*",
-        "mobiledetect/mobiledetectlib": "dev-master",
+        "mobiledetect/mobiledetectlib": "~2.8",
         "tobie/ua-parser" : "dev-master"
     },
 
