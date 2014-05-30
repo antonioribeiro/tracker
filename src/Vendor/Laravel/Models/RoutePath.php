@@ -36,4 +36,10 @@ class RoutePath extends Base {
 	{
 		return $this->hasMany($this->getConfig()->get('route_path_parameter_model'));
 	}
+
+	public function route()
+	{
+		return $this->belongsTo($this->getConfig()->get('route_model'), 'route_id');
+	}
+
 }

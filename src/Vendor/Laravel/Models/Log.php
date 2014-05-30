@@ -50,12 +50,12 @@ class Log extends Base {
 
 	public function logQuery()
 	{
-		return $this->belongsTo($this->getConfig()->get('query_model'));
+		return $this->belongsTo($this->getConfig()->get('query_model'), 'query_id');
 	}
 
-	public function route()
+	public function routePath()
 	{
-		return $this->belongsTo($this->getConfig()->get('route_path_model'));
+		return $this->belongsTo($this->getConfig()->get('route_path_model'), 'route_path_id');
 	}
 
 }

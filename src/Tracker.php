@@ -234,4 +234,9 @@ class Tracker
 		);
 	}
 
+    public function sessionLog($uuid)
+    {
+        return $this->dataRepositoryManager->getSessionLog($uuid);
+    }
+
 }

@@ -40,6 +40,11 @@ class Session extends Repository {
         parent::__construct($model);
     }
 
+    public function findByUuid($uuid)
+    {
+        return $this->model->where('uuid', $uuid)->first();
+    }
+
     public function getCurrentId($sessionInfo)
     {
         $this->setSessionData($sessionInfo);
