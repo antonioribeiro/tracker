@@ -398,4 +398,10 @@ class RepositoryManager implements RepositoryManagerInterface {
 
 		return $this->logRepository->bySession($session->id);
 	}
+
+	public function pageViews()
+	{
+		return $this->logRepository->pageViews();
+	}
+	
 }

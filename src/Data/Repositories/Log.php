@@ -50,6 +50,7 @@ class Log extends Repository {
 
 	public function pageViews()
 	{
+		dd($this->model);
 		return $this->model->select(
 			$this->model->raw('DATE(created_at) as date, count(*) as total')
 		)->get();
