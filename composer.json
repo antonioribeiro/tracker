@@ -1,9 +1,9 @@
 {
     "name": "pragmarx/tracker",
 
-    "description": "A Laravel 4.1+ user activity tracker",
+    "description": "A Laravel 4.1+ Visitor Tracker",
 
-    "keywords": ["tracking", "logging", "user agent", "mobile detection", "laravel"],
+    "keywords": ["tracker", "tracking", "visitor", "logging", "user agent", "mobile detection", "laravel", "pragmarx"],
 
     "license": "MIT",
 
@@ -17,8 +17,7 @@
 
     "require": {
         "php": ">=5.3.7",
-        "illuminate/foundation": ">=4.1",
-        "illuminate/support": ">=4.1",
+        "laravel/framework": ">=4.1",
         "pragmarx/support": "0.2.*",
         "rhumsaa/uuid": "2.7.*",
         "mobiledetect/mobiledetectlib": "dev-master",

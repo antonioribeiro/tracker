@@ -4,13 +4,14 @@
 
 # THIS IS A WORK IN PROGRESS, IT WORKS BUT IS NOT DONE YET.
 
-## A Laravel User Tracker/Logger package
+## A Laravel Visitor Tracker package
 
 Tracker gathers information from your requests to store identify:
 
 - **Device** (computer, smartphone, tablet...)
 - **Browser** (Chrome, Mozilla Firefox, Safari, Internet Explorer...)
 - **Operating System** (iOS, Mac OS, Linux, Windows...)
+- **Geo Location** (Country and City)
 
 It also has tha ability to log your site accesses, by recording:
 
@@ -53,15 +54,15 @@ Add the service provider to your app/config/app.php:
 
 Create the migration:
 
-	php artisan tracker:tables
+    php artisan tracker:tables
 
 Migrate it
 
-	php artisan migrate
+    php artisan migrate
 
 Publish tracker configuration:
 
-	php artisan config:publish pragmarx/tracker
+    php artisan config:publish pragmarx/tracker
 
 Create the UA Parser regex file (every time you run `composer update` you must also execute this command):
 
@@ -69,11 +70,11 @@ Create the UA Parser regex file (every time you run `composer update` you must a
 
 And edit the file `app/config/packages/pragmarx/tracker/config.php` to enable Tracker.
 
-	'enabled' => true,
+    'enabled' => true,
 
 Note that the logging function is disabled by default, because it may write too much data to your database, but you can enable it by changing:
 
-	'log_enabled' => true,
+    'log_enabled' => true,
 
 ## Author
 
