@@ -35,12 +35,12 @@ Here's a view of tables contents after
 
 Require the `tracker` package by **executing** the following command in your command line:
 
-    composer require "pragmarx/tracker" "~1.0"
+    composer require "pragmarx/tracker":"~0.2"
 
 **Or** add to your composer.json:
 
     "require": {
-        "pragmarx/tracker": "~1.0"
+        "pragmarx/tracker": "~0.2"
     }
 
 And execute
