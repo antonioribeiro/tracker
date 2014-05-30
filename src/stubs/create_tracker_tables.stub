@@ -7,7 +7,7 @@ use PragmaRX\Tracker\Vendor\Laravel\Facade as Tracker;
 class CreateTrackerTables extends Migration {
 
 	/**
-	 * Run the migrations.
+	 * Run the migrations via migrator.
 	 *
 	 * @return void
 	 */
@@ -17,7 +17,7 @@ class CreateTrackerTables extends Migration {
 	}
 
 	/**
-	 * Reverse the migrations.
+	 * Reverse the migrations via migrator.
 	 *
 	 * @return void
 	 */
