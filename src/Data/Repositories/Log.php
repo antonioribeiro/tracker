@@ -47,4 +47,15 @@ class Log extends Repository {
 	{
 		return $this->model->where('session_id', $sessionId)->orderBy('updated_at', 'desc')->get();
 	}
+
+	public function pageViews()
+	{
+		return $this->model->select(
+			$this->model->raw('DATE(created_at) as date, count(*) as total')
+		)->get();
+
+		// where('session_id', $sessionId)->orderBy('updated_at', 'desc')->get();
+
+		// select  from tracker_log group by DATE(created_at);
+	}
 }

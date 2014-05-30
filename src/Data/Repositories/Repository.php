@@ -29,16 +29,24 @@ abstract class Repository implements RepositoryInterface {
 
 	protected $result;
 
+	protected $connection;
+
+	protected $className;
+
 	public function __construct($model)
 	{
 		$this->model = $model;
+
+		$this->className = get_class($model);
+
+		$this->connection = $this->getModel()->getConnectionName();
 	}
 
 	public function getBuilder()
 	{
 		if ( ! $this->builder)
 		{
-			$this->builder = $this->model->newQuery();	
+			$this->builder = $this->getModel()->newQuery();	
 		}
 
 		return $this->builder;
@@ -60,16 +68,31 @@ abstract class Repository implements RepositoryInterface {
 
 	public function find($id)
 	{
-		$this->result = $this->model->find($id);
+		$this->result = $this->getModel()->find($id);
 
 		return $this->result ? $this : null;
 	}
 
 	public function create($attributes)
 	{
-		$this->model = $this->model->create($attributes);
+		$model = new $this->className;
 
-		return $this;
+		if ($this->connection)
+		{
+			$model->setConnection($this->connection);
+		}
+
+		foreach($attributes as $attribute => $value)
+		{
+			if (in_array($attribute, $model->getFillable()))
+			{
+				$model->{$attribute} = $value;
+			}
+		}
+
+		$model->save();
+
+		return $model;
 	}
 
 	public function getId()
@@ -94,7 +117,7 @@ abstract class Repository implements RepositoryInterface {
 
     public function findOrCreate($attributes, $keys = null, &$created = false)
     {
-        $model = $this->model->newQuery();
+        $model = $this->getModel()->newQuery();
 
         $keys = $keys ?: array_keys($attributes);
 
@@ -103,16 +126,22 @@ abstract class Repository implements RepositoryInterface {
 	        $model = $model->where($key, $attributes[$key]);
         }
 
-        if (! $model = $model->first())
+        if ( ! $model = $model->first())
         {
-            $model = $this->model->create($attributes);
+            $model = $this->create($attributes);
 
 	        $created = true;
         }
 
 	    $this->model = $model;
 
-        return $this->model->id;
+        return  $model->id;
     }
 
+    public function getModel()
+    {
+    	return $this->connection
+    			? $this->model->on($this->connection)
+    			: $this->model;
+    }
 }

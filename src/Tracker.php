@@ -239,4 +239,9 @@ class Tracker
         return $this->dataRepositoryManager->getSessionLog($uuid);
     }
 
+    public function pageViews()
+    {
+    	return $this->dataRepositoryManager->pageViews();
+    }
+
 }

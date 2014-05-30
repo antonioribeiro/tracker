@@ -303,6 +303,11 @@ class ServiceProvider extends IlluminateServiceProvider {
 
         $model->config = $this->app['tracker.config'];
 
+        if ($connection = $this->getConfig('connection'))
+        {
+            $model->setConnection($connection);
+        }
+
 		return $model;
 	}
 
