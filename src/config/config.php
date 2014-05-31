@@ -20,25 +20,78 @@
 
 return array(
 
-    'create_tracker_alias' => true,
-
-    'tracker_alias' => 'Tracker',
-
+	/**
+	 * Enable it?
+	 */
 	'enabled' => false,
 
+	/**
+	 * Which environments are not trackable?
+	 */
+	'do_not_track_environments' => array(
+		// defaults to none
+	),
+
+	/**
+	 * The Do Not Track Ips is used to disable Tracker for some IP addresses:
+	 *
+	 *     '127.0.0.1', '192.168.1.1'
+	 *
+	 * You can set ranges of IPs
+	 *     '192.168.0.1-192.168.0.100'
+	 *
+	 * And use net masks
+	 *     '10.0.0.0/32'
+	 *     '172.17.0.0/255.255.0.0'
+	 */
+	'do_not_track_ips' => array(
+		'127.0.0.0/24' /// range 127.0.0.1 - 127.0.0.255
+	),
+
+	/**
+	 * Log every single access?
+	 *
+	 * The log table can become huge if your site is popular, but...
+	 *
+	 * Log table is also responsible for storing information on:
+	 *
+	 *    - Routes and controller actions accessed
+	 *    - HTTP method used (GET, POST...)
+	 *    - Error log
+	 *    - URL queries (including values)
+	 */
 	'log_enabled' => false,
 
-    'store_cookie_tracker' => true,
+	/**
+	 * A cookie may be created on your visitor device, so you can have information
+	 * on everything made using that device on your site.	 *
+	 */
+	'store_cookie_tracker' => true,
 
-	'do_no_track' => array('127.0.0.1'),
+	/**
+	 * If you are storing cookies, you better change it to a name you of your own.
+	 */
+	'tracker_cookie_name' => 'please_change_this_cookie_name',
 
+	/**
+	 * If you prefer to store Tracker data on a different database, you can set it here.
+	 */
     'connection' => null,
 
+	/**
+	 * Internal tracker session name.
+	 */
     'tracker_session_name' => 'tracker_session',
 
-    'tracker_cookie_name' => 'please_change_this_cookie_name',
+	/**
+	 * ** IMPORTANT **
+	 *   Change the user model to your own.
+	 */
+	'user_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\User',
 
-    'user_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\User',
+	/**
+	 * You can use your own model for every single table Tracker has.
+	 */
 
     'session_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Session',
 
@@ -70,12 +123,22 @@ return array(
 
 	'geoip_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\GeoIp',
 
-	'authentication_ioc_binding' => 'auth',
+	/**
+	 * Laravel internal variables on user authentication and login.
+	 */
+	'authentication_ioc_binding' => 'auth', // defaults to 'auth' in Illuminate\Support\Facades\Auth
 
-    'authenticated_check_method' => 'check',
+    'authenticated_check_method' => 'check', // to Auth::check()
 
-    'authenticated_user_method' => 'user',
+    'authenticated_user_method' => 'user', // to Auth::user()
 
-    'authenticated_user_id_column' => 'id',
+    'authenticated_user_id_column' => 'id', // to Auth::user()->id
+
+	/**
+	 * Laravel Alias, create one? Which name?
+	 */
+	'create_tracker_alias' => true,
+
+	'tracker_alias' => 'Tracker',
 
 );

@@ -129,7 +129,8 @@ class ServiceProvider extends IlluminateServiceProvider {
                                     $app['request'],
                                     $app['router'],
                                     $app['tracker.migrator'],
-                                    $app['log']
+                                    $app['log'],
+                                    $app
                                 );
         });
     }

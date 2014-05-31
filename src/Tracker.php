@@ -21,6 +21,7 @@
 
 namespace PragmaRX\Tracker;
 
+use Illuminate\Foundation\Application as Laravel;
 use PragmaRX\Tracker\Support\Config;
 use PragmaRX\Tracker\Data\RepositoryManager as DataRepositoryManager;
 use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
@@ -38,6 +39,10 @@ class Tracker
 	private $route;
 
     private $logger;
+	/**
+	 * @var \Illuminate\Foundation\Application
+	 */
+	private $laravel;
 
 	public function __construct(
                                     Config $config,
@@ -45,7 +50,8 @@ class Tracker
                                     Request $request,
                                     Router $route,
                                     Migrator $migrator,
-                                    Logger $logger
+                                    Logger $logger,
+								    Laravel $laravel
                                 )
     {
         $this->config = $config;
@@ -59,11 +65,18 @@ class Tracker
 	    $this->route = $route;
 
         $this->logger = $logger;
+
+	    $this->laravel = $laravel;
     }
 
     public function boot()
     {
-        if ($this->config->get('enabled') && $this->parserIsAvailable() && $this->ipIsTrackable())
+        if (
+	        $this->config->get('enabled') &&
+	        $this->parserIsAvailable() &&
+	        $this->isTrackableIp() &&
+	        $this->isTrackableEnvironment()
+        )
         {
             $this->track();
         }
@@ -192,11 +205,19 @@ class Tracker
         return true;
     }
 
-	private function ipIsTrackable()
+	private function isTrackableIp()
+	{
+		return ! ipv4_in_range(
+			$this->request->getClientIp(),
+			$this->config->get('do_not_track_ips')
+		);
+	}
+
+	private function isTrackableEnvironment()
 	{
 		return ! in_array(
-			$this->request->getClientIp(),
-			$this->config->get('do_no_track')
+			$this->laravel->environment(),
+			$this->config->get('do_not_track_environments')
 		);
 	}
 
