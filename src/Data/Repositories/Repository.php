@@ -40,12 +40,12 @@ abstract class Repository implements RepositoryInterface {
 		$this->className = get_class($model);
 
 		$this->connection = $this->getModel()->getConnectionName();
-
-		$this->builder = $this->newQuery();
 	}
 
 	public function where($key, $operation, $value = null)
 	{
+		$this->builder = $this->builder ?: $this->newQuery();
+
 		$this->builder = $this->builder->where($key, $operation, $value = null);
 
 		return $this;
