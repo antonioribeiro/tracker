@@ -40,47 +40,34 @@ abstract class Repository implements RepositoryInterface {
 		$this->className = get_class($model);
 
 		$this->connection = $this->getModel()->getConnectionName();
-	}
 
-	public function getBuilder()
-	{
-		if ( ! $this->builder)
-		{
-			$this->builder = $this->getModel()->newQuery();	
-		}
-
-		return $this->builder;
+		$this->builder = $this->newQuery();
 	}
 
 	public function where($key, $operation, $value = null)
 	{
-		$this->builder = $this->getBuilder()->where($key, $operation, $value = null);
+		$this->builder = $this->builder->where($key, $operation, $value = null);
 
 		return $this;
 	}
 
 	public function first()
 	{
-		$this->result = $this->getBuilder()->first();
+		$this->result = $this->builder->first();
 
 		return $this->result ? $this : null;
 	}
 
 	public function find($id)
 	{
-		$this->result = $this->getModel()->find($id);
+		$this->result = $this->newQuery()->find($id);
 
 		return $this->result ? $this : null;
 	}
 
 	public function create($attributes)
 	{
-		$model = new $this->className;
-
-		if ($this->connection)
-		{
-			$model->setConnection($this->connection);
-		}
+		$model = $this->newModel();
 
 		foreach($attributes as $attribute => $value)
 		{
@@ -117,7 +104,7 @@ abstract class Repository implements RepositoryInterface {
 
     public function findOrCreate($attributes, $keys = null, &$created = false)
     {
-        $model = $this->getModel()->newQuery();
+        $model = $this->newQuery();
 
         $keys = $keys ?: array_keys($attributes);
 
@@ -140,8 +127,36 @@ abstract class Repository implements RepositoryInterface {
 
     public function getModel()
     {
-    	return $this->connection
-    			? $this->model->on($this->connection)
-    			: $this->model;
+    	if ($this->model instanceof Illuminate\Database\Eloquent\Builder)
+    	{
+    		$this->model = new $this->className;
+    	}
+
+	    if ($this->connection)
+	    {
+		    $this->model->setConnection($this->connection);
+	    }
+
+    	return $this->model;
     }
+
+	public function newModel()
+	{
+		$this->model = new $this->className;
+
+		return $this->getModel();
+	}
+
+	public function newQuery()
+	{
+		$this->builder = new $this->className;
+
+		if ($this->connection)
+		{
+			$this->builder = $this->builder->on($this->connection);
+		}
+
+		return $this->builder->newQuery();
+	}
+
 }

@@ -25,38 +25,38 @@ class Log extends Repository {
 
 	public function updateRoute($route_path_id)
 	{
-		if ($this->model->id)
+		if ($this->getModel()->id)
 		{
-			$this->model->route_path_id = $route_path_id;
+			$this->getModel()->route_path_id = $route_path_id;
 
-			$this->model->save();
+			$this->getModel()->save();
 		}
 	}
 
 	public function updateError($error_id)
 	{
-		if ($this->model->id)
+		if ($this->getModel()->id)
 		{
-			$this->model->error_id = $error_id;
+			$this->getModel()->error_id = $error_id;
 
-			$this->model->save();
+			$this->getModel()->save();
 		}
 	}
 
 	public function bySession($sessionId)
 	{
-		return $this->model->where('session_id', $sessionId)->orderBy('updated_at', 'desc')->get();
+		return $this->getModel()->where('session_id', $sessionId)->orderBy('updated_at', 'desc')->get();
 	}
 
 	public function pageViews()
 	{
-		dd($this->model);
-		return $this->model->select(
-			$this->model->raw('DATE(created_at) as date, count(*) as total')
-		)->get();
+		// dd($this->model);
+		// return $this->getModel()->select(
+		// 	$this->getModel()->raw('DATE(created_at) as date, count(*) as total')
+		// )->get();
 
-		// where('session_id', $sessionId)->orderBy('updated_at', 'desc')->get();
+		// // where('session_id', $sessionId)->orderBy('updated_at', 'desc')->get();
 
-		// select  from tracker_log group by DATE(created_at);
+		// // select  from tracker_log group by DATE(created_at);
 	}
 }

@@ -29,6 +29,8 @@ class Base extends Eloquent {
 	public function __construct(array $attributes = array())
 	{
 		parent::__construct($attributes);
+
+		$this->setConnection($this->getConfig()->get('connection'));
 	}
 
 	public function getConfig()

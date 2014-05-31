@@ -248,6 +248,8 @@ class Migrator
 	    $this->getSchemaBuilder()->drop('tracker_paths');
 
         $this->getSchemaBuilder()->drop('tracker_log');
+
+	    $this->getSchemaBuilder()->drop('tracker_geoip');
     }
 
     public function getSchemaBuilder()

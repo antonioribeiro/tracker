@@ -42,7 +42,7 @@ class Session extends Repository {
 
     public function findByUuid($uuid)
     {
-        return $this->model->where('uuid', $uuid)->first();
+        return $this->newQuery()->where('uuid', $uuid)->first();
     }
 
     public function getCurrentId($sessionInfo)
@@ -92,7 +92,7 @@ class Session extends Repository {
         }
         else
         {
-	        $session = $this->model->find($this->getSessionData('id'));
+	        $session = $this->find($this->getSessionData('id'));
 
 	        $session->updated_at = Carbon::now();
 
@@ -197,7 +197,7 @@ class Session extends Repository {
 
     private function getSessions()
     {
-        return $this->model->orderBy('updated_at', 'desc');
+        return $this->newQuery()->orderBy('updated_at', 'desc');
     }
 
     public function all()
