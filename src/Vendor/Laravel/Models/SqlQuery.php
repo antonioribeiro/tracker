@@ -21,12 +21,15 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-class Domain extends Base {
+class SqlQuery extends Base {
 
-	protected $table = 'tracker_domains';
+	protected $table = 'tracker_sql_queries';
 
 	protected $fillable = array(
-		'name',
+		'sha1',
+		'statement',
+	    'time',
+	    'connection_id',
 	);
 
 }

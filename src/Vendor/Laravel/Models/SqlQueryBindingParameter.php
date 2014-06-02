@@ -21,12 +21,14 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-class Domain extends Base {
+class SqlQueryBindingParameter extends Base {
 
-	protected $table = 'tracker_domains';
+	protected $table = 'tracker_sql_query_bindings_parameters';
 
 	protected $fillable = array(
+		'sql_query_bindings_id',
 		'name',
+		'value',
 	);
 
 }

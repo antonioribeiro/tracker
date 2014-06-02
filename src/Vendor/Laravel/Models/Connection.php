@@ -21,9 +21,9 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-class Domain extends Base {
+class Connection extends Base {
 
-	protected $table = 'tracker_domains';
+	protected $table = 'tracker_connections';
 
 	protected $fillable = array(
 		'name',

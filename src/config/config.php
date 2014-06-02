@@ -63,6 +63,27 @@ return array(
 	'log_enabled' => false,
 
 	/**
+	 * Log SQL queries?
+	 *
+	 * Log must be enabled for this option to work.
+	 */
+	'log_sql_queries' => false,
+
+	/**
+	 * Forbid logging of SQL queries for the following connections:
+	 */
+	'do_not_log_sql_queries_connections' => array(
+		// defaults to none
+	),
+
+	/**
+	 * Also log SQL query bindings?
+	 *
+	 * Log must be enabled for this option to work.
+	 */
+	'log_sql_queries_bindings' => false,
+
+	/**
 	 * A cookie may be created on your visitor device, so you can have information
 	 * on everything made using that device on your site.	 *
 	 */
@@ -122,6 +143,16 @@ return array(
 	'error_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Error',
 
 	'geoip_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\GeoIp',
+
+	'sql_query_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQuery',
+
+	'sql_query_binding_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryBinding',
+
+	'sql_query_binding_parameter_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryBindingParameter',
+
+	'sql_query_log_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryLog',
+
+	'connection_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Connection',
 
 	/**
 	 * Laravel internal variables on user authentication and login.

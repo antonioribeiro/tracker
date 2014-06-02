@@ -21,6 +21,11 @@
 
 namespace PragmaRX\Tracker\Data;
 
+use PragmaRX\Tracker\Data\Repositories\Connection;
+use PragmaRX\Tracker\Data\Repositories\SqlQuery;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryBinding;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryLog;
 use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Support\Config;
 
@@ -94,30 +99,69 @@ class RepositoryManager implements RepositoryManagerInterface {
 
 	private $geoIpRepository;
 
+	/**
+	 * @var Repositories\SqlQuery
+	 */
+	private $sqlQueryRepository;
+
+	/**
+	 * @var Repositories\SqlQueryBinding
+	 */
+	private $sqlQueryBindingRepository;
+
+	/**
+	 * @var Repositories\SqlQueryLog
+	 */
+	private $sqlQueryLogRepository;
+
+	private $sqlQueryBindingParameterRepository;
+
+	/**
+	 * @var Repositories\Connection
+	 */
+	private $connectionRepository;
+
 	public function __construct(
-                                    Session $sessionRepository,
-                                    Log $logRepository,
-									Path $pathRepository,
-									Query $queryRepository,
-									QueryArgument $queryArgumentRepository,
-                                    Agent $agentRepository,
-                                    Device $deviceRepository,
-                                    Cookie $cookieRepository,
-                                    Domain $domainRepository,
-                                    Referer $refererRepository,
-                                    Route $routeRepository,
-                                    RoutePath $routePathRepository,
-                                    RoutePathParameter $routePathParameterRepository,
-                                    Error $errorRepository,
-                                    GeoIpRepository $geoIpRepository,
-                                    GeoIP $geoIp,
-                                    MobileDetect $mobileDetect,
-                                    $userAgentParser,
-                                    Authentication $authentication,
-                                    IlluminateSession $session,
-                                    Config $config
-                                )
+		GeoIP $geoIp,
+		MobileDetect $mobileDetect,
+		$userAgentParser,
+		Authentication $authentication,
+		IlluminateSession $session,
+		Config $config,
+        Session $sessionRepository,
+        Log $logRepository,
+		Path $pathRepository,
+		Query $queryRepository,
+		QueryArgument $queryArgumentRepository,
+        Agent $agentRepository,
+        Device $deviceRepository,
+        Cookie $cookieRepository,
+        Domain $domainRepository,
+        Referer $refererRepository,
+        Route $routeRepository,
+        RoutePath $routePathRepository,
+        RoutePathParameter $routePathParameterRepository,
+        Error $errorRepository,
+        GeoIpRepository $geoIpRepository,
+        SqlQuery $sqlQueryRepository,
+        SqlQueryBinding $sqlQueryBindingRepository,
+        SqlQueryBindingParameter $sqlQueryBindingParameterRepository,
+        SqlQueryLog $sqlQueryLogRepository,
+		Connection $connectionRepository
+    )
     {
+	    $this->authentication = $authentication;
+
+	    $this->mobileDetect = $mobileDetect;
+
+	    $this->userAgentParser = $userAgentParser;
+
+	    $this->session = $session;
+
+	    $this->config = $config;
+
+	    $this->geoIp = $geoIp;
+
         $this->sessionRepository = $sessionRepository;
 
         $this->logRepository = $logRepository;
@@ -146,24 +190,24 @@ class RepositoryManager implements RepositoryManagerInterface {
 
 	    $this->errorRepository = $errorRepository;
 
-        $this->authentication = $authentication;
-
-        $this->mobileDetect = $mobileDetect;
-
-        $this->userAgentParser = $userAgentParser;
-
-        $this->session = $session;
-
-        $this->config = $config;
-
-	    $this->geoIp = $geoIp;
-
 	    $this->geoIpRepository = $geoIpRepository;
+
+	    $this->sqlQueryRepository = $sqlQueryRepository;
+
+	    $this->sqlQueryBindingRepository = $sqlQueryBindingRepository;
+
+	    $this->sqlQueryBindingParameterRepository = $sqlQueryBindingParameterRepository;
+
+	    $this->sqlQueryLogRepository = $sqlQueryLogRepository;
+
+	    $this->connectionRepository = $connectionRepository;
     }
 
     public function createLog($data)
     {
-        return $this->logRepository->create($data);
+	    $id = $this->logRepository->createLog($data);
+
+	    $this->sqlQueryRepository->fire();
     }
 
     public function findOrCreateSession($data)
@@ -359,7 +403,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 			array('message', 'code')
 		);
 
-		return $this->logRepository->updateError($error_id);
+		$this->logRepository->updateError($error_id);
 	}
 
 	public function getLastSessions($minutes)
@@ -403,5 +447,15 @@ class RepositoryManager implements RepositoryManagerInterface {
 	{
 		return $this->logRepository->pageViews();
 	}
-	
+
+	public function logSqlQuery($query, $bindings, $time, $name)
+	{
+		$this->sqlQueryRepository->push(array(
+			'query' => $query,
+			'bindings' => $bindings,
+			'time' => $time,
+			'name' => $name,
+		));
+	}
+
 }

@@ -23,6 +23,8 @@ namespace PragmaRX\Tracker\Data\Repositories;
 
 class Log extends Repository {
 
+	private $currentLogId = null;
+
 	public function updateRoute($route_path_id)
 	{
 		if ($this->getModel()->id)
@@ -58,5 +60,30 @@ class Log extends Repository {
 		// // where('session_id', $sessionId)->orderBy('updated_at', 'desc')->get();
 
 		// // select  from tracker_log group by DATE(created_at);
+	}
+
+	/**
+	 * @return null
+	 */
+	public function getCurrentLogId()
+	{
+		return $this->currentLogId;
+	}
+
+	/**
+	 * @param null $currentLogId
+	 */
+	public function setCurrentLogId($currentLogId)
+	{
+		$this->currentLogId = $currentLogId;
+	}
+
+	public function createLog($data)
+	{
+		$log = $this->create($data);
+
+		$this->setCurrentLogId($log->id);
+
+		return $this->getCurrentLogId();
 	}
 }

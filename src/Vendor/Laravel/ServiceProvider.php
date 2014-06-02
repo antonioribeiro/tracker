@@ -1,5 +1,7 @@
 <?php namespace PragmaRX\Tracker\Vendor\Laravel;
 
+use PragmaRX\Tracker\Data\Repositories\Connection;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
 use PragmaRX\Tracker\Tracker;
 
 use PragmaRX\Tracker\Services\Authentication;
@@ -25,6 +27,9 @@ use PragmaRX\Tracker\Data\Repositories\RoutePath;
 use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
 use PragmaRX\Tracker\Data\Repositories\Error;
 use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
+use PragmaRX\Tracker\Data\Repositories\SqlQuery;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryLog;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryBinding;
 
 use PragmaRX\Tracker\Data\RepositoryManager;
 
@@ -94,6 +99,8 @@ class ServiceProvider extends IlluminateServiceProvider {
 
 	    $this->registerExecutionCallBack();
 
+	    $this->registerSqlQueryLogWatcher();
+
 	    $this->registerErrorHandler();
 
 	    $this->commands('tracker.tables.command');
@@ -149,69 +156,123 @@ class ServiceProvider extends IlluminateServiceProvider {
             }
 
             $sessionModel = $this->instantiateModel('session_model');
+
             $logModel = $this->instantiateModel('log_model');
+
             $agentModel = $this->instantiateModel('agent_model');
+
             $deviceModel = $this->instantiateModel('device_model');
+
             $cookieModel = $this->instantiateModel('cookie_model');
+
 	        $pathModel = $this->instantiateModel('path_model');
+
 			$queryModel = $this->instantiateModel('query_model');
+
 			$queryArgumentModel = $this->instantiateModel('query_argument_model');
+
 	        $domainModel = $this->instantiateModel('domain_model');
+
 	        $refererModel = $this->instantiateModel('referer_model');
+
 	        $routeModel = $this->instantiateModel('route_model');
+
 	        $routePathModel = $this->instantiateModel('route_path_model');
+
 	        $routePathParameterModel = $this->instantiateModel('route_path_parameter_model');
+
 	        $errorModel = $this->instantiateModel('error_model');
+
 	        $geoipModel = $this->instantiateModel('geoip_model');
 
-            return new RepositoryManager(
-                                        new Session($sessionModel,
-                                                    $app['tracker.config'],
-                                                    $app['session.store']),
+	        $sqlQueryModel = $this->instantiateModel('sql_query_model');
 
-                                        new Log($logModel),
+            $sqlQueryBindingModel = $this->instantiateModel('sql_query_binding_model');
 
-                                        new Path($pathModel),
+	        $sqlQueryBindingParameterModel = $this->instantiateModel('sql_query_binding_parameter_model');
 
-                                        new Query($queryModel),
+            $sqlQueryLogModel = $this->instantiateModel('sql_query_log_model');
 
-                                        new QueryArgument($queryArgumentModel),
+	        $connectionModel = $this->instantiateModel('connection_model');
 
-                                        new Agent($agentModel),
+	        $logRepository = new Log($logModel);
 
-                                        new Device($deviceModel),
+	        $connectionRepository = new Connection($connectionModel);
 
-                                        new Cookie($cookieModel,
-                                                    $app['tracker.config'],
-                                                    $app['request'],
-                                                    $app['cookie']),
+	        $sqlQueryBindingRepository = new SqlQueryBinding($sqlQueryBindingModel);
 
-                                        new Domain($domainModel),
+	        $sqlQueryBindingParameterRepository = new SqlQueryBindingParameter($sqlQueryBindingParameterModel);
 
-                                        new Referer($refererModel),
+	        $sqlQueryLogRepository = new SqlQueryLog($sqlQueryLogModel);
 
-                                        new Route($routeModel),
+	        $sqlQueryRepository = new SqlQuery(
+		        $sqlQueryModel,
+		        $sqlQueryLogRepository,
+		        $sqlQueryBindingRepository,
+		        $sqlQueryBindingParameterRepository,
+		        $connectionRepository,
+		        $logRepository,
+		        $app['tracker.config']
+	        );
 
-                                        new RoutePath($routePathModel),
+	        return new RepositoryManager(
+	            new GeoIp(),
 
-                                        new RoutePathParameter($routePathParameterModel),
+	            new MobileDetect,
 
-                                        new Error($errorModel),
+	            $uaParser,
 
-                                        new GeoIpRepository($geoipModel),
+	            $app['tracker.authentication'],
 
-                                        new GeoIp(),
+	            $app['session.store'],
 
-                                        new MobileDetect,
+	            $app['tracker.config'],
 
-                                        $uaParser,
+                new Session($sessionModel,
+                            $app['tracker.config'],
+                            $app['session.store']),
 
-                                        $app['tracker.authentication'],
+                $logRepository,
 
-                                        $app['session.store'],
+                new Path($pathModel),
 
-                                        $app['tracker.config']
-                                    );
+                new Query($queryModel),
+
+                new QueryArgument($queryArgumentModel),
+
+                new Agent($agentModel),
+
+                new Device($deviceModel),
+
+                new Cookie($cookieModel,
+                            $app['tracker.config'],
+                            $app['request'],
+                            $app['cookie']),
+
+                new Domain($domainModel),
+
+                new Referer($refererModel),
+
+                new Route($routeModel),
+
+                new RoutePath($routePathModel),
+
+                new RoutePathParameter($routePathParameterModel),
+
+                new Error($errorModel),
+
+                new GeoIpRepository($geoipModel),
+
+				$sqlQueryRepository,
+
+                $sqlQueryBindingRepository,
+
+                $sqlQueryBindingParameterRepository,
+
+                $sqlQueryLogRepository,
+
+	            $connectionRepository
+            );
         });
     }
 
@@ -310,6 +371,21 @@ class ServiceProvider extends IlluminateServiceProvider {
         }
 
 		return $model;
+	}
+
+	private function registerSqlQueryLogWatcher()
+	{
+		$me = $this;
+
+		$this->app['events']->listen('illuminate.query', function($query,
+		                                                          $bindings,
+		                                                          $time,
+		                                                          $name) use ($me)
+		{
+			$me->app['tracker']->logSqlQuery(
+				$query, $bindings, $time, $name
+			);
+		});
 	}
 
 }

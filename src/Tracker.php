@@ -71,12 +71,7 @@ class Tracker
 
     public function boot()
     {
-        if (
-	        $this->config->get('enabled') &&
-	        $this->parserIsAvailable() &&
-	        $this->isTrackableIp() &&
-	        $this->isTrackableEnvironment()
-        )
+        if ($this->isTrackable())
         {
             $this->track();
         }
@@ -148,7 +143,7 @@ class Tracker
 	{
 		if ($this->config->get('enabled'))
 		{
-			return $this->dataRepositoryManager->updateRoute(
+			$this->dataRepositoryManager->updateRoute(
 				$this->getRoutePathId($this->route->current())
 			);
 		}
@@ -265,4 +260,32 @@ class Tracker
     	return $this->dataRepositoryManager->pageViews();
     }
 
+	public function logSqlQuery($query, $bindings, $time, $name)
+	{
+		if (
+			$this->isTrackable() &&
+			$this->config->get('log_enabled') &&
+			$this->config->get('log_sql_queries') &&
+			$this->isSqlQueriesLoggableConnection($name)
+		)
+		{
+			$this->dataRepositoryManager->logSqlQuery($query, $bindings, $time, $name);
+		}
+	}
+
+	private function isSqlQueriesLoggableConnection($name)
+	{
+		return ! in_array(
+			$name,
+			$this->config->get('do_not_log_sql_queries_connections')
+		);
+	}
+
+	private function isTrackable()
+	{
+		return $this->config->get('enabled') &&
+				$this->parserIsAvailable() &&
+				$this->isTrackableIp() &&
+				$this->isTrackableEnvironment();
+	}
 }
