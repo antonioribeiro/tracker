@@ -25,334 +25,373 @@ use Illuminate\Database\DatabaseManager;
 
 class Migrator
 {
-    private $manager;
-    
-    private $connection;
+	private $manager;
+	
+	private $connection;
 
-    public function __construct(DatabaseManager $manager, $connection)
-    {
-        $this->manager = $manager;
+	public function __construct(DatabaseManager $manager, $connection)
+	{
+		$this->manager = $manager;
 
-        $this->connection = $connection;
-    }
+		$this->connection = $connection;
+	}
 
-    public function up()
-    {
-        $this->getSchemaBuilder()->create('tracker_log', function($table)
-        {
-            $table->bigIncrements('id');
+	public function up()
+	{
+		$this->execute('createTables');
+	}
 
-            $table->bigInteger('session_id')->unsigned();
-            $table->bigInteger('path_id')->unsigned();
-	        $table->bigInteger('query_id')->unsigned()->nullable();
-	        $table->string('method',10);
-	        $table->bigInteger('route_path_id')->unsigned()->nullable();
-	        $table->boolean('is_ajax');
-	        $table->boolean('is_secure');
-	        $table->boolean('is_json');
-	        $table->boolean('wants_json');
-	        $table->bigInteger('error_id')->unsigned()->nullable();
+	public function createTables()
+	{
+		$this->getSchemaBuilder()->create('tracker_log', function($table)
+		{
+			$table->bigIncrements('id');
 
-            $table->timestamps();
-        });
+			$table->bigInteger('session_id')->unsigned();
+			$table->bigInteger('path_id')->unsigned();
+			$table->bigInteger('query_id')->unsigned()->nullable();
+			$table->string('method',10);
+			$table->bigInteger('route_path_id')->unsigned()->nullable();
+			$table->boolean('is_ajax');
+			$table->boolean('is_secure');
+			$table->boolean('is_json');
+			$table->boolean('wants_json');
+			$table->bigInteger('error_id')->unsigned()->nullable();
 
-	    $this->getSchemaBuilder()->create('tracker_paths', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->string('path')->index();
+		$this->getSchemaBuilder()->create('tracker_paths', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->string('path')->index();
 
-	    $this->getSchemaBuilder()->create('tracker_queries', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->string('query')->index();
+		$this->getSchemaBuilder()->create('tracker_queries', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->string('query')->index();
 
-	    $this->getSchemaBuilder()->create('tracker_query_arguments', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->bigInteger('query_id')->unsigned()->index();
-		    $table->string('argument');
-		    $table->string('value');
+		$this->getSchemaBuilder()->create('tracker_query_arguments', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->bigInteger('query_id')->unsigned()->index();
+			$table->string('argument');
+			$table->string('value');
 
-	    $this->getSchemaBuilder()->create('tracker_routes', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->string('name')->index();
-		    $table->string('action')->index();
+		$this->getSchemaBuilder()->create('tracker_routes', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->string('name')->index();
+			$table->string('action')->index();
 
-	    $this->getSchemaBuilder()->create('tracker_route_paths', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->string('route_id')->index();
-		    $table->string('path');
+		$this->getSchemaBuilder()->create('tracker_route_paths', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->string('route_id')->index();
+			$table->string('path');
 
-	    $this->getSchemaBuilder()->create('tracker_route_path_parameters', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->bigInteger('route_path_id')->unsigned()->index();
-		    $table->string('parameter');
-		    $table->string('value');
+		$this->getSchemaBuilder()->create('tracker_route_path_parameters', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->bigInteger('route_path_id')->unsigned()->index();
+			$table->string('parameter');
+			$table->string('value');
 
-        $this->getSchemaBuilder()->create('tracker_agents', function($table)
-        {
-            $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-            $table->string('name')->unique();
-            $table->string('browser');
-            $table->string('browser_version');
+		$this->getSchemaBuilder()->create('tracker_agents', function($table)
+		{
+			$table->bigIncrements('id');
 
-            $table->timestamps();
-        });
-
-        $this->getSchemaBuilder()->create('tracker_cookies', function($table)
-        {
-            $table->bigIncrements('id');
+			$table->string('name')->unique();
+			$table->string('browser');
+			$table->string('browser_version');
 
-            $table->string('uuid')->unique();
+			$table->timestamps();
+		});
+
+		$this->getSchemaBuilder()->create('tracker_cookies', function($table)
+		{
+			$table->bigIncrements('id');
 
-            $table->timestamps();
-        });
+			$table->string('uuid')->unique();
 
-        $this->getSchemaBuilder()->create('tracker_devices', function($table)
-        {
-            $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-            $table->string('kind')->index();
-            $table->string('model')->index();
-            $table->string('platform')->index();
-            $table->string('platform_version')->index();
-            $table->boolean('is_mobile');
+		$this->getSchemaBuilder()->create('tracker_devices', function($table)
+		{
+			$table->bigIncrements('id');
 
-            $table->unique(['kind', 'model', 'platform', 'platform_version']);
+			$table->string('kind')->index();
+			$table->string('model')->index();
+			$table->string('platform')->index();
+			$table->string('platform_version')->index();
+			$table->boolean('is_mobile');
 
-            $table->timestamps();
-        });
+			$table->unique(['kind', 'model', 'platform', 'platform_version']);
 
-	    $this->getSchemaBuilder()->create('tracker_referers', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->bigInteger('domain_id')->unsigned()->index();
-		    $table->string('url')->index();
-		    $table->string('host');
+		$this->getSchemaBuilder()->create('tracker_referers', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->bigInteger('domain_id')->unsigned()->index();
+			$table->string('url')->index();
+			$table->string('host');
 
-	    $this->getSchemaBuilder()->create('tracker_domains', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->string('name')->index();
+		$this->getSchemaBuilder()->create('tracker_domains', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->string('name')->index();
 
-	    $this->getSchemaBuilder()->create('tracker_sessions', function($table)
-	    {
-            $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-            $table->string('uuid')->unique();
-            $table->bigInteger('user_id')->unsigned()->nullable();
-            $table->bigInteger('device_id')->unsigned();
-            $table->bigInteger('agent_id')->unsigned();
-            $table->string('client_ip');
-	        $table->bigInteger('referer_id')->unsigned()->nullable();
-            $table->bigInteger('cookie_id')->unsigned()->nullable();
-		    $table->bigInteger('geoip_id')->unsigned()->nullable();
+		$this->getSchemaBuilder()->create('tracker_sessions', function($table)
+		{
+			$table->bigIncrements('id');
 
-            $table->timestamps();
-        });
+			$table->string('uuid')->unique();
+			$table->bigInteger('user_id')->unsigned()->nullable();
+			$table->bigInteger('device_id')->unsigned();
+			$table->bigInteger('agent_id')->unsigned();
+			$table->string('client_ip');
+			$table->bigInteger('referer_id')->unsigned()->nullable();
+			$table->bigInteger('cookie_id')->unsigned()->nullable();
+			$table->bigInteger('geoip_id')->unsigned()->nullable();
 
-	    $this->getSchemaBuilder()->create('tracker_errors', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->string('code')->index();
-		    $table->string('message')->index();
+		$this->getSchemaBuilder()->create('tracker_errors', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->string('code')->index();
+			$table->string('message')->index();
 
-	    $this->getSchemaBuilder()->create('tracker_geoip', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->float('latitude')->nullable()->index();
-		    $table->float('longitude')->nullable()->index();
+		$this->getSchemaBuilder()->create('tracker_geoip', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->string('country_code', 2)->nullable();
-		    $table->string('country_code3', 3)->nullable();
-		    $table->string('country_name')->nullable();
-		    $table->string('region', 2)->nullable();
-		    $table->string('city', 50)->nullable();
-		    $table->string('postal_code', 20)->nullable();
-		    $table->bigInteger('area_code')->nullable();
-		    $table->float('dma_code')->nullable();
-		    $table->float('metro_code')->nullable();
-		    $table->string('continent_code', 2)->nullable();
+			$table->float('latitude')->nullable()->index();
+			$table->float('longitude')->nullable()->index();
 
-		    $table->timestamps();
-	    });
+			$table->string('country_code', 2)->nullable();
+			$table->string('country_code3', 3)->nullable();
+			$table->string('country_name')->nullable();
+			$table->string('region', 2)->nullable();
+			$table->string('city', 50)->nullable();
+			$table->string('postal_code', 20)->nullable();
+			$table->bigInteger('area_code')->nullable();
+			$table->float('dma_code')->nullable();
+			$table->float('metro_code')->nullable();
+			$table->string('continent_code', 2)->nullable();
 
-	    $this->getSchemaBuilder()->create('tracker_sql_queries', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->string('sha1', 40)->index();
-		    $table->text('statement');
-		    $table->float('time');
-		    $table->integer('connection_id')->unsigned();
+		$this->getSchemaBuilder()->create('tracker_sql_queries', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->string('sha1', 40)->index();
+			$table->text('statement');
+			$table->float('time');
+			$table->integer('connection_id')->unsigned();
 
-	    $this->getSchemaBuilder()->create('tracker_sql_query_bindings', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->string('sha1', 40)->index();
-		    $table->text('serialized');
+		$this->getSchemaBuilder()->create('tracker_sql_query_bindings', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->string('sha1', 40)->index();
+			$table->text('serialized');
 
-	    $this->getSchemaBuilder()->create('tracker_sql_query_bindings_parameters', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->bigInteger('sql_query_bindings_id')->unsigned()->nullable();
-		    $table->string('name')->nullable();
-		    $table->text('value')->nullable();
+		$this->getSchemaBuilder()->create('tracker_sql_query_bindings_parameters', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->bigInteger('sql_query_bindings_id')->unsigned()->nullable();
+			$table->string('name')->nullable();
+			$table->text('value')->nullable();
 
-	    $this->getSchemaBuilder()->create('tracker_sql_queries_log', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->bigInteger('log_id')->unsigned();
-		    $table->bigInteger('sql_query_id')->unsigned();
+		$this->getSchemaBuilder()->create('tracker_sql_queries_log', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->bigInteger('log_id')->unsigned();
+			$table->bigInteger('sql_query_id')->unsigned();
 
-	    $this->getSchemaBuilder()->create('tracker_connections', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->string('name')->index();
+		$this->getSchemaBuilder()->create('tracker_connections', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->string('name')->index();
 
-	    $this->getSchemaBuilder()->create('tracker_events', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->string('name')->index();
+		$this->getSchemaBuilder()->create('tracker_events', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->string('name')->index();
 
-	    $this->getSchemaBuilder()->create('tracker_events_log', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->bigInteger('event_id')->unsigned();
-		    $table->bigInteger('class_id')->unsigned();
-		    $table->bigInteger('log_id')->unsigned();
+		$this->getSchemaBuilder()->create('tracker_events_log', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->bigInteger('event_id')->unsigned();
+			$table->bigInteger('class_id')->unsigned();
+			$table->bigInteger('log_id')->unsigned();
 
-	    $this->getSchemaBuilder()->create('tracker_system_classes', function($table)
-	    {
-		    $table->bigIncrements('id');
+			$table->timestamps();
+		});
 
-		    $table->string('name')->index();
+		$this->getSchemaBuilder()->create('tracker_system_classes', function($table)
+		{
+			$table->bigIncrements('id');
 
-		    $table->timestamps();
-	    });
+			$table->string('name')->index();
 
-    }
+			$table->timestamps();
+		});
+	}
 
-    public function down()
-    {
-	    $this->getSchemaBuilder()->drop('tracker_errors');
+	public function down()
+	{
+		$this->execute('dropTables');
+	}
 
-        $this->getSchemaBuilder()->drop('tracker_sessions');
+	public function dropTables()
+	{
+		$this->getSchemaBuilder()->drop('tracker_errors');
 
-	    $this->getSchemaBuilder()->drop('tracker_referers');
+		$this->getSchemaBuilder()->drop('tracker_sessions');
 
-	    $this->getSchemaBuilder()->drop('tracker_domains');
+		$this->getSchemaBuilder()->drop('tracker_referers');
 
-	    $this->getSchemaBuilder()->drop('tracker_routes');
+		$this->getSchemaBuilder()->drop('tracker_domains');
 
-	    $this->getSchemaBuilder()->drop('tracker_route_paths');
+		$this->getSchemaBuilder()->drop('tracker_routes');
 
-	    $this->getSchemaBuilder()->drop('tracker_route_path_parameters');
+		$this->getSchemaBuilder()->drop('tracker_route_paths');
 
-        $this->getSchemaBuilder()->drop('tracker_devices');
+		$this->getSchemaBuilder()->drop('tracker_route_path_parameters');
 
-        $this->getSchemaBuilder()->drop('tracker_cookies');
+		$this->getSchemaBuilder()->drop('tracker_devices');
 
-        $this->getSchemaBuilder()->drop('tracker_agents');
+		$this->getSchemaBuilder()->drop('tracker_cookies');
 
-	    $this->getSchemaBuilder()->drop('tracker_query_arguments');
+		$this->getSchemaBuilder()->drop('tracker_agents');
 
-	    $this->getSchemaBuilder()->drop('tracker_queries');
+		$this->getSchemaBuilder()->drop('tracker_query_arguments');
 
-	    $this->getSchemaBuilder()->drop('tracker_paths');
+		$this->getSchemaBuilder()->drop('tracker_queries');
 
-        $this->getSchemaBuilder()->drop('tracker_log');
+		$this->getSchemaBuilder()->drop('tracker_paths');
 
-	    $this->getSchemaBuilder()->drop('tracker_geoip');
+		$this->getSchemaBuilder()->drop('tracker_log');
 
-	    $this->getSchemaBuilder()->drop('tracker_sql_queries');
+		$this->getSchemaBuilder()->drop('tracker_geoip');
 
-	    $this->getSchemaBuilder()->drop('tracker_sql_queries_log');
+		$this->getSchemaBuilder()->drop('tracker_sql_queries');
 
-	    $this->getSchemaBuilder()->drop('tracker_sql_query_bindings');
+		$this->getSchemaBuilder()->drop('tracker_sql_queries_log');
 
-	    $this->getSchemaBuilder()->drop('tracker_sql_query_bindings_parameters');
+		$this->getSchemaBuilder()->drop('tracker_sql_query_bindings');
 
-	    $this->getSchemaBuilder()->drop('tracker_connections');
+		$this->getSchemaBuilder()->drop('tracker_sql_query_bindings_parameters');
 
-	    $this->getSchemaBuilder()->drop('tracker_events');
+		$this->getSchemaBuilder()->drop('tracker_connections');
 
-	    $this->getSchemaBuilder()->drop('tracker_events_log');
+		$this->getSchemaBuilder()->drop('tracker_events');
 
-	    $this->getSchemaBuilder()->drop('tracker_system_classes');
-    }
+		$this->getSchemaBuilder()->drop('tracker_events_log');
 
-    public function getSchemaBuilder()
-    {
-        return $this->manager->connection($this->connection)->getSchemaBuilder();
-    }
+		$this->getSchemaBuilder()->drop('tracker_system_classes');
+	}
+
+	public function getSchemaBuilder()
+	{
+		return $this->getConnection()->getSchemaBuilder();
+	}
+
+	public function getConnection()
+	{
+		return $this->manager->connection($this->connection);
+	}
+
+	public function execute($method)
+	{
+		$this->getConnection()->beginTransaction();
+
+		try 
+		{
+			$this->{$method}();
+		} 
+		catch (\Exception $e) 
+		{
+			$this->getConnection()->rollback();
+
+			if ($e instanceof \Illuminate\Database\QueryException)
+			{
+				throw new $e($e->getMessage(), $e->getBindings(), $e->previous);	
+			}
+			else
+			{
+				throw new $e($e->getMessage(), $e->previous);
+			}
+		}
+
+		$this->getConnection()->commit();
+	}
 
 }

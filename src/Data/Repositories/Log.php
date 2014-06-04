@@ -50,9 +50,9 @@ class Log extends Repository {
 		return $this->getModel()->where('session_id', $sessionId)->orderBy('updated_at', 'desc')->get();
 	}
 
-	public function pageViews()
+	public function pageViews($minutes)
 	{
-		 return $this->getModel()->pageViews();
+		 return $this->getModel()->pageViews($minutes);
 	}
 
 	/**

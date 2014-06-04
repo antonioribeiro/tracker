@@ -21,6 +21,8 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
+use Carbon\Carbon;
+
 class Log extends Base {
 
 	protected $table = 'tracker_log';
@@ -58,14 +60,17 @@ class Log extends Base {
 		return $this->belongsTo($this->getConfig()->get('route_path_model'), 'route_path_id');
 	}
 
-	public function pageViews()
+	public function pageViews($minutes)
 	{
+        $hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
+
 		return
 			$this->select(
 				$this->getConnection()->raw('DATE(created_at) as date, count(*) as total')
 			)->groupBy(
 				$this->getConnection()->raw('DATE(created_at)')
 			)
+			->where('updated_at', '>=', $hour)
 			->orderBy('date')
 			->get();
 	}

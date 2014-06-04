@@ -373,12 +373,12 @@ class ServiceProvider extends IlluminateServiceProvider {
 	{
 		$me = $this;
 
-		$this->app->error(function(\Exception $exception, $code) use ($me)
-		{
-			dd($exception->getMessage());
+		// $this->app->error(function(\Exception $exception, $code) use ($me)
+		// {
+		// 	dd($exception->getMessage());
 
-			$me->app['tracker']->handleException($exception, $code);
-		});
+		// 	$me->app['tracker']->handleException($exception, $code);
+		// });
 	}
 
 	private function instantiateModel($modelName)

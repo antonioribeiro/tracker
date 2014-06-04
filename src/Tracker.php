@@ -255,9 +255,9 @@ class Tracker
         return $this->dataRepositoryManager->getSessionLog($uuid);
     }
 
-    public function pageViews()
+    public function pageViews($minutes)
     {
-    	return $this->dataRepositoryManager->pageViews();
+    	return $this->dataRepositoryManager->pageViews($minutes);
     }
 
 	public function logSqlQuery($query, $bindings, $time, $name)
