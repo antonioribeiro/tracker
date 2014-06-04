@@ -385,12 +385,6 @@ class ServiceProvider extends IlluminateServiceProvider {
 	{
 		$model = $this->getConfig($modelName);
 
-		if(!$model)
-		{
-			dd(debug_backtrace());
-			dd($modelName);
-		}
-
 		if ( ! $model)
 		{
 			$message = "Tracker: Model not found for '$modelName'.";

@@ -64,13 +64,12 @@ class Log extends Base {
 	{
         $hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
 
-		return
-			$this->select(
+		return $this->select(
 				$this->getConnection()->raw('DATE(created_at) as date, count(*) as total')
 			)->groupBy(
 				$this->getConnection()->raw('DATE(created_at)')
 			)
-			->where('updated_at', '>=', $hour)
+			->where('created_at', '>=', $hour)
 			->orderBy('date')
 			->get();
 	}
