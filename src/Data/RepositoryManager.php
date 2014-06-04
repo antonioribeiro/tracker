@@ -22,10 +22,13 @@
 namespace PragmaRX\Tracker\Data;
 
 use PragmaRX\Tracker\Data\Repositories\Connection;
+use PragmaRX\Tracker\Data\Repositories\Event;
+use PragmaRX\Tracker\Data\Repositories\EventLog;
 use PragmaRX\Tracker\Data\Repositories\SqlQuery;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryBinding;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryLog;
+use PragmaRX\Tracker\Data\Repositories\SystemClass;
 use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Support\Config;
 
@@ -121,6 +124,21 @@ class RepositoryManager implements RepositoryManagerInterface {
 	 */
 	private $connectionRepository;
 
+	/**
+	 * @var Repositories\Event
+	 */
+	private $eventRepository;
+
+	/**
+	 * @var Repositories\EventLog
+	 */
+	private $eventLogRepository;
+
+	/**
+	 * @var Repositories\SystemClass
+	 */
+	private $systemClassRepository;
+
 	public function __construct(
 		GeoIP $geoIp,
 		MobileDetect $mobileDetect,
@@ -147,7 +165,10 @@ class RepositoryManager implements RepositoryManagerInterface {
         SqlQueryBinding $sqlQueryBindingRepository,
         SqlQueryBindingParameter $sqlQueryBindingParameterRepository,
         SqlQueryLog $sqlQueryLogRepository,
-		Connection $connectionRepository
+		Connection $connectionRepository,
+		Event $eventRepository,
+		EventLog $eventLogRepository,
+		SystemClass $systemClassRepository
     )
     {
 	    $this->authentication = $authentication;
@@ -201,11 +222,17 @@ class RepositoryManager implements RepositoryManagerInterface {
 	    $this->sqlQueryLogRepository = $sqlQueryLogRepository;
 
 	    $this->connectionRepository = $connectionRepository;
+
+	    $this->eventRepository = $eventRepository;
+
+	    $this->eventLogRepository = $eventLogRepository;
+
+	    $this->systemClassRepository = $systemClassRepository;
     }
 
     public function createLog($data)
     {
-	    $id = $this->logRepository->createLog($data);
+	    $this->logRepository->createLog($data);
 
 	    $this->sqlQueryRepository->fire();
     }
@@ -456,6 +483,11 @@ class RepositoryManager implements RepositoryManagerInterface {
 			'time' => $time,
 			'name' => $name,
 		));
+	}
+
+	public function logEvents()
+	{
+		$this->eventRepository->logEvents();
 	}
 
 }

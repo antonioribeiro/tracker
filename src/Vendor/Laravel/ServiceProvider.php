@@ -1,7 +1,11 @@
 <?php namespace PragmaRX\Tracker\Vendor\Laravel;
 
 use PragmaRX\Tracker\Data\Repositories\Connection;
+use PragmaRX\Tracker\Data\Repositories\Event;
+use PragmaRX\Tracker\Data\Repositories\EventLog;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
+use PragmaRX\Tracker\Data\Repositories\SystemClass;
+use PragmaRX\Tracker\Eventing\EventStorage;
 use PragmaRX\Tracker\Tracker;
 
 use PragmaRX\Tracker\Services\Authentication;
@@ -101,6 +105,8 @@ class ServiceProvider extends IlluminateServiceProvider {
 
 	    $this->registerSqlQueryLogWatcher();
 
+	    $this->registerGlobalEventLogger();
+
 	    $this->registerErrorHandler();
 
 	    $this->commands('tracker.tables.command');
@@ -195,6 +201,12 @@ class ServiceProvider extends IlluminateServiceProvider {
 
 	        $connectionModel = $this->instantiateModel('connection_model');
 
+	        $eventModel = $this->instantiateModel('event_model');
+
+	        $eventLogModel = $this->instantiateModel('event_log_model');
+
+	        $systemClassModel = $this->instantiateModel('system_class_model');
+
 	        $logRepository = new Log($logModel);
 
 	        $connectionRepository = new Connection($connectionModel);
@@ -211,6 +223,19 @@ class ServiceProvider extends IlluminateServiceProvider {
 		        $sqlQueryBindingRepository,
 		        $sqlQueryBindingParameterRepository,
 		        $connectionRepository,
+		        $logRepository,
+		        $app['tracker.config']
+	        );
+
+			$eventLogRepository = new EventLog($eventLogModel);
+
+			$systemClassRepository = new SystemClass($systemClassModel);
+
+	        $eventRepository = new Event(
+		        $eventModel,
+		        $app['tracker.events'],
+		        $eventLogRepository,
+		        $systemClassRepository,
 		        $logRepository,
 		        $app['tracker.config']
 	        );
@@ -271,7 +296,13 @@ class ServiceProvider extends IlluminateServiceProvider {
 
                 $sqlQueryLogRepository,
 
-	            $connectionRepository
+	            $connectionRepository,
+
+	            $eventRepository,
+
+	            $eventLogRepository,
+
+	            $systemClassRepository
             );
         });
     }
@@ -344,6 +375,8 @@ class ServiceProvider extends IlluminateServiceProvider {
 
 		$this->app->error(function(\Exception $exception, $code) use ($me)
 		{
+			dd($exception->getMessage());
+
 			$me->app['tracker']->handleException($exception, $code);
 		});
 	}
@@ -351,6 +384,12 @@ class ServiceProvider extends IlluminateServiceProvider {
 	private function instantiateModel($modelName)
 	{
 		$model = $this->getConfig($modelName);
+
+		if(!$model)
+		{
+			dd(debug_backtrace());
+			dd($modelName);
+		}
 
 		if ( ! $model)
 		{
@@ -386,6 +425,44 @@ class ServiceProvider extends IlluminateServiceProvider {
 				$query, $bindings, $time, $name
 			);
 		});
+	}
+
+	private function registerGlobalEventLogger()
+	{
+		$me = $this;
+
+		$this->app['tracker.events'] = $this->app->share(function($app)
+		{
+			return new EventStorage();
+		});
+
+		$this->app['events']->listen('*', function($object) use ($me)
+		{
+			if ($me->app['tracker.events']->isOff())
+			{
+				return;
+			}
+
+			// To avoid infinite recursion, event tracking while logging events
+			// must be turned off
+			$me->app['tracker.events']->turnOff();
+
+			// Log events even before application is ready
+			$me->app['tracker.events']->logEvent(
+				$me->app['events']->firing(),
+				$object
+			);
+
+			// Can only send events to database after application is ready
+			if (isset($me->app['tracker.loaded']))
+			{
+				$me->app['tracker']->logEvents();
+			}
+
+			// Turn the event tracking to on again
+			$me->app['tracker.events']->turnOn();
+		});
+
 	}
 
 }

@@ -288,4 +288,16 @@ class Tracker
 				$this->isTrackableIp() &&
 				$this->isTrackableEnvironment();
 	}
+
+	public function logEvents()
+	{
+		if (
+			$this->isTrackable() &&
+			$this->config->get('log_enabled') &&
+			$this->config->get('log_events')
+		)
+		{
+			$this->dataRepositoryManager->logEvents();
+		}
+	}
 }

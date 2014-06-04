@@ -52,14 +52,7 @@ class Log extends Repository {
 
 	public function pageViews()
 	{
-		// dd($this->model);
-		// return $this->getModel()->select(
-		// 	$this->getModel()->raw('DATE(created_at) as date, count(*) as total')
-		// )->get();
-
-		// // where('session_id', $sessionId)->orderBy('updated_at', 'desc')->get();
-
-		// // select  from tracker_log group by DATE(created_at);
+		 return $this->getModel()->pageViews();
 	}
 
 	/**

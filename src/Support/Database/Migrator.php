@@ -270,6 +270,35 @@ class Migrator
 		    $table->timestamps();
 	    });
 
+	    $this->getSchemaBuilder()->create('tracker_events', function($table)
+	    {
+		    $table->bigIncrements('id');
+
+		    $table->string('name')->index();
+
+		    $table->timestamps();
+	    });
+
+	    $this->getSchemaBuilder()->create('tracker_events_log', function($table)
+	    {
+		    $table->bigIncrements('id');
+
+		    $table->bigInteger('event_id')->unsigned();
+		    $table->bigInteger('class_id')->unsigned();
+		    $table->bigInteger('log_id')->unsigned();
+
+		    $table->timestamps();
+	    });
+
+	    $this->getSchemaBuilder()->create('tracker_system_classes', function($table)
+	    {
+		    $table->bigIncrements('id');
+
+		    $table->string('name')->index();
+
+		    $table->timestamps();
+	    });
+
     }
 
     public function down()
@@ -313,6 +342,12 @@ class Migrator
 	    $this->getSchemaBuilder()->drop('tracker_sql_query_bindings_parameters');
 
 	    $this->getSchemaBuilder()->drop('tracker_connections');
+
+	    $this->getSchemaBuilder()->drop('tracker_events');
+
+	    $this->getSchemaBuilder()->drop('tracker_events_log');
+
+	    $this->getSchemaBuilder()->drop('tracker_system_classes');
     }
 
     public function getSchemaBuilder()

@@ -6,21 +6,20 @@
 
 ## A Laravel Visitor Tracker package
 
-Tracker gathers information from your requests to store identify:
+Tracker gathers information from your requests to identify and/or store:
 
 - **Device** (computer, smartphone, tablet...)
 - **Browser** (Chrome, Mozilla Firefox, Safari, Internet Explorer...)
 - **Operating System** (iOS, Mac OS, Linux, Windows...)
 - **Geo Location** (Country and City)
-
-It also has tha ability to log your site accesses, by recording:
-
 - **Session**
-- **User**
+- **Logged users**
 - **User device** (by keeping a cookie on each device)
 - **Routes and all its parameters**
-- **Queries and all its arguments**
-- **Referer**
+- **Url queries and all its arguments**
+- **Sql queries and all its bindings**
+- **Events**
+- **Referers**
 - **Exceptions/Errors**
 
 ## Tables

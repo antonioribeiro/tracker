@@ -84,6 +84,29 @@ return array(
 	'log_sql_queries_bindings' => false,
 
 	/**
+	 * Log events?
+	 */
+	'log_events' => false,
+
+	/**
+	 * Which events do you want to log exactly?
+	 */
+	'log_only_events' => array(
+		// defaults to logging all events
+	),
+
+	/**
+	 * Do not log events for the following patterns.
+	 * Strings accepts wildcards:
+	 *
+	 *    eloquent.*
+	 *
+	 */
+	'do_not_log_events' => array(
+		// defaults to logging all events
+	),
+
+	/**
 	 * A cookie may be created on your visitor device, so you can have information
 	 * on everything made using that device on your site.	 *
 	 */
@@ -154,7 +177,13 @@ return array(
 
 	'connection_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Connection',
 
-	/**
+	'event_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Event',
+
+	'event_log_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\EventLog',
+
+	'system_class_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SystemClass',
+
+/**
 	 * Laravel internal variables on user authentication and login.
 	 */
 	'authentication_ioc_binding' => 'auth', // defaults to 'auth' in Illuminate\Support\Facades\Auth

@@ -58,4 +58,15 @@ class Log extends Base {
 		return $this->belongsTo($this->getConfig()->get('route_path_model'), 'route_path_id');
 	}
 
+	public function pageViews()
+	{
+		return
+			$this->select(
+				$this->getConnection()->raw('DATE(created_at) as date, count(*) as total')
+			)->groupBy(
+				$this->getConnection()->raw('DATE(created_at)')
+			)
+			->orderBy('date')
+			->get();
+	}
 }
