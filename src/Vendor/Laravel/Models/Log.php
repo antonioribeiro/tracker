@@ -62,7 +62,7 @@ class Log extends Base {
 
 	public function pageViews($minutes)
 	{
-        $hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
+		$hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
 
 		return $this->select(
 				$this->getConnection()->raw('DATE(created_at) as date, count(*) as total')
@@ -71,6 +71,25 @@ class Log extends Base {
 			)
 			->where('created_at', '>=', $hour)
 			->orderBy('date')
+			->get();
+	}
+
+	public function pageViewsByCountry($minutes)
+	{
+		$hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
+
+		\DB::listen(function($sql, $bindings, $time) { var_dump($sql); var_dump($bindings); });
+		return 
+			$this
+			->select(
+				'tracker_geoip.country_name'
+				, $this->getConnection()->raw('count(tracker_log.id) as total')
+			)
+			->join('tracker_sessions', 'tracker_log.session_id', '=', 'tracker_sessions.id')
+			->join('tracker_geoip', 'tracker_sessions.geoip_id', '=', 'tracker_geoip.id')
+			->groupBy('tracker_geoip.country_name')
+			->where('tracker_log.created_at', '>=', $hour)
+			->whereNotNull('tracker_sessions.geoip_id')
 			->get();
 	}
 

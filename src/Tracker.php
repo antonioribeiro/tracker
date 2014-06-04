@@ -301,6 +301,11 @@ class Tracker
     	return $this->dataRepositoryManager->pageViews($minutes);
     }
 
+    public function pageViewsByCountry($minutes)
+    {
+    	return $this->dataRepositoryManager->pageViewsByCountry($minutes);
+    }
+
     public function users($minutes)
     {
     	return $this->dataRepositoryManager->users($minutes);

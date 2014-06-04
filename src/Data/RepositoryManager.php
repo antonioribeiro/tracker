@@ -475,6 +475,11 @@ class RepositoryManager implements RepositoryManagerInterface {
 		return $this->logRepository->pageViews($minutes);
 	}
 
+	public function pageViewsByCountry($minutes)
+	{
+		return $this->logRepository->pageViewsByCountry($minutes);
+	}
+
 	public function logSqlQuery($query, $bindings, $time, $name)
 	{
 		$this->sqlQueryRepository->push(array(
