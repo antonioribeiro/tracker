@@ -178,11 +178,6 @@ class Tracker
 		}
 	}
 
-    public function lastSessions($minutes = 1440)
-    {
-        return $this->dataRepositoryManager->getLastSessions($minutes);
-    }
-
     public function allSessions()
     {
         return $this->dataRepositoryManager->getAllSessions();
@@ -255,11 +250,6 @@ class Tracker
         return $this->dataRepositoryManager->getSessionLog($uuid);
     }
 
-    public function pageViews($minutes)
-    {
-    	return $this->dataRepositoryManager->pageViews($minutes);
-    }
-
 	public function logSqlQuery($query, $bindings, $time, $name)
 	{
 		if (
@@ -300,4 +290,20 @@ class Tracker
 			$this->dataRepositoryManager->logEvents();
 		}
 	}
+
+    public function lastSessions($minutes = 1440)
+    {
+        return $this->dataRepositoryManager->getLastSessions($minutes);
+    }
+
+    public function pageViews($minutes)
+    {
+    	return $this->dataRepositoryManager->pageViews($minutes);
+    }
+
+    public function users($minutes)
+    {
+    	return $this->dataRepositoryManager->users($minutes);
+    }
+
 }

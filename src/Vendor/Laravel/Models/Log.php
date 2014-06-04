@@ -73,4 +73,5 @@ class Log extends Base {
 			->orderBy('date')
 			->get();
 	}
+
 }

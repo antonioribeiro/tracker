@@ -211,5 +211,10 @@ class Session extends Repository {
 
         return $this->getSessions()->where('updated_at', '>=', $hour)->get();
     }
-}
 
+    public function users($minutes)
+    {
+         return $this->getModel()->users($minutes);
+    }
+    
+}

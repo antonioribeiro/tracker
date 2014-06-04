@@ -21,6 +21,8 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
+use Carbon\Carbon;
+
 class Session extends Base {
 
 	protected $table = 'tracker_sessions';
@@ -76,4 +78,21 @@ class Session extends Base {
 		return $this->log()->count();
 	}
 
+	public function users($minutes)
+	{
+        $hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
+
+		return 
+			$this
+				->select(
+					'user_id', 
+					$this->getConnection()->raw('max(updated_at) as updated_at')
+				)
+				->groupBy('user_id')
+				->from('tracker_sessions')
+				->where('updated_at', '>=', $hour)
+				->whereNotNull('user_id')
+				->orderBy($this->getConnection()->raw('max(updated_at)'), 'desc')
+				->get();
+	}
 }
