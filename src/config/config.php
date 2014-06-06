@@ -183,7 +183,7 @@ return array(
 
 	'system_class_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SystemClass',
 
-/**
+	/**
 	 * Laravel internal variables on user authentication and login.
 	 */
 	'authentication_ioc_binding' => 'auth', // defaults to 'auth' in Illuminate\Support\Facades\Auth
