@@ -164,4 +164,9 @@ class Event extends Repository {
 			}
 		}
 	}
+
+	public function getAll($minutes)
+	{
+		return $this->getModel()->allInThePeriod($minutes);
+	}
 }

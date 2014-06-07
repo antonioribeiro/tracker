@@ -311,4 +311,14 @@ class Tracker
     	return $this->dataRepositoryManager->users($minutes);
     }
 
+	public function events($minutes)
+	{
+		return $this->dataRepositoryManager->events($minutes);
+	}
+
+	public function errors($minutes)
+	{
+		return $this->dataRepositoryManager->errors($minutes);
+	}
+
 }

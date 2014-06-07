@@ -50,6 +50,11 @@ class Log extends Base {
 		return $this->belongsTo($this->getConfig()->get('path_model'));
 	}
 
+	public function error()
+	{
+		return $this->belongsTo($this->getConfig()->get('error_model'));
+	}
+
 	public function logQuery()
 	{
 		return $this->belongsTo($this->getConfig()->get('query_model'), 'query_id');
@@ -92,4 +97,16 @@ class Log extends Base {
 			->get();
 	}
 
+	public function errors($minutes)
+	{
+		$hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
+
+		return $this
+			->where('tracker_log.created_at', '>=', $hour)
+			->whereNotNull('error_id')
+			->orderBy('created_at', 'desc')
+			->get();
+	}
+
 }
+

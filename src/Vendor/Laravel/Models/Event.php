@@ -21,6 +21,8 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
+use Carbon\Carbon;
+
 class Event extends Base {
 
 	protected $table = 'tracker_events';
@@ -28,5 +30,24 @@ class Event extends Base {
 	protected $fillable = array(
 		'name',
 	);
+
+	public function allInThePeriod($minutes)
+	{
+		$hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
+
+		return
+			$this
+				->select(
+					'tracker_events.id',
+					'tracker_events.name',
+					$this->getConnection()->raw('count(tracker_events_log.id) as total')
+				)
+				->from('tracker_events')
+				->where('tracker_events.created_at', '>=', $hour)
+				->join('tracker_events_log', 'tracker_events_log.event_id', '=', 'tracker_events.id')
+				->groupBy('tracker_events.id', 'tracker_events.name')
+				->orderBy('total', 'desc')
+				->get();
+	}
 
 }

@@ -85,4 +85,9 @@ class Log extends Repository {
 		 return $this->getModel()->pageViewsByCountry($minutes);
 	}
 
+	public function getErrors($minutes)
+	{
+		return $this->getModel()->errors($minutes);
+	}
+
 }
