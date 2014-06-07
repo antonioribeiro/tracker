@@ -73,7 +73,7 @@ class Session extends Base {
 		return $this->hasMany($this->getConfig()->get('log_model'));
 	}
 
-	public function getHitsAttribute()
+	public function getPageViewsAttribute()
 	{
 		return $this->log()->count();
 	}
@@ -82,10 +82,10 @@ class Session extends Base {
 	{
         $hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
 
-		return 
+		return
 			$this
 				->select(
-					'user_id', 
+					'user_id',
 					$this->getConnection()->raw('max(updated_at) as updated_at')
 				)
 				->groupBy('user_id')
