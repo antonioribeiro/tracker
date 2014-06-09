@@ -321,4 +321,8 @@ class Tracker
 		return $this->dataRepositoryManager->errors($minutes);
 	}
 
+	public function currentSession()
+	{
+		return $this->dataRepositoryManager->sessionRepository->getCurrent();
+	}
 }

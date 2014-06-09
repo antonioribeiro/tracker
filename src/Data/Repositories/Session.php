@@ -216,5 +216,10 @@ class Session extends Repository {
     {
          return $this->getModel()->users($minutes);
     }
-    
+
+	public function getCurrent()
+	{
+		return $this->getModel();
+	}
+
 }

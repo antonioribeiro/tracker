@@ -62,7 +62,12 @@ abstract class Repository implements RepositoryInterface {
 	{
 		$this->result = $this->newQuery()->find($id);
 
-		return $this->result ? $this : null;
+		if ($this->result)
+		{
+			$this->model = $this->result;
+		}
+
+		return $this->result;
 	}
 
 	public function create($attributes)
