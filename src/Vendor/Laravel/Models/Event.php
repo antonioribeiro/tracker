@@ -43,7 +43,7 @@ class Event extends Base {
 					$this->getConnection()->raw('count(tracker_events_log.id) as total')
 				)
 				->from('tracker_events')
-				->where('tracker_events.created_at', '>=', $hour)
+				->where('tracker_events_log.created_at', '>=', $hour)
 				->join('tracker_events_log', 'tracker_events_log.event_id', '=', 'tracker_events.id')
 				->groupBy('tracker_events.id', 'tracker_events.name')
 				->orderBy('total', 'desc')
