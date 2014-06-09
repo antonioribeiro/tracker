@@ -30,7 +30,7 @@ Storing user tracking information, on indexed and normalized database tables, wa
 
 As soon as you install and enable it, Tracker will start storing all information you tell it to, then you can in your application use the Tracker Facade to access everything. Here are some of the methods and relatioships available:
 
-#### Sessions
+#### Sessions (visits)
 
 ```
 $sessions = Tracker::sessions(60 * 24); // get sessions (visits) from the past day
@@ -88,7 +88,7 @@ $pageViews = Tracker::pageViewsByCountry(60 * 24);
 
 ## Examples of the information this package may provide
 
-### Views
+### Visits
 
 ![visits](https://raw.githubusercontent.com/antonioribeiro/acr.com/master/public/assets/layouts/admin/img/screenshots/visits.png)
 
