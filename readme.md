@@ -30,24 +30,40 @@ Storing user tracking information, on indexed and normalized database tables, wa
 
 As soon as you install and enable it, Tracker will start storing all information you tell it to, then you can in your application use the Tracker Facade to access everything. Here are some of the methods and relatioships available:
 
+#### Current Session/Visitor
+
+```
+$visitor = Tracker::currentSession();
+```
+
+Most of those functions return an Eloquent collection, so you can use not only its attributes, but also relational data:
+
+```
+var_dump( $visitor->device->is_mobile );
+
+var_dump( $visitor->device->platform );
+
+var_dump( $visitor->client_ip );
+
+var_dump( $visitor->geoIp->city );
+```
+
 #### Sessions (visits)
 
 ```
 $sessions = Tracker::sessions(60 * 24); // get sessions (visits) from the past day
 ```
 
-Most of those functions return an Eloquent collection, so you can use no only its attributes, but also relational data:
-
 ```
 foreach($sessions as $session)
 {
     var_dump( $session->user->email );
 
-    var_dump( $session->device->kind . ' - ' . $session->device->kind );
+    var_dump( $session->device->kind . ' - ' . $session->device->platform );
 
     var_dump( $session->agent->browser . ' - ' . $session->agent->browser_version );
 
-    var_dump( $session->geo_ip->country_name );
+    var_dump( $session->geoIp->country_name );
 
     foreach($session->session->log as $log)
     {
