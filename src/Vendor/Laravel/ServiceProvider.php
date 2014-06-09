@@ -355,7 +355,9 @@ class ServiceProvider extends IlluminateServiceProvider {
     {
         $this->app['tracker.updateparser.command'] = $this->app->share(function($app)
         {
-            return new UpdateParserCommand();
+            return new UpdateParserCommand(
+	            $app['tracker.config']
+            );
         });
     }
 

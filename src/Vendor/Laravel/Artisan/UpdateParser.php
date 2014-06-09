@@ -1,9 +1,6 @@
 <?php namespace PragmaRX\Tracker\Vendor\Laravel\Artisan;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use PragmaRX\Tracker\Support\Config;
 use UAParser\Util\Converter;
 use UAParser\Util\Fetcher;
 
@@ -23,6 +20,18 @@ class UpdateParser extends Base {
      */
     protected $description = 'Update uaparser regexes';
 
+	/**
+	 * @var
+	 */
+	private $config;
+
+	public function __construct(Config $config)
+	{
+		parent::__construct();
+
+		$this->config = $config;
+	}
+
     /**
      * Execute the command.
      *
@@ -30,9 +39,11 @@ class UpdateParser extends Base {
      */
     public function fire()
     {
+	    $this->config->set('enabled', false);
+
         $fetcher = new Fetcher();
 
-        $converter = new Converter(base_path().'/vendor/tobie/ua-parser/php/resources/');
+        $converter = new Converter(base_path().'/vendor/pragmarx/ua-parser/php/resources/');
 
         $converter->convertString($fetcher->fetch(), false);
     }
