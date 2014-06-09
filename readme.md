@@ -364,7 +364,7 @@ Require the `tracker` package by **executing** the following command in your com
 **Or** add to your composer.json:
 
     "require": {
-        "pragmarx/tracker": "~0.2"
+        "pragmarx/tracker": "0.3.*"
     }
 
 And execute
