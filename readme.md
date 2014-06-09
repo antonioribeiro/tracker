@@ -4,7 +4,7 @@
 
 ## A Laravel Visitor Tracker package
 
-Tracker gathers a lot of information from your requests to identify and/or store:
+Tracker gathers a lot of information from your requests to identify and store:
 
 - **Sessions**
 - **Page Views (hits on routes)**
@@ -24,16 +24,16 @@ Tracker gathers a lot of information from your requests to identify and/or store
 
 ## Why?
 
-Storing user tracking information on indexed and normalized database tables, wastes less disk space and ease the extract of valuable information about your applications.
+Storing user tracking information, on indexed and normalized database tables, wastes less disk space and ease the extract of valuable information about your application and business.
 
 ## Usage
 
-As soon as you install and enable, it will start storing all information you tell it to store, then you can, in your application use the Tracker alias to have access to the information, here are some of the methods and relatioships available:
+As soon as you install and enable it, Tracker will start storing all information you tell it to, then you can in your application use the Tracker Facade to access everything. Here are some of the methods and relatioships available:
 
 #### Sessions
 
 ```
-$sessions = Tracker::sessions(60 * 24); // get sessions from the past day
+$sessions = Tracker::sessions(60 * 24); // get sessions (visits) from the past day
 ```
 
 Most of those functions return an Eloquent collection, so you can use no only its attributes, but also relational data:
