@@ -21,7 +21,7 @@
         "pragmarx/support": "0.2.*",
         "rhumsaa/uuid": "2.7.*",
         "mobiledetect/mobiledetectlib": "~2.8",
-        "tobie/ua-parser" : "dev-master#6cc14f52b298946782786f1ce07b0ca890c36554"
+        "pragmarx/ua-parser" : "0.3.3"
     },
 
     "suggest": {
