@@ -245,11 +245,6 @@ class Tracker
 		);
 	}
 
-    public function sessionLog($uuid)
-    {
-        return $this->dataRepositoryManager->getSessionLog($uuid);
-    }
-
 	public function logSqlQuery($query, $bindings, $time, $name)
 	{
 		if (
@@ -291,12 +286,17 @@ class Tracker
 		}
 	}
 
-    public function lastSessions($minutes = 1440)
+    public function sessions($minutes = 1440)
     {
         return $this->dataRepositoryManager->getLastSessions($minutes);
     }
 
-    public function pageViews($minutes)
+	public function sessionLog($uuid)
+	{
+		return $this->dataRepositoryManager->getSessionLog($uuid);
+	}
+
+	public function pageViews($minutes)
     {
     	return $this->dataRepositoryManager->pageViews($minutes);
     }
