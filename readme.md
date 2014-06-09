@@ -36,14 +36,14 @@ As soon as you install and enable it, Tracker will start storing all information
 $visitor = Tracker::currentSession();
 ```
 
-Most of those functions return an Eloquent collection, so you can use not only its attributes, but also relational data:
+Most of those methods return an Eloquent model or collection, so you can use not only its attributes, but also relational data:
 
 ```
+var_dump( $visitor->client_ip );
+
 var_dump( $visitor->device->is_mobile );
 
 var_dump( $visitor->device->platform );
-
-var_dump( $visitor->client_ip );
 
 var_dump( $visitor->geoIp->city );
 ```
