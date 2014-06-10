@@ -25,83 +25,94 @@ use Mobile_Detect;
 
 class MobileDetect extends Mobile_Detect {
 
+	/**
+	 * Detect kind, model and mobility.
+	 *
+	 * @return array
+	 */
 	public function detectDevice()
 	{
-		$mobile = $this->isMobile();
+		return [
+					'kind' => $this->getDeviceKind(),
+					'model' => $this->getDeviceName(),
+					'is_mobile' => $this->isMobile(),
+				];
 
-		if ( $this->isTablet() )
+	}
+
+	/**
+	 * Get the kind of device.
+	 *
+	 * @internal param $mobile
+	 * @return string
+	 */
+	public function getDeviceKind()
+	{
+		$kind = 'unavailable';
+
+		if ($this->isTablet())
 		{
 			$kind = ' Tablet';
 		}
-		elseif ( $this->isPhone() )
+
+		elseif ($this->isPhone())
 		{
 			$kind = 'Phone';
 		}
-		else
-		{	
-			$kind = !$mobile ? 'Computer' : 'Phone';
+
+		elseif ($this->isComputer())
+		{
+			$kind = 'Computer';
 		}
-		
+
+		return $kind;
+	}
+
+	/**
+	 * Get the device name.
+	 *
+	 * @return int|string
+	 */
+	public function getDeviceName()
+	{
+		$devices = array_merge(
+			$this->getPhoneDevices(),
+			$this->getTabletDevices()
+		);
+
 		$model = 'unavailable';
-		$model = $this->isiPhone() ? 'iPhone' : $model;
-		$model = $this->isiPad() ? 'iPad' : $model;
-		$model = $this->isBlackBerry() ? 'BlackBerry' : $model;
-		$model = $this->isHTC() ? 'HTC' : $model;
-		$model = $this->isNexus() ? 'Nexus' : $model;
-		$model = $this->isDell() ? 'Dell' : $model;
-		$model = $this->isMotorola() ? 'Motorola' : $model;
-		$model = $this->isSamsung() ? 'Samsung' : $model;
-		$model = $this->isLG() ? 'LG' : $model;
-		$model = $this->isSony() ? 'Sony' : $model;
-		$model = $this->isAsus() ? 'Asus' : $model;
-		$model = $this->isPalm() ? 'Palm' : $model;
-		$model = $this->isVertu() ? 'Vertu' : $model;
-		$model = $this->isPantech() ? 'Pantech' : $model;
-		$model = $this->isFly() ? 'Fly' : $model;
-		$model = $this->isSimValley() ? 'SimValley' : $model;
-		$model = $this->isGenericPhone() ? 'GenericPhone' : $model;
-		$model = $this->isNexusTablet() ? 'Nexus Tablet' : $model;
-		$model = $this->isSamsungTablet() ? 'Samsung Tablet' : $model;
-		$model = $this->isKindle() ? 'Kindle' : $model;
-		$model = $this->isSurfaceTablet() ? 'Surface Tablet' : $model;
-		$model = $this->isAsusTablet() ? 'Asus Tablet' : $model;
-		$model = $this->isBlackBerryTablet() ? 'BlackBerry Tablet' : $model;
-		$model = $this->isHTCtablet() ? 'HTC tablet' : $model;
-		$model = $this->isMotorolaTablet() ? 'Motorola Tablet' : $model;
-		$model = $this->isNookTablet() ? 'Nook Tablet' : $model;
-		$model = $this->isAcerTablet() ? 'Acer Tablet' : $model;
-		$model = $this->isToshibaTablet() ? 'Toshiba Tablet' : $model;
-		$model = $this->isLGTablet() ? 'LG Tablet' : $model;
-		$model = $this->isYarvikTablet() ? 'Yarvik Tablet' : $model;
-		$model = $this->isMedionTablet() ? 'Medion Tablet' : $model;
-		$model = $this->isArnovaTablet() ? 'Arnova Tablet' : $model;
-		$model = $this->isArchosTablet() ? 'Archos Tablet' : $model;
-		$model = $this->isAinolTablet() ? 'Ainol Tablet' : $model;
-		$model = $this->isSonyTablet() ? 'Sony Tablet' : $model;
-		$model = $this->isCubeTablet() ? 'Cube Tablet' : $model;
-		$model = $this->isCobyTablet() ? 'Coby Tablet' : $model;
-		$model = $this->isSMiTTablet() ? 'SMiT Tablet' : $model;
-		$model = $this->isRockChipTablet() ? 'RockChip Tablet' : $model;
-		$model = $this->isTelstraTablet() ? 'Telstra Tablet' : $model;
-		$model = $this->isFlyTablet() ? 'Fly Tablet' : $model;
-		$model = $this->isbqTablet() ? 'bq Tablet' : $model;
-		$model = $this->isHuaweiTablet() ? 'Huawei Tablet' : $model;
-		$model = $this->isNecTablet() ? 'Nec Tablet' : $model;
-		$model = $this->isPantechTablet() ? 'Pantech Tablet' : $model;
-		$model = $this->isBronchoTablet() ? 'Broncho Tablet' : $model;
-		$model = $this->isVersusTablet() ? 'Versus Tablet' : $model;
-		$model = $this->isZyncTablet() ? 'Zync Tablet' : $model;
-		$model = $this->isPositivoTablet() ? 'Positivo Tablet' : $model;
-		$model = $this->isNabiTablet() ? 'Nabi Tablet' : $model;
-		$model = $this->isPlaystationTablet() ? 'Playstation Tablet' : $model;
-		$model = $this->isGenericTablet() ? 'Generic Tablet' : $model;
 
-		return [
-					'kind' => trim($kind),
-					'model' => trim($model),
-					'is_mobile' => $mobile,
-				];
+		foreach ($devices as $name => $regex)
+		{
+			if ($this->{'is' . $name}())
+			{
+				$model = $name;
 
+				break;
+			}
+		}
+
+		return $model;
+	}
+
+	/**
+	 * Is this a phone?
+	 *
+	 * @return bool
+	 */
+	public function isPhone()
+	{
+		return ! $this->isTablet() && ! $this->isComputer();
+	}
+
+	/**
+	 * Is this a computer?
+	 *
+	 * @return bool
+	 */
+	public function isComputer()
+	{
+		return ! $this->isMobile();
 	}
 
 }
