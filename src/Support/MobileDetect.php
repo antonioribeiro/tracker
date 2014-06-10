@@ -21,9 +21,9 @@
  
 namespace PragmaRX\Tracker\Support;
 
-use Mobile_Detect;
+use Jenssegers\Agent\Agent;
 
-class MobileDetect extends Mobile_Detect {
+class MobileDetect extends Agent {
 
 	/**
 	 * Detect kind, model and mobility.
