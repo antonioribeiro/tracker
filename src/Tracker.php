@@ -272,7 +272,8 @@ class Tracker
 		return $this->config->get('enabled') &&
 				$this->parserIsAvailable() &&
 				$this->isTrackableIp() &&
-				$this->isTrackableEnvironment();
+				$this->isTrackableEnvironment() &&
+				$this->notRobotOrTrackable();
 	}
 
 	public function logEvents()
@@ -330,5 +331,12 @@ class Tracker
 	public function isRobot()
 	{
 		return $this->dataRepositoryManager->isRobot();
+	}
+
+	private function notRobotOrTrackable()
+	{
+		return
+			! $this->isRobot() ||
+			! $this->config->get('do_not_track_robots');
 	}
 }

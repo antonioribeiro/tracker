@@ -26,6 +26,11 @@ return array(
 	'enabled' => false,
 
 	/**
+	 * Robots should be tracked?
+	 */
+	'do_not_track_robots' => true,
+
+	/**
 	 * Which environments are not trackable?
 	 */
 	'do_not_track_environments' => array(
