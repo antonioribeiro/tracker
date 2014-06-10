@@ -36,6 +36,7 @@ class MobileDetect extends Agent {
 					'kind' => $this->getDeviceKind(),
 					'model' => $this->getDeviceName(),
 					'is_mobile' => $this->isMobile(),
+					'is_robot' => $this->isRobot(),
 				];
 
 	}

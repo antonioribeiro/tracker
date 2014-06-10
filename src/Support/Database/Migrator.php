@@ -200,6 +200,7 @@ class Migrator
 			$table->bigInteger('referer_id')->unsigned()->nullable()->index();
 			$table->bigInteger('cookie_id')->unsigned()->nullable()->index();
 			$table->bigInteger('geoip_id')->unsigned()->nullable()->index();
+			$table->boolean('is_robot');
 
 			$this->timestamp('created_at')->index();
 			$this->timestamp('updated_at')->index();

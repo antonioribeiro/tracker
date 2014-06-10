@@ -510,4 +510,9 @@ class RepositoryManager implements RepositoryManagerInterface {
 		return $this->logRepository->getErrors($minutes);
 	}
 
+	public function isRobot()
+	{
+		return $this->mobileDetect->isRobot();
+	}
+
 }

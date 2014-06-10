@@ -242,6 +242,7 @@ class Tracker
 			'user_agent' => $this->dataRepositoryManager->getCurrentUserAgent(),
 			'referer_id' => $this->getRefererId(),
 			'cookie_id' => $this->getCookieId(),
+			'is_robot' => $this->isRobot(),
 		);
 	}
 
@@ -324,5 +325,10 @@ class Tracker
 	public function currentSession()
 	{
 		return $this->dataRepositoryManager->sessionRepository->getCurrent();
+	}
+
+	public function isRobot()
+	{
+		return $this->dataRepositoryManager->isRobot();
 	}
 }

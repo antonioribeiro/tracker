@@ -35,7 +35,8 @@ class Session extends Base {
 		'client_ip',
 		'cookie_id',
 		'referer_id',
-		'geoip_id'
+		'geoip_id',
+		'is_robot',
 	);
 
 	public function __construct(array $attributes = array())
