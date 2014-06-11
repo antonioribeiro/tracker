@@ -1,10 +1,8 @@
-# Laravel Tracker
+# Laravel Stats Tracker
 
 [![Latest Stable Version](https://poser.pugx.org/pragmarx/tracker/v/stable.png)](https://packagist.org/packages/pragmarx/tracker) [![License](https://poser.pugx.org/pragmarx/tracker/license.png)](https://packagist.org/packages/pragmarx/tracker)
 
-## A Laravel Visitor Tracker package
-
-Tracker gathers a lot of information from your requests to identify and store:
+###Tracker gathers a lot of information from your requests to identify and store:
 
 - **Sessions**
 - **Page Views (hits on routes)**
