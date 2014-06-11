@@ -108,7 +108,11 @@ return array(
 	 *
 	 */
 	'do_not_log_events' => array(
-		// defaults to logging all events
+		'illuminate.log',
+		'eloquent.*',
+		'router.*',
+		'composing: *',
+		'creating: *',
 	),
 
 	/**
