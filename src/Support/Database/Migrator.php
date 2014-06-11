@@ -337,7 +337,7 @@ class Migrator
 			$table->bigIncrements('id');
 
 			$table->bigInteger('event_id')->unsigned()->index();
-			$table->bigInteger('class_id')->unsigned()->index();
+			$table->bigInteger('class_id')->unsigned()->nullable()->index();
 			$table->bigInteger('log_id')->unsigned()->index();
 
 			$table->timestamp('created_at')->index();

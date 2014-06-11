@@ -120,23 +120,30 @@ class Event extends Repository {
 			, FILE_APPEND
 		);
 
-		$evenId = $this->findOrCreate(
-			array('name' => $event['event']),
-			array('name')
-		);
+		$evenId = $event['event']
+					? $this->findOrCreate(
+							array('name' => $event['event']),
+							array('name')
+						)
+					: null;
 
-		$classId = $this->systemClassRepository->findOrCreate(
-			array('name' => $this->getObject($event['object'])),
-			array('name')
-		);
+		$classId = $this->getObject($event['object'])
+					? $this->systemClassRepository->findOrCreate(
+							array('name' => $this->getObject($event['object'])),
+							array('name')
+						)
+					: null;
 
-		$this->eventLogRepository->create(
-			array(
-				'log_id'   => $this->logRepository->getCurrentLogId(),
-				'event_id' => $evenId,
-			    'class_id' => $classId,
-			)
-		);
+		if ($evenId)
+		{
+			$this->eventLogRepository->create(
+				array(
+					'log_id'   => $this->logRepository->getCurrentLogId(),
+					'event_id' => $evenId,
+					'class_id' => $classId,
+				)
+			);
+		}
 	}
 
 	private function getObject($object)
