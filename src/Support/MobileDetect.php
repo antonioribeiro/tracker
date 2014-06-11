@@ -34,7 +34,7 @@ class MobileDetect extends Agent {
 	{
 		return [
 					'kind' => $this->getDeviceKind(),
-					'model' => $this->getDeviceName(),
+					'model' => $this->device(),
 					'is_mobile' => $this->isMobile(),
 					'is_robot' => $this->isRobot(),
 				];
@@ -53,7 +53,7 @@ class MobileDetect extends Agent {
 
 		if ($this->isTablet())
 		{
-			$kind = ' Tablet';
+			$kind = 'Tablet';
 		}
 
 		elseif ($this->isPhone())
@@ -67,33 +67,6 @@ class MobileDetect extends Agent {
 		}
 
 		return $kind;
-	}
-
-	/**
-	 * Get the device name.
-	 *
-	 * @return int|string
-	 */
-	public function getDeviceName()
-	{
-		$devices = array_merge(
-			$this->getPhoneDevices(),
-			$this->getTabletDevices()
-		);
-
-		$model = 'unavailable';
-
-		foreach ($devices as $name => $regex)
-		{
-			if ($this->{'is' . $name}())
-			{
-				$model = $name;
-
-				break;
-			}
-		}
-
-		return $model;
 	}
 
 	/**
