@@ -29,6 +29,32 @@ class Migrator
 	
 	private $connection;
 
+	static $tables = array(
+		'tracker_errors',
+		'tracker_sessions',
+		'tracker_referers',
+		'tracker_domains',
+		'tracker_routes',
+		'tracker_route_paths',
+		'tracker_route_path_parameters',
+		'tracker_devices',
+		'tracker_cookies',
+		'tracker_agents',
+		'tracker_query_arguments',
+		'tracker_queries',
+		'tracker_paths',
+		'tracker_log',
+		'tracker_geoip',
+		'tracker_sql_queries',
+		'tracker_sql_queries_log',
+		'tracker_sql_query_bindings',
+		'tracker_sql_query_bindings_parameters',
+		'tracker_connections',
+		'tracker_events',
+		'tracker_events_log',
+		'tracker_system_classes',
+	);
+
 	public function __construct(DatabaseManager $manager, $connection)
 	{
 		$this->manager = $manager;
@@ -38,7 +64,7 @@ class Migrator
 
 	public function up()
 	{
-		$this->execute('createTables');
+		$this->executeInTransaction('createTables');
 	}
 
 	public function createTables()
@@ -331,56 +357,18 @@ class Migrator
 
 	public function down()
 	{
-		$this->execute('dropTables');
+		$this->executeInTransaction('dropTables');
 	}
 
 	public function dropTables()
 	{
-		$this->getSchemaBuilder()->drop('tracker_errors');
-
-		$this->getSchemaBuilder()->drop('tracker_sessions');
-
-		$this->getSchemaBuilder()->drop('tracker_referers');
-
-		$this->getSchemaBuilder()->drop('tracker_domains');
-
-		$this->getSchemaBuilder()->drop('tracker_routes');
-
-		$this->getSchemaBuilder()->drop('tracker_route_paths');
-
-		$this->getSchemaBuilder()->drop('tracker_route_path_parameters');
-
-		$this->getSchemaBuilder()->drop('tracker_devices');
-
-		$this->getSchemaBuilder()->drop('tracker_cookies');
-
-		$this->getSchemaBuilder()->drop('tracker_agents');
-
-		$this->getSchemaBuilder()->drop('tracker_query_arguments');
-
-		$this->getSchemaBuilder()->drop('tracker_queries');
-
-		$this->getSchemaBuilder()->drop('tracker_paths');
-
-		$this->getSchemaBuilder()->drop('tracker_log');
-
-		$this->getSchemaBuilder()->drop('tracker_geoip');
-
-		$this->getSchemaBuilder()->drop('tracker_sql_queries');
-
-		$this->getSchemaBuilder()->drop('tracker_sql_queries_log');
-
-		$this->getSchemaBuilder()->drop('tracker_sql_query_bindings');
-
-		$this->getSchemaBuilder()->drop('tracker_sql_query_bindings_parameters');
-
-		$this->getSchemaBuilder()->drop('tracker_connections');
-
-		$this->getSchemaBuilder()->drop('tracker_events');
-
-		$this->getSchemaBuilder()->drop('tracker_events_log');
-
-		$this->getSchemaBuilder()->drop('tracker_system_classes');
+		foreach(static::$tables as $table)
+		{
+			if ($this->tableExists($table))
+			{
+				$this->getSchemaBuilder()->drop($table);
+			}
+		}
 	}
 
 	public function getSchemaBuilder()
@@ -393,7 +381,7 @@ class Migrator
 		return $this->manager->connection($this->connection);
 	}
 
-	public function execute($method)
+	public function executeInTransaction($method)
 	{
 		$this->getConnection()->beginTransaction();
 
@@ -416,6 +404,13 @@ class Migrator
 		}
 
 		$this->getConnection()->commit();
+	}
+
+	private function tableExists($table)
+	{
+		$schema = $this->getSchemaBuilder();
+
+		return $schema->hasTable($table);
 	}
 
 }
