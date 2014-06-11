@@ -58,8 +58,8 @@ class Migrator
 			$table->boolean('wants_json');
 			$table->bigInteger('error_id')->unsigned()->nullable()->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_paths', function($table)
@@ -68,8 +68,8 @@ class Migrator
 
 			$table->string('path')->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_queries', function($table)
@@ -78,8 +78,8 @@ class Migrator
 
 			$table->string('query')->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_query_arguments', function($table)
@@ -90,8 +90,8 @@ class Migrator
 			$table->string('argument')->index();
 			$table->string('value')->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_routes', function($table)
@@ -101,8 +101,8 @@ class Migrator
 			$table->string('name')->index();
 			$table->string('action')->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_route_paths', function($table)
@@ -112,8 +112,8 @@ class Migrator
 			$table->string('route_id')->index();
 			$table->string('path')->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_route_path_parameters', function($table)
@@ -124,8 +124,8 @@ class Migrator
 			$table->string('parameter')->index();
 			$table->string('value')->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_agents', function($table)
@@ -136,8 +136,8 @@ class Migrator
 			$table->string('browser')->index();
 			$table->string('browser_version');
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_cookies', function($table)
@@ -146,8 +146,8 @@ class Migrator
 
 			$table->string('uuid')->unique();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_devices', function($table)
@@ -162,8 +162,8 @@ class Migrator
 
 			$table->unique(['kind', 'model', 'platform', 'platform_version']);
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_referers', function($table)
@@ -174,8 +174,8 @@ class Migrator
 			$table->string('url')->index();
 			$table->string('host');
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_domains', function($table)
@@ -184,8 +184,8 @@ class Migrator
 
 			$table->string('name')->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_sessions', function($table)
@@ -202,8 +202,8 @@ class Migrator
 			$table->bigInteger('geoip_id')->unsigned()->nullable()->index();
 			$table->boolean('is_robot');
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_errors', function($table)
@@ -213,8 +213,8 @@ class Migrator
 			$table->string('code')->index();
 			$table->string('message')->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_geoip', function($table)
@@ -235,8 +235,8 @@ class Migrator
 			$table->float('metro_code')->nullable();
 			$table->string('continent_code', 2)->nullable();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_sql_queries', function($table)
@@ -248,8 +248,8 @@ class Migrator
 			$table->float('time')->index();
 			$table->integer('connection_id')->unsigned();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_sql_query_bindings', function($table)
@@ -259,8 +259,8 @@ class Migrator
 			$table->string('sha1', 40)->index();
 			$table->text('serialized');
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_sql_query_bindings_parameters', function($table)
@@ -271,8 +271,8 @@ class Migrator
 			$table->string('name')->nullable()->index();
 			$table->text('value')->nullable();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_sql_queries_log', function($table)
@@ -282,8 +282,8 @@ class Migrator
 			$table->bigInteger('log_id')->unsigned()->index();
 			$table->bigInteger('sql_query_id')->unsigned()->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_connections', function($table)
@@ -292,8 +292,8 @@ class Migrator
 
 			$table->string('name')->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_events', function($table)
@@ -302,8 +302,8 @@ class Migrator
 
 			$table->string('name')->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_events_log', function($table)
@@ -314,8 +314,8 @@ class Migrator
 			$table->bigInteger('class_id')->unsigned()->index();
 			$table->bigInteger('log_id')->unsigned()->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 
 		$this->getSchemaBuilder()->create('tracker_system_classes', function($table)
@@ -324,8 +324,8 @@ class Migrator
 
 			$table->string('name')->index();
 
-			$this->timestamp('created_at')->index();
-			$this->timestamp('updated_at')->index();
+			$table->timestamp('created_at')->index();
+			$table->timestamp('updated_at')->index();
 		});
 	}
 
