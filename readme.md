@@ -126,9 +126,9 @@ $pageViews = Tracker::pageViewsByCountry(60 * 24);
 
 ## Tables
 
-Here's an extract of some tables, columns and contents
+All tables are prefixed by `tracker_`, and here's an extract of some of them, showing columns and contents:
 
-### sessions                      ;
+### sessions
 
 ```
 +-----+--------------------------------------+---------+-----------+----------+-----------------+------------+-----------+----------+
