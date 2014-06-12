@@ -87,6 +87,45 @@ class Tracker
         }
     }
 
+	/**
+	 * @return array
+	 */
+	private function getSessionData()
+	{
+		return array(
+			'user_id' => $this->getUserId(),
+			'device_id' => $this->getDeviceId(),
+			'client_ip' => $this->request->getClientIp(),
+			'geoip_id' => $this->getGeoIpId(),
+			'agent_id' => $this->getAgentId(),
+			'referer_id' => $this->getRefererId(),
+			'cookie_id' => $this->getCookieId(),
+			'is_robot' => $this->isRobot(),
+
+			// The key user_agent is not present in the sessions table, but
+			// it's internally used to check if the user agent changed
+			// during a session.
+			'user_agent' => $this->dataRepositoryManager->getCurrentUserAgent(),
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getLogData()
+	{
+		return array(
+			'session_id' => $this->getSessionId(true),
+			'method' => $this->request->method(),
+			'path_id' => $this->getPathId(),
+			'query_id' => $this->getQueryId(),
+			'is_ajax' => $this->request->ajax(),
+			'is_secure' => $this->request->isSecure(),
+			'is_json' => $this->request->isJson(),
+			'wants_json' => $this->request->wantsJson(),
+		);
+	}
+
     public function getSessionId($updateLastActivity = false)
     {
         return $this->dataRepositoryManager->getSessionId(
@@ -97,40 +136,51 @@ class Tracker
 
     public function getUserId()
     {
-        return $this->dataRepositoryManager->getCurrentUserId();
+	    return $this->config->get('log_users')
+			    ? $this->dataRepositoryManager->getCurrentUserId()
+			    : null;
     }
 
     public function getCookieId()
     {
-        return $this->dataRepositoryManager->getCookieId();
+	    return $this->config->get('store_cookie_tracker')
+		        ? $this->dataRepositoryManager->getCookieId()
+		        : null;
     }
 
     public function getDeviceId()
     {
-        return $this->dataRepositoryManager->findOrCreateDevice(
-	        $this->dataRepositoryManager->getCurrentDeviceProperties()
-        );
+	    return $this->config->get('log_devices')
+		    ?   $this->dataRepositoryManager->findOrCreateDevice(
+			        $this->dataRepositoryManager->getCurrentDeviceProperties()
+		        )
+		    : null;
     }
 
 	public function getPathId()
 	{
-		return $this->dataRepositoryManager->findOrCreatePath(
-			array(
-				'path' => $this->request->path()
-			)
-		);
+		return $this->config->get('log_paths')
+			?   $this->dataRepositoryManager->findOrCreatePath(
+					array(
+						'path' => $this->request->path()
+					)
+				)
+			: null;
 	}
 
 	public function getQueryId()
 	{
-		if (count($arguments = $this->request->query()))
+		if ($this->config->get('log_queries'))
 		{
-			return $this->dataRepositoryManager->getQueryId(
-				array(
-					'query' => array_implode('=', '|', $arguments),
-					'arguments' => $arguments
-				)
-			);
+			if (count($arguments = $this->request->query()))
+			{
+				return $this->dataRepositoryManager->getQueryId(
+					array(
+						'query' => array_implode('=', '|', $arguments),
+						'arguments' => $arguments
+					)
+				);
+			}
 		}
 	}
 
@@ -141,7 +191,7 @@ class Tracker
 
 	public function routerMatched()
 	{
-		if ($this->config->get('enabled'))
+		if ($this->config->get('enabled') && $this->config->get('log_routes'))
 		{
 			$this->dataRepositoryManager->updateRoute(
 				$this->getRoutePathId($this->route->current())
@@ -151,9 +201,11 @@ class Tracker
 
 	private function getRefererId()
 	{
-		return $this->dataRepositoryManager->getRefererId(
-			$this->request->headers->get('referer')
-		);
+		return $this->config->get('log_referers')
+				?   $this->dataRepositoryManager->getRefererId(
+						$this->request->headers->get('referer')
+					)
+				: null;
 	}
 
 	public function getDomainId($domain)
@@ -208,41 +260,6 @@ class Tracker
 		return ! in_array(
 			$this->laravel->environment(),
 			$this->config->get('do_not_track_environments')
-		);
-	}
-
-	/**
-	 * @return array
-	 */
-	private function getLogData()
-	{
-		return array(
-			'session_id' => $this->getSessionId(true),
-			'method' => $this->request->method(),
-			'path_id' => $this->getPathId(),
-			'query_id' => $this->getQueryId(),
-			'is_ajax' => $this->request->ajax(),
-			'is_secure' => $this->request->isSecure(),
-			'is_json' => $this->request->isJson(),
-			'wants_json' => $this->request->wantsJson(),
-		);
-	}
-
-	/**
-	 * @return array
-	 */
-	private function getSessionData()
-	{
-		return array(
-			'user_id' => $this->getUserId(),
-			'device_id' => $this->getDeviceId(),
-			'client_ip' => $this->request->getClientIp(),
-			'geoip_id' => $this->dataRepositoryManager->getGeoIpId($this->request->getClientIp()),
-			'agent_id' => $this->dataRepositoryManager->getAgentId(),
-			'user_agent' => $this->dataRepositoryManager->getCurrentUserAgent(),
-			'referer_id' => $this->getRefererId(),
-			'cookie_id' => $this->getCookieId(),
-			'is_robot' => $this->isRobot(),
 		);
 	}
 
@@ -338,5 +355,19 @@ class Tracker
 		return
 			! $this->isRobot() ||
 			! $this->config->get('do_not_track_robots');
+	}
+
+	private function getGeoIpId()
+	{
+		return $this->config->get('log_geoip')
+				? $this->dataRepositoryManager->getGeoIpId($this->request->getClientIp())
+				: null;
+	}
+
+	private function getAgentId()
+	{
+		return $this->config->get('log_user_agents')
+				? $this->dataRepositoryManager->getAgentId()
+				: null;
 	}
 }

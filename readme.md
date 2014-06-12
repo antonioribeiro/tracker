@@ -373,12 +373,12 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 
 Require the `tracker` package by **executing** the following command in your command line:
 
-    composer require "pragmarx/tracker":"~0.2"
+    composer require "pragmarx/tracker":"0.4.*"
 
 **Or** add to your composer.json:
 
     "require": {
-        "pragmarx/tracker": "0.3.*"
+        "pragmarx/tracker": "0.4.*"
     }
 
 And execute

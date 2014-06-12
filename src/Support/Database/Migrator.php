@@ -74,7 +74,7 @@ class Migrator
 			$table->bigIncrements('id');
 
 			$table->bigInteger('session_id')->unsigned()->index();
-			$table->bigInteger('path_id')->unsigned()->index();
+			$table->bigInteger('path_id')->unsigned()->nullable()->index();
 			$table->bigInteger('query_id')->unsigned()->nullable()->index();
 			$table->string('method',10)->index();
 			$table->bigInteger('route_path_id')->unsigned()->nullable()->index();
@@ -220,8 +220,8 @@ class Migrator
 
 			$table->string('uuid')->unique()->index();
 			$table->bigInteger('user_id')->unsigned()->nullable()->index();
-			$table->bigInteger('device_id')->unsigned()->index();
-			$table->bigInteger('agent_id')->unsigned()->index();
+			$table->bigInteger('device_id')->unsigned()->nullable()->index();
+			$table->bigInteger('agent_id')->unsigned()->nullable()->index();
 			$table->string('client_ip')->index();
 			$table->bigInteger('referer_id')->unsigned()->nullable()->index();
 			$table->bigInteger('cookie_id')->unsigned()->nullable()->index();

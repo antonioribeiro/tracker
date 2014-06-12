@@ -1,5 +1,23 @@
 # Laravel Tracker Upgrading guide
 
+## to 0.4.0
+
+- Add the following keys to your `app/config/packages/pragmarx/tracker/config.php`:
+
+```
+	'log_geoip' => true,
+	'log_user_agents' => true,
+	'log_users' => true,
+	'log_devices' => true,
+	'log_referers' => true,
+	'log_paths' => true,
+	'log_queries' => true,
+	'log_routes' => true,
+```
+
+- On `tracker_sessions` table, change columns `device_id` and `agent_id` to be nullable.
+- On `tracker_log` table, change column `path_id` to be nullable.
+
 ## to 0.3.2
 
 - Add a is_robot boolean column to: `ALTER TABLE tracker_sessions ADD is_robot BOOL;`

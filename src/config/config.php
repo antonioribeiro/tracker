@@ -116,6 +116,46 @@ return array(
 	),
 
 	/**
+	 * Do you wish to log Geo IP data?
+	 */
+	'log_geoip' => true,
+
+	/**
+	 * Do you wish to log the user agent?
+	 */
+	'log_user_agents' => true,
+
+	/**
+	 * Do you wish to log your users?
+	 */
+	'log_users' => true,
+
+	/**
+	 * Do you wish to log devices?
+	 */
+	'log_devices' => true,
+
+	/**
+	 * Do you wish to log HTTP referers?
+	 */
+	'log_referers' => true,
+
+	/**
+	 * Do you wish to log url paths?
+	 */
+	'log_paths' => true,
+
+	/**
+	 * Do you wish to log url queries and query arguments?
+	 */
+	'log_queries' => true,
+
+	/**
+	 * Do you wish to log routes and route parameters?
+	 */
+	'log_routes' => true,
+
+	/**
 	 * A cookie may be created on your visitor device, so you can have information
 	 * on everything made using that device on your site.	 *
 	 */
