@@ -21,15 +21,11 @@
 
 namespace PragmaRX\Tracker\Support\Database;
 
-use Illuminate\Database\DatabaseManager;
+use PragmaRX\Support\Migrator as BaseMigrator;
 
-class Migrator
-{
-	private $manager;
-	
-	private $connection;
+class Migrator extends BaseMigrator {
 
-	static $tables = array(
+	protected $tables = array(
 		'tracker_errors',
 		'tracker_sessions',
 		'tracker_referers',
@@ -55,362 +51,365 @@ class Migrator
 		'tracker_system_classes',
 	);
 
-	public function __construct(DatabaseManager $manager, $connection)
+	protected function migrateUp()
 	{
-		$this->manager = $manager;
-
-		$this->connection = $connection;
-	}
-
-	public function up()
-	{
-		$this->executeInTransaction('createTables');
-	}
-
-	public function createTables()
-	{
-		$this->getSchemaBuilder()->create('tracker_log', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->bigInteger('session_id')->unsigned()->index();
-			$table->bigInteger('path_id')->unsigned()->nullable()->index();
-			$table->bigInteger('query_id')->unsigned()->nullable()->index();
-			$table->string('method',10)->index();
-			$table->bigInteger('route_path_id')->unsigned()->nullable()->index();
-			$table->boolean('is_ajax');
-			$table->boolean('is_secure');
-			$table->boolean('is_json');
-			$table->boolean('wants_json');
-			$table->bigInteger('error_id')->unsigned()->nullable()->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_paths', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('path')->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_queries', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('query')->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_query_arguments', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->bigInteger('query_id')->unsigned()->index();
-			$table->string('argument')->index();
-			$table->string('value')->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_routes', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('name')->index();
-			$table->string('action')->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_route_paths', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('route_id')->index();
-			$table->string('path')->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_route_path_parameters', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->bigInteger('route_path_id')->unsigned()->index();
-			$table->string('parameter')->index();
-			$table->string('value')->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_agents', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('name')->unique();
-			$table->string('browser')->index();
-			$table->string('browser_version');
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_cookies', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('uuid')->unique();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_devices', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('kind')->index();
-			$table->string('model')->index();
-			$table->string('platform')->index();
-			$table->string('platform_version')->index();
-			$table->boolean('is_mobile');
-
-			$table->unique(['kind', 'model', 'platform', 'platform_version']);
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_referers', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->bigInteger('domain_id')->unsigned()->index();
-			$table->string('url')->index();
-			$table->string('host');
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_domains', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('name')->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_sessions', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('uuid')->unique()->index();
-			$table->bigInteger('user_id')->unsigned()->nullable()->index();
-			$table->bigInteger('device_id')->unsigned()->nullable()->index();
-			$table->bigInteger('agent_id')->unsigned()->nullable()->index();
-			$table->string('client_ip')->index();
-			$table->bigInteger('referer_id')->unsigned()->nullable()->index();
-			$table->bigInteger('cookie_id')->unsigned()->nullable()->index();
-			$table->bigInteger('geoip_id')->unsigned()->nullable()->index();
-			$table->boolean('is_robot');
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_errors', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('code')->index();
-			$table->string('message')->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_geoip', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->float('latitude')->nullable()->index();
-			$table->float('longitude')->nullable()->index();
-
-			$table->string('country_code', 2)->nullable()->index();
-			$table->string('country_code3', 3)->nullable()->index();
-			$table->string('country_name')->nullable()->index();
-			$table->string('region', 2)->nullable();
-			$table->string('city', 50)->nullable()->index();
-			$table->string('postal_code', 20)->nullable();
-			$table->bigInteger('area_code')->nullable();
-			$table->float('dma_code')->nullable();
-			$table->float('metro_code')->nullable();
-			$table->string('continent_code', 2)->nullable();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_sql_queries', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('sha1', 40)->index();
-			$table->text('statement');
-			$table->float('time')->index();
-			$table->integer('connection_id')->unsigned();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_sql_query_bindings', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('sha1', 40)->index();
-			$table->text('serialized');
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_sql_query_bindings_parameters', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->bigInteger('sql_query_bindings_id')->unsigned()->nullable();
-			$table->string('name')->nullable()->index();
-			$table->text('value')->nullable();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_sql_queries_log', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->bigInteger('log_id')->unsigned()->index();
-			$table->bigInteger('sql_query_id')->unsigned()->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_connections', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('name')->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_events', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('name')->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_events_log', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->bigInteger('event_id')->unsigned()->index();
-			$table->bigInteger('class_id')->unsigned()->nullable()->index();
-			$table->bigInteger('log_id')->unsigned()->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-
-		$this->getSchemaBuilder()->create('tracker_system_classes', function($table)
-		{
-			$table->bigIncrements('id');
-
-			$table->string('name')->index();
-
-			$table->timestamp('created_at')->index();
-			$table->timestamp('updated_at')->index();
-		});
-	}
-
-	public function down()
-	{
-		$this->executeInTransaction('dropTables');
-	}
-
-	public function dropTables()
-	{
-		foreach(static::$tables as $table)
-		{
-			if ($this->tableExists($table))
+		$this->schemaBuilder->create(
+			'tracker_log',
+			function ($table)
 			{
-				$this->getSchemaBuilder()->drop($table);
+				$table->bigIncrements('id');
+
+				$table->bigInteger('session_id')->unsigned()->index();
+				$table->bigInteger('path_id')->unsigned()->nullable()->index();
+				$table->bigInteger('query_id')->unsigned()->nullable()->index();
+				$table->string('method', 10)->index();
+				$table->bigInteger('route_path_id')->unsigned()->nullable()->index();
+				$table->boolean('is_ajax');
+				$table->boolean('is_secure');
+				$table->boolean('is_json');
+				$table->boolean('wants_json');
+				$table->bigInteger('error_id')->unsigned()->nullable()->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
 			}
-		}
-	}
+		);
 
-	public function getSchemaBuilder()
-	{
-		return $this->getConnection()->getSchemaBuilder();
-	}
-
-	public function getConnection()
-	{
-		return $this->manager->connection($this->connection);
-	}
-
-	public function executeInTransaction($method)
-	{
-		$this->getConnection()->beginTransaction();
-
-		try 
-		{
-			$this->{$method}();
-		} 
-		catch (\Exception $e) 
-		{
-			$this->getConnection()->rollback();
-
-			if ($e instanceof \Illuminate\Database\QueryException)
+		$this->schemaBuilder->create(
+			'tracker_paths',
+			function ($table)
 			{
-				throw new $e($e->getMessage(), $e->getBindings(), $e->previous);	
+				$table->bigIncrements('id');
+
+				$table->string('path')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
 			}
-			else
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_queries',
+			function ($table)
 			{
-				throw new $e($e->getMessage(), $e->previous);
+				$table->bigIncrements('id');
+
+				$table->string('query')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
 			}
-		}
+		);
 
-		$this->getConnection()->commit();
+		$this->schemaBuilder->create(
+			'tracker_query_arguments',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->bigInteger('query_id')->unsigned()->index();
+				$table->string('argument')->index();
+				$table->string('value')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_routes',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('name')->index();
+				$table->string('action')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_route_paths',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('route_id')->index();
+				$table->string('path')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_route_path_parameters',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->bigInteger('route_path_id')->unsigned()->index();
+				$table->string('parameter')->index();
+				$table->string('value')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_agents',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('name')->unique();
+				$table->string('browser')->index();
+				$table->string('browser_version');
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_cookies',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('uuid')->unique();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_devices',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('kind')->index();
+				$table->string('model')->index();
+				$table->string('platform')->index();
+				$table->string('platform_version')->index();
+				$table->boolean('is_mobile');
+
+				$table->unique(['kind', 'model', 'platform', 'platform_version']);
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_referers',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->bigInteger('domain_id')->unsigned()->index();
+				$table->string('url')->index();
+				$table->string('host');
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_domains',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('name')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_sessions',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('uuid')->unique()->index();
+				$table->bigInteger('user_id')->unsigned()->nullable()->index();
+				$table->bigInteger('device_id')->unsigned()->nullable()->index();
+				$table->bigInteger('agent_id')->unsigned()->nullable()->index();
+				$table->string('client_ip')->index();
+				$table->bigInteger('referer_id')->unsigned()->nullable()->index();
+				$table->bigInteger('cookie_id')->unsigned()->nullable()->index();
+				$table->bigInteger('geoip_id')->unsigned()->nullable()->index();
+				$table->boolean('is_robot');
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_errors',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('code')->index();
+				$table->string('message')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_geoip',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->float('latitude')->nullable()->index();
+				$table->float('longitude')->nullable()->index();
+
+				$table->string('country_code', 2)->nullable()->index();
+				$table->string('country_code3', 3)->nullable()->index();
+				$table->string('country_name')->nullable()->index();
+				$table->string('region', 2)->nullable();
+				$table->string('city', 50)->nullable()->index();
+				$table->string('postal_code', 20)->nullable();
+				$table->bigInteger('area_code')->nullable();
+				$table->float('dma_code')->nullable();
+				$table->float('metro_code')->nullable();
+				$table->string('continent_code', 2)->nullable();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_sql_queries',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('sha1', 40)->index();
+				$table->text('statement');
+				$table->float('time')->index();
+				$table->integer('connection_id')->unsigned();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_sql_query_bindings',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('sha1', 40)->index();
+				$table->text('serialized');
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_sql_query_bindings_parameters',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->bigInteger('sql_query_bindings_id')->unsigned()->nullable();
+				$table->string('name')->nullable()->index();
+				$table->text('value')->nullable();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_sql_queries_log',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->bigInteger('log_id')->unsigned()->index();
+				$table->bigInteger('sql_query_id')->unsigned()->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_connections',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('name')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_events',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('name')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_events_log',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->bigInteger('event_id')->unsigned()->index();
+				$table->bigInteger('class_id')->unsigned()->nullable()->index();
+				$table->bigInteger('log_id')->unsigned()->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->schemaBuilder->create(
+			'tracker_system_classes',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('name')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
 	}
 
-	private function tableExists($table)
+	protected function migrateDown()
 	{
-		$schema = $this->getSchemaBuilder();
-
-		return $schema->hasTable($table);
+		$this->dropAllTables();
 	}
-
 }
