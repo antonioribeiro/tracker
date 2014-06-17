@@ -368,6 +368,7 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 
 - Laravel 4.1+
 - PHP 5.3.7+
+- Package "geoip/geoip":"~1.14" (If you are planning to store Geo IP information)
 
 ## Installing
 
@@ -412,6 +413,14 @@ And edit the file `app/config/packages/pragmarx/tracker/config.php` to enable Tr
 Note that the logging function is disabled by default, because it may write too much data to your database, but you can enable it by changing:
 
     'log_enabled' => true,
+
+If you are planning to store Geo IP information, also install the geoip package:
+
+    composer require "geoip/geoip":"~1.14"
+
+And make sure you don't have the PHP module installed. This is a Debian/Ubuntu example:
+
+	sudo apt-get purge php5-geoip
 
 ## Database Connections & Query Logs
 
