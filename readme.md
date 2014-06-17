@@ -413,6 +413,48 @@ Note that the logging function is disabled by default, because it may write too 
 
     'log_enabled' => true,
 
+## Database Connections & Query Logs
+
+If you are planning to store your query logs, to avoid recursion while logging SQL queries, you will need to create a different database connection for it:
+
+This is a main connection:
+
+	'postgresql' => [
+		'driver'   => 'pgsql',
+		'host'     => 'localhost',
+		'database' => getenv('MAIN.DATABASE_NAME'),
+		'username' => getenv('MAIN.DATABASE_USER'),
+		'password' => getenv('MAIN.DATABASE_PASSWORD'),
+		'charset'  => 'utf8',
+		'prefix'   => '',
+		'schema'   => 'public',
+	],
+
+This is the tracker connection pointing to the same database:
+
+	'tracker' => [
+		'driver'   => 'pgsql',
+		'host'     => 'localhost',
+		'database' => getenv('MAIN.DATABASE_NAME'),
+		'username' => getenv('MAIN.DATABASE_USER'),
+		'password' => getenv('MAIN.DATABASE_PASSWORD'),
+		'charset'  => 'utf8',
+		'prefix'   => '',
+		'schema'   => 'public',
+	],
+
+On your `tracker/config.php` file, set the Tracker connection to the one you created for it:
+
+	'connection' => 'tracker',
+
+And ignore this connection for SQL queries logging:
+
+	'do_not_log_sql_queries_connections' => array(
+		'tracker'
+	),
+
+You don't need to use a different database, but, since Tracker may generate a huge number of records, this would be a good practice.
+
 ## Author
 
 [Antonio Carlos Ribeiro](http://twitter.com/iantonioribeiro)
