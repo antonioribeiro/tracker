@@ -275,8 +275,8 @@ class Migrator extends BaseMigrator {
 			{
 				$table->bigIncrements('id');
 
-				$table->float('latitude')->nullable()->index();
-				$table->float('longitude')->nullable()->index();
+				$table->double('latitude')->nullable()->index();
+				$table->double('longitude')->nullable()->index();
 
 				$table->string('country_code', 2)->nullable()->index();
 				$table->string('country_code3', 3)->nullable()->index();
@@ -285,8 +285,8 @@ class Migrator extends BaseMigrator {
 				$table->string('city', 50)->nullable()->index();
 				$table->string('postal_code', 20)->nullable();
 				$table->bigInteger('area_code')->nullable();
-				$table->float('dma_code')->nullable();
-				$table->float('metro_code')->nullable();
+				$table->double('dma_code')->nullable();
+				$table->double('metro_code')->nullable();
 				$table->string('continent_code', 2)->nullable();
 
 				$table->timestamp('created_at')->index();
@@ -302,7 +302,7 @@ class Migrator extends BaseMigrator {
 
 				$table->string('sha1', 40)->index();
 				$table->text('statement');
-				$table->float('time')->index();
+				$table->double('time')->index();
 				$table->integer('connection_id')->unsigned();
 
 				$table->timestamp('created_at')->index();
