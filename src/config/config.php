@@ -75,7 +75,19 @@ return array(
 	'log_sql_queries' => false,
 
 	/**
-	 * Forbid logging of SQL queries for the following connections:
+	 * If you prefer to store Tracker data on a different database or connection,
+	 * you can set it here.
+	 *
+	 * To avoid SQL queries log recursion, create a different connection for Tracker,
+	 * point it to the same database (or not) and forbid logging of this connection in
+	 * do_not_log_sql_queries_connections.
+	 */
+	'connection' => null,
+
+	/**
+	 * Forbid logging of SQL queries for some connections.
+	 *
+	 * To avoid recursion, you better ignore Tracker connection here.
 	 */
 	'do_not_log_sql_queries_connections' => array(
 		// defaults to none
@@ -174,11 +186,6 @@ return array(
 	 * If you are storing cookies, you better change it to a name you of your own.
 	 */
 	'tracker_cookie_name' => 'please_change_this_cookie_name',
-
-	/**
-	 * If you prefer to store Tracker data on a different database, you can set it here.
-	 */
-    'connection' => null,
 
 	/**
 	 * Internal tracker session name.
