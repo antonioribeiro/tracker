@@ -85,7 +85,8 @@ class ServiceProvider extends IlluminateServiceProvider {
     {
         // Unfortunately, we are stuck with PHP session, because
         // Laravel's Session ID changes every time user logs in.
-	    if (session_status() == PHP_SESSION_NONE) {
+	    if (session_status() == PHP_SESSION_NONE)
+	    {
 		    session_start();
 	    }
 
