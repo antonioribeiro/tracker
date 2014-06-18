@@ -193,10 +193,10 @@ class Migrator extends BaseMigrator {
 			{
 				$table->bigIncrements('id');
 
-				$table->string('kind')->index();
-				$table->string('model')->index();
-				$table->string('platform')->index();
-				$table->string('platform_version')->index();
+				$table->string('kind', 16)->index();
+				$table->string('model', 64)->index();
+				$table->string('platform', 64)->index();
+				$table->string('platform_version', 16)->index();
 				$table->boolean('is_mobile');
 
 				$table->unique(['kind', 'model', 'platform', 'platform_version']);
