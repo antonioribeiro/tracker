@@ -72,7 +72,7 @@ class Event extends Repository {
 
 		$this->config = $config;
 	}
-	
+
 	public function logEvents()
 	{
 		if ( ! $this->logRepository->getCurrentLogId())

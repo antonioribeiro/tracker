@@ -18,7 +18,7 @@
  * @copyright  (c) 2013, PragmaRX
  * @link       http://pragmarx.com
  */
- 
+
 namespace PragmaRX\Tracker\Support;
 
 use UAParser\Parser;

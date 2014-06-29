@@ -351,7 +351,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 	public function getRefererId($referer)
 	{
 		if ($referer)
-		{			
+		{
 			$url = parse_url($referer);
 
 			$parts = explode(".", $url['host']);
@@ -360,7 +360,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 			if(sizeof($parts) > 0){
 				$domain = array_pop($parts) . "." . $domain;
 			}
-			
+
 			$domain_id = $this->getDomainId($domain);
 
 			return $this->refererRepository->findOrCreate(

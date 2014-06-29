@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * Part of the Tracker package.
  *
