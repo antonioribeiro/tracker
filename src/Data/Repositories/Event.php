@@ -113,13 +113,6 @@ class Event extends Repository {
 
 	private function logEvent($event)
 	{
-		file_put_contents(
-			'/tmp/event.txt',
-		    $this->eventStorage->isOn() ? 'on' : 'off'.
-		       ' - event = '.$event['event'].' -- object = '.$this->getObject($event['object'])."\n"
-			, FILE_APPEND
-		);
-
 		$evenId = $event['event']
 					? $this->findOrCreate(
 							array('name' => $event['event']),
