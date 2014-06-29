@@ -27,8 +27,8 @@ class Agent extends Base {
 
 	protected $table = 'tracker_agents';
 
-	protected $fillable = array('name', 
-								'browser', 
+	protected $fillable = array('name',
+								'browser',
 								'browser_version');
 
 }
