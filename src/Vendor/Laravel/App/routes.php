@@ -4,7 +4,7 @@ $prefix = Config::get('pragmarx/tracker::stats_base_uri');
 
 $namespace = Config::get('pragmarx/tracker::stats_controllers_namespace');
 
-$filter = Config::get('pragmarx/tracker::stats_route_filter');
+$filter = Config::get('pragmarx/tracker::stats_routes_before_filter');
 
 Route::group(['namespace' => $namespace], function() use ($prefix, $filter)
 {

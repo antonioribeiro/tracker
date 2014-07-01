@@ -272,11 +272,11 @@ return array(
 	'stats_panel_enabled' => false,
 
 	/**
-	 * Stats Panel route filter
+	 * Stats Panel routes before filter
 	 *
-	 * You better set an 'auth' filter here.
+	 * You better drop an 'auth' filter here.
 	 */
-	'stats_route_filter' => '',
+	'stats_routes_before_filter' => '',
 
 	/**
      * Stats Panel template path
