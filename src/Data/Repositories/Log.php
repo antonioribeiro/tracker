@@ -90,4 +90,9 @@ class Log extends Repository {
 		return $this->getModel()->errors($minutes);
 	}
 
+	public function allByRouteName($name, $minutes = null)
+	{
+		return $this->getModel()->allByRouteName($name, $minutes);
+	}
+
 }

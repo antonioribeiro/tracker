@@ -370,4 +370,9 @@ class Tracker
 				? $this->dataRepositoryManager->getAgentId()
 				: null;
 	}
+
+	public function logByRouteName($name, $minutes = null)
+	{
+		return $this->dataRepositoryManager->logByRouteName($name, $minutes);
+	}
 }

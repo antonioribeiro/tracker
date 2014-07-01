@@ -108,5 +108,29 @@ class Log extends Base {
 			->get();
 	}
 
-}
+	public function allByRouteName($name, $minutes = null)
+	{
+		$result = $this
+					->join('tracker_route_paths', 'tracker_route_paths.id', '=', 'tracker_log.route_path_id')
 
+					->join(
+						'tracker_route_path_parameters',
+						'tracker_route_path_parameters.route_path_id',
+						'=',
+						'tracker_route_paths.id'
+					)
+
+					->join('tracker_routes', 'tracker_routes.id', '=', 'tracker_route_paths.route_id')
+
+					->where('tracker_routes.name', $name);
+
+		if ($minutes)
+		{
+			$hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
+
+			$result->where('tracker_log.created_at', '>=', $hour);
+		}
+
+		return $result;
+	}
+}

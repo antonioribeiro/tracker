@@ -396,12 +396,12 @@ class RepositoryManager implements RepositoryManagerInterface {
 				// When the parameter value is a whole model, we have
 				// two options left:
 				//
-				//  1) Return model id
+				//  1) Return model id, if it's available as 'id'
 				//  2) Return null (not ideal, but, what could we do?)
 				//
 				// Should we store the whole model? Not really useful, right?
 
-				if($value instanceof \Illuminate\Database\Eloquent\Model)
+				if ($value instanceof \Illuminate\Database\Eloquent\Model)
 				{
 					if (property_exists($value, 'id'))
 					{
@@ -538,6 +538,11 @@ class RepositoryManager implements RepositoryManagerInterface {
 	public function isRobot()
 	{
 		return $this->mobileDetect->isRobot();
+	}
+
+	public function logByRouteName($name, $minutes = null)
+	{
+		return $this->logRepository->allByRouteName($name, $minutes);
 	}
 
 }
