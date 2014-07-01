@@ -66,19 +66,19 @@
                 <div class="sidebar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="{{route('tracker.stats.index')}}?page=visits"><i class="fa fa-dashboard fa-fw"></i> Visits</a>
+                            <a href="{{route('tracker.stats.index')}}?page=visits" ><i class="fa fa-dashboard fa-fw"></i> Visits <span class="{{ Session::get('tracker.stats.page') =='visits' ? 'fa arrow' : '' }}"></span></a>
                         </li>
                         <li>
-                            <a href="{{route('tracker.stats.index')}}?page=summary"><i class="fa fa-bar-chart-o fa-fw"></i> Summary</a>
+                            <a href="{{route('tracker.stats.index')}}?page=summary"><i class="fa fa-bar-chart-o fa-fw"></i> Summary <span class="{{ Session::get('tracker.stats.page') =='summary' ? 'fa arrow' : '' }}"></span></a>
                         </li>
                         <li>
-                            <a href="{{route('tracker.stats.index')}}?page=users"><i class="fa fa-user fa-fw"></i> Users</a>
+                            <a href="{{route('tracker.stats.index')}}?page=users"><i class="fa fa-user fa-fw"></i> Users <span class="{{ Session::get('tracker.stats.page') =='users' ? 'fa arrow' : '' }}"></span></a>
                         </li>
                         <li>
-                            <a href="{{route('tracker.stats.index')}}?page=events"><i class="fa fa-bolt fa-fw"></i> Events</a>
+                            <a href="{{route('tracker.stats.index')}}?page=events"><i class="fa fa-bolt fa-fw"></i> Events <span class="{{ Session::get('tracker.stats.page') =='events' ? 'fa arrow' : '' }}"></span></a>
                         </li>
                         <li>
-                            <a href="{{route('tracker.stats.index')}}?page=errors"><i class="fa fa-exclamation fa-fw"></i>Errors</a>
+                            <a href="{{route('tracker.stats.index')}}?page=errors"><i class="fa fa-exclamation fa-fw"></i>Errors <span class="{{ Session::get('tracker.stats.page') =='errors' ? 'fa arrow' : '' }}"></span></a>
                         </li>
                     </ul>
                     <!-- /#side-menu -->

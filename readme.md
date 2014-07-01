@@ -115,8 +115,8 @@ return Tracker::logByRouteName('user.profile')
         ->where(function($query)
         {
             $query
-                ->where('parameter', 'email')
-                ->where('value', 'john@doe.com');
+                ->where('parameter', 'id')
+                ->where('value', 1);
         })
         ->count();
 ```
