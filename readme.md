@@ -104,23 +104,23 @@ $pageViews = Tracker::pageViewsByCountry(60 * 24);
 
 ### Visits
 
-![visits](https://raw.githubusercontent.com/antonioribeiro/acr.com/master/public/assets/layouts/admin/img/screenshots/visits.png)
+![visits](https://raw.githubusercontent.com/antonioribeiro/tracker/master/src/views/screenshots/visits.png)
 
 ### Charts
 
-![charts](https://raw.githubusercontent.com/antonioribeiro/acr.com/master/public/assets/layouts/admin/img/screenshots/charts.png)
+![charts](https://raw.githubusercontent.com/antonioribeiro/tracker/master/src/views/screenshots/summary.png)
 
 ### Users
 
-![users](https://raw.githubusercontent.com/antonioribeiro/acr.com/master/public/assets/layouts/admin/img/screenshots/users.png)
+![users](https://raw.githubusercontent.com/antonioribeiro/tracker/master/src/views/screenshots/users.png)
 
 ### Events
 
-![events](https://raw.githubusercontent.com/antonioribeiro/acr.com/master/public/assets/layouts/admin/img/screenshots/events.png)
+![events](https://raw.githubusercontent.com/antonioribeiro/tracker/master/src/views/screenshots/events.png)
 
 ### Errors
 
-![errors](https://raw.githubusercontent.com/antonioribeiro/acr.com/master/public/assets/layouts/admin/img/screenshots/errors.png)
+![errors](https://raw.githubusercontent.com/antonioribeiro/tracker/master/src/views/screenshots/errors.png)
 
 ## Views
 
