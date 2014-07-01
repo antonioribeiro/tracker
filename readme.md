@@ -124,9 +124,7 @@ $pageViews = Tracker::pageViewsByCountry(60 * 24);
 
 ## Views
 
-The views above are not available in this package, only the class methods used to gather this information is provided, but I'm planning to publish them in another repository.
-
-But they exist! If you would like to use them, the way they are now, here's a gist with enough information to get them: [Laravel Stats Tracker Views](https://gist.github.com/antonioribeiro/223f661d012b458ab13f) 
+The views above are available in this package, but you need to install the `sb-admin` panel on your public folder, please look at the instructions below.
 
 ## Tables
 
