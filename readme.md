@@ -100,6 +100,27 @@ $pageViews = Tracker::pageViews(60 * 24 * 30);
 $pageViews = Tracker::pageViewsByCountry(60 * 24);
 ```
 
+#### Routes By Name
+
+Having a route of
+
+```
+Route::get('user/{id}', ['as' => 'user.profile', 'use' => 'UsersController@profile']);
+```
+
+You can use this method to select all hits on that particular route and count them using Laravel: 
+
+```
+return Tracker::logByRouteName('user.profile')
+        ->where(function($query)
+        {
+            $query
+                ->where('parameter', 'email')
+                ->where('value', 'john@doe.com');
+        })
+        ->count();
+```
+
 ## Examples of the information this package may provide
 
 ### Visits
