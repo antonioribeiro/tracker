@@ -136,7 +136,7 @@ class Migrator extends BaseMigrator {
 			{
 				$table->bigIncrements('id');
 
-				$table->string('route_id')->index();
+				$table->bigInteger('route_id')->index();
 				$table->string('path')->index();
 
 				$table->timestamp('created_at')->index();

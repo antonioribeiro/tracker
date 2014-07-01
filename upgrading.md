@@ -1,5 +1,13 @@
 # Laravel Stats Tracker Upgrading Guide
 
+## to 0.5.1
+
+As `tracker_route_paths.route_id` column was wrongly set to string, you need to change it to int8 or bigint. This is how you do this in PostgreSQL: 
+
+	ALTER TABLE "tracker_route_paths" 
+	ALTER COLUMN route_id TYPE bigint 
+		USING CAST(CASE route_id WHEN '' THEN NULL ELSE route_id END AS INTEGER)
+   
 ## to 0.5.0
 
 ####Download sb-panel v2, if you want to access the new Stats Panel:
