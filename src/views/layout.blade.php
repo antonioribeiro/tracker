@@ -22,7 +22,7 @@
 	<link
 		rel="stylesheet"
 		type="text/css"
-		href="http://cloud.github.com/downloads/lafeber/world-flags-sprite/flags32.css"
+		href="https://cloud.github.com/downloads/lafeber/world-flags-sprite/flags16.css"
 	/>
 
 </head>
