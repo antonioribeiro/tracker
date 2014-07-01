@@ -36,5 +36,5 @@ class Route extends Base {
 	{
 		return $this->hasMany($this->getConfig()->get('route_path_model'));
 	}
-	
+
 }

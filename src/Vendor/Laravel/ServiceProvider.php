@@ -152,11 +152,11 @@ class ServiceProvider extends IlluminateServiceProvider {
     {
         $this->app['tracker.repositories'] = $this->app->share(function($app)
         {
-            try 
+            try
             {
                 $uaParser = new UserAgentParser($app->make('path.base'));
             }
-            catch (\Exception $exception) 
+            catch (\Exception $exception)
             {
                 $uaParser = null;
             }
