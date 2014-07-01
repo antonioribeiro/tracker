@@ -25,7 +25,7 @@
 						$countryCode = strtolower($session->geoip ? $session->geoip->country_code : '');
 
 						$flag = $countryCode
-							? "<img src=\"\" class=\"flag $countryCode\" alt=\"$countryName\" />"
+							? "<span class=\"f16\"><span class=\"flag $countryCode\" alt=\"$countryName\" /></span></span>"
 							: '';
 					?>
 
