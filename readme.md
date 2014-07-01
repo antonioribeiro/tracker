@@ -124,9 +124,7 @@ $pageViews = Tracker::pageViewsByCountry(60 * 24);
 
 ## Views
 
-The views above are not available in this package, only the class methods used to gather this information is provided, but I'm planning to publish them in another repository.
-
-But they exist! If you would like to use them, the way they are now, here's a gist with enough information to get them: [Laravel Stats Tracker Views](https://gist.github.com/antonioribeiro/223f661d012b458ab13f) 
+The views above are available in this package, but you need to install the `sb-admin` panel on your public folder, please look at the instructions below.
 
 ## Tables
 
@@ -378,12 +376,12 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 
 Require the `tracker` package by **executing** the following command in your command line:
 
-    composer require "pragmarx/tracker":"~0.4"
+    composer require "pragmarx/tracker":"~0.5"
 
 **Or** add to your composer.json:
 
     "require": {
-        "pragmarx/tracker": "~0.4"
+        "pragmarx/tracker": "~0.5"
     }
 
 And execute

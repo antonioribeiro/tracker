@@ -1,5 +1,17 @@
 ## Laravel Stats Tracker Upgrading Guide
 
+### to 0.5.0
+
+- Download sb-panel v2, if you want to access the new Stats Panel:
+
+    wget --output-document=/tmp/sba2.zip http://startbootstrap.com/downloads/sb-admin-v2.zip
+    unzip /tmp/sba2.zip -d public/templates/
+
+- Add the following **mandatory** key to your `app/config/packages/pragmarx/tracker/config.php`:
+
+	'stats_panel_enabled' => false,
+	'stats_route_filter' => '',
+
 ### to 0.4.0
 
 - Add the following keys to your `app/config/packages/pragmarx/tracker/config.php`:
