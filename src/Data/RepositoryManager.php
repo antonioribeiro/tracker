@@ -393,6 +393,26 @@ class RepositoryManager implements RepositoryManagerInterface {
 		{
 			foreach($route->current()->parameters() as $parameter => $value)
 			{
+				// When the parameter value is a whole model, we have
+				// two options left:
+				//
+				//  1) Return model id
+				//  2) Return null (not ideal, but, what could we do?)
+				//
+				// Should we store the whole model? Not really useful, right?
+
+				if($value instanceof \Illuminate\Database\Eloquent\Model)
+				{
+					if (property_exists($value, 'id'))
+					{
+						$value = $value->id;
+					}
+					else
+					{
+						$value = null;
+					}
+				}
+
 				$this->createRoutePathParameter($route_path_id, $parameter, $value);
 			}
 		}
