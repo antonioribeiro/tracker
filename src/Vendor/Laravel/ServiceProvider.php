@@ -73,6 +73,8 @@ class ServiceProvider extends IlluminateServiceProvider {
                                                         );
         }
 
+	    $this->loadRoutes();
+
         $this->wakeUp();
     }
 
@@ -465,6 +467,14 @@ class ServiceProvider extends IlluminateServiceProvider {
 		if (session_status() == PHP_SESSION_NONE)
 		{
 			session_start();
+		}
+	}
+
+	private function loadRoutes()
+	{
+		if ($this->app['config']->get(self::PACKAGE_NAMESPACE.'::stats_panel_enabled'))
+		{
+			include __DIR__.'/../../Vendor/Laravel/App/routes.php';
 		}
 	}
 

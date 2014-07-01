@@ -266,4 +266,40 @@ return array(
 
 	'tracker_alias' => 'Tracker',
 
+	/**
+	 * Enable the Stats Panel?
+	 */
+	'stats_panel_enabled' => false,
+
+	/**
+	 * Stats Panel route filter
+	 *
+	 * You better set an 'auth' filter here.
+	 */
+	'stats_route_filter' => '',
+
+	/**
+     * Stats Panel template path
+     */
+    'stats_template_path' => '/templates/sb-admin-v2',
+
+    /**
+     * Stats Panel base uri.
+     *
+     * If your site url is http://wwww.mysite.com, then your stats page will be:
+     *
+     *    http://wwww.mysite.com/stats
+     *
+     */
+    'stats_base_uri' => 'stats',
+
+    /**
+     * Stats Panel layout view
+     */
+    'stats_layout' => 'pragmarx/tracker::layout',
+
+    /**
+     * Stats Panel controllers namespace
+     */
+    'stats_controllers_namespace' => 'PragmaRX\Tracker\Vendor\Laravel\Controllers',
 );
