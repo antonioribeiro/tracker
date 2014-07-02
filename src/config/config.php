@@ -38,6 +38,13 @@ return array(
 	),
 
 	/**
+	 * Which routes names are not trackable?
+	 */
+	'do_not_track_routes' => array(
+		'tracker.stats.*',
+	),
+
+	/**
 	 * The Do Not Track Ips is used to disable Tracker for some IP addresses:
 	 *
 	 *     '127.0.0.1', '192.168.1.1'

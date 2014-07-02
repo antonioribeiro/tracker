@@ -193,9 +193,16 @@ class Tracker
 	{
 		if ($this->config->get('enabled') && $this->config->get('log_routes'))
 		{
-			$this->dataRepositoryManager->updateRoute(
-				$this->getRoutePathId($this->route->current())
-			);
+		    if ($this->dataRepositoryManager->routeIsTrackable($this->route))
+		    {
+			    $this->dataRepositoryManager->updateRoute(
+				    $this->getRoutePathId($this->route->current())
+			    );
+		    }
+			else
+			{
+				$this->deleteCurrentLog();
+			}
 		}
 	}
 
@@ -379,5 +386,10 @@ class Tracker
 	public function getConfig($key)
 	{
 		return $this->config->get($key);
+	}
+
+	private function deleteCurrentLog()
+	{
+		$this->dataRepositoryManager->logRepository->delete();
 	}
 }

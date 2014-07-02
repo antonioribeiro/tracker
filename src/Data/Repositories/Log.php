@@ -95,4 +95,9 @@ class Log extends Repository {
 		return $this->getModel()->allByRouteName($name, $minutes);
 	}
 
+	public function delete()
+	{
+		$this->getModel()->delete();
+	}
+
 }

@@ -240,6 +240,11 @@ class ServiceProvider extends IlluminateServiceProvider {
 		        $app['tracker.config']
 	        );
 
+	        $routeRepository = new Route(
+		        $routeModel,
+		        $app['tracker.config']
+	        );
+
 	        return new RepositoryManager(
 	            new GeoIp(),
 
@@ -278,7 +283,7 @@ class ServiceProvider extends IlluminateServiceProvider {
 
                 new Referer($refererModel),
 
-                new Route($routeModel),
+                $routeRepository,
 
                 new RoutePath($routePathModel),
 

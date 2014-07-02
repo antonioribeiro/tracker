@@ -545,4 +545,9 @@ class RepositoryManager implements RepositoryManagerInterface {
 		return $this->logRepository->allByRouteName($name, $minutes);
 	}
 
+	public function routeIsTrackable($route)
+	{
+		return $this->routeRepository->isTrackable($route);
+	}
+
 }

@@ -101,7 +101,7 @@ class Event extends Repository {
 
 			&&
 
-			! $this->inArrayWildcard($event['event'], $forbidden)
+			! in_array_wildcard($event['event'], $forbidden)
 
 			&&
 
@@ -152,17 +152,6 @@ class Event extends Repository {
 		}
 
 		return $object;
-	}
-
-	private function inArrayWildcard($event, $forbidden)
-	{
-		foreach($forbidden as $pattern)
-		{
-			if (str_is($pattern, $event))
-			{
-				return true;
-			}
-		}
 	}
 
 	public function getAll($minutes)

@@ -21,6 +21,10 @@ ALTER TABLE tracker_route_paths CHANGE route_id route_id bigint unsigned NULL;
 'log_exceptions' => true,
 
 'authenticated_user_username_column' => 'email',
+
+'do_not_track_routes' => array(
+    'tracker.stats.*',
+),
 ```
    
 ## to 0.5.0
