@@ -39,7 +39,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Laravel Stats Tracker</a>
+                <a class="navbar-brand" href="{{route('tracker.stats.index')}}">Laravel Stats Tracker</a>
             </div>
             <!-- /.navbar-header -->
 
