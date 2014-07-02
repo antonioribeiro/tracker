@@ -38,7 +38,7 @@
 		})
 		.done(function( data ) {
 			pageViews.setData(formatDates(data));
-		})
+		});
 
 		jQuery.ajax({
 			type: "GET",
@@ -57,7 +57,7 @@
 					clickable: true
 				}
 			});
-		})
+		});
 
 		var convertToPlottableData = function(data)
 		{
