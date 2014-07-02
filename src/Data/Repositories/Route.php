@@ -37,7 +37,8 @@ class Route extends Repository {
 		$forbidden = $this->config->get('do_not_track_routes');
 
 		return
-			$route->currentRouteName() &&
+			! $forbidden ||
+			! $route->currentRouteName() ||
 			! in_array_wildcard($route->currentRouteName(), $forbidden);
 	}
 
