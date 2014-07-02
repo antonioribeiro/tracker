@@ -177,6 +177,11 @@ return array(
 	'log_routes' => true,
 
 	/**
+	 * Log errors and exceptions?
+	 */
+	'log_exceptions' => true,
+
+	/**
 	 * A cookie may be created on your visitor device, so you can have information
 	 * on everything made using that device on your site.	 *
 	 */

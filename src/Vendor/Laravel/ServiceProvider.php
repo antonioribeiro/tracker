@@ -75,6 +75,8 @@ class ServiceProvider extends IlluminateServiceProvider {
 
 	    $this->loadRoutes();
 
+	    $this->registerErrorHandler();
+
         $this->wakeUp();
     }
 
@@ -106,8 +108,6 @@ class ServiceProvider extends IlluminateServiceProvider {
 	    $this->registerSqlQueryLogWatcher();
 
 	    $this->registerGlobalEventLogger();
-
-	    $this->registerErrorHandler();
 
 	    $this->commands('tracker.tables.command');
 
@@ -373,12 +373,15 @@ class ServiceProvider extends IlluminateServiceProvider {
 
 	private function registerErrorHandler()
 	{
-		$me = $this;
-
-		$this->app->error(function(\Exception $exception, $code) use ($me)
+		if ($this->getConfig('log_exceptions'))
 		{
-			$me->app['tracker']->handleException($exception, $code);
-		});
+			$me = $this;
+
+			$this->app->error(function(\Exception $exception, $code) use ($me)
+			{
+				$me->app['tracker']->handleException($exception, $code);
+			});
+		}
 	}
 
 	private function instantiateModel($modelName)
