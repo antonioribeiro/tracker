@@ -20,7 +20,7 @@
 @stop
 
 @section('inline-javascript')
-	$(function()
+	jQuery(function()
     {
 		var pageViews = Morris.Bar({
 			element: 'pageViews',
@@ -33,7 +33,7 @@
 
 		jQuery.ajax({
 			type: "GET",
-			url: "{{ route('tracker.stats.api.pageviews') }}", // This is the URL to the API
+			url: "{{ route('tracker.stats.api.pageviews') }}",
 			data: { }
 		})
 		.done(function( data ) {
@@ -42,7 +42,7 @@
 
 		jQuery.ajax({
 			type: "GET",
-			url: "{{ route('tracker.stats.api.pageviewsbycountry') }}", // This is the URL to the API
+			url: "{{ route('tracker.stats.api.pageviewsbycountry') }}",
 			data: { }
 		})
 		.done(function( data ) {
@@ -74,7 +74,7 @@
             }
 
 			return plottable;
-        }
+        };
 
 		var formatDates = function(data)
         {
@@ -89,8 +89,7 @@
             }
 
 			return data;
-		}
-
+		};
 	});
 @stop
 
