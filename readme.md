@@ -121,6 +121,22 @@ return Tracker::logByRouteName('user.profile')
         ->count();
 ```
 
+And if you need count how many unique visitors accessed that route, you can do:
+
+```
+return Tracker::logByRouteName('tracker.stats.log')
+        ->where(function($query)
+        {
+            $query
+                ->where('parameter', 'uuid')
+                ->where('value', '8b6faf82-00f1-4db9-88ad-32e58cfb4f9d');
+        })
+        ->select('tracker_log.session_id')
+        ->groupBy('tracker_log.session_id')
+        ->distinct()
+        ->count('tracker_log.session_id');
+```
+
 ## Examples of the information this package may provide
 
 ### Visits
