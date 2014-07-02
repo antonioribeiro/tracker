@@ -2,12 +2,17 @@
 
 ## to 0.5.1
 
-####As `tracker_route_paths.route_id` column was wrongly set to string, you need to change it to int8 or bigint. This is how you do this in PostgreSQL: 
-
+####As `tracker_route_paths.route_id` column was wrongly set to string, you need to change it to int8 or bigint. This is how you do this
+ 
+#####In PostgreSQL 
 ```
-ALTER TABLE "tracker_route_paths" 
-ALTER COLUMN route_id TYPE bigint 
-    USING CAST(CASE route_id WHEN '' THEN NULL ELSE route_id END AS INTEGER)
+ALTER TABLE "tracker_route_paths" ALTER COLUMN route_id TYPE BIGINT 
+    USING CAST(CASE route_id WHEN '' THEN NULL ELSE route_id END AS BIGINT)
+```
+
+#####In MySQL
+```
+ALTER TABLE tracker_route_paths CHANGE route_id route_id bigint unsigned NULL;
 ```
 
 ####Add the following keys to your `app/config/packages/pragmarx/tracker/config.php`:
