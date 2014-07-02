@@ -5,7 +5,7 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Email</th>
+					<th>{{ studly($username_column) }}</th>
 					<th>Last seen</th>
 				</tr>
 			</thead>
@@ -13,7 +13,7 @@
 			<tbody>
 				@foreach($users as $user)
 					<tr>
-						<td>{{ $user->user->email }}</td>
+						<td>{{ $user->user->$username_column }}</td>
 						<td>{{ $user->updated_at->diffForHumans() }}</td>
 					</tr>
 				@endforeach

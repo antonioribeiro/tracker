@@ -264,6 +264,8 @@ return array(
 
     'authenticated_user_id_column' => 'id', // to Auth::user()->id
 
+    'authenticated_user_username_column' => 'email', // to Auth::user()->email
+
 	/**
 	 * Laravel Alias, create one? Which name?
 	 */
