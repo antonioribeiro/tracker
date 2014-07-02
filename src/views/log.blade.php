@@ -14,6 +14,7 @@
 				<th>Is json?</th>
 				<th>Wants Json?</th>
 				<th>Error?</th>
+				<th>Created at</th>
 			</tr>
 		</thead>
 
@@ -51,6 +52,7 @@
 					<td>{{ $entry->is_json ? 'true' : '' }}</td>
 					<td>{{ $entry->wants_json ? 'true' : '' }}</td>
 					<td>{{ $entry->error ? 'true' : '' }}</td>
+					<td>{{ $entry->created_at }}</td>
 				</tr>
 			@endforeach
 		</tbody>
