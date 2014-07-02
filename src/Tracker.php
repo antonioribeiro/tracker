@@ -375,4 +375,9 @@ class Tracker
 	{
 		return $this->dataRepositoryManager->logByRouteName($name, $minutes);
 	}
+
+	public function getConfig($key)
+	{
+		return $this->config->get($key);
+	}
 }
