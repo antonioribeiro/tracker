@@ -33,7 +33,7 @@
 						<td>{{ link_to_route('tracker.stats.log', $session->id, ['uuid' => $session->uuid]) }}</td>
 						<td>{{ $session->client_ip }}</td>
 						<td>{{ $flag }} {{ $countryName }}</td>
-						<td>{{ $session->user ? $session->user->email : 'guest' }}</td>
+						<td>{{ $session->user ? $session->user->$username_column : 'guest' }}</td>
 						<td>{{ $session->device ? $session->device->kind . ' ' . ($session->device->model && $session->device->model !== 'unavailable' ? '['.$session->device->model.']' : '').' '.($session->device->platform ? ' ['.trim($session->device->platform.' '.$session->device->platform_version).']' : '').' '.($session->device->is_mobile ? ' [mobile device]' : '') : '' }}</td>
 						<td>{{ $session->agent && $session->agent ? $session->agent->browser . ' ('.$session->agent->browser_version.')' : '' }}</td>
 						<td>{{ $session->referer ? $session->referer->domain->name : '' }}</td>

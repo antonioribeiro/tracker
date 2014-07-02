@@ -58,7 +58,8 @@ class Stats extends Controller {
 	{
 		return View::make('pragmarx/tracker::index')
 			->with('sessions', Tracker::sessions(60 * 24 * Session::get('tracker.stats.days')))
-			->with('title', 'Visits');
+			->with('title', 'Visits')
+			->with('username_column', Tracker::getConfig('authenticated_user_username_column'));
 	}
 
 	public function log($uuid)
