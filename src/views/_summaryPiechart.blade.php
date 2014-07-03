@@ -4,10 +4,8 @@
 
 	google.setOnLoadCallback(drawChart);
 
-	function drawChart() {
-
-		// {{ route('tracker.stats.api.pageviewsbycountry') }}
-
+	function drawChart()
+	{
 		jQuery.ajax({
 			type: "GET",
 			url: "{{ route('tracker.stats.api.pageviewsbycountry') }}",

@@ -19,6 +19,16 @@ Route::group(['namespace' => $namespace], function() use ($prefix, $filter)
 			Route::get('api/pageviews', array('as' => 'tracker.stats.api.pageviews', 'uses' => 'Stats@apiPageviews'));
 
 			Route::get('api/pageviewsbycountry', array('as' => 'tracker.stats.api.pageviewsbycountry', 'uses' => 'Stats@apiPageviewsByCountry'));
+
+			Route::get('api/log/{uuid}', array('as' => 'tracker.stats.api.log', 'uses' => 'Stats@apiLog'));
+
+			Route::get('api/errors', array('as' => 'tracker.stats.api.errors', 'uses' => 'Stats@apiErrors'));
+
+			Route::get('api/events', array('as' => 'tracker.stats.api.events', 'uses' => 'Stats@apiEvents'));
+
+			Route::get('api/users', array('as' => 'tracker.stats.api.users', 'uses' => 'Stats@apiUsers'));
+
+			Route::get('api/visits', array('as' => 'tracker.stats.api.visits', 'uses' => 'Stats@apiVisits'));
 		});
 	});
 });

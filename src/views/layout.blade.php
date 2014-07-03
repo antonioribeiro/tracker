@@ -2,7 +2,6 @@
 <html>
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -25,6 +24,7 @@
 		href="https://cloud.github.com/downloads/lafeber/world-flags-sprite/flags16.css"
 	/>
 
+	<script src="{{ $stats_template_path }}/js/jquery-1.10.2.js"></script>
 </head>
 
 <body>
@@ -117,7 +117,6 @@
     <!-- /#wrapper -->
 
     <!-- Core Scripts - Include with every page -->
-    <script src="{{ $stats_template_path }}/js/jquery-1.10.2.js"></script>
     <script src="{{ $stats_template_path }}/js/bootstrap.min.js"></script>
     <script src="{{ $stats_template_path }}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 
