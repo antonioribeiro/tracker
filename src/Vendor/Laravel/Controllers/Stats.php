@@ -30,27 +30,11 @@ class Stats extends Controller {
 
 	public function showPage($page)
 	{
-		switch ($page) {
-			case 'summary':
-			default:
-				return $this->summary();
-				break;
+		$me = $this;
 
-			case 'visits':
-				return $this->visits();
-				break;
-
-			case 'users':
-				return $this->users();
-				break;
-
-			case 'events':
-				return $this->events();
-				break;
-
-			case 'errors':
-				return $this->errors();
-				break;
+		if (method_exists($me, $page))
+		{
+			return $this->$page();
 		}
 	}
 
