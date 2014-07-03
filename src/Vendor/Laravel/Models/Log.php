@@ -21,8 +21,6 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-use Carbon\Carbon;
-
 class Log extends Base {
 
 	protected $table = 'tracker_log';
@@ -67,22 +65,18 @@ class Log extends Base {
 
 	public function pageViews($minutes)
 	{
-		$hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
-
 		return $this->select(
 				$this->getConnection()->raw('DATE(created_at) as date, count(*) as total')
 			)->groupBy(
 				$this->getConnection()->raw('DATE(created_at)')
 			)
-			->where('created_at', '>=', $hour)
+			->period($minutes)
 			->orderBy('date')
 			->get();
 	}
 
 	public function pageViewsByCountry($minutes)
 	{
-		$hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
-
 		return
 			$this
 			->select(
@@ -92,7 +86,7 @@ class Log extends Base {
 			->join('tracker_sessions', 'tracker_log.session_id', '=', 'tracker_sessions.id')
 			->join('tracker_geoip', 'tracker_sessions.geoip_id', '=', 'tracker_geoip.id')
 			->groupBy('tracker_geoip.country_name')
-			->where('tracker_log.created_at', '>=', $hour)
+			->period($minutes, 'tracker_log')
 			->whereNotNull('tracker_sessions.geoip_id')
 			->orderBy('value', 'desc')
 			->get();
@@ -100,13 +94,11 @@ class Log extends Base {
 
 	public function errors($minutes)
 	{
-		$hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
-
 		return $this
-			->where('tracker_log.created_at', '>=', $hour)
-			->whereNotNull('error_id')
-			->orderBy('created_at', 'desc')
-			->get();
+				->period($minutes, 'tracker_log')
+				->whereNotNull('error_id')
+				->orderBy('created_at', 'desc')
+				->get();
 	}
 
 	public function allByRouteName($name, $minutes = null)
@@ -127,9 +119,7 @@ class Log extends Base {
 
 		if ($minutes)
 		{
-			$hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
-
-			$result->where('tracker_log.created_at', '>=', $hour);
+			$result->period($minutes, 'tracker_log');
 		}
 
 		return $result;

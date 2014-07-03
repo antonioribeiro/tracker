@@ -33,8 +33,6 @@ class Event extends Base {
 
 	public function allInThePeriod($minutes)
 	{
-		$hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
-
 		return
 			$this
 				->select(
@@ -43,7 +41,7 @@ class Event extends Base {
 					$this->getConnection()->raw('count(tracker_events_log.id) as total')
 				)
 				->from('tracker_events')
-				->where('tracker_events_log.created_at', '>=', $hour)
+				->period($minutes, 'tracker_events_log')
 				->join('tracker_events_log', 'tracker_events_log.event_id', '=', 'tracker_events.id')
 				->groupBy('tracker_events.id', 'tracker_events.name')
 				->orderBy('total', 'desc')

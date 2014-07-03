@@ -208,9 +208,10 @@ class Session extends Repository {
 
     public function last($minutes)
     {
-        $hour = Carbon::now()->subMinutes($minutes);
-
-        return $this->getSessions()->where('updated_at', '>=', $hour)->get();
+        return $this
+	            ->getSessions()
+	            ->period($minutes)
+                ->get();
     }
 
     public function users($minutes)

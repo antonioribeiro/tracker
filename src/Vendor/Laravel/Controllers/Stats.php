@@ -3,6 +3,7 @@
 namespace PragmaRX\Tracker\Vendor\Laravel\Controllers;
 
 
+use PragmaRX\Tracker\Support\Minutes;
 use PragmaRX\Tracker\Vendor\Laravel\Facade as Tracker;
 
 use Illuminate\Routing\Controller;
@@ -19,6 +20,8 @@ class Stats extends Controller {
 		Session::put('tracker.stats.days', $this->getValue('days', 1));
 
 		Session::put('tracker.stats.page', $this->getValue('page', 'visits'));
+
+		$this->minutes = new Minutes(60 * 24 * Session::get('tracker.stats.days'));
 
 		$this->buildComposers();
 	}
@@ -41,7 +44,7 @@ class Stats extends Controller {
 	public function visits()
 	{
 		return View::make('pragmarx/tracker::index')
-			->with('sessions', Tracker::sessions(60 * 24 * Session::get('tracker.stats.days')))
+			->with('sessions', Tracker::sessions($this->minutes))
 			->with('title', 'Visits')
 			->with('username_column', Tracker::getConfig('authenticated_user_username_column'));
 	}
@@ -61,16 +64,12 @@ class Stats extends Controller {
 
 	public function apiPageviews()
 	{
-		return Tracker::pageViews(
-			60 * 24 * Session::get('tracker.stats.days')
-		)->toJson();
+		return Tracker::pageViews($this->minutes)->toJson();
 	}
 
 	public function apiPageviewsByCountry()
 	{
-		return Tracker::pageViewsByCountry(
-			60 * 24 * Session::get('tracker.stats.days')
-		)->toJson();
+		return Tracker::pageViewsByCountry($this->minutes)->toJson();
 	}
 
 	public function getValue($variable, $default = null)
@@ -90,7 +89,7 @@ class Stats extends Controller {
 	public function users()
 	{
 		return View::make('pragmarx/tracker::users')
-			->with('users', Tracker::users(60 * 24 * Session::get('tracker.stats.days')))
+			->with('users', Tracker::users($this->minutes))
 			->with('title', 'Users')
 			->with('username_column', Tracker::getConfig('authenticated_user_username_column'));
 	}
@@ -98,14 +97,14 @@ class Stats extends Controller {
 	private function events()
 	{
 		return View::make('pragmarx/tracker::events')
-			->with('events', Tracker::events(60 * 24 * Session::get('tracker.stats.days')))
+			->with('events', Tracker::events($this->minutes))
 			->with('title', 'Events');
 	}
 
 	public function errors()
 	{
 		return View::make('pragmarx/tracker::errors')
-			->with('error_log', Tracker::errors(60 * 24 * Session::get('tracker.stats.days')))
+			->with('error_log', Tracker::errors($this->minutes))
 			->with('title', 'Errors');
 	}
 

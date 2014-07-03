@@ -38,4 +38,13 @@ class Base extends Eloquent {
 		return $GLOBALS["app"]["tracker.config"];
 	}
 
+	public function scopePeriod($query, $minutes, $alias = '')
+	{
+		$alias = $alias ? "$alias." : '';
+
+		return $query
+				->where($alias.'updated_at', '>=', $minutes->getStart())
+				->where($alias.'updated_at', '<=', $minutes->getEnd());
+	}
+
 }

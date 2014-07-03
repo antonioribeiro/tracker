@@ -81,8 +81,6 @@ class Session extends Base {
 
 	public function users($minutes)
 	{
-        $hour = Carbon::now()->subMinutes($minutes ?: 60 * 24);
-
 		return
 			$this
 				->select(
@@ -91,7 +89,7 @@ class Session extends Base {
 				)
 				->groupBy('user_id')
 				->from('tracker_sessions')
-				->where('updated_at', '>=', $hour)
+				->period($minutes)
 				->whereNotNull('user_id')
 				->orderBy($this->getConnection()->raw('max(updated_at)'), 'desc')
 				->get();

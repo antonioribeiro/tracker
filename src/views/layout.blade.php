@@ -44,6 +44,10 @@
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right navbar-nav">
+				<li {{ Session::get('tracker.stats.days') == '0' ? 'class="active"' : '' }}>
+					<a href="{{route('tracker.stats.index')}}?days=0">Today</a>
+				</li>
+
 				<li {{ Session::get('tracker.stats.days') == '1' ? 'class="active"' : '' }}>
 					<a href="{{route('tracker.stats.index')}}?days=1">1 day</a>
 				</li>
