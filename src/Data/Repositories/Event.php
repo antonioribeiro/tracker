@@ -93,7 +93,7 @@ class Event extends Repository {
 	{
 		$forbidden = $this->config->get('do_not_log_events');
 
-		// Illuminate Query may cause infinite recursivity
+		// Illuminate Query may cause infinite recursion
 		$forbidden[] = 'illuminate.query';
 
 		return
