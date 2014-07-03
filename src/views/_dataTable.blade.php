@@ -10,7 +10,7 @@
 
 	.google-visualization-table-page-numbers .page-number {
 		border: 1px outset !important;
-		padding: .65em .7em .5em .75em !important;
+		padding: .65em .7em .5em .5em !important;
 		font-size: .85em !important;
 	}
 </style>

@@ -7,6 +7,7 @@
 2014-07-03
 
 - Added a 'Today' filter option on Stats Panel
+- All stats tables are now Google Charts Tables (paginated)
 
 2014-07-02
 
