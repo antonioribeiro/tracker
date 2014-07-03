@@ -17,6 +17,8 @@
 			</div>
 		</div>
 	</div><!-- /.row -->
+
+	@include('pragmarx/tracker::_summaryPiechart')
 @stop
 
 @section('inline-javascript')
@@ -38,25 +40,6 @@
 		})
 		.done(function( data ) {
 			pageViews.setData(formatDates(data));
-		});
-
-		jQuery.ajax({
-			type: "GET",
-			url: "{{ route('tracker.stats.api.pageviewsbycountry') }}",
-			data: { }
-		})
-		.done(function( data ) {
-			jQuery.plot('#pageViewsByCountry', convertToPlottableData(data), {
-				series: {
-					pie: {
-						show: true
-					}
-				},
-				grid: {
-					hoverable: true,
-					clickable: true
-				}
-			});
 		});
 
 		var convertToPlottableData = function(data)
