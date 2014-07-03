@@ -95,7 +95,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header">{{$title}}</h1>
+                    <h2 class="page-header">{{$title}}</h2>
                 </div>
 
 	            <div class="col-lg-12">
