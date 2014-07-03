@@ -27,7 +27,7 @@
 
 			for (var key in data)
 			{
-				chartData.push([data[key].label + '\ (' + data[key].value + ')', data[key].value]);
+				chartData.push([data[key].label + '\ (' + data[key].value + ')', Number(data[key].value)]);
 			}
 
 			var data = google.visualization.arrayToDataTable(chartData);

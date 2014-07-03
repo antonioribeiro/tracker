@@ -94,6 +94,7 @@ class Log extends Base {
 			->groupBy('tracker_geoip.country_name')
 			->where('tracker_log.created_at', '>=', $hour)
 			->whereNotNull('tracker_sessions.geoip_id')
+			->orderBy('value', 'desc')
 			->get();
 	}
 
