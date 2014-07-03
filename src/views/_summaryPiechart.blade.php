@@ -35,7 +35,8 @@
 			var options = {
 				title: '',
 				is3D: true,
-				sliceVisibilityThreshold: 0
+				sliceVisibilityThreshold: 0,
+				enableInteractivity: false
 			};
 
 			var chart = new google.visualization.PieChart(document.getElementById('pageViewsByCountry'));
