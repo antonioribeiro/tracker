@@ -2,6 +2,12 @@
 
 ## Changelog
 
+### 0.5.2
+
+2014-07-06
+
+- Fixed HTTP cache by removing PHP session_start 
+
 ### 0.5.1
 
 2014-07-03

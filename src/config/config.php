@@ -11,7 +11,6 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Tracker
- * @version    1.0.0
  * @author     Antonio Carlos Ribeiro @ PragmaRX
  * @license    BSD License (3-clause)
  * @copyright  (c) 2013, PragmaRX
