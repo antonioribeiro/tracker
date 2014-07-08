@@ -52,7 +52,7 @@ class Migrator extends Migration {
 
 	protected function migrateUp()
 	{
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_log',
 			function ($table)
 			{
@@ -74,7 +74,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_paths',
 			function ($table)
 			{
@@ -87,7 +87,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_queries',
 			function ($table)
 			{
@@ -100,7 +100,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_query_arguments',
 			function ($table)
 			{
@@ -115,7 +115,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_routes',
 			function ($table)
 			{
@@ -129,7 +129,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_route_paths',
 			function ($table)
 			{
@@ -143,7 +143,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_route_path_parameters',
 			function ($table)
 			{
@@ -158,7 +158,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_agents',
 			function ($table)
 			{
@@ -173,7 +173,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_cookies',
 			function ($table)
 			{
@@ -186,7 +186,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_devices',
 			function ($table)
 			{
@@ -205,7 +205,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_referers',
 			function ($table)
 			{
@@ -220,7 +220,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_domains',
 			function ($table)
 			{
@@ -233,7 +233,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_sessions',
 			function ($table)
 			{
@@ -254,7 +254,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_errors',
 			function ($table)
 			{
@@ -268,7 +268,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_geoip',
 			function ($table)
 			{
@@ -293,7 +293,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_sql_queries',
 			function ($table)
 			{
@@ -309,7 +309,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_sql_query_bindings',
 			function ($table)
 			{
@@ -323,7 +323,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_sql_query_bindings_parameters',
 			function ($table)
 			{
@@ -338,7 +338,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_sql_queries_log',
 			function ($table)
 			{
@@ -352,7 +352,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_connections',
 			function ($table)
 			{
@@ -365,7 +365,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_events',
 			function ($table)
 			{
@@ -378,7 +378,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_events_log',
 			function ($table)
 			{
@@ -393,7 +393,7 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->schemaBuilder->create(
+		$this->builder->create(
 			'tracker_system_classes',
 			function ($table)
 			{
