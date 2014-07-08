@@ -20,9 +20,9 @@
 
 namespace PragmaRX\Tracker\Support\Database;
 
-use PragmaRX\Support\Migrator as BaseMigrator;
+use PragmaRX\Support\Migration;
 
-class Migrator extends BaseMigrator {
+class Migrator extends Migration {
 
 	protected $tables = array(
 		'tracker_errors',
