@@ -119,6 +119,15 @@ return array(
 	),
 
 	/**
+	 * What are the names of the id columns on your system?
+	 *
+	 * 'id' is the most common, but if you have one or more different,
+	 * please add them here in your preference order.
+	 */
+	'id_columns_names' => array(
+		'id'
+	),
+	/**
 	 * Do not log events for the following patterns.
 	 * Strings accepts wildcards:
 	 *
