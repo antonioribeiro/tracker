@@ -412,7 +412,10 @@ class RepositoryManager implements RepositoryManagerInterface {
 					}
 				}
 
-				$this->createRoutePathParameter($route_path_id, $parameter, $value);
+				if ($route_path_id && $parameter && $value)
+				{
+					$this->createRoutePathParameter($route_path_id, $parameter, $value);
+				}
 			}
 		}
 
