@@ -2,9 +2,10 @@
 
 ## to 0.6.0
 
-A massive updgrade happened at StartBootstrap, you need to download and unzip the admin frontend again:
+A [massive update happened at StartBootstrap](https://github.com/IronSummitMedia/startbootstrap/commit/66716399cf8eb5109498d41a2dad95a093c18f2b), you need to download and unzip the admin frontend again:
  
 ```
+    rm -rf public/templates/sb-admin-v2
     wget --output-document=/tmp/sba2.zip http://startbootstrap.com/downloads/sb-admin-2.zip
     unzip /tmp/sba2.zip -d public/templates/
 ```
