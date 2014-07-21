@@ -507,7 +507,7 @@ You don't need to use a different database, but, since Tracker may generate a hu
 
 To use the stats panel on your website you'll need to download the sb-admin 2 sources to your public folder:
  
-    wget --output-document=/tmp/sba2.zip http://startbootstrap.com/downloads/sb-admin-v2.zip
+    wget --output-document=/tmp/sba2.zip http://startbootstrap.com/downloads/sb-admin-2.zip
     unzip /tmp/sba2.zip -d public/templates/
 
 And enabled in your config file:

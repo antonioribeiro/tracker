@@ -1,5 +1,14 @@
 # Laravel Stats Tracker Upgrading Guide
 
+## to 0.6.0
+
+A massive updgrade happened at StartBootstrap, you need to download and unzip the admin frontend again:
+ 
+```
+    wget --output-document=/tmp/sba2.zip http://startbootstrap.com/downloads/sb-admin-2.zip
+    unzip /tmp/sba2.zip -d public/templates/
+```
+
 ## to 0.5.1
 
 ####As `tracker_route_paths.route_id` column was wrongly set to string, you need to change it to int8 or bigint. This is how you do this

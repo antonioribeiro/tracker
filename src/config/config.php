@@ -303,7 +303,7 @@ return array(
 	/**
      * Stats Panel template path
      */
-    'stats_template_path' => '/templates/sb-admin-v2',
+    'stats_template_path' => '/templates/sb-admin-2',
 
     /**
      * Stats Panel base uri.

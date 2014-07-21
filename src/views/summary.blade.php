@@ -24,6 +24,8 @@
 @section('inline-javascript')
 	jQuery(function()
     {
+		console.log(jQuery('#pageViews'));
+
 		var pageViews = Morris.Bar({
 			element: 'pageViews',
 			grid: false,
@@ -76,3 +78,15 @@
 	});
 @stop
 
+@section('required-scripts-top')
+	<!-- Page-Level Plugin Scripts - Main -->
+	<script src="{{ $stats_template_path }}/js/plugins/morris/raphael.min.js"></script>
+	<script src="{{ $stats_template_path }}/js/plugins/morris/morris.min.js"></script>
+
+	<!-- Page-Level Plugin Scripts - Flot -->
+	<!--[if lte IE 8]><script src="{{ $stats_template_path }}/js/excanvas.min.js"></script><![endif]-->
+	<script src="{{ $stats_template_path }}/js/plugins/flot/jquery.flot.js"></script>
+	<script src="{{ $stats_template_path }}/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+	<script src="{{ $stats_template_path }}/js/plugins/flot/jquery.flot.resize.js"></script>
+	<script src="{{ $stats_template_path }}/js/plugins/flot/jquery.flot.pie.js"></script>
+@stop
