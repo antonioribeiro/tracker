@@ -436,7 +436,7 @@ class ServiceProvider extends IlluminateServiceProvider {
 			return new EventStorage();
 		});
 
-		$this->app['events']->listen('*', function($object) use ($me)
+		$this->app['events']->listen('*', function($object = null) use ($me)
 		{
 			if ($me->app['tracker.events']->isOff())
 			{
