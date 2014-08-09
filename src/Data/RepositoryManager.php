@@ -402,19 +402,19 @@ class RepositoryManager implements RepositoryManagerInterface {
 
 				if ($value instanceof \Illuminate\Database\Eloquent\Model)
 				{
-					$result = null;
+					$model_id = null;
 
 					foreach($this->config->get('id_columns_names', ['id']) as $column)
 					{
 						if (property_exists($value, $column))
 						{
-							$result = $value->$column;
+							$model_id = $value->$column;
 
 							break;
 						}
 					}
 
-					$value = $result;
+					$value = $model_id;
 				}
 
 				if ($route_path_id && $parameter && $value)
