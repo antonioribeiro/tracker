@@ -21,7 +21,7 @@
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
-use PragmaRX\Tracker\Support\Config;
+use Symfony\Component\Console\Application;
 
 class Base extends Eloquent {
 
@@ -34,6 +34,11 @@ class Base extends Eloquent {
 
 	public function getConfig()
 	{
+		if ($GLOBALS["app"] instanceof Application)
+		{
+			return app()->make('tracker.config');
+		}
+
 		return $GLOBALS["app"]["tracker.config"];
 	}
 
