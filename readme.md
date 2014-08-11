@@ -22,21 +22,14 @@
 
 ##Index
 
-[Why?](#why)
-
-[How To Use It](#usage)
-
-[Screenshots](#screenshots)
-
-[Blade Views](#views)
-
-[Table Schemas](#how-data-is-stored)
-
-[System Requirements](#requirements)
-
-[Installing](#installing)
-
-[Contributing](#contributing)
+- [Why?](#why)
+- [How To Use It](#usage)
+- [Screenshots](#screenshots)
+- [Blade Views](#views)
+- [Table Schemas](#how-data-is-stored)
+- [System Requirements](#requirements)
+- [Installing](#installing)
+- [Contributing](#contributing)
 
 ## Why?
 
