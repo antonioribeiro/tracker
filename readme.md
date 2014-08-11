@@ -20,6 +20,24 @@
 - **Url queries and all its arguments**
 - **Database connections**
 
+##Index
+
+[Why?](#why)
+
+[How To Use It](#usage)
+
+[Screenshots](#screenshots)
+
+[Blade Views](#views)
+
+[Table Schemas](#how-data-is-stored)
+
+[System Requirements](#requirements)
+
+[Installing](#installing)
+
+[Contributing](#contributing)
+
 ## Why?
 
 Storing user tracking information, on indexed and normalized database tables, wastes less disk space and ease the extract of valuable information about your application and business.
@@ -108,7 +126,7 @@ Having a route of
 Route::get('user/{id}', ['as' => 'user.profile', 'use' => 'UsersController@profile']);
 ```
 
-You can use this method to select all hits on that particular route and count them using Laravel: 
+You can use this method to select all hits on that particular route and count them using Laravel:
 
 ```
 return Tracker::logByRouteName('user.profile')
@@ -137,7 +155,7 @@ return Tracker::logByRouteName('tracker.stats.log')
         ->count('tracker_log.session_id');
 ```
 
-## Examples of the information this package may provide
+## Screenshots
 
 ### Visits
 
@@ -159,11 +177,11 @@ return Tracker::logByRouteName('tracker.stats.log')
 
 ![errors](https://raw.githubusercontent.com/antonioribeiro/tracker/master/src/views/screenshots/errors.png)
 
-## Views
+## Blade Views
 
 The views above are available in this package, but you need to install the `sb-admin` panel on your public folder, please look at the instructions below.
 
-## Tables
+## How data is stored
 
 All tables are prefixed by `tracker_`, and here's an extract of some of them, showing columns and contents:
 
@@ -506,7 +524,7 @@ You don't need to use a different database, but, since Tracker may generate a hu
 ## Stats Panel
 
 To use the stats panel on your website you'll need to download the sb-admin 2 sources to your public folder:
- 
+
     wget --output-document=/tmp/sba2.zip http://startbootstrap.com/downloads/sb-admin-2.zip
     unzip /tmp/sba2.zip -d public/templates/
 
