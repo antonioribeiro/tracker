@@ -89,27 +89,30 @@ class ServiceProvider extends IlluminateServiceProvider {
     {
 	    $this->registerConfig();
 
-        $this->registerAuthentication();
+	    if ($this->getConfig('enabled'))
+	    {
+		    $this->registerAuthentication();
 
-        $this->registerMigrator();
+		    $this->registerMigrator();
 
-        $this->registerRepositories();
+		    $this->registerRepositories();
 
-        $this->registerTracker();
+		    $this->registerTracker();
 
-	    $this->registerTablesCommand();
+		    $this->registerTablesCommand();
 
-        $this->registerUpdateParserCommand();
+		    $this->registerUpdateParserCommand();
 
-	    $this->registerExecutionCallBack();
+		    $this->registerExecutionCallBack();
 
-	    $this->registerSqlQueryLogWatcher();
+		    $this->registerSqlQueryLogWatcher();
 
-	    $this->registerGlobalEventLogger();
+		    $this->registerGlobalEventLogger();
 
-	    $this->commands('tracker.tables.command');
+		    $this->commands('tracker.tables.command');
 
-        $this->commands('tracker.updateparser.command');
+		    $this->commands('tracker.updateparser.command');
+	    }
     }
 
     /**
