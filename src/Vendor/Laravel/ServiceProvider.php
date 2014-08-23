@@ -338,7 +338,10 @@ class ServiceProvider extends IlluminateServiceProvider {
 
     private function wakeUp()
     {
-        $this->app['tracker']->boot();
+	    if ($this->getConfig('enabled'))
+	    {
+		    $this->app['tracker']->boot();
+	    }
     }
 
     private function getConfig($key)
