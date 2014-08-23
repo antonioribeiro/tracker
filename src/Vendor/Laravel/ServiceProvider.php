@@ -63,21 +63,24 @@ class ServiceProvider extends IlluminateServiceProvider {
      */
     public function boot()
     {
-        $this->package(self::PACKAGE_NAMESPACE, self::PACKAGE_NAMESPACE, __DIR__.'/../..');
+	    if ($this->getConfig('enabled'))
+	    {
+		    $this->package(self::PACKAGE_NAMESPACE, self::PACKAGE_NAMESPACE, __DIR__.'/../..');
 
-        if( $this->app['config']->get(self::PACKAGE_NAMESPACE.'::create_tracker_alias') )
-        {
-            IlluminateAliasLoader::getInstance()->alias(
-                                                            $this->getConfig('tracker_alias'),
-                                                            'PragmaRX\Tracker\Vendor\Laravel\Facade'
-                                                        );
-        }
+		    if( $this->app['config']->get(self::PACKAGE_NAMESPACE.'::create_tracker_alias') )
+		    {
+			    IlluminateAliasLoader::getInstance()->alias(
+				    $this->getConfig('tracker_alias'),
+				    'PragmaRX\Tracker\Vendor\Laravel\Facade'
+			    );
+		    }
 
-	    $this->loadRoutes();
+		    $this->loadRoutes();
 
-	    $this->registerErrorHandler();
+		    $this->registerErrorHandler();
 
-        $this->wakeUp();
+		    $this->wakeUp();
+	    }
     }
 
     /**
@@ -341,10 +344,7 @@ class ServiceProvider extends IlluminateServiceProvider {
 
     private function wakeUp()
     {
-	    if ($this->getConfig('enabled'))
-	    {
-		    $this->app['tracker']->boot();
-	    }
+	    $this->app['tracker']->boot();
     }
 
     private function getConfig($key)
