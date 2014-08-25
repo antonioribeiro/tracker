@@ -63,21 +63,24 @@ class ServiceProvider extends IlluminateServiceProvider {
      */
     public function boot()
     {
-        $this->package(self::PACKAGE_NAMESPACE, self::PACKAGE_NAMESPACE, __DIR__.'/../..');
+	    if ($this->getConfig('enabled'))
+	    {
+		    $this->package(self::PACKAGE_NAMESPACE, self::PACKAGE_NAMESPACE, __DIR__.'/../..');
 
-        if( $this->app['config']->get(self::PACKAGE_NAMESPACE.'::create_tracker_alias') )
-        {
-            IlluminateAliasLoader::getInstance()->alias(
-                                                            $this->getConfig('tracker_alias'),
-                                                            'PragmaRX\Tracker\Vendor\Laravel\Facade'
-                                                        );
-        }
+		    if( $this->app['config']->get(self::PACKAGE_NAMESPACE.'::create_tracker_alias') )
+		    {
+			    IlluminateAliasLoader::getInstance()->alias(
+				    $this->getConfig('tracker_alias'),
+				    'PragmaRX\Tracker\Vendor\Laravel\Facade'
+			    );
+		    }
 
-	    $this->loadRoutes();
+		    $this->loadRoutes();
 
-	    $this->registerErrorHandler();
+		    $this->registerErrorHandler();
 
-        $this->wakeUp();
+		    $this->wakeUp();
+	    }
     }
 
     /**
@@ -89,27 +92,30 @@ class ServiceProvider extends IlluminateServiceProvider {
     {
 	    $this->registerConfig();
 
-        $this->registerAuthentication();
+	    if ($this->getConfig('enabled'))
+	    {
+		    $this->registerAuthentication();
 
-        $this->registerMigrator();
+		    $this->registerMigrator();
 
-        $this->registerRepositories();
+		    $this->registerRepositories();
 
-        $this->registerTracker();
+		    $this->registerTracker();
 
-	    $this->registerTablesCommand();
+		    $this->registerTablesCommand();
 
-        $this->registerUpdateParserCommand();
+		    $this->registerUpdateParserCommand();
 
-	    $this->registerExecutionCallBack();
+		    $this->registerExecutionCallBack();
 
-	    $this->registerSqlQueryLogWatcher();
+		    $this->registerSqlQueryLogWatcher();
 
-	    $this->registerGlobalEventLogger();
+		    $this->registerGlobalEventLogger();
 
-	    $this->commands('tracker.tables.command');
+		    $this->commands('tracker.tables.command');
 
-        $this->commands('tracker.updateparser.command');
+		    $this->commands('tracker.updateparser.command');
+	    }
     }
 
     /**
@@ -338,7 +344,7 @@ class ServiceProvider extends IlluminateServiceProvider {
 
     private function wakeUp()
     {
-        $this->app['tracker']->boot();
+	    $this->app['tracker']->boot();
     }
 
     private function getConfig($key)
