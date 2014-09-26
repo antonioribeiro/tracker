@@ -17,7 +17,7 @@
  * @link       http://pragmarx.com
  */
 
-return array(
+return [
 
 	/**
 	 * Enable it?
@@ -27,21 +27,21 @@ return array(
 	/**
 	 * Robots should be tracked?
 	 */
-	'do_not_track_robots' => true,
+	'do_not_track_robots' => false,
 
 	/**
 	 * Which environments are not trackable?
 	 */
-	'do_not_track_environments' => array(
+	'do_not_track_environments' => [
 		// defaults to none
-	),
+	],
 
 	/**
 	 * Which routes names are not trackable?
 	 */
-	'do_not_track_routes' => array(
+	'do_not_track_routes' => [
 		'tracker.stats.*',
-	),
+	],
 
 	/**
 	 * The Do Not Track Ips is used to disable Tracker for some IP addresses:
@@ -55,9 +55,9 @@ return array(
 	 *     '10.0.0.0/32'
 	 *     '172.17.0.0/255.255.0.0'
 	 */
-	'do_not_track_ips' => array(
+	'do_not_track_ips' => [
 		'127.0.0.0/24' /// range 127.0.0.1 - 127.0.0.255
-	),
+	],
 
 	/**
 	 * Log every single access?
@@ -88,16 +88,22 @@ return array(
 	 * point it to the same database (or not) and forbid logging of this connection in
 	 * do_not_log_sql_queries_connections.
 	 */
-	'connection' => null,
+	'connection' => 'tracker',
 
 	/**
 	 * Forbid logging of SQL queries for some connections.
 	 *
 	 * To avoid recursion, you better ignore Tracker connection here.
+	 *
+	 * Please create a separate database connection for Tracker. It can hit
+	 * the same database of your application, but the connection itself
+	 * has to have a different name, so the package can ignore its own queries
+	 * and avoid recursion.
+	 *
 	 */
-	'do_not_log_sql_queries_connections' => array(
-		// defaults to none
-	),
+	'do_not_log_sql_queries_connections' => [
+		'tracker'
+	],
 
 	/**
 	 * Also log SQL query bindings?
@@ -114,9 +120,9 @@ return array(
 	/**
 	 * Which events do you want to log exactly?
 	 */
-	'log_only_events' => array(
+	'log_only_events' => [
 		// defaults to logging all events
-	),
+	],
 
 	/**
 	 * What are the names of the id columns on your system?
@@ -124,9 +130,9 @@ return array(
 	 * 'id' is the most common, but if you have one or more different,
 	 * please add them here in your preference order.
 	 */
-	'id_columns_names' => array(
+	'id_columns_names' => [
 		'id'
-	),
+	],
 	/**
 	 * Do not log events for the following patterns.
 	 * Strings accepts wildcards:
@@ -134,13 +140,13 @@ return array(
 	 *    eloquent.*
 	 *
 	 */
-	'do_not_log_events' => array(
+	'do_not_log_events' => [
 		'illuminate.log',
 		'eloquent.*',
 		'router.*',
 		'composing: *',
 		'creating: *',
-	),
+	],
 
 	/**
 	 * Do you wish to log Geo IP data?
@@ -159,48 +165,48 @@ return array(
 	/**
 	 * Do you wish to log the user agent?
 	 */
-	'log_user_agents' => true,
+	'log_user_agents' => false,
 
 	/**
 	 * Do you wish to log your users?
 	 */
-	'log_users' => true,
+	'log_users' => false,
 
 	/**
 	 * Do you wish to log devices?
 	 */
-	'log_devices' => true,
+	'log_devices' => false,
 
 	/**
 	 * Do you wish to log HTTP referers?
 	 */
-	'log_referers' => true,
+	'log_referers' => false,
 
 	/**
 	 * Do you wish to log url paths?
 	 */
-	'log_paths' => true,
+	'log_paths' => false,
 
 	/**
 	 * Do you wish to log url queries and query arguments?
 	 */
-	'log_queries' => true,
+	'log_queries' => false,
 
 	/**
 	 * Do you wish to log routes and route parameters?
 	 */
-	'log_routes' => true,
+	'log_routes' => false,
 
 	/**
 	 * Log errors and exceptions?
 	 */
-	'log_exceptions' => true,
+	'log_exceptions' => false,
 
 	/**
 	 * A cookie may be created on your visitor device, so you can have information
 	 * on everything made using that device on your site.	 *
 	 */
-	'store_cookie_tracker' => true,
+	'store_cookie_tracker' => false,
 
 	/**
 	 * If you are storing cookies, you better change it to a name you of your own.
@@ -284,7 +290,7 @@ return array(
 	/**
 	 * Laravel Alias, create one? Which name?
 	 */
-	'create_tracker_alias' => true,
+	'create_tracker_alias' => false,
 
 	'tracker_alias' => 'Tracker',
 
@@ -324,4 +330,4 @@ return array(
      * Stats Panel controllers namespace
      */
     'stats_controllers_namespace' => 'PragmaRX\Tracker\Vendor\Laravel\Controllers',
-);
+];
