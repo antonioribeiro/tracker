@@ -93,4 +93,5 @@ class Session extends Base {
 				->orderBy($this->getConnection()->raw('max(updated_at)'), 'desc')
 				->get();
 	}
+
 }
