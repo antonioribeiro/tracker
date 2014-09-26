@@ -13,6 +13,7 @@ use PragmaRX\Tracker\Services\Authentication;
 use PragmaRX\Tracker\Support\Config;
 use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Support\UserAgentParser;
+use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 
 use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
 
@@ -45,9 +46,13 @@ use PragmaRX\Support\GeoIp;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
 
-class ServiceProvider extends IlluminateServiceProvider {
+class ServiceProvider extends PragmaRXServiceProvider {
 
-    const PACKAGE_NAMESPACE = 'pragmarx/tracker';
+	protected $packageVendor = 'pragmarx';
+
+	protected $packageName = 'tracker';
+
+	protected $packageNameCapitalized = 'Tracker';
 
     /**
      * Indicates if loading of the provider is deferred.
@@ -65,9 +70,9 @@ class ServiceProvider extends IlluminateServiceProvider {
     {
 	    if ($this->getConfig('enabled'))
 	    {
-		    $this->package(self::PACKAGE_NAMESPACE, self::PACKAGE_NAMESPACE, __DIR__.'/../..');
+		    $this->package($this->packageNamespace, $this->packageNamespace, __DIR__.'/../..');
 
-		    if( $this->app['config']->get(self::PACKAGE_NAMESPACE.'::create_tracker_alias') )
+		    if( $this->app['config']->get($this->packageNamespace.'::create_tracker_alias') )
 		    {
 			    IlluminateAliasLoader::getInstance()->alias(
 				    $this->getConfig('tracker_alias'),
@@ -90,6 +95,8 @@ class ServiceProvider extends IlluminateServiceProvider {
      */
     public function register()
     {
+	    $this->preRegister();
+
 	    $this->registerConfig();
 
 	    if ($this->getConfig('enabled'))
@@ -328,7 +335,7 @@ class ServiceProvider extends IlluminateServiceProvider {
     {
         $this->app['tracker.config'] = $this->app->share(function($app)
         {
-            return new Config($app['config'], self::PACKAGE_NAMESPACE);
+            return new Config($app['config'], $this->packageNamespace);
         });
     }
 
@@ -342,14 +349,9 @@ class ServiceProvider extends IlluminateServiceProvider {
         });
     }
 
-    private function wakeUp()
+    protected function wakeUp()
     {
 	    $this->app['tracker']->boot();
-    }
-
-    private function getConfig($key)
-    {
-        return $this->app['config']->get(self::PACKAGE_NAMESPACE.'::'.$key);
     }
 
 	private function registerTablesCommand()
@@ -473,7 +475,7 @@ class ServiceProvider extends IlluminateServiceProvider {
 
 	private function loadRoutes()
 	{
-		if ($this->app['config']->get(self::PACKAGE_NAMESPACE.'::stats_panel_enabled'))
+		if ($this->app['config']->get($this->packageNamespace.'::stats_panel_enabled'))
 		{
 			include __DIR__.'/../../Vendor/Laravel/App/routes.php';
 		}
