@@ -440,6 +440,18 @@ Add the service provider to your app/config/app.php:
 
     'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
 
+Publish tracker configuration:
+
+    php artisan config:publish pragmarx/tracker
+
+And edit the file `app/config/packages/pragmarx/tracker/config.php` to enable Tracker.
+
+    'enabled' => true,
+
+Create the UA Parser regex file (every time you run `composer update` you must also execute this command):
+
+    php artisan tracker:updateparser
+
 Create the migration:
 
     php artisan tracker:tables
@@ -447,22 +459,6 @@ Create the migration:
 Migrate it
 
     php artisan migrate
-
-Publish tracker configuration:
-
-    php artisan config:publish pragmarx/tracker
-
-Create the UA Parser regex file (every time you run `composer update` you must also execute this command):
-
-    php artisan tracker:updateparser
-
-And edit the file `app/config/packages/pragmarx/tracker/config.php` to enable Tracker.
-
-    'enabled' => true,
-
-Note that the logging function is disabled by default, because it may write too much data to your database, but you can enable it by changing:
-
-    'log_enabled' => true,
 
 If you are planning to store Geo IP information, also install the geoip package:
 
@@ -474,22 +470,7 @@ And make sure you don't have the PHP module installed. This is a Debian/Ubuntu e
 
 ## Database Connections & Query Logs
 
-If you are planning to store your query logs, to avoid recursion while logging SQL queries, you will need to create a different database connection for it:
-
-This is a main connection:
-
-	'postgresql' => [
-		'driver'   => 'pgsql',
-		'host'     => 'localhost',
-		'database' => getenv('MAIN.DATABASE_NAME'),
-		'username' => getenv('MAIN.DATABASE_USER'),
-		'password' => getenv('MAIN.DATABASE_PASSWORD'),
-		'charset'  => 'utf8',
-		'prefix'   => '',
-		'schema'   => 'public',
-	],
-
-This is the tracker connection pointing to the same database:
+If you are planning to store your query logs, to avoid recursion while logging SQL queries, you will have to create a different database connection for it. The connection can connect to your main database, but it must be different from the main one:
 
 	'tracker' => [
 		'driver'   => 'pgsql',
@@ -502,17 +483,15 @@ This is the tracker connection pointing to the same database:
 		'schema'   => 'public',
 	],
 
-On your `tracker/config.php` file, set the Tracker connection to the one you created for it:
+While you don't need to use a different database, but Tracker may generate a huge number of records, so this is also advisable.
 
-	'connection' => 'tracker',
+## Everything Is Disabled By Default
 
-And ignore this connection for SQL queries logging:
+Tracker has a lot of logging options, but you need to decide what you want to log. Starting by enabling this one:
 
-	'do_not_log_sql_queries_connections' => array(
-		'tracker'
-	),
+    'log_enabled' => true,
 
-You don't need to use a different database, but, since Tracker may generate a huge number of records, this would be a good practice.
+It is responsible for logging page hits and sessions, basically the client IP address.
 
 ## Stats Panel
 
