@@ -18,7 +18,7 @@
     "require": {
         "php": ">=5.3.7",
         "laravel/framework": "~4.1",
-        "pragmarx/support": "~0.3",
+        "pragmarx/support": "~0.3.1",
         "rhumsaa/uuid": "~2.7",
         "jenssegers/agent": "~2.1",
         "pragmarx/ua-parser" : "0.3.4"
