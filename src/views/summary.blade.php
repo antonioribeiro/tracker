@@ -1,7 +1,7 @@
 @extends(Config::get('pragmarx/tracker::stats_layout'))
 
 @section('page-contents')
-	<div id="pageViews" style="height: 250px;"></div>
+	<div id="pageViewsLine" class="chart no-padding"></div>
 @stop
 
 @section('page-secondary-contents')
@@ -22,14 +22,16 @@
 @stop
 
 @section('inline-javascript')
+
 	jQuery(function()
     {
 		console.log(jQuery('#pageViews'));
 
-		var pageViews = Morris.Bar({
-			element: 'pageViews',
-			grid: false,
-			data: [0,0],
+		var pageViewsLine = Morris.Line({
+            element: 'pageViewsLine',
+            parseTime:false,
+			grid: true,
+			data: [{'date': 0, 'total': 0}],
 			xkey: 'date',
 			ykeys: ['total'],
 			labels: ['Page Views']
@@ -41,7 +43,8 @@
 			data: { }
 		})
 		.done(function( data ) {
-			pageViews.setData(formatDates(data));
+		    console.log(data);
+			pageViewsLine.setData(formatDates(data));
 		});
 
 		var convertToPlottableData = function(data)
