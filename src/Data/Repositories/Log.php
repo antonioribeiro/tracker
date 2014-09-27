@@ -44,9 +44,18 @@ class Log extends Repository {
 		}
 	}
 
-	public function bySession($sessionId)
+	public function bySession($sessionId, $results = true)
 	{
-		return $this->getModel()->where('session_id', $sessionId)->orderBy('updated_at', 'desc')->get();
+		$query = $this
+					->getModel()
+					->where('session_id', $sessionId)->orderBy('updated_at', 'desc');
+
+		if ($results)
+		{
+			return $query->get();
+		}
+
+		return $query;
 	}
 
 	/**

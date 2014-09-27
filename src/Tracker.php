@@ -316,9 +316,9 @@ class Tracker
         return $this->dataRepositoryManager->getLastSessions($minutes, $results);
     }
 
-	public function sessionLog($uuid)
+	public function sessionLog($uuid, $results = true)
 	{
-		return $this->dataRepositoryManager->getSessionLog($uuid);
+		return $this->dataRepositoryManager->getSessionLog($uuid, $results);
 	}
 
 	public function pageViews($minutes, $results = true)

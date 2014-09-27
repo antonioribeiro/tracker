@@ -500,11 +500,11 @@ class RepositoryManager implements RepositoryManagerInterface {
 		return $id;
 	}
 
-	public function getSessionLog($uuid)
+	public function getSessionLog($uuid, $results = true)
 	{
 		$session = $this->sessionRepository->findByUuid($uuid);
 
-		return $this->logRepository->bySession($session->id);
+		return $this->logRepository->bySession($session->id, $results);
 	}
 
 	public function pageViews($minutes, $results)

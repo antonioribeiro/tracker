@@ -77,61 +77,79 @@ class Stats extends Controller {
 
 	public function apiLog($uuid)
 	{
-		$columns = array(
-			array('type' => 'string', 'label' => 'Method'),
-			array('type' => 'string', 'label' => 'Route Name / Action'),
-			array('type' => 'string', 'label' => 'Route'),
-			array('type' => 'string', 'label' => 'Query'),
-			array('type' => 'string', 'label' => 'Is ajax?'),
-			array('type' => 'string', 'label' => 'Is secure?'),
-			array('type' => 'string', 'label' => 'Is json?'),
-			array('type' => 'string', 'label' => 'Wants Json?'),
-			array('type' => 'string', 'label' => 'Error?'),
-			array('type' => 'datetime', 'label' => 'Created at'),
-		);
+		$query = Tracker::sessionLog($uuid, false);
 
-		$data = array();
+		$query->select(array(
+			               'id',
+			               'session_id',
+			               'method',
+			               'path_id',
+			               'query_id',
+			               'route_path_id',
+			               'is_ajax',
+			               'is_secure',
+			               'is_json',
+			               'wants_json',
+			               'error_id',
+			               'updated_at',
+		               ));
 
-		foreach(Tracker::sessionLog($uuid) as $row)
-		{
-			$query = null;
+		return Datatables::of($query)
+			->edit_column('route_name', function($row) {
+					return 	$row->routePath
+							? $row->routePath->route->name . '<br>' . $row->routePath->route->action
+							: $row->path->path;
+			})
 
-			if ($row->logQuery)
-			{
-				foreach($row->logQuery->arguments as $argument)
+			->edit_column('route', function($row) {
+				$route = null;
+
+				if ($row->routePath)
 				{
-					$query .= ($query ? '<br>' : '') . $argument->argument . '=' . $argument->value;
+					foreach($row->routePath->parameters as $parameter)
+					{
+						$route .= ($route ? '<br>' : '') . $parameter->parameter . '=' . $parameter->value;
+					}
 				}
-			}
 
-			$route = null;
+				return $route;
+			})
 
-			if ($row->routePath)
-			{
-				foreach($row->routePath->parameters as $parameter)
+			->edit_column('query', function($row) {
+				$query = null;
+
+				if ($row->logQuery)
 				{
-					$route .= ($route ? '<br>' : '') . $parameter->parameter . '=' . $parameter->value;
+					foreach($row->logQuery->arguments as $argument)
+					{
+						$query .= ($query ? '<br>' : '') . $argument->argument . '=' . $argument->value;
+					}
 				}
-			}
 
-			$data[] = [
-				$row->method,
-				$row->routePath ? $row->routePath->route->name . '<br>' . $row->routePath->route->action : $row->path->path,
-				$route,
-				$query,
-				$row->is_ajax ? 'yes' : '',
-				$row->is_secure ? 'yes' : '',
-				$row->is_json ? 'yes' : '',
-				$row->wants_json ? 'yes' : '',
-				$row->error ? 'yes' : '',
-				(string) $row->created_at,
-			];
-		}
+				return $query;
+			})
 
-		return Response::json(array(
-			'columns' => $columns,
-		    'data' => $data,
-		));
+			->edit_column('is_ajax', function($row) {
+				return 	$row->is_ajax ? 'yes' : '';
+			})
+
+			->edit_column('is_secure', function($row) {
+				return 	$row->is_secure ? 'yes' : '';
+			})
+
+			->edit_column('is_json', function($row) {
+				return 	$row->is_json ? 'yes' : '';
+			})
+
+			->edit_column('wants_json', function($row) {
+				return 	$row->wants_json ? 'yes' : '';
+			})
+
+			->edit_column('error', function($row) {
+				return 	$row->error ? 'yes' : '';
+			})
+
+			->make(true);
 	}
 
 	public function getValue($variable, $default = null)
