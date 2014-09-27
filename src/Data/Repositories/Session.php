@@ -197,7 +197,16 @@ class Session extends Repository {
 
     private function getSessions()
     {
-        return $this->newQuery()->orderBy('updated_at', 'desc');
+        return $this
+	            ->newQuery()
+	            ->with('user')
+		        ->with('device')
+		        ->with('agent')
+		        ->with('referer')
+		        ->with('geoIp')
+		        ->with('log')
+		        ->with('cookie')
+	            ->orderBy('updated_at', 'desc');
     }
 
     public function all()
@@ -205,17 +214,23 @@ class Session extends Repository {
         return $this->getSessions()->get();
     }
 
-    public function last($minutes)
+    public function last($minutes, $results)
     {
-        return $this
-	            ->getSessions()
-	            ->period($minutes)
-                ->get();
+	    $query = $this
+		            ->getSessions()
+		            ->period($minutes);
+
+	    if ($results)
+	    {
+		    return $query->get();
+	    }
+
+	    return $query;
     }
 
-    public function users($minutes)
+    public function users($minutes, $results)
     {
-         return $this->getModel()->users($minutes);
+         return $this->getModel()->users($minutes, $results);
     }
 
 	public function getCurrent()

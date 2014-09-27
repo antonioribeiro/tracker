@@ -62,21 +62,27 @@ class Log extends Base {
 		return $this->belongsTo($this->getConfig()->get('route_path_model'), 'route_path_id');
 	}
 
-	public function pageViews($minutes)
+	public function pageViews($minutes, $results)
 	{
-		return $this->select(
+		$query = $this->select(
 				$this->getConnection()->raw('DATE(created_at) as date, count(*) as total')
 			)->groupBy(
 				$this->getConnection()->raw('DATE(created_at)')
 			)
 			->period($minutes)
-			->orderBy('date')
-			->get();
+			->orderBy('date');
+
+		if ($results)
+		{
+			return $query->get();
+		}
+
+		return $query;
 	}
 
-	public function pageViewsByCountry($minutes)
+	public function pageViewsByCountry($minutes, $results)
 	{
-		return
+		$query =
 			$this
 			->select(
 				'tracker_geoip.country_name as label'
@@ -87,17 +93,32 @@ class Log extends Base {
 			->groupBy('tracker_geoip.country_name')
 			->period($minutes, 'tracker_log')
 			->whereNotNull('tracker_sessions.geoip_id')
-			->orderBy('value', 'desc')
-			->get();
+			->orderBy('value', 'desc');
+
+		if ($results)
+		{
+			return $query->get();
+		}
+
+		return $query;
 	}
 
-	public function errors($minutes)
+	public function errors($minutes, $results)
 	{
-		return $this
-				->period($minutes, 'tracker_log')
-				->whereNotNull('error_id')
-				->orderBy('created_at', 'desc')
-				->get();
+		$query = $this
+					->with('error')
+					->with('session')
+					->with('path')
+					->period($minutes, 'tracker_log')
+					->whereNotNull('error_id')
+					->orderBy('created_at', 'desc');
+
+		if ($results)
+		{
+			return $query->get();
+		}
+
+		return $query;
 	}
 
 	public function allByRouteName($name, $minutes = null)

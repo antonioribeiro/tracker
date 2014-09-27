@@ -321,6 +321,11 @@ class RepositoryManager implements RepositoryManagerInterface {
 		{
 			foreach ($data['arguments'] as $argument => $value)
 			{
+				if (is_array($value))
+				{
+					$value = multi_implode(',', $value);
+				}
+
 				$this->queryArgumentRepository->create(
 					array(
 						'query_id' => $id,
@@ -465,9 +470,9 @@ class RepositoryManager implements RepositoryManagerInterface {
 		$this->logRepository->updateError($error_id);
 	}
 
-	public function getLastSessions($minutes)
+	public function getLastSessions($minutes, $results)
 	{
-		return $this->sessionRepository->last($minutes);
+		return $this->sessionRepository->last($minutes, $results);
 	}
 
 	public function getAllSessions()
@@ -502,14 +507,14 @@ class RepositoryManager implements RepositoryManagerInterface {
 		return $this->logRepository->bySession($session->id);
 	}
 
-	public function pageViews($minutes)
+	public function pageViews($minutes, $results)
 	{
-		return $this->logRepository->pageViews($minutes);
+		return $this->logRepository->pageViews($minutes, $results);
 	}
 
-	public function pageViewsByCountry($minutes)
+	public function pageViewsByCountry($minutes, $results)
 	{
-		return $this->logRepository->pageViewsByCountry($minutes);
+		return $this->logRepository->pageViewsByCountry($minutes, $results);
 	}
 
 	public function logSqlQuery($query, $bindings, $time, $name)
@@ -527,19 +532,19 @@ class RepositoryManager implements RepositoryManagerInterface {
 		$this->eventRepository->logEvents();
 	}
 
-	public function users($minutes)
+	public function users($minutes, $results)
 	{
-		return $this->sessionRepository->users($minutes);
+		return $this->sessionRepository->users($minutes, $results);
 	}
 
-	public function events($minutes)
+	public function events($minutes, $results)
 	{
-		return $this->eventRepository->getAll($minutes);
+		return $this->eventRepository->getAll($minutes, $results);
 	}
 
-	public function errors($minutes)
+	public function errors($minutes, $results)
 	{
-		return $this->logRepository->getErrors($minutes);
+		return $this->logRepository->getErrors($minutes, $results);
 	}
 
 	public function isRobot()

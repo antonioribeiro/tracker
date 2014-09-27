@@ -30,9 +30,9 @@ class Event extends Base {
 		'name',
 	);
 
-	public function allInThePeriod($minutes)
+	public function allInThePeriod($minutes, $result)
 	{
-		return
+		$query =
 			$this
 				->select(
 					'tracker_events.id',
@@ -43,8 +43,14 @@ class Event extends Base {
 				->period($minutes, 'tracker_events_log')
 				->join('tracker_events_log', 'tracker_events_log.event_id', '=', 'tracker_events.id')
 				->groupBy('tracker_events.id', 'tracker_events.name')
-				->orderBy('total', 'desc')
-				->get();
+				->orderBy('total', 'desc');
+
+		if ($result)
+		{
+			return $query->get();
+		}
+
+		return $query;
 	}
 
 }

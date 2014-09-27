@@ -68,6 +68,11 @@ class Session extends Base {
 		return $this->belongsTo($this->getConfig()->get('geoip_model'), 'geoip_id');
 	}
 
+	public function cookie()
+	{
+		return $this->belongsTo($this->getConfig()->get('cookie_model'), 'cookie_id');
+	}
+
 	public function log()
 	{
 		return $this->hasMany($this->getConfig()->get('log_model'));
@@ -78,20 +83,25 @@ class Session extends Base {
 		return $this->log()->count();
 	}
 
-	public function users($minutes)
+	public function users($minutes, $result)
 	{
-		return
-			$this
-				->select(
-					'user_id',
-					$this->getConnection()->raw('max(updated_at) as updated_at')
-				)
-				->groupBy('user_id')
-				->from('tracker_sessions')
-				->period($minutes)
-				->whereNotNull('user_id')
-				->orderBy($this->getConnection()->raw('max(updated_at)'), 'desc')
-				->get();
+		$query = $this
+			->select(
+				'user_id',
+				$this->getConnection()->raw('max(updated_at) as updated_at')
+			)
+			->groupBy('user_id')
+			->from('tracker_sessions')
+			->period($minutes)
+			->whereNotNull('user_id')
+			->orderBy($this->getConnection()->raw('max(updated_at)'), 'desc');
+
+		if ($result)
+		{
+			return $query->get();
+		}
+
+		return $query;
 	}
 
 }

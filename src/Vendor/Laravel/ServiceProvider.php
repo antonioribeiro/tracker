@@ -43,7 +43,6 @@ use PragmaRX\Tracker\Vendor\Laravel\Artisan\UpdateParser as UpdateParserCommand;
 
 use PragmaRX\Support\GeoIp;
 
-use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
 
 class ServiceProvider extends PragmaRXServiceProvider {
@@ -118,6 +117,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		    $this->registerSqlQueryLogWatcher();
 
 		    $this->registerGlobalEventLogger();
+
+		    $this->registerDatatables();
 
 		    $this->commands('tracker.tables.command');
 
@@ -479,6 +480,13 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		{
 			include __DIR__.'/../../Vendor/Laravel/App/routes.php';
 		}
+	}
+
+	private function registerDatatables()
+	{
+		$this->registerServiceProvider('Bllim\Datatables\DatatablesServiceProvider');
+
+		$this->registerServiceAlias('Datatable', 'Bllim\Datatables\Facade\Datatables');
 	}
 
 }

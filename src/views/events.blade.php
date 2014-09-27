@@ -1,7 +1,19 @@
 @extends(Config::get('pragmarx/tracker::stats_layout'))
 
 @section('page-contents')
-	@include('pragmarx/tracker::_dataTable', array('route' => route('tracker.stats.api.events')))
+	<table id="table_div" class="display" cellspacing="0" width="100%"></table>
+@stop
 
-	<div id='table_div'></div>
+@section('inline-javascript')
+    @include(
+        'pragmarx/tracker::_datatables',
+        array(
+            'datatables_ajax_route' => route('tracker.stats.api.events'),
+            'datatables_columns' =>
+            '
+                { "data" : "name",  "title" : "Name", "orderable": true, "searchable": false },
+                { "data" : "total", "title" : "# of occurrences in the period", "orderable": true, "searchable": false },
+            '
+        )
+    )
 @stop

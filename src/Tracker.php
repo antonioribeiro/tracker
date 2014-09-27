@@ -311,9 +311,9 @@ class Tracker
 		}
 	}
 
-    public function sessions($minutes = 1440)
+    public function sessions($minutes = 1440, $results = true)
     {
-        return $this->dataRepositoryManager->getLastSessions($minutes);
+        return $this->dataRepositoryManager->getLastSessions($minutes, $results);
     }
 
 	public function sessionLog($uuid)
@@ -321,29 +321,29 @@ class Tracker
 		return $this->dataRepositoryManager->getSessionLog($uuid);
 	}
 
-	public function pageViews($minutes)
+	public function pageViews($minutes, $results = true)
     {
-    	return $this->dataRepositoryManager->pageViews($minutes);
+    	return $this->dataRepositoryManager->pageViews($minutes, $results);
     }
 
-    public function pageViewsByCountry($minutes)
+    public function pageViewsByCountry($minutes, $results = true)
     {
-    	return $this->dataRepositoryManager->pageViewsByCountry($minutes);
+    	return $this->dataRepositoryManager->pageViewsByCountry($minutes, $results);
     }
 
-    public function users($minutes)
+    public function users($minutes, $results = true)
     {
-    	return $this->dataRepositoryManager->users($minutes);
+    	return $this->dataRepositoryManager->users($minutes, $results);
     }
 
-	public function events($minutes)
+	public function events($minutes, $results = true)
 	{
-		return $this->dataRepositoryManager->events($minutes);
+		return $this->dataRepositoryManager->events($minutes, $results);
 	}
 
-	public function errors($minutes)
+	public function errors($minutes, $results = true)
 	{
-		return $this->dataRepositoryManager->errors($minutes);
+		return $this->dataRepositoryManager->errors($minutes, $results);
 	}
 
 	public function currentSession()

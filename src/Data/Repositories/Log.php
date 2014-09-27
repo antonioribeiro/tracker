@@ -74,19 +74,19 @@ class Log extends Repository {
 		return $this->getCurrentLogId();
 	}
 
-	public function pageViews($minutes)
+	public function pageViews($minutes, $results)
 	{
-		 return $this->getModel()->pageViews($minutes);
+		 return $this->getModel()->pageViews($minutes, $results);
 	}
 
-	public function pageViewsByCountry($minutes)
+	public function pageViewsByCountry($minutes, $results)
 	{
-		 return $this->getModel()->pageViewsByCountry($minutes);
+		 return $this->getModel()->pageViewsByCountry($minutes, $results);
 	}
 
-	public function getErrors($minutes)
+	public function getErrors($minutes, $results)
 	{
-		return $this->getModel()->errors($minutes);
+		return $this->getModel()->errors($minutes, $results);
 	}
 
 	public function allByRouteName($name, $minutes = null)

@@ -23,6 +23,8 @@
     <!-- SB Admin CSS - Include with every page -->
     <link href="{{ $stats_template_path }}/css/sb-admin-2.css" rel="stylesheet">
 
+    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet">
+
 	<link
 		rel="stylesheet"
 		type="text/css"
@@ -125,6 +127,8 @@
     <script src="{{ $stats_template_path }}/js/sb-admin-2.js"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+
+    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
 
 	@yield('required-scripts-bottom')
 
