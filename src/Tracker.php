@@ -27,6 +27,7 @@ use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Log\Writer as Logger;
+use PragmaRX\Tracker\Support\Minutes;
 
 class Tracker
 {
@@ -313,7 +314,7 @@ class Tracker
 
     public function sessions($minutes = 1440, $results = true)
     {
-        return $this->dataRepositoryManager->getLastSessions($minutes, $results);
+        return $this->dataRepositoryManager->getLastSessions(Minutes::make($minutes), $results);
     }
 
 	public function sessionLog($uuid, $results = true)
@@ -323,27 +324,27 @@ class Tracker
 
 	public function pageViews($minutes, $results = true)
     {
-    	return $this->dataRepositoryManager->pageViews($minutes, $results);
+    	return $this->dataRepositoryManager->pageViews(Minutes::make($minutes), $results);
     }
 
     public function pageViewsByCountry($minutes, $results = true)
     {
-    	return $this->dataRepositoryManager->pageViewsByCountry($minutes, $results);
+    	return $this->dataRepositoryManager->pageViewsByCountry(Minutes::make($minutes), $results);
     }
 
     public function users($minutes, $results = true)
     {
-    	return $this->dataRepositoryManager->users($minutes, $results);
+    	return $this->dataRepositoryManager->users(Minutes::make($minutes), $results);
     }
 
 	public function events($minutes, $results = true)
 	{
-		return $this->dataRepositoryManager->events($minutes, $results);
+		return $this->dataRepositoryManager->events(Minutes::make($minutes), $results);
 	}
 
 	public function errors($minutes, $results = true)
 	{
-		return $this->dataRepositoryManager->errors($minutes, $results);
+		return $this->dataRepositoryManager->errors(Minutes::make($minutes), $results);
 	}
 
 	public function currentSession()
@@ -379,6 +380,11 @@ class Tracker
 
 	public function logByRouteName($name, $minutes = null)
 	{
+		if ($minutes)
+		{
+			$minutes = Minutes::make($minutes);
+		}
+
 		return $this->dataRepositoryManager->logByRouteName($name, $minutes);
 	}
 

@@ -17,7 +17,16 @@ class Minutes {
 	{
 	    $this->minutes = $minutes;
 
-		$this->calculateStartEnd();
+		if ($minutes instanceof Minutes)
+		{
+			$this->start = $minutes->getStart();
+
+			$this->end = $minutes->getEnd();
+		}
+		else
+		{
+			$this->calculateStartEnd();
+		}
 	}
 
 	public function getStart()
@@ -51,4 +60,8 @@ class Minutes {
 		$this->end = Carbon::now()->setTime(23,59,59);
 	}
 
+	public static function make($minutes)
+	{
+		return new static($minutes);
+	}
 }
