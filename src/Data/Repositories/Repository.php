@@ -73,7 +73,7 @@ abstract class Repository implements RepositoryInterface {
 	{
 		$model = $this->newModel();
 
-		foreach($attributes as $attribute => $value)
+		foreach ($attributes as $attribute => $value)
 		{
 			if (in_array($attribute, $model->getFillable()))
 			{
@@ -112,7 +112,7 @@ abstract class Repository implements RepositoryInterface {
 
         $keys = $keys ?: array_keys($attributes);
 
-        foreach($keys as $key)
+        foreach ($keys as $key)
         {
 	        $model = $model->where($key, $attributes[$key]);
         }

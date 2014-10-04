@@ -21,7 +21,7 @@ class Base extends Command {
 	 */
 	public function displayMessages($type, $messages)
 	{
-		foreach($messages as $message)
+		foreach ($messages as $message)
 		{
 			$this->$type($message);
 		}

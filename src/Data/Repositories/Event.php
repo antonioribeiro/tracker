@@ -79,7 +79,7 @@ class Event extends Repository {
 			return;
 		}
 
-		foreach($this->eventStorage->popAll() as $event)
+		foreach ($this->eventStorage->popAll() as $event)
 		{
 			if ($this->isLoggableEvent($event))
 			{

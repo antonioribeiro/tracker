@@ -106,7 +106,7 @@ class Stats extends Controller {
 
 				if ($row->routePath)
 				{
-					foreach($row->routePath->parameters as $parameter)
+					foreach ($row->routePath->parameters as $parameter)
 					{
 						$route .= ($route ? '<br>' : '') . $parameter->parameter . '=' . $parameter->value;
 					}
@@ -120,7 +120,7 @@ class Stats extends Controller {
 
 				if ($row->logQuery)
 				{
-					foreach($row->logQuery->arguments as $argument)
+					foreach ($row->logQuery->arguments as $argument)
 					{
 						$query .= ($query ? '<br>' : '') . $argument->argument . '=' . $argument->value;
 					}

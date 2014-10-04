@@ -395,7 +395,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 
 		if ($created)
 		{
-			foreach($route->current()->parameters() as $parameter => $value)
+			foreach ($route->current()->parameters() as $parameter => $value)
 			{
 				// When the parameter value is a whole model, we have
 				// two options left:
@@ -409,7 +409,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 				{
 					$model_id = null;
 
-					foreach($this->config->get('id_columns_names', ['id']) as $column)
+					foreach ($this->config->get('id_columns_names', ['id']) as $column)
 					{
 						if (property_exists($value, $column))
 						{
