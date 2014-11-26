@@ -94,7 +94,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
      */
     public function register()
     {
-	    $this->preRegister();
+	    parent::register();
 
 	    $this->registerConfig();
 
