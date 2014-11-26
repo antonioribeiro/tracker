@@ -440,6 +440,10 @@ Add the service provider to your app/config/app.php:
 
     'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
 
+Add the alias to the facade on your app/config/app.php:
+
+    'Tracker' => 'PragmaRX\Tracker\Vendor\Laravel\Facade',
+
 Publish tracker configuration:
 
     php artisan config:publish pragmarx/tracker
