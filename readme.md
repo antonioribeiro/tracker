@@ -501,7 +501,7 @@ It is responsible for logging page hits and sessions, basically the client IP ad
 
 To use the stats panel on your website you'll need to download the sb-admin 2 sources to your public folder:
 
-    wget --output-document=/tmp/sba2.zip http://startbootstrap.com/downloads/sb-admin-2.zip
+    wget --output-document=/tmp/sba2.zip https://github.com/IronSummitMedia/startbootstrap-sb-admin-2/archive/v1.0.5.zip
     unzip /tmp/sba2.zip -d public/templates/
 
 And enabled in your config file:
