@@ -84,8 +84,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
     {
 	    parent::register();
 
-	    $this->registerConfig();
-
 	    if ($this->getConfig('enabled'))
 	    {
 		    $this->registerAuthentication();
@@ -317,14 +315,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
         $this->app['tracker.authentication'] = $this->app->share(function($app)
         {
             return new Authentication($app['tracker.config'], $app);
-        });
-    }
-
-    public function registerConfig()
-    {
-        $this->app['tracker.config'] = $this->app->share(function($app)
-        {
-            return new Config($app['config'], $this->packageNamespace);
         });
     }
 
