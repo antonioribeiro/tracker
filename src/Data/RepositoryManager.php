@@ -307,7 +307,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 	{
 		if ( ! $query)
 		{
-			return;
+			return null;
 		}
 
 		return $this->findOrCreateQuery($query);
