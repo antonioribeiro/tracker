@@ -65,13 +65,15 @@ class ServiceProvider extends PragmaRXServiceProvider {
      */
     public function boot()
     {
+	    parent::boot();
+
 	    if ($this->getConfig('enabled'))
 	    {
 		    $this->loadRoutes();
 
 		    $this->registerErrorHandler();
 
-		    $this->wakeUp();
+		    $this->bootTracker();
 	    }
     }
 
@@ -328,11 +330,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
         });
     }
 
-    protected function wakeUp()
-    {
-	    $this->app['tracker']->boot();
-    }
-
 	private function registerTablesCommand()
 	{
 		$this->app['tracker.tables.command'] = $this->app->share(function($app)
@@ -475,6 +472,11 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	public function getPackageDir()
 	{
 		return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..';
+	}
+
+	private function bootTracker()
+	{
+		$this->app['tracker']->boot();
 	}
 
 }
