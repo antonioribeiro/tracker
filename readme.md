@@ -416,7 +416,7 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 
 ## Requirements
 
-- Laravel 4.1+
+- Laravel 4.1+ or 5+
 - PHP 5.3.7+
 - Package "geoip/geoip":"~1.14" (If you are planning to store Geo IP information)
 
@@ -424,17 +424,7 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 
 Require the `tracker` package by **executing** the following command in your command line:
 
-    composer require "pragmarx/tracker":"0.7.*"
-
-**Or** add to your composer.json:
-
-    "require": {
-        "pragmarx/tracker": "0.7.*"
-    }
-
-And execute
-
-    composer update
+    composer require pragmarx/tracker
 
 Add the service provider to your app/config/app.php:
 
@@ -444,9 +434,15 @@ Add the alias to the facade on your app/config/app.php:
 
     'Tracker' => 'PragmaRX\Tracker\Vendor\Laravel\Facade',
 
-Publish tracker configuration:
+Publish tracker configuration Laravel 4:
+
+**Laravel 4**
 
     php artisan config:publish pragmarx/tracker
+
+**Laravel 5**
+
+    php artisan vendor:publish
 
 And edit the file `app/config/packages/pragmarx/tracker/config.php` to enable Tracker.
 
