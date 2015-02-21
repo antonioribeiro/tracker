@@ -10,7 +10,7 @@ use PragmaRX\Tracker\Tracker;
 
 use PragmaRX\Tracker\Services\Authentication;
 
-use PragmaRX\Tracker\Support\Config;
+use PragmaRX\Support\Config;
 use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Support\UserAgentParser;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;

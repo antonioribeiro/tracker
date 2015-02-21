@@ -20,7 +20,7 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-use PragmaRX\Tracker\Support\Config;
+use PragmaRX\Support\Config;
 
 use Illuminate\Session\Store as IlluminateSession;
 

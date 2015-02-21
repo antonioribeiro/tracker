@@ -20,7 +20,7 @@
 
 namespace PragmaRX\Tracker\Services;
 
-use PragmaRX\Tracker\Support\Config as Config;
+use PragmaRX\Support\Config as Config;
 
 use Illuminate\Foundation\Application;
 

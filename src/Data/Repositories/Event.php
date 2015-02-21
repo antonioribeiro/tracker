@@ -21,7 +21,7 @@
 namespace PragmaRX\Tracker\Data\Repositories;
 
 use PragmaRX\Tracker\Eventing\EventStorage;
-use PragmaRX\Tracker\Support\Config;
+use PragmaRX\Support\Config;
 
 class Event extends Repository {
 
@@ -41,7 +41,7 @@ class Event extends Repository {
 	private $logRepository;
 
 	/**
-	 * @var \PragmaRX\Tracker\Support\Config
+	 * @var \PragmaRX\Support\Config
 	 */
 	private $config;
 

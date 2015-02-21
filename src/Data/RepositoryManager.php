@@ -29,7 +29,7 @@ use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryLog;
 use PragmaRX\Tracker\Data\Repositories\SystemClass;
 use PragmaRX\Tracker\Support\MobileDetect;
-use PragmaRX\Tracker\Support\Config;
+use PragmaRX\Support\Config;
 
 use PragmaRX\Tracker\Data\Repositories\Session;
 use PragmaRX\Tracker\Data\Repositories\Log;
