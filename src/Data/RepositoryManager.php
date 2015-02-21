@@ -467,7 +467,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 			array('message', 'code')
 		);
 
-		$this->logRepository->updateError($error_id);
+		return $this->logRepository->updateError($error_id);
 	}
 
 	public function getLastSessions($minutes, $results)
