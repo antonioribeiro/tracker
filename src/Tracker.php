@@ -21,7 +21,7 @@
 namespace PragmaRX\Tracker;
 
 use Illuminate\Foundation\Application as Laravel;
-use PragmaRX\Tracker\Support\Config;
+use PragmaRX\Support\Config;
 use PragmaRX\Tracker\Data\RepositoryManager as DataRepositoryManager;
 use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
 use Illuminate\Http\Request;
