@@ -42,6 +42,8 @@ class Log extends Repository {
 
 			$this->getModel()->save();
 		}
+
+		return $this->getModel();
 	}
 
 	public function bySession($sessionId, $results = true)
