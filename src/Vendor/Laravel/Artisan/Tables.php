@@ -36,7 +36,14 @@ class Tables extends Base {
 			$this->info("Migration $table created successfully!");
 		}
 
-		$this->call('dump-autoload');
+		if (isLaravel5())
+		{
+			$this->call('optimize');
+		}
+		else
+		{
+			$this->call('dump-autoload');
+		}
 	}
 
 	/**
@@ -47,7 +54,14 @@ class Tables extends Base {
 	 */
 	protected function createBaseMigration($name)
 	{
-		$path = $this->laravel['path'].'/database/migrations';
+		if (isLaravel5())
+		{
+			$path = base_path('/database/migrations');
+		}
+		else
+		{
+			$path = $this->laravel['path'].'/database/migrations';
+		}
 
 		return $this->laravel['migration.creator']->create($name, $path);
 	}
