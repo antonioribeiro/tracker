@@ -43,8 +43,6 @@ use PragmaRX\Tracker\Vendor\Laravel\Artisan\UpdateParser as UpdateParserCommand;
 
 use PragmaRX\Support\GeoIp;
 
-use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
-
 class ServiceProvider extends PragmaRXServiceProvider {
 
 	protected $packageVendor = 'pragmarx';
@@ -69,16 +67,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
     {
 	    if ($this->getConfig('enabled'))
 	    {
-		    $this->package($this->packageNamespace, $this->packageNamespace, __DIR__.'/../..');
-
-		    if ( $this->app['config']->get($this->packageNamespace.'::create_tracker_alias') )
-		    {
-			    IlluminateAliasLoader::getInstance()->alias(
-				    $this->getConfig('tracker_alias'),
-				    'PragmaRX\Tracker\Vendor\Laravel\Facade'
-			    );
-		    }
-
 		    $this->loadRoutes();
 
 		    $this->registerErrorHandler();
@@ -487,6 +475,16 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		$this->registerServiceProvider('Bllim\Datatables\DatatablesServiceProvider');
 
 		$this->registerServiceAlias('Datatable', 'Bllim\Datatables\Facade\Datatables');
+	}
+
+	/**
+	 * Get the current package directory.
+	 *
+	 * @return string
+	 */
+	public function getPackageDir()
+	{
+		return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..';
 	}
 
 }
