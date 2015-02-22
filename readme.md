@@ -444,7 +444,7 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 
     php artisan vendor:publish
 
-####And edit the file `app/config/packages/pragmarx/tracker/config.php` to enable Tracker.
+####Enable Tracker in your config.php (Laravel 4) or tracker.php (Laravel 5)
 
     'enabled' => true,
 
@@ -461,14 +461,10 @@ This is only needed if you are on Laravel 4, because `vendor:publish` does it fo
 ####Create a database connection for it on your `config/database.php`
 
 	'tracker' => [
-		'driver'   => 'pgsql',
-		'host'     => 'localhost',
-		'database' => getenv('MAIN.DATABASE_NAME'),
-		'username' => getenv('MAIN.DATABASE_USER'),
-		'password' => getenv('MAIN.DATABASE_PASSWORD'),
-		'charset'  => 'utf8',
-		'prefix'   => '',
-		'schema'   => 'public',
+		'driver'   => '...',
+		'host'     => '...',
+		'database' => ...,
+		...
 	],
 
 ####Migrate it
