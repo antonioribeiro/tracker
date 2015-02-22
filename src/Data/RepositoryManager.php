@@ -1,57 +1,35 @@
 <?php
 
-/**
- * Part of the Tracker package.
- *
- * NOTICE OF LICENSE
- *
- * Licensed under the 3-clause BSD License.
- *
- * This source file is subject to the 3-clause BSD License that is
- * bundled with this package in the LICENSE file.  It is also available at
- * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
- *
- * @package    Tracker
- * @author     Antonio Carlos Ribeiro @ PragmaRX
- * @license    BSD License (3-clause)
- * @copyright  (c) 2013, PragmaRX
- * @link       http://pragmarx.com
- */
-
 namespace PragmaRX\Tracker\Data;
 
-use PragmaRX\Tracker\Data\Repositories\Connection;
-use PragmaRX\Tracker\Data\Repositories\Event;
-use PragmaRX\Tracker\Data\Repositories\EventLog;
-use PragmaRX\Tracker\Data\Repositories\SqlQuery;
-use PragmaRX\Tracker\Data\Repositories\SqlQueryBinding;
-use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
-use PragmaRX\Tracker\Data\Repositories\SqlQueryLog;
-use PragmaRX\Tracker\Data\Repositories\SystemClass;
-use PragmaRX\Tracker\Support\MobileDetect;
+use PragmaRX\Support\GeoIp;
 use PragmaRX\Support\Config;
-
-use PragmaRX\Tracker\Data\Repositories\Session;
+use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Data\Repositories\Log;
 use PragmaRX\Tracker\Data\Repositories\Path;
 use PragmaRX\Tracker\Data\Repositories\Query;
-use PragmaRX\Tracker\Data\Repositories\QueryArgument;
 use PragmaRX\Tracker\Data\Repositories\Agent;
+use PragmaRX\Tracker\Services\Authentication;
+use PragmaRX\Tracker\Data\Repositories\Route;
+use PragmaRX\Tracker\Data\Repositories\Event;
+use PragmaRX\Tracker\Data\Repositories\Error;
 use PragmaRX\Tracker\Data\Repositories\Device;
 use PragmaRX\Tracker\Data\Repositories\Cookie;
 use PragmaRX\Tracker\Data\Repositories\Domain;
 use PragmaRX\Tracker\Data\Repositories\Referer;
-use PragmaRX\Tracker\Data\Repositories\Route;
+use PragmaRX\Tracker\Data\Repositories\Session;
+use PragmaRX\Tracker\Data\Repositories\EventLog;
+use PragmaRX\Tracker\Data\Repositories\SqlQuery;
 use PragmaRX\Tracker\Data\Repositories\RoutePath;
-use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
-use PragmaRX\Tracker\Data\Repositories\Error;
-use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
-
-use PragmaRX\Tracker\Services\Authentication;
-
-use PragmaRX\Support\GeoIp;
-
 use Illuminate\Session\Store as IlluminateSession;
+use PragmaRX\Tracker\Data\Repositories\Connection;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryLog;
+use PragmaRX\Tracker\Data\Repositories\SystemClass;
+use PragmaRX\Tracker\Data\Repositories\QueryArgument;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryBinding;
+use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
+use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
 
 class RepositoryManager implements RepositoryManagerInterface {
 
