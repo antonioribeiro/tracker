@@ -41,7 +41,7 @@
 
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-laravel5": "1.0.x-dev"
         }
     },
 
