@@ -1,32 +1,11 @@
 <?php
 
-/**
- * Part of the Tracker package.
- *
- * NOTICE OF LICENSE
- *
- * Licensed under the 3-clause BSD License.
- *
- * This source file is subject to the 3-clause BSD License that is
- * bundled with this package in the LICENSE file.  It is also available at
- * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
- *
- * @package    Tracker
- * @author     Antonio Carlos Ribeiro @ PragmaRX
- * @license    BSD License (3-clause)
- * @copyright  (c) 2013, PragmaRX
- * @link       http://pragmarx.com
- */
-
 namespace PragmaRX\Tracker\Data\Repositories;
 
-use PragmaRX\Tracker\Support\Config;
-
-use Illuminate\Session\Store as IlluminateSession;
-
-use Rhumsaa\Uuid\Uuid as UUID;
-
 use Carbon\Carbon;
+use PragmaRX\Support\Config;
+use Rhumsaa\Uuid\Uuid as UUID;
+use Illuminate\Session\Store as IlluminateSession;
 
 class Session extends Repository {
 

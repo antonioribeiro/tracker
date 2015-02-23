@@ -416,78 +416,74 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 
 ## Requirements
 
-- Laravel 4.1+
+- Laravel 4.1+ or 5+
 - PHP 5.3.7+
 - Package "geoip/geoip":"~1.14" (If you are planning to store Geo IP information)
 
 ## Installing
 
-Require the `tracker` package by **executing** the following command in your command line:
+####Require the `tracker` package by **executing** the following command in your command line:
 
-    composer require "pragmarx/tracker":"0.7.*"
+    composer require pragmarx/tracker
 
-**Or** add to your composer.json:
-
-    "require": {
-        "pragmarx/tracker": "0.7.*"
-    }
-
-And execute
-
-    composer update
-
-Add the service provider to your app/config/app.php:
+####Add the service provider to your app/config/app.php:
 
     'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
 
-Add the alias to the facade on your app/config/app.php:
+####Add the alias to the facade on your app/config/app.php:
 
     'Tracker' => 'PragmaRX\Tracker\Vendor\Laravel\Facade',
 
-Publish tracker configuration:
+####Publish tracker configuration:
+
+**Laravel 4**
 
     php artisan config:publish pragmarx/tracker
 
-And edit the file `app/config/packages/pragmarx/tracker/config.php` to enable Tracker.
+**Laravel 5**
+
+    php artisan vendor:publish
+
+####Enable Tracker in your config.php (Laravel 4) or tracker.php (Laravel 5)
 
     'enabled' => true,
 
-Create the UA Parser regex file (every time you run `composer update` you must also execute this command):
+####Create the UA Parser regex file (every time you run `composer update` you must also execute this command):
 
     php artisan tracker:updateparser
 
-Create the migration:
+####Publish the migration
 
     php artisan tracker:tables
 
-Migrate it
+This is only needed if you are on Laravel 4, because `vendor:publish` does it for you in Laravel 5.
+
+####Create a database connection for it on your `config/database.php`
+
+	'tracker' => [
+		'driver'   => '...',
+		'host'     => '...',
+		'database' => ...,
+		...
+	],
+
+####Migrate it
+
+If you have set the default connection to `tracker`, you can
 
     php artisan migrate
 
-If you are planning to store Geo IP information, also install the geoip package:
+Otherwise you'll have to
+
+    php artisan migrate --database=tracker
+
+####If you are planning to store Geo IP information, also install the geoip package:
 
     composer require "geoip/geoip":"~1.14"
 
-And make sure you don't have the PHP module installed. This is a Debian/Ubuntu example:
+####And make sure you don't have the PHP module installed. This is a Debian/Ubuntu example:
 
 	sudo apt-get purge php5-geoip
-
-## Database Connections & Query Logs
-
-If you are planning to store your query logs, to avoid recursion while logging SQL queries, you will have to create a different database connection for it. The connection can connect to your main database, but it must be different from the main one:
-
-	'tracker' => [
-		'driver'   => 'pgsql',
-		'host'     => 'localhost',
-		'database' => getenv('MAIN.DATABASE_NAME'),
-		'username' => getenv('MAIN.DATABASE_USER'),
-		'password' => getenv('MAIN.DATABASE_PASSWORD'),
-		'charset'  => 'utf8',
-		'prefix'   => '',
-		'schema'   => 'public',
-	],
-
-While you don't need to use a different database, but Tracker may generate a huge number of records, so this is also advisable.
 
 ## Everything Is Disabled By Default
 
