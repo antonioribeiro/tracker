@@ -34,12 +34,12 @@ class Base extends Eloquent {
 
 	public function getConfig()
 	{
-		if ($GLOBALS["app"] instanceof Application)
+		if (isset($GLOBALS["app"]) && $GLOBALS["app"] instanceof Application)
 		{
-			return app()->make('tracker.config');
+			return $GLOBALS["app"]["tracker.config"];
 		}
 
-		return $GLOBALS["app"]["tracker.config"];
+		return app()->make('tracker.config');
 	}
 
 	public function scopePeriod($query, $minutes, $alias = '')
