@@ -126,7 +126,7 @@ class Log extends Base {
 		$result = $this
 					->join('tracker_route_paths', 'tracker_route_paths.id', '=', 'tracker_log.route_path_id')
 
-					->join(
+					->leftJoin(
 						'tracker_route_path_parameters',
 						'tracker_route_path_parameters.route_path_id',
 						'=',
