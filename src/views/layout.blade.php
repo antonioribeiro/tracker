@@ -7,21 +7,21 @@
 
     <title>Laravel Stats Tracker</title>
 
-	<script src="{{ $stats_template_path }}/js/jquery-1.11.0.js"></script>
+	<script src="{{ $stats_template_path }}/bower_components/jquery/dist/jquery.min.js"></script>
 
 	@yield('required-scripts-top')
 
     <!-- Core CSS - Include with every page -->
-    <link href="{{ $stats_template_path }}/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ $stats_template_path }}/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet">
-	<link href="{{ $stats_template_path }}/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link href="{{ $stats_template_path }}/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ $stats_template_path }}/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="{{ $stats_template_path }}/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
 
     <!-- Page-Level Plugin CSS - Dashboard -->
-    <link href="{{ $stats_template_path }}/css/plugins/morris.css" rel="stylesheet">
-    <link href="{{ $stats_template_path }}/css/plugins/timeline.css" rel="stylesheet">
+    <link href="{{ $stats_template_path }}/bower_components/morrisjs/morris.css" rel="stylesheet">
+    <link href="{{ $stats_template_path }}/dist/css/timeline.css" rel="stylesheet">
 
     <!-- SB Admin CSS - Include with every page -->
-    <link href="{{ $stats_template_path }}/css/sb-admin-2.css" rel="stylesheet">
+    <link href="{{ $stats_template_path }}/dist/css/sb-admin-2.css" rel="stylesheet">
 
     <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet">
 
@@ -120,11 +120,15 @@
     <!-- /#wrapper -->
 
     <!-- Core Scripts - Include with every page -->
-    <script src="{{ $stats_template_path }}/js/bootstrap.min.js"></script>
-    <script src="{{ $stats_template_path }}/js/plugins/metisMenu/metisMenu.min.js"></script>
+    <script src="{{ $stats_template_path }}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="{{ $stats_template_path }}/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <script src="{{ $stats_template_path }}/bower_components/raphael/raphael-min.js"></script>
+    <script src="{{ $stats_template_path }}/bower_components/morrisjs/morris.min.js"></script>
+    <script src="{{ $stats_template_path }}/js/morris-data.js"></script>
 
     <!-- SB Admin Scripts - Include with every page -->
-    <script src="{{ $stats_template_path }}/js/sb-admin-2.js"></script>
+    <script src="{{ $stats_template_path }}/dist/js/sb-admin-2.js"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
 
