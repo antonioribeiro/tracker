@@ -393,7 +393,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 			$created
 		);
 
-		if ($created)
+		if ($created && $route->current())
 		{
 			foreach ($route->current()->parameters() as $parameter => $value)
 			{
