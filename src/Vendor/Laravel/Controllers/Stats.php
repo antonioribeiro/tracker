@@ -113,7 +113,7 @@ class Stats extends Controller {
 			->edit_column('route_name', function($row) {
 					return 	$row->routePath
 							? $row->routePath->route->name . '<br>' . $row->routePath->route->action
-							: $row->path->path;
+							: ($row->path ? $row->path->path : '');
 			})
 
 			->edit_column('route', function($row) {
