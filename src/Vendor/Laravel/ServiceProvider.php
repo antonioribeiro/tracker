@@ -453,10 +453,45 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	private function loadRoutes()
 	{
-		if ($this->app['config']->get($this->packageNamespace.'::stats_panel_enabled'))
+		if ( ! $this->getConfig('stats_panel_enabled'))
 		{
-			include __DIR__.'/../../Vendor/Laravel/App/routes.php';
+			return false;
 		}
+
+		$prefix = $this->getConfig('stats_base_uri');
+
+		$namespace = $this->getConfig('stats_controllers_namespace');
+
+		$filter = $this->getConfig('stats_routes_before_filter');
+
+		$router = $this->app->make('router');
+
+		$router->group(['namespace' => $namespace], function() use ($prefix, $filter, $router)
+		{
+			$router->group(['before' => $filter], function() use ($prefix, $filter, $router)
+			{
+				$router->group(['prefix' => $prefix], function($router)
+				{
+					$router->get('/', array('as' => 'tracker.stats.index', 'uses' => 'Stats@index'));
+
+					$router->get('log/{uuid}', array('as' => 'tracker.stats.log', 'uses' => 'Stats@log'));
+
+					$router->get('api/pageviews', array('as' => 'tracker.stats.api.pageviews', 'uses' => 'Stats@apiPageviews'));
+
+					$router->get('api/pageviewsbycountry', array('as' => 'tracker.stats.api.pageviewsbycountry', 'uses' => 'Stats@apiPageviewsByCountry'));
+
+					$router->get('api/log/{uuid}', array('as' => 'tracker.stats.api.log', 'uses' => 'Stats@apiLog'));
+
+					$router->get('api/errors', array('as' => 'tracker.stats.api.errors', 'uses' => 'Stats@apiErrors'));
+
+					$router->get('api/events', array('as' => 'tracker.stats.api.events', 'uses' => 'Stats@apiEvents'));
+
+					$router->get('api/users', array('as' => 'tracker.stats.api.users', 'uses' => 'Stats@apiUsers'));
+
+					$router->get('api/visits', array('as' => 'tracker.stats.api.visits', 'uses' => 'Stats@apiVisits'));
+				});
+			});
+		});
 	}
 
 	private function registerDatatables()
