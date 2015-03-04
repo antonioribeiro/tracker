@@ -276,11 +276,11 @@ class Stats extends Controller {
 
 				->add_column('device', function($row) use ($username_column)
 				{
-					$model = ($row->device->model && $row->device->model !== 'unavailable' ? '['.$row->device->model.']' : '');
+					$model = ($row->device && $row->device->model && $row->device->model !== 'unavailable' ? '['.$row->device->model.']' : '');
 
-					$platform = ($row->device->platform ? ' ['.trim($row->device->platform.' '.$row->device->platform_version).']' : '');
+					$platform = ($row->device && $row->device->platform ? ' ['.trim($row->device->platform.' '.$row->device->platform_version).']' : '');
 
-					$mobile = ($row->device->is_mobile ? ' [mobile device]' : '');
+					$mobile = ($row->device && $row->device->is_mobile ? ' [mobile device]' : '');
 
 					return $model || $platform || $mobile
 							? $row->device->kind . ' ' . $model . ' ' . $platform . ' ' . $mobile
