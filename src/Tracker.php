@@ -294,6 +294,7 @@ class Tracker
 	private function isTrackable()
 	{
 		return $this->config->get('enabled') &&
+				$this->logIsEnabled() &&
 				$this->parserIsAvailable() &&
 				$this->isTrackableIp() &&
 				$this->isTrackableEnvironment() &&
@@ -397,4 +398,23 @@ class Tracker
 	{
 		$this->dataRepositoryManager->logRepository->delete();
 	}
+
+	private function logIsEnabled()
+	{
+		return
+			$this->config->get('log_enabled') ||
+			$this->config->get('log_sql_queries') ||
+			$this->config->get('log_sql_queries_bindings') ||
+			$this->config->get('log_events') ||
+			$this->config->get('log_geoip') ||
+			$this->config->get('log_user_agents') ||
+			$this->config->get('log_users') ||
+			$this->config->get('log_devices') ||
+			$this->config->get('log_referers') ||
+			$this->config->get('log_paths') ||
+			$this->config->get('log_queries') ||
+			$this->config->get('log_routes') ||
+			$this->config->get('log_exceptions');
+	}
+
 }
