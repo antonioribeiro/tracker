@@ -266,7 +266,9 @@ class Stats extends Controller {
 		return Datatables::of($query)
 				->edit_column('id', function($row) use ($username_column)
 				{
-					return link_to_route('tracker.stats.log', $row->id, ['uuid' => $row->uuid]);
+					$uri = route('tracker.stats.log', $row->uuid);
+
+					return '<a href="'.$uri.'">'.$row->id.'</a>';
 				})
 
 				->add_column('country', function ($row)
