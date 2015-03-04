@@ -82,13 +82,13 @@
 
 @section('required-scripts-top')
 	<!-- Page-Level Plugin Scripts - Main -->
-	<script src="{{ $stats_template_path }}/js/plugins/morris/raphael.min.js"></script>
-	<script src="{{ $stats_template_path }}/js/plugins/morris/morris.min.js"></script>
+	<script src="{{ $stats_template_path }}/bower_components/raphael/raphael-min.js"></script>
+	<script src="{{ $stats_template_path }}/bower_components/morrisjs/morris.min.js"></script>
 
 	<!-- Page-Level Plugin Scripts - Flot -->
 	<!--[if lte IE 8]><script src="{{ $stats_template_path }}/js/excanvas.min.js"></script><![endif]-->
-	<script src="{{ $stats_template_path }}/js/plugins/flot/jquery.flot.js"></script>
-	<script src="{{ $stats_template_path }}/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-	<script src="{{ $stats_template_path }}/js/plugins/flot/jquery.flot.resize.js"></script>
-	<script src="{{ $stats_template_path }}/js/plugins/flot/jquery.flot.pie.js"></script>
+	<script src="{{ $stats_template_path }}/bower_components/flot/jquery.flot.js"></script>
+	<script src="{{ $stats_template_path }}/bower_components/flot/jquery.flot.resize.js"></script>
+	<script src="{{ $stats_template_path }}/bower_components/flot/jquery.flot.pie.js"></script>
+    <script src="{{ $stats_template_path }}/bower_components/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
 @stop
