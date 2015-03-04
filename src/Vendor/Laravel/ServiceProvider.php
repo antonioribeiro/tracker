@@ -108,6 +108,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 		    $this->registerDatatables();
 
+		    $this->registerGlobalViewComposers();
+
 		    $this->commands('tracker.tables.command');
 
 		    $this->commands('tracker.updateparser.command');
@@ -474,9 +476,31 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..';
 	}
 
+	/**
+	 * Boot & Track
+	 *
+	 */
 	private function bootTracker()
 	{
 		$this->app['tracker']->boot();
+	}
+
+	/**
+	 * Register global view composers
+	 *
+	 */
+	private function registerGlobalViewComposers()
+	{
+		$me = $this;
+
+		$this->app->make('view')->composer('pragmarx/tracker::*', function($view) use ($me)
+		{
+			$view->with('stats_layout', $me->getConfig('stats_layout'));
+
+			$template_path = url('/') . $me->getConfig('stats_template_path');
+
+			$view->with('stats_template_path', $template_path);
+		});
 	}
 
 }
