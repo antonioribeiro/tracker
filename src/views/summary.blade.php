@@ -22,7 +22,6 @@
 @stop
 
 @section('inline-javascript')
-
 	jQuery(function()
     {
 		console.log(jQuery('#pageViews'));

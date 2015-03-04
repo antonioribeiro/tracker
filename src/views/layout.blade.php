@@ -125,7 +125,6 @@
 
     <script src="{{ $stats_template_path }}/bower_components/raphael/raphael-min.js"></script>
     <script src="{{ $stats_template_path }}/bower_components/morrisjs/morris.min.js"></script>
-    <script src="{{ $stats_template_path }}/js/morris-data.js"></script>
 
     <!-- SB Admin Scripts - Include with every page -->
     <script src="{{ $stats_template_path }}/dist/js/sb-admin-2.js"></script>
