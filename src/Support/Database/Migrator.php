@@ -7,55 +7,49 @@ use PragmaRX\Support\Migration;
 class Migrator extends Migration {
 
 	protected $tables = array(
-		'tracker_errors',
-		'tracker_sessions',
-		'tracker_referers',
-		'tracker_domains',
-		'tracker_routes',
-		'tracker_route_paths',
-		'tracker_route_path_parameters',
-		'tracker_devices',
-		'tracker_cookies',
-		'tracker_agents',
-		'tracker_query_arguments',
-		'tracker_queries',
-		'tracker_paths',
-		'tracker_log',
-		'tracker_geoip',
-		'tracker_sql_queries',
+		'tracker_events_log',
+		'tracker_events',
+		'tracker_system_classes',
+
+		'tracker_sql_query_bindings_parameters',
 		'tracker_sql_queries_log',
 		'tracker_sql_query_bindings',
-		'tracker_sql_query_bindings_parameters',
+		'tracker_sql_queries',
+
+		'tracker_log',
+
+		'tracker_sessions',
+
+		'tracker_paths',
+
+		'tracker_query_arguments',
+		'tracker_queries',
+
+		'tracker_route_path_parameters',
+		'tracker_route_paths',
+		'tracker_routes',
+
+		'tracker_agents',
+
+		'tracker_cookies',
+
+		'tracker_devices',
+
+		'tracker_referers',
+		'tracker_domains',
+
+		'tracker_geoip',
+
+		'tracker_errors',
+
 		'tracker_connections',
-		'tracker_events',
-		'tracker_events_log',
-		'tracker_system_classes',
 	);
 
 	protected function migrateUp()
 	{
-		$this->builder->create(
-			'tracker_log',
-			function ($table)
-			{
-				$table->bigIncrements('id');
-
-				$table->bigInteger('session_id')->unsigned()->index();
-				$table->bigInteger('path_id')->unsigned()->nullable()->index();
-				$table->bigInteger('query_id')->unsigned()->nullable()->index();
-				$table->string('method', 10)->index();
-				$table->bigInteger('route_path_id')->unsigned()->nullable()->index();
-				$table->boolean('is_ajax');
-				$table->boolean('is_secure');
-				$table->boolean('is_json');
-				$table->boolean('wants_json');
-				$table->bigInteger('error_id')->unsigned()->nullable()->index();
-
-				$table->timestamp('created_at')->index();
-				$table->timestamp('updated_at')->index();
-			}
-		);
-
+		/**
+		 * Paths
+		 */
 		$this->builder->create(
 			'tracker_paths',
 			function ($table)
@@ -69,6 +63,9 @@ class Migrator extends Migration {
 			}
 		);
 
+		/**
+		 * Queries
+		 */
 		$this->builder->create(
 			'tracker_queries',
 			function ($table)
@@ -96,6 +93,19 @@ class Migrator extends Migration {
 				$table->timestamp('updated_at')->index();
 			}
 		);
+
+		$this->builder->table('tracker_query_arguments', function($table)
+		{
+			$table->foreign('query_id')
+				->references('id')
+				->on('tracker_queries')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		/**
+		 * Routes
+		 */
 
 		$this->builder->create(
 			'tracker_routes',
@@ -125,6 +135,15 @@ class Migrator extends Migration {
 			}
 		);
 
+		$this->builder->table('tracker_route_paths', function($table)
+		{
+			$table->foreign('route_id')
+				->references('id')
+				->on('tracker_routes')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
 		$this->builder->create(
 			'tracker_route_path_parameters',
 			function ($table)
@@ -140,6 +159,18 @@ class Migrator extends Migration {
 			}
 		);
 
+		$this->builder->table('tracker_route_path_parameters', function($table)
+		{
+			$table->foreign('route_path_id')
+				->references('id')
+				->on('tracker_route_paths')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		/**
+		 * Agents
+		 */
 		$this->builder->create(
 			'tracker_agents',
 			function ($table)
@@ -155,6 +186,10 @@ class Migrator extends Migration {
 			}
 		);
 
+		/**
+		 * Cookies
+		 */
+
 		$this->builder->create(
 			'tracker_cookies',
 			function ($table)
@@ -167,6 +202,10 @@ class Migrator extends Migration {
 				$table->timestamp('updated_at')->index();
 			}
 		);
+
+		/**
+		 * Devices
+		 */
 
 		$this->builder->create(
 			'tracker_devices',
@@ -181,6 +220,23 @@ class Migrator extends Migration {
 				$table->boolean('is_mobile');
 
 				$table->unique(['kind', 'model', 'platform', 'platform_version']);
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		/**
+		 * Domains
+		 */
+
+		$this->builder->create(
+			'tracker_domains',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('name')->index();
 
 				$table->timestamp('created_at')->index();
 				$table->timestamp('updated_at')->index();
@@ -202,54 +258,18 @@ class Migrator extends Migration {
 			}
 		);
 
-		$this->builder->create(
-			'tracker_domains',
-			function ($table)
-			{
-				$table->bigIncrements('id');
+		$this->builder->table('tracker_referers', function($table)
+		{
+			$table->foreign('domain_id')
+				->references('id')
+				->on('tracker_domains')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
 
-				$table->string('name')->index();
-
-				$table->timestamp('created_at')->index();
-				$table->timestamp('updated_at')->index();
-			}
-		);
-
-		$this->builder->create(
-			'tracker_sessions',
-			function ($table)
-			{
-				$table->bigIncrements('id');
-
-				$table->string('uuid')->unique()->index();
-				$table->bigInteger('user_id')->unsigned()->nullable()->index();
-				$table->bigInteger('device_id')->unsigned()->nullable()->index();
-				$table->bigInteger('agent_id')->unsigned()->nullable()->index();
-				$table->string('client_ip')->index();
-				$table->bigInteger('referer_id')->unsigned()->nullable()->index();
-				$table->bigInteger('cookie_id')->unsigned()->nullable()->index();
-				$table->bigInteger('geoip_id')->unsigned()->nullable()->index();
-				$table->boolean('is_robot');
-
-				$table->timestamp('created_at')->index();
-				$table->timestamp('updated_at')->index();
-			}
-		);
-
-		$this->builder->create(
-			'tracker_errors',
-			function ($table)
-			{
-				$table->bigIncrements('id');
-
-				$table->string('code')->index();
-				$table->string('message')->index();
-
-				$table->timestamp('created_at')->index();
-				$table->timestamp('updated_at')->index();
-			}
-		);
-
+		/**
+		 * GeoIP
+		 */
 		$this->builder->create(
 			'tracker_geoip',
 			function ($table)
@@ -275,6 +295,240 @@ class Migrator extends Migration {
 			}
 		);
 
+		/**
+		 * Sessions
+		 */
+		$this->builder->create(
+			'tracker_sessions',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('uuid')->unique()->index();
+				$table->bigInteger('user_id')->unsigned()->nullable()->index();
+				$table->bigInteger('device_id')->unsigned()->nullable()->index();
+				$table->bigInteger('agent_id')->unsigned()->nullable()->index();
+				$table->string('client_ip')->index();
+				$table->bigInteger('referer_id')->unsigned()->nullable()->index();
+				$table->bigInteger('cookie_id')->unsigned()->nullable()->index();
+				$table->bigInteger('geoip_id')->unsigned()->nullable()->index();
+				$table->boolean('is_robot');
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->builder->table('tracker_sessions', function($table)
+		{
+			$table->foreign('device_id')
+				->references('id')
+				->on('tracker_devices')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		$this->builder->table('tracker_sessions', function($table)
+		{
+			$table->foreign('agent_id')
+				->references('id')
+				->on('tracker_agents')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		$this->builder->table('tracker_sessions', function($table)
+		{
+			$table->foreign('referer_id')
+				->references('id')
+				->on('tracker_referers')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		$this->builder->table('tracker_sessions', function($table)
+		{
+			$table->foreign('cookie_id')
+				->references('id')
+				->on('tracker_cookies')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		$this->builder->table('tracker_sessions', function($table)
+		{
+			$table->foreign('geoip_id')
+				->references('id')
+				->on('tracker_geoip')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		/**
+		 * Errors
+		 */
+		$this->builder->create(
+			'tracker_errors',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('code')->index();
+				$table->string('message')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		/**
+		 * System Classes
+		 */
+		$this->builder->create(
+			'tracker_system_classes',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('name')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		/**
+		 * Log
+		 */
+		$this->builder->create(
+			'tracker_log',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->bigInteger('session_id')->unsigned()->index();
+				$table->bigInteger('path_id')->unsigned()->nullable()->index();
+				$table->bigInteger('query_id')->unsigned()->nullable()->index();
+				$table->string('method', 10)->index();
+				$table->bigInteger('route_path_id')->unsigned()->nullable()->index();
+				$table->boolean('is_ajax');
+				$table->boolean('is_secure');
+				$table->boolean('is_json');
+				$table->boolean('wants_json');
+				$table->bigInteger('error_id')->unsigned()->nullable()->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->builder->table('tracker_log', function($table)
+		{
+			$table->foreign('session_id')
+				->references('id')
+				->on('tracker_sessions')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		$this->builder->table('tracker_log', function($table)
+		{
+			$table->foreign('path_id')
+				->references('id')
+				->on('tracker_paths')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		$this->builder->table('tracker_log', function($table)
+		{
+			$table->foreign('query_id')
+				->references('id')
+				->on('tracker_queries')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		$this->builder->table('tracker_log', function($table)
+		{
+			$table->foreign('route_path_id')
+				->references('id')
+				->on('tracker_route_paths')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		$this->builder->table('tracker_log', function($table)
+		{
+			$table->foreign('error_id')
+				->references('id')
+				->on('tracker_errors')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		/**
+		 * Events
+		 */
+		$this->builder->create(
+			'tracker_events',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->string('name')->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->builder->create(
+			'tracker_events_log',
+			function ($table)
+			{
+				$table->bigIncrements('id');
+
+				$table->bigInteger('event_id')->unsigned()->index();
+				$table->bigInteger('class_id')->unsigned()->nullable()->index();
+				$table->bigInteger('log_id')->unsigned()->index();
+
+				$table->timestamp('created_at')->index();
+				$table->timestamp('updated_at')->index();
+			}
+		);
+
+		$this->builder->table('tracker_events_log', function($table)
+		{
+			$table->foreign('event_id')
+				->references('id')
+				->on('tracker_events')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		$this->builder->table('tracker_events_log', function($table)
+		{
+			$table->foreign('class_id')
+				->references('id')
+				->on('tracker_system_classes')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		$this->builder->table('tracker_events_log', function($table)
+		{
+			$table->foreign('log_id')
+				->references('id')
+				->on('tracker_log')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+
+		/**
+		 * SQL Queries
+		 */
 		$this->builder->create(
 			'tracker_sql_queries',
 			function ($table)
@@ -320,6 +574,16 @@ class Migrator extends Migration {
 			}
 		);
 
+		$this->builder->table('tracker_sql_query_bindings_parameters', function($table)
+		{
+			$table->foreign('sql_query_bindings_id')
+				->references('id')
+				->on('tracker_sql_query_bindings')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+
 		$this->builder->create(
 			'tracker_sql_queries_log',
 			function ($table)
@@ -334,49 +598,29 @@ class Migrator extends Migration {
 			}
 		);
 
+		$this->builder->table('tracker_sql_queries_log', function($table)
+		{
+			$table->foreign('log_id')
+				->references('id')
+				->on('tracker_log')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		$this->builder->table('tracker_sql_queries_log', function($table)
+		{
+			$table->foreign('sql_query_id')
+				->references('id')
+				->on('tracker_sql_queries')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		/**
+		 * Connections
+		 */
 		$this->builder->create(
 			'tracker_connections',
-			function ($table)
-			{
-				$table->bigIncrements('id');
-
-				$table->string('name')->index();
-
-				$table->timestamp('created_at')->index();
-				$table->timestamp('updated_at')->index();
-			}
-		);
-
-		$this->builder->create(
-			'tracker_events',
-			function ($table)
-			{
-				$table->bigIncrements('id');
-
-				$table->string('name')->index();
-
-				$table->timestamp('created_at')->index();
-				$table->timestamp('updated_at')->index();
-			}
-		);
-
-		$this->builder->create(
-			'tracker_events_log',
-			function ($table)
-			{
-				$table->bigIncrements('id');
-
-				$table->bigInteger('event_id')->unsigned()->index();
-				$table->bigInteger('class_id')->unsigned()->nullable()->index();
-				$table->bigInteger('log_id')->unsigned()->index();
-
-				$table->timestamp('created_at')->index();
-				$table->timestamp('updated_at')->index();
-			}
-		);
-
-		$this->builder->create(
-			'tracker_system_classes',
 			function ($table)
 			{
 				$table->bigIncrements('id');
