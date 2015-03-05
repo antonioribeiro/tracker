@@ -1,47 +1,42 @@
-<?php namespace PragmaRX\Tracker\Vendor\Laravel;
+<?php
 
-use PragmaRX\Support\PhpSession;
-use PragmaRX\Tracker\Data\Repositories\Connection;
-use PragmaRX\Tracker\Data\Repositories\Event;
-use PragmaRX\Tracker\Data\Repositories\EventLog;
-use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
-use PragmaRX\Tracker\Data\Repositories\SystemClass;
-use PragmaRX\Tracker\Eventing\EventStorage;
+namespace PragmaRX\Tracker\Vendor\Laravel;
+
+use PragmaRX\Support\GeoIp;
 use PragmaRX\Tracker\Tracker;
-
-use PragmaRX\Tracker\Services\Authentication;
-
+use PragmaRX\Support\PhpSession;
 use PragmaRX\Tracker\Support\MobileDetect;
-use PragmaRX\Tracker\Support\UserAgentParser;
-use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
-
-use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
-
-use PragmaRX\Tracker\Data\Repositories\Session;
+use PragmaRX\Tracker\Eventing\EventStorage;
 use PragmaRX\Tracker\Data\Repositories\Log;
+use PragmaRX\Tracker\Data\RepositoryManager;
 use PragmaRX\Tracker\Data\Repositories\Path;
+use PragmaRX\Tracker\Data\Repositories\Route;
 use PragmaRX\Tracker\Data\Repositories\Query;
-use PragmaRX\Tracker\Data\Repositories\QueryArgument;
+use PragmaRX\Tracker\Data\Repositories\Event;
+use PragmaRX\Tracker\Services\Authentication;
+use PragmaRX\Tracker\Support\UserAgentParser;
+use PragmaRX\Tracker\Data\Repositories\Error;
 use PragmaRX\Tracker\Data\Repositories\Agent;
 use PragmaRX\Tracker\Data\Repositories\Device;
 use PragmaRX\Tracker\Data\Repositories\Cookie;
 use PragmaRX\Tracker\Data\Repositories\Domain;
 use PragmaRX\Tracker\Data\Repositories\Referer;
-use PragmaRX\Tracker\Data\Repositories\Route;
-use PragmaRX\Tracker\Data\Repositories\RoutePath;
-use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
-use PragmaRX\Tracker\Data\Repositories\Error;
-use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
+use PragmaRX\Tracker\Data\Repositories\Session;
+use PragmaRX\Tracker\Data\Repositories\EventLog;
 use PragmaRX\Tracker\Data\Repositories\SqlQuery;
+use PragmaRX\Tracker\Data\Repositories\RoutePath;
+use PragmaRX\Tracker\Data\Repositories\Connection;
+use PragmaRX\Tracker\Data\Repositories\SystemClass;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryLog;
+use PragmaRX\Tracker\Data\Repositories\QueryArgument;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryBinding;
-
-use PragmaRX\Tracker\Data\RepositoryManager;
-
+use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
+use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
+use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
+use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 use PragmaRX\Tracker\Vendor\Laravel\Artisan\Tables as TablesCommand;
 use PragmaRX\Tracker\Vendor\Laravel\Artisan\UpdateParser as UpdateParserCommand;
-
-use PragmaRX\Support\GeoIp;
 
 class ServiceProvider extends PragmaRXServiceProvider {
 
