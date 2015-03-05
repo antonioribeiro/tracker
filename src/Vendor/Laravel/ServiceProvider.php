@@ -1,5 +1,6 @@
 <?php namespace PragmaRX\Tracker\Vendor\Laravel;
 
+use PragmaRX\Support\PhpSession;
 use PragmaRX\Tracker\Data\Repositories\Connection;
 use PragmaRX\Tracker\Data\Repositories\Event;
 use PragmaRX\Tracker\Data\Repositories\EventLog;
@@ -10,7 +11,6 @@ use PragmaRX\Tracker\Tracker;
 
 use PragmaRX\Tracker\Services\Authentication;
 
-use PragmaRX\Support\Config;
 use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Support\UserAgentParser;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
@@ -262,7 +262,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
                 new Session($sessionModel,
                             $app['tracker.config'],
-                            $app['session.store']),
+                            new PhpSession()),
 
                 $logRepository,
 

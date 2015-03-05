@@ -5,15 +5,15 @@ namespace PragmaRX\Tracker\Data\Repositories;
 use Carbon\Carbon;
 use PragmaRX\Support\Config;
 use Rhumsaa\Uuid\Uuid as UUID;
-use Illuminate\Session\Store as IlluminateSession;
+use PragmaRX\Support\PhpSession;
 
 class Session extends Repository {
 
-    public function __construct($model, Config $config, IlluminateSession $session)
+    public function __construct($model, Config $config, PhpSession $session)
     {
         $this->config = $config;
 
-        $this->session = $session;
+	    $this->session = $session;
 
         parent::__construct($model);
     }
@@ -159,7 +159,9 @@ class Session extends Repository {
 
     private function getSessionData($variable = null)
     {
-        $data = $this->session->get($this->getSessioIdentifier());
+	    $id = $this->getSessioIdentifier();
+
+        $data = $this->session->get($id);
 
         return $variable ? (isset($data[$variable]) ? $data[$variable] : null) : $data;
     }
