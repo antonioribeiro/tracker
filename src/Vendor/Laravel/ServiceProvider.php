@@ -356,7 +356,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 		$this->app['events']->listen('router.matched', function() use ($me)
 		{
-			$me->app['tracker']->routerMatched();
+			$me->app['tracker']->routerMatched($me->getConfig('log_routes'));
 		});
 	}
 

@@ -171,20 +171,26 @@ class Tracker
         return $this->migrator;
     }
 
-	public function routerMatched()
+	public function routerMatched($log)
 	{
-		if ($this->config->get('enabled') && $this->config->get('log_routes'))
-		{
-		    if ($this->dataRepositoryManager->routeIsTrackable($this->route))
+	    if ($this->dataRepositoryManager->routeIsTrackable($this->route))
+	    {
+		    if ($log)
 		    {
 			    $this->dataRepositoryManager->updateRoute(
 				    $this->getRoutePathId($this->route->current())
 			    );
 		    }
-			else
-			{
-				$this->deleteCurrentLog();
-			}
+	    }
+
+	    // Router was matched but this route is not trackable
+	    // Let's just delete the stored data, because There's not a
+	    // really clean way of doing this because if a route is not
+	    // matched, and this happens ages after the app is booted,
+	    // we still need to store data from the request.
+		else
+		{
+			$this->deleteCurrentLog();
 		}
 	}
 
