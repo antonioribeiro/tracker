@@ -26,6 +26,8 @@ class Tracker
 	 */
 	private $laravel;
 
+	private $enabled = true;
+
 	public function __construct(
                                     Config $config,
                                     DataRepositoryManager $dataRepositoryManager,
@@ -190,6 +192,8 @@ class Tracker
 	    // we still need to store data from the request.
 		else
 		{
+			$this->turnOff();
+
 			$this->deleteCurrentLog();
 		}
 	}
@@ -403,6 +407,16 @@ class Tracker
 			$this->config->get('log_queries') ||
 			$this->config->get('log_routes') ||
 			$this->config->get('log_exceptions');
+	}
+
+	public function isEnabled()
+	{
+		return $this->enabled;
+	}
+
+	private function turnOff()
+	{
+		$this->enabled = false;
 	}
 
 }

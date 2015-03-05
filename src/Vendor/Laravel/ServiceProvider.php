@@ -398,9 +398,12 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		                                                          $time,
 		                                                          $name) use ($me)
 		{
-			$me->app['tracker']->logSqlQuery(
-				$query, $bindings, $time, $name
-			);
+			if ($me->app['tracker']->isEnabled())
+			{
+				$me->app['tracker']->logSqlQuery(
+					$query, $bindings, $time, $name
+				);
+			}
 		});
 	}
 
