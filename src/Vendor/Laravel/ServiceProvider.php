@@ -36,6 +36,7 @@ use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 use PragmaRX\Tracker\Vendor\Laravel\Artisan\Tables as TablesCommand;
+use PragmaRX\Tracker\Support\Exceptions\Handler as TrackerExceptionHandler;
 use PragmaRX\Tracker\Vendor\Laravel\Artisan\UpdateParser as UpdateParserCommand;
 
 class ServiceProvider extends PragmaRXServiceProvider {
@@ -359,12 +360,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	{
 		if ($this->getConfig('log_exceptions'))
 		{
-			$me = $this;
-
-			$this->app->error(function(\Exception $exception, $code) use ($me)
-			{
-				$me->app['tracker']->handleException($exception, $code);
-			});
+			new TrackerExceptionHandler($this->app['tracker']);
 		}
 	}
 
