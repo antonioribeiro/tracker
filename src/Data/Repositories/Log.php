@@ -18,14 +18,16 @@ class Log extends Repository {
 
 	public function updateError($error_id)
 	{
-		if ($this->getModel()->id)
-		{
-			$this->getModel()->error_id = $error_id;
+		$model = $this->getModel();
 
-			$this->getModel()->save();
+		if ($model->id)
+		{
+			$model->error_id = $error_id;
+
+			$model->save();
 		}
 
-		return $this->getModel();
+		return $model;
 	}
 
 	public function bySession($sessionId, $results = true)
