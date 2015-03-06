@@ -271,13 +271,6 @@ return [
     'authenticated_user_username_column' => 'email', // to Auth::user()->email
 
 	/**
-	 * Laravel Alias, create one? Which name?
-	 */
-	'create_tracker_alias' => false,
-
-	'tracker_alias' => 'Tracker',
-
-	/**
 	 * Enable the Stats Panel?
 	 */
 	'stats_panel_enabled' => false,
