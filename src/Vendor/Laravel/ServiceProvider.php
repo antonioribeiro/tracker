@@ -587,4 +587,9 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		return $this->tracker;
 	}
 
+	public function getRootDirectory()
+	{
+		return __DIR__.'/../..';
+	}
+
 }
