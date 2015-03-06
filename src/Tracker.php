@@ -230,11 +230,7 @@ class Tracker
 	{
 		if ($this->config->get('log_enabled'))
 		{
-			try
-			{
-				return $this->dataRepositoryManager->handleException($exception, $code);
-			}
-			catch (\Exception $e) {}
+			$this->dataRepositoryManager->handleException($exception, $code);
 		}
 	}
 
