@@ -375,6 +375,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 					$this->app[$illuminateHandler]
 				);
 
+				// Replace original Illuminate Exception Handler by Tracker's
 				$this->app[$illuminateHandler] = $handler;
 			}
 			else
