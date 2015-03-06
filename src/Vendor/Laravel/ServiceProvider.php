@@ -368,12 +368,14 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		{
 			if (isLaravel5())
 			{
+				$illuminateHandler = 'Illuminate\Contracts\Debug\ExceptionHandler';
+
 				$handler = new TrackerExceptionHandler(
 					$this->getTracker(),
-					$this->app['Illuminate\Contracts\Debug\ExceptionHandler']
+					$this->app[$illuminateHandler]
 				);
 
-				$this->app['Illuminate\Contracts\Debug\ExceptionHandler'] = $handler;
+				$this->app[$illuminateHandler] = $handler;
 			}
 			else
 			{
