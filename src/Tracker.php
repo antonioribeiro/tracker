@@ -28,6 +28,8 @@ class Tracker
 
 	private $enabled = true;
 
+	private $sessionData;
+
 	public function __construct(
                                     Config $config,
                                     DataRepositoryManager $dataRepositoryManager,
@@ -76,7 +78,7 @@ class Tracker
 	 */
 	private function getSessionData()
 	{
-		return array(
+		$sessionData = array(
 			'user_id' => $this->getUserId(),
 			'device_id' => $this->getDeviceId(),
 			'client_ip' => $this->request->getClientIp(),
@@ -91,6 +93,13 @@ class Tracker
 			// during a session.
 			'user_agent' => $this->dataRepositoryManager->getCurrentUserAgent(),
 		);
+
+		if ($this->sessionData && $this->sessionData !== $sessionData)
+		{
+			$this->dataRepositoryManager->updateSessionData($sessionData);
+		}
+
+		return $this->sessionData = $sessionData;
 	}
 
 	/**
@@ -417,6 +426,18 @@ class Tracker
 	private function turnOff()
 	{
 		$this->enabled = false;
+	}
+
+	public function checkCurrentUser()
+	{
+		if ( ! $this->getSessionData()['user_id'] && $user_id = $this->getUserId())
+		{
+			dd('has to update!');
+
+			return true;
+		}
+
+		return false;
 	}
 
 }

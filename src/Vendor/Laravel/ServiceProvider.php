@@ -54,7 +54,11 @@ class ServiceProvider extends PragmaRXServiceProvider {
      */
     protected $defer = false;
 
-    /**
+	private $userChecked = false;
+
+	private $tracker;
+
+	/**
      * Bootstrap the application events.
      *
      * @return void
@@ -96,7 +100,9 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 		    $this->registerUpdateParserCommand();
 
-		    $this->registerExecutionCallBack();
+		    $this->registerExecutionCallback();
+
+		    $this->registerUserCheckCallback();
 
 		    $this->registerSqlQueryLogWatcher();
 
@@ -346,13 +352,13 @@ class ServiceProvider extends PragmaRXServiceProvider {
         });
     }
 
-	private function registerExecutionCallBack()
+	private function registerExecutionCallback()
 	{
 		$me = $this;
 
 		$this->app['events']->listen('router.matched', function() use ($me)
 		{
-			$me->app['tracker']->routerMatched($me->getConfig('log_routes'));
+			$me->getTracker()->routerMatched($me->getConfig('log_routes'));
 		});
 	}
 
@@ -360,7 +366,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	{
 		if ($this->getConfig('log_exceptions'))
 		{
-			new TrackerExceptionHandler($this->app['tracker']);
+			new TrackerExceptionHandler($this->getTracker());
 		}
 	}
 
@@ -398,9 +404,9 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		                                                          $time,
 		                                                          $name) use ($me)
 		{
-			if ($me->app['tracker']->isEnabled())
+			if ($me->getTracker()->isEnabled())
 			{
-				$me->app['tracker']->logSqlQuery(
+				$me->getTracker()->logSqlQuery(
 					$query, $bindings, $time, $name
 				);
 			}
@@ -436,7 +442,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 			// Can only send events to database after application is ready
 			if (isset($me->app['tracker.loaded']))
 			{
-				$me->app['tracker']->logEvents();
+				$me->getTracker()->logEvents();
 			}
 
 			// Turn the event tracking to on again
@@ -511,7 +517,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 */
 	private function bootTracker()
 	{
-		$this->app['tracker']->boot();
+		$this->getTracker()->boot();
 	}
 
 	/**
@@ -530,6 +536,33 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 			$view->with('stats_template_path', $template_path);
 		});
+	}
+
+	private function registerUserCheckCallback()
+	{
+		$me = $this;
+
+		$this->app['events']->listen('router.before', function($object = null) use ($me)
+		{
+			if ($me->tracker &&
+				! $me->userChecked &&
+				$me->getConfig('log_users') &&
+				$me->app->resolved($me->getConfig('authentication_ioc_binding'))
+			)
+			{
+				$me->userChecked = $me->getTracker()->checkCurrentUser();
+			}
+		});
+	}
+
+	public function getTracker()
+	{
+		if ( ! $this->tracker)
+		{
+			$this->tracker = $this->app['tracker'];
+		}
+
+		return $this->tracker;
 	}
 
 }

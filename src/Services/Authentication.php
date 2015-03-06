@@ -15,8 +15,6 @@ class Authentication {
     {
         $this->config = $config;
 
-        $class = $this->config->get('authentication_facade');
-
         $this->authentication = $app->make($this->config->get('authentication_ioc_binding'));
     }
 

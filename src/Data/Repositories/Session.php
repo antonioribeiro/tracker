@@ -30,7 +30,7 @@ class Session extends Repository {
         return $this->sessionGetId($sessionInfo);
     }
 
-    private function setSessionData($sessinInfo)
+    public function setSessionData($sessinInfo)
     {
         $this->generateSession($sessinInfo);
 
@@ -217,6 +217,21 @@ class Session extends Repository {
 	public function getCurrent()
 	{
 		return $this->getModel();
+	}
+
+	public function updateSessionData($data)
+	{
+		$session = $this->find($this->getSessionData('id'));
+
+		foreach($session->getAttributes() as $name => $value)
+		{
+			if (isset($data[$name]) && $name !== 'id' && $name !== 'uuid')
+			{
+				$session->{$name} = $data[$name];
+			}
+		}
+
+		$session->save();
 	}
 
 }
