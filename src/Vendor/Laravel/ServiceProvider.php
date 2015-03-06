@@ -1,49 +1,43 @@
-<?php namespace PragmaRX\Tracker\Vendor\Laravel;
+<?php
 
-use PragmaRX\Tracker\Data\Repositories\Connection;
-use PragmaRX\Tracker\Data\Repositories\Event;
-use PragmaRX\Tracker\Data\Repositories\EventLog;
-use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
-use PragmaRX\Tracker\Data\Repositories\SystemClass;
-use PragmaRX\Tracker\Eventing\EventStorage;
+namespace PragmaRX\Tracker\Vendor\Laravel;
+
+use PragmaRX\Support\GeoIp;
 use PragmaRX\Tracker\Tracker;
-
-use PragmaRX\Tracker\Services\Authentication;
-
-use PragmaRX\Tracker\Support\Config;
+use PragmaRX\Support\PhpSession;
 use PragmaRX\Tracker\Support\MobileDetect;
-use PragmaRX\Tracker\Support\UserAgentParser;
-use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
-
-use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
-
-use PragmaRX\Tracker\Data\Repositories\Session;
+use PragmaRX\Tracker\Eventing\EventStorage;
 use PragmaRX\Tracker\Data\Repositories\Log;
+use PragmaRX\Tracker\Data\RepositoryManager;
 use PragmaRX\Tracker\Data\Repositories\Path;
+use PragmaRX\Tracker\Data\Repositories\Route;
 use PragmaRX\Tracker\Data\Repositories\Query;
-use PragmaRX\Tracker\Data\Repositories\QueryArgument;
+use PragmaRX\Tracker\Data\Repositories\Event;
+use PragmaRX\Tracker\Services\Authentication;
+use PragmaRX\Tracker\Support\UserAgentParser;
+use PragmaRX\Tracker\Data\Repositories\Error;
 use PragmaRX\Tracker\Data\Repositories\Agent;
 use PragmaRX\Tracker\Data\Repositories\Device;
 use PragmaRX\Tracker\Data\Repositories\Cookie;
 use PragmaRX\Tracker\Data\Repositories\Domain;
 use PragmaRX\Tracker\Data\Repositories\Referer;
-use PragmaRX\Tracker\Data\Repositories\Route;
-use PragmaRX\Tracker\Data\Repositories\RoutePath;
-use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
-use PragmaRX\Tracker\Data\Repositories\Error;
-use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
+use PragmaRX\Tracker\Data\Repositories\Session;
+use PragmaRX\Tracker\Data\Repositories\EventLog;
 use PragmaRX\Tracker\Data\Repositories\SqlQuery;
+use PragmaRX\Tracker\Data\Repositories\RoutePath;
+use PragmaRX\Tracker\Data\Repositories\Connection;
+use PragmaRX\Tracker\Data\Repositories\SystemClass;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryLog;
+use PragmaRX\Tracker\Data\Repositories\QueryArgument;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryBinding;
-
-use PragmaRX\Tracker\Data\RepositoryManager;
-
+use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
+use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
+use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
+use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 use PragmaRX\Tracker\Vendor\Laravel\Artisan\Tables as TablesCommand;
+use PragmaRX\Tracker\Support\Exceptions\Handler as TrackerExceptionHandler;
 use PragmaRX\Tracker\Vendor\Laravel\Artisan\UpdateParser as UpdateParserCommand;
-
-use PragmaRX\Support\GeoIp;
-
-use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
 
 class ServiceProvider extends PragmaRXServiceProvider {
 
@@ -60,30 +54,26 @@ class ServiceProvider extends PragmaRXServiceProvider {
      */
     protected $defer = false;
 
-    /**
+	private $userChecked = false;
+
+	private $tracker;
+
+	/**
      * Bootstrap the application events.
      *
      * @return void
      */
     public function boot()
     {
+	    parent::boot();
+
 	    if ($this->getConfig('enabled'))
 	    {
-		    $this->package($this->packageNamespace, $this->packageNamespace, __DIR__.'/../..');
-
-		    if ( $this->app['config']->get($this->packageNamespace.'::create_tracker_alias') )
-		    {
-			    IlluminateAliasLoader::getInstance()->alias(
-				    $this->getConfig('tracker_alias'),
-				    'PragmaRX\Tracker\Vendor\Laravel\Facade'
-			    );
-		    }
-
 		    $this->loadRoutes();
 
 		    $this->registerErrorHandler();
 
-		    $this->wakeUp();
+		    $this->bootTracker();
 	    }
     }
 
@@ -95,8 +85,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
     public function register()
     {
 	    parent::register();
-
-	    $this->registerConfig();
 
 	    if ($this->getConfig('enabled'))
 	    {
@@ -112,13 +100,17 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 		    $this->registerUpdateParserCommand();
 
-		    $this->registerExecutionCallBack();
+		    $this->registerExecutionCallback();
+
+		    $this->registerUserCheckCallback();
 
 		    $this->registerSqlQueryLogWatcher();
 
 		    $this->registerGlobalEventLogger();
 
 		    $this->registerDatatables();
+
+		    $this->registerGlobalViewComposers();
 
 		    $this->commands('tracker.tables.command');
 
@@ -272,7 +264,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
                 new Session($sessionModel,
                             $app['tracker.config'],
-                            $app['session.store']),
+                            new PhpSession()),
 
                 $logRepository,
 
@@ -332,14 +324,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
         });
     }
 
-    public function registerConfig()
-    {
-        $this->app['tracker.config'] = $this->app->share(function($app)
-        {
-            return new Config($app['config'], $this->packageNamespace);
-        });
-    }
-
     public function registerMigrator()
     {
         $this->app['tracker.migrator'] = $this->app->share(function($app)
@@ -348,11 +332,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
             return new Migrator($app['db'], $connection);
         });
-    }
-
-    protected function wakeUp()
-    {
-	    $this->app['tracker']->boot();
     }
 
 	private function registerTablesCommand()
@@ -373,13 +352,13 @@ class ServiceProvider extends PragmaRXServiceProvider {
         });
     }
 
-	private function registerExecutionCallBack()
+	private function registerExecutionCallback()
 	{
 		$me = $this;
 
 		$this->app['events']->listen('router.matched', function() use ($me)
 		{
-			$me->app['tracker']->routerMatched();
+			$me->getTracker()->routerMatched($me->getConfig('log_routes'));
 		});
 	}
 
@@ -387,12 +366,29 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	{
 		if ($this->getConfig('log_exceptions'))
 		{
-			$me = $this;
-
-			$this->app->error(function(\Exception $exception, $code) use ($me)
+			if (isLaravel5())
 			{
-				$me->app['tracker']->handleException($exception, $code);
-			});
+				$illuminateHandler = 'Illuminate\Contracts\Debug\ExceptionHandler';
+
+				$handler = new TrackerExceptionHandler(
+					$this->getTracker(),
+					$this->app[$illuminateHandler]
+				);
+
+				// Replace original Illuminate Exception Handler by Tracker's
+				$this->app[$illuminateHandler] = $handler;
+			}
+			else
+			{
+				$me = $this;
+
+				$this->app->error(
+					function (\Exception $exception, $code) use ($me)
+					{
+						$me->app['tracker']->handleException($exception, $code);
+					}
+				);
+			}
 		}
 	}
 
@@ -430,9 +426,12 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		                                                          $time,
 		                                                          $name) use ($me)
 		{
-			$me->app['tracker']->logSqlQuery(
-				$query, $bindings, $time, $name
-			);
+			if ($me->getTracker()->isEnabled())
+			{
+				$me->getTracker()->logSqlQuery(
+					$query, $bindings, $time, $name
+				);
+			}
 		});
 	}
 
@@ -465,7 +464,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 			// Can only send events to database after application is ready
 			if (isset($me->app['tracker.loaded']))
 			{
-				$me->app['tracker']->logEvents();
+				$me->getTracker()->logEvents();
 			}
 
 			// Turn the event tracking to on again
@@ -476,10 +475,45 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	private function loadRoutes()
 	{
-		if ($this->app['config']->get($this->packageNamespace.'::stats_panel_enabled'))
+		if ( ! $this->getConfig('stats_panel_enabled'))
 		{
-			include __DIR__.'/../../Vendor/Laravel/App/routes.php';
+			return false;
 		}
+
+		$prefix = $this->getConfig('stats_base_uri');
+
+		$namespace = $this->getConfig('stats_controllers_namespace');
+
+		$filter = $this->getConfig('stats_routes_before_filter');
+
+		$router = $this->app->make('router');
+
+		$router->group(['namespace' => $namespace], function() use ($prefix, $filter, $router)
+		{
+			$router->group(['before' => $filter], function() use ($prefix, $filter, $router)
+			{
+				$router->group(['prefix' => $prefix], function($router)
+				{
+					$router->get('/', array('as' => 'tracker.stats.index', 'uses' => 'Stats@index'));
+
+					$router->get('log/{uuid}', array('as' => 'tracker.stats.log', 'uses' => 'Stats@log'));
+
+					$router->get('api/pageviews', array('as' => 'tracker.stats.api.pageviews', 'uses' => 'Stats@apiPageviews'));
+
+					$router->get('api/pageviewsbycountry', array('as' => 'tracker.stats.api.pageviewsbycountry', 'uses' => 'Stats@apiPageviewsByCountry'));
+
+					$router->get('api/log/{uuid}', array('as' => 'tracker.stats.api.log', 'uses' => 'Stats@apiLog'));
+
+					$router->get('api/errors', array('as' => 'tracker.stats.api.errors', 'uses' => 'Stats@apiErrors'));
+
+					$router->get('api/events', array('as' => 'tracker.stats.api.events', 'uses' => 'Stats@apiEvents'));
+
+					$router->get('api/users', array('as' => 'tracker.stats.api.users', 'uses' => 'Stats@apiUsers'));
+
+					$router->get('api/visits', array('as' => 'tracker.stats.api.visits', 'uses' => 'Stats@apiVisits'));
+				});
+			});
+		});
 	}
 
 	private function registerDatatables()
@@ -487,6 +521,75 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		$this->registerServiceProvider('Bllim\Datatables\DatatablesServiceProvider');
 
 		$this->registerServiceAlias('Datatable', 'Bllim\Datatables\Facade\Datatables');
+	}
+
+	/**
+	 * Get the current package directory.
+	 *
+	 * @return string
+	 */
+	public function getPackageDir()
+	{
+		return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..';
+	}
+
+	/**
+	 * Boot & Track
+	 *
+	 */
+	private function bootTracker()
+	{
+		$this->getTracker()->boot();
+	}
+
+	/**
+	 * Register global view composers
+	 *
+	 */
+	private function registerGlobalViewComposers()
+	{
+		$me = $this;
+
+		$this->app->make('view')->composer('pragmarx/tracker::*', function($view) use ($me)
+		{
+			$view->with('stats_layout', $me->getConfig('stats_layout'));
+
+			$template_path = url('/') . $me->getConfig('stats_template_path');
+
+			$view->with('stats_template_path', $template_path);
+		});
+	}
+
+	private function registerUserCheckCallback()
+	{
+		$me = $this;
+
+		$this->app['events']->listen('router.before', function($object = null) use ($me)
+		{
+			if ($me->tracker &&
+				! $me->userChecked &&
+				$me->getConfig('log_users') &&
+				$me->app->resolved($me->getConfig('authentication_ioc_binding'))
+			)
+			{
+				$me->userChecked = $me->getTracker()->checkCurrentUser();
+			}
+		});
+	}
+
+	public function getTracker()
+	{
+		if ( ! $this->tracker)
+		{
+			$this->tracker = $this->app['tracker'];
+		}
+
+		return $this->tracker;
+	}
+
+	public function getRootDirectory()
+	{
+		return __DIR__.'/../..';
 	}
 
 }

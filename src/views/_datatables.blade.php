@@ -9,7 +9,7 @@ $(document).ready(function() {
             "defaultContent": ""
         } ],
         "columns": [
-            {{ $datatables_columns }}
+            <?php echo $datatables_columns; ?>
         ]
     } );
 } );

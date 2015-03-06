@@ -1,4 +1,4 @@
-@extends(Config::get('pragmarx/tracker::stats_layout'))
+@extends($stats_layout)
 
 @section('page-contents')
 	<div id="pageViewsLine" class="chart no-padding"></div>

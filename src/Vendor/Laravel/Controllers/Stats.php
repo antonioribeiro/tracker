@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Controllers;
 
-
 use Bllim\Datatables\Facade\Datatables;
 use Illuminate\Support\Facades\Response;
 use PragmaRX\Tracker\Support\Minutes;
@@ -24,8 +23,6 @@ class Stats extends Controller {
 		Session::put('tracker.stats.page', $this->getValue('page', 'visits'));
 
 		$this->minutes = new Minutes(60 * 24 * Session::get('tracker.stats.days'));
-
-		$this->buildComposers();
 	}
 
 	public function index()
@@ -45,10 +42,28 @@ class Stats extends Controller {
 
 	public function visits()
 	{
+		$datatables_data = array
+		(
+			'datatables_ajax_route' => route('tracker.stats.api.visits'),
+			'datatables_columns' =>
+				'
+                { "data" : "id",          "title" : "Id", "orderable": true, "searchable": true },
+                { "data" : "client_ip",   "title" : "IP Address", "orderable": true, "searchable": true },
+                { "data" : "country",     "title" : "Country / City", "orderable": true, "searchable": true },
+                { "data" : "user",        "title" : "User", "orderable": true, "searchable": true },
+                { "data" : "device",      "title" : "Device", "orderable": true, "searchable": true },
+                { "data" : "browser",     "title" : "Browser", "orderable": true, "searchable": true },
+                { "data" : "referer",     "title" : "Referer", "orderable": true, "searchable": true },
+                { "data" : "pageViews",   "title" : "Page Views", "orderable": true, "searchable": true },
+                { "data" : "lastActivity","title" : "Last Activity", "orderable": true, "searchable": true },
+            '
+		);
+
 		return View::make('pragmarx/tracker::index')
 			->with('sessions', Tracker::sessions($this->minutes))
 			->with('title', 'Visits')
-			->with('username_column', Tracker::getConfig('authenticated_user_username_column'));
+			->with('username_column', Tracker::getConfig('authenticated_user_username_column'))
+			->with('datatables_data', $datatables_data);
 	}
 
 	public function log($uuid)
@@ -251,7 +266,9 @@ class Stats extends Controller {
 		return Datatables::of($query)
 				->edit_column('id', function($row) use ($username_column)
 				{
-					return link_to_route('tracker.stats.log', $row->id, ['uuid' => $row->uuid]);
+					$uri = route('tracker.stats.log', $row->uuid);
+
+					return '<a href="'.$uri.'">'.$row->id.'</a>';
 				})
 
 				->add_column('country', function ($row)
@@ -311,16 +328,6 @@ class Stats extends Controller {
 				})
 
 				->make(true);
-	}
-
-	private function buildComposers()
-	{
-		$template_path = url('/') . Config::get('pragmarx/tracker::stats_template_path');
-
-		View::composer('pragmarx/tracker::*', function($view) use ($template_path)
-		{
-			$view->with('stats_template_path', $template_path);
-		});
 	}
 
 }

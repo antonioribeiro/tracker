@@ -1,40 +1,19 @@
 <?php
 
-/**
- * Part of the Tracker package.
- *
- * NOTICE OF LICENSE
- *
- * Licensed under the 3-clause BSD License.
- *
- * This source file is subject to the 3-clause BSD License that is
- * bundled with this package in the LICENSE file.  It is also available at
- * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
- *
- * @package    Tracker
- * @author     Antonio Carlos Ribeiro @ PragmaRX
- * @license    BSD License (3-clause)
- * @copyright  (c) 2013, PragmaRX
- * @link       http://pragmarx.com
- */
-
 namespace PragmaRX\Tracker\Data\Repositories;
 
-use PragmaRX\Tracker\Support\Config;
-
-use Illuminate\Session\Store as IlluminateSession;
-
-use Rhumsaa\Uuid\Uuid as UUID;
-
 use Carbon\Carbon;
+use PragmaRX\Support\Config;
+use Rhumsaa\Uuid\Uuid as UUID;
+use PragmaRX\Support\PhpSession;
 
 class Session extends Repository {
 
-    public function __construct($model, Config $config, IlluminateSession $session)
+    public function __construct($model, Config $config, PhpSession $session)
     {
         $this->config = $config;
 
-        $this->session = $session;
+	    $this->session = $session;
 
         parent::__construct($model);
     }
@@ -51,7 +30,7 @@ class Session extends Repository {
         return $this->sessionGetId($sessionInfo);
     }
 
-    private function setSessionData($sessinInfo)
+    public function setSessionData($sessinInfo)
     {
         $this->generateSession($sessinInfo);
 
@@ -180,7 +159,9 @@ class Session extends Repository {
 
     private function getSessionData($variable = null)
     {
-        $data = $this->session->get($this->getSessioIdentifier());
+	    $id = $this->getSessioIdentifier();
+
+        $data = $this->session->get($id);
 
         return $variable ? (isset($data[$variable]) ? $data[$variable] : null) : $data;
     }
@@ -236,6 +217,21 @@ class Session extends Repository {
 	public function getCurrent()
 	{
 		return $this->getModel();
+	}
+
+	public function updateSessionData($data)
+	{
+		$session = $this->find($this->getSessionData('id'));
+
+		foreach($session->getAttributes() as $name => $value)
+		{
+			if (isset($data[$name]) && $name !== 'id' && $name !== 'uuid')
+			{
+				$session->{$name} = $data[$name];
+			}
+		}
+
+		$session->save();
 	}
 
 }

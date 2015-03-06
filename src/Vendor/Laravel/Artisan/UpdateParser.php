@@ -1,6 +1,6 @@
 <?php namespace PragmaRX\Tracker\Vendor\Laravel\Artisan;
 
-use PragmaRX\Tracker\Support\Config;
+use PragmaRX\Support\Config;
 use UAParser\Util\Converter;
 use UAParser\Util\Fetcher;
 
