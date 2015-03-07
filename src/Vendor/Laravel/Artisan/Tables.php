@@ -1,4 +1,6 @@
-<?php namespace PragmaRX\Tracker\Vendor\Laravel\Artisan;
+<?php
+
+namespace PragmaRX\Tracker\Vendor\Laravel\Artisan;
 
 class Tables extends Base {
 
@@ -8,10 +10,6 @@ class Tables extends Base {
 	 * @var string
 	 */
 	protected $name = 'tracker:tables';
-
-	private $tables = [
-		'create_tracker_tables',
-	];
 
 	/**
 	 * Command description.
@@ -27,13 +25,13 @@ class Tables extends Base {
 	 */
 	public function fire()
 	{
-		foreach ($this->tables as $table)
+		$files = $this->laravel->make('files');
+
+		foreach ($files->files($this->getPackageMigrationsPath()) as $file)
 		{
-			$fullPath = $this->createBaseMigration($table);
+			$files->copy($file, $destination = $this->makeMigrationPath($file));
 
-			file_put_contents($fullPath, $this->getMigrationStub($table));
-
-			$this->info("Migration $table created successfully!");
+			$this->info("Migration created: $destination");
 		}
 
 		if (isLaravel5())
@@ -47,35 +45,43 @@ class Tables extends Base {
 	}
 
 	/**
-	 * Create a base migration file for the reminders.
+	 * Get the package migrations folder
 	 *
-	 * @param $name
 	 * @return string
 	 */
-	protected function createBaseMigration($name)
+	protected function getPackageMigrationsPath()
 	{
-		if (isLaravel5())
-		{
-			$path = base_path('/database/migrations');
-		}
-		else
-		{
-			$path = $this->laravel['path'].'/database/migrations';
-		}
+		$ds = DIRECTORY_SEPARATOR;
 
-		return $this->laravel['migration.creator']->create($name, $path);
+		return __DIR__."{$ds}..{$ds}..{$ds}..{$ds}migrations";
 	}
 
 	/**
-	 * Get the contents of a migration stub.
+	 * Get the system migrations folder
 	 *
-	 * @param $name
 	 * @return string
 	 */
-	protected function getMigrationStub($name)
+	protected function getBaseMigrationsPath()
 	{
-		$stub = file_get_contents(__DIR__."/../../../stubs/$name.stub");
+		$path = 'database'.DIRECTORY_SEPARATOR.'migrations';
 
-		return $stub;
+		if (isLaravel5())
+		{
+			return base_path($path);
+		}
+
+		return app_path($path);
 	}
+
+	/**
+	 * Make a full path migration name
+	 *
+	 * @param $file
+	 * @return string
+	 */
+	private function makeMigrationPath($file)
+	{
+		return $this->getBaseMigrationsPath().DIRECTORY_SEPARATOR.basename($file);
+	}
+
 }
