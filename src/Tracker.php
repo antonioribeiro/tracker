@@ -8,7 +8,6 @@ use Illuminate\Routing\Router;
 use Illuminate\Log\Writer as Logger;
 use PragmaRX\Tracker\Support\Minutes;
 use Illuminate\Foundation\Application as Laravel;
-use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
 use PragmaRX\Tracker\Data\RepositoryManager as DataRepositoryManager;
 
 class Tracker
@@ -35,7 +34,6 @@ class Tracker
                                     DataRepositoryManager $dataRepositoryManager,
                                     Request $request,
                                     Router $route,
-                                    Migrator $migrator,
                                     Logger $logger,
 								    Laravel $laravel
                                 )
@@ -45,8 +43,6 @@ class Tracker
         $this->dataRepositoryManager = $dataRepositoryManager;
 
         $this->request = $request;
-
-        $this->migrator = $migrator;
 
 	    $this->route = $route;
 
@@ -176,11 +172,6 @@ class Tracker
 			}
 		}
 	}
-
-    public function getMigrator()
-    {
-        return $this->migrator;
-    }
 
 	public function routerMatched($log)
 	{

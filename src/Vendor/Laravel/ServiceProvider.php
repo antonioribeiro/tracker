@@ -31,7 +31,6 @@ use PragmaRX\Tracker\Data\Repositories\SqlQueryLog;
 use PragmaRX\Tracker\Data\Repositories\QueryArgument;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryBinding;
 use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
-use PragmaRX\Tracker\Support\Database\Migrator as Migrator;
 use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
@@ -90,8 +89,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	    {
 		    $this->registerAuthentication();
 
-		    $this->registerMigrator();
-
 		    $this->registerRepositories();
 
 		    $this->registerTracker();
@@ -145,7 +142,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
                                     $app['tracker.repositories'],
                                     $app['request'],
                                     $app['router'],
-                                    $app['tracker.migrator'],
                                     $app['log'],
                                     $app
                                 );
@@ -321,16 +317,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
         $this->app['tracker.authentication'] = $this->app->share(function($app)
         {
             return new Authentication($app['tracker.config'], $app);
-        });
-    }
-
-    public function registerMigrator()
-    {
-        $this->app['tracker.migrator'] = $this->app->share(function($app)
-        {
-            $connection = $this->getConfig('connection');
-
-            return new Migrator($app['db'], $connection);
         });
     }
 
