@@ -8,7 +8,7 @@ php:
   - 7.0
   - hhvm
 
-before_script:
+install:
   - travis_retry composer install --no-interaction --prefer-source
 
 script:
