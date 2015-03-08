@@ -22,7 +22,7 @@
         "rhumsaa/uuid": "~2.7",
         "jenssegers/agent": "~2.1",
         "pragmarx/ua-parser" : "0.3.4",
-        "pragmarx/datatables": "1.4.9"
+        "pragmarx/datatables": "1.4.10"
     },
 
     "suggest": {
