@@ -46,6 +46,8 @@ class UpdateParser extends Base {
         $converter = new Converter(base_path().'/vendor/pragmarx/ua-parser/php/resources/');
 
         $converter->convertString($fetcher->fetch(), false);
+
+	    $this->info("UA Parser was updated.");
     }
 
 }
