@@ -82,4 +82,9 @@ class Handler {
 		return $this->illuminateHandler->render($request, $e);
 	}
 
+	public function renderForConsole($output, Exception $e)
+	{
+		return $this->illuminateHandler->renderForConsole($output, $e);
+	}
+
 }
