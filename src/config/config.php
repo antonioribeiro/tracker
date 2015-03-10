@@ -278,9 +278,20 @@ return [
 	/**
 	 * Stats Panel routes before filter
 	 *
-	 * You better drop an 'auth' filter here.
 	 */
 	'stats_routes_before_filter' => '',
+
+	/**
+	 * Stats Panel routes after filter
+	 *
+	 */
+	'stats_routes_after_filter' => '',
+
+	/**
+	 * Stats Panel routes middleware
+	 *
+	 */
+	'stats_routes_middleware' => '',
 
 	/**
      * Stats Panel template path

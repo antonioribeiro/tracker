@@ -461,7 +461,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	private function loadRoutes()
 	{
-		if ( ! $this->getConfig('stats_panel_enabled'))
+		if (!$this->getConfig('stats_panel_enabled'))
 		{
 			return false;
 		}
@@ -470,13 +470,28 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 		$namespace = $this->getConfig('stats_controllers_namespace');
 
-		$filter = $this->getConfig('stats_routes_before_filter');
+		$filters = [];
+
+		if ($before = $this->getConfig('stats_routes_before_filter'))
+		{
+			$filters['before'] = $before;
+		}
+
+		if ($after = $this->getConfig('stats_routes_after_filter'))
+		{
+			$filters['after'] = $after;
+		}
+
+		if ($middleware = $this->getConfig('stats_routes_middleware'))
+		{
+			$filters['middleware'] = $middleware;
+		}
 
 		$router = $this->app->make('router');
 
-		$router->group(['namespace' => $namespace], function() use ($prefix, $filter, $router)
+		$router->group(['namespace' => $namespace], function() use ($prefix, $router, $filters)
 		{
-			$router->group(['before' => $filter], function() use ($prefix, $filter, $router)
+			$router->group($filters, function() use ($prefix, $router)
 			{
 				$router->group(['prefix' => $prefix], function($router)
 				{
