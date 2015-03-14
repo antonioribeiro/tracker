@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.3] - 2015-03-08
+### Fixed
+- Datatables bug
+
+## [1.0.2] - 2015-03-07
+### Fixed
+- Migrations for MySQL
+
+## [1.0.0] - 2015-02-21
+### Changed
+- Added support for Laravel 5
+
 ## [1.0.0] - 2015-02-21
 ### Changed
 - Added support for Laravel 5
