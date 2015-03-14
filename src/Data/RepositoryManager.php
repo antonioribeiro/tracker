@@ -339,20 +339,15 @@ class RepositoryManager implements RepositoryManagerInterface {
 			$parts = explode(".", $url['host']);
 
 			$domain = array_pop($parts);
-			if(sizeof($parts) > 0){
+
+			if (sizeof($parts) > 0)
+			{
 				$domain = array_pop($parts) . "." . $domain;
 			}
 
 			$domain_id = $this->getDomainId($domain);
 
-			return $this->refererRepository->findOrCreate(
-				array(
-					'url' => $referer,
-					'host' => $url['host'],
-					'domain_id' => $domain_id,
-				),
-				array('url')
-			);
+			return $this->refererRepository->store($referer, $url['host'], $domain_id);
 		}
 	}
 

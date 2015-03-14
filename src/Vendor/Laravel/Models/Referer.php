@@ -10,10 +10,14 @@ class Referer extends Base {
 		'url',
 		'host',
 		'domain_id',
+		'medium',
+		'source',
+		'search_terms_hash'
 	);
 
 	public function domain()
 	{
 		return $this->belongsTo($this->getConfig()->get('domain_model'));
 	}
+
 }

@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class Base extends Eloquent {
 
+	protected $hidden = ['config'];
+
+	private $config;
+
 	public function __construct(array $attributes = array())
 	{
 		parent::__construct($attributes);
@@ -16,12 +20,21 @@ class Base extends Eloquent {
 
 	public function getConfig()
 	{
-		if (isset($GLOBALS["app"]) && $GLOBALS["app"] instanceof Application)
+		if ($this->config)
+		{
+			return $this->config;
+		}
+		elseif (isset($GLOBALS["app"]) && $GLOBALS["app"] instanceof Application)
 		{
 			return $GLOBALS["app"]["tracker.config"];
 		}
 
 		return app()->make('tracker.config');
+	}
+
+	public function setConfig($config)
+	{
+		$this->config = $config;
 	}
 
 	public function scopePeriod($query, $minutes, $alias = '')

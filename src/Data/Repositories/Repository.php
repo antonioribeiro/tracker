@@ -51,9 +51,9 @@ abstract class Repository implements RepositoryInterface {
 		return $this->result;
 	}
 
-	public function create($attributes)
+	public function create($attributes, $model = null)
 	{
-		$model = $this->newModel();
+		$model = $model && ! $model->exists() ? $model : $this->newModel($model);
 
 		foreach ($attributes as $attribute => $value)
 		{
@@ -88,9 +88,9 @@ abstract class Repository implements RepositoryInterface {
 		return $this->result->save();
 	}
 
-    public function findOrCreate($attributes, $keys = null, &$created = false)
+    public function findOrCreate($attributes, $keys = null, &$created = false, $otherModel = null)
     {
-        $model = $this->newQuery();
+        $model = $this->newQuery($otherModel);
 
         $keys = $keys ?: array_keys($attributes);
 
@@ -101,7 +101,7 @@ abstract class Repository implements RepositoryInterface {
 
         if ( ! $model = $model->first())
         {
-            $model = $this->create($attributes);
+            $model = $this->create($attributes, $otherModel);
 
 	        $created = true;
         }
@@ -126,16 +126,30 @@ abstract class Repository implements RepositoryInterface {
     	return $this->model;
     }
 
-	public function newModel()
+	public function newModel($model = null)
 	{
-		$this->model = new $this->className;
+		$className = $this->className;
+
+		if ($model)
+		{
+			$className = get_class($model);
+		}
+
+		$this->model = new $className;
 
 		return $this->getModel();
 	}
 
-	public function newQuery()
+	public function newQuery($model = null)
 	{
-		$this->builder = new $this->className;
+		$className = $this->className;
+
+		if ($model)
+		{
+			$className = get_class($model);
+		}
+
+		$this->builder = new $className;
 
 		if ($this->connection)
 		{

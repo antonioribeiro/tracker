@@ -181,6 +181,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	        $refererModel = $this->instantiateModel('referer_model');
 
+	        $refererSearchTermModel = $this->instantiateModel('referer_search_term_model');
+
 	        $routeModel = $this->instantiateModel('route_model');
 
 	        $routePathModel = $this->instantiateModel('route_path_model');
@@ -281,7 +283,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
                 new Domain($domainModel),
 
-                new Referer($refererModel),
+	            $app->make('\PragmaRX\Tracker\Data\Repositories\Referer', [$refererModel, $refererSearchTermModel, $this->getAppUrl()]),
 
                 $routeRepository,
 
@@ -393,7 +395,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
         $model = new $model;
 
-        $model->config = $this->app['tracker.config'];
+        $model->setConfig($this->app['tracker.config']);
 
         if ($connection = $this->getConfig('connection'))
         {
@@ -591,6 +593,14 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	public function getRootDirectory()
 	{
 		return __DIR__.'/../..';
+	}
+
+	private function getAppUrl()
+	{
+		// Is it possible to get this via Laravel?
+		// $this->app->make('request')->server('APP_URL');
+
+		return $_SERVER['APP_URL'];
 	}
 
 }

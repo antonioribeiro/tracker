@@ -231,6 +231,8 @@ return [
 
 	'referer_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Referer',
 
+	'referer_search_term_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\RefererSearchTerm',
+
 	'route_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Route',
 
 	'route_path_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\RoutePath',
