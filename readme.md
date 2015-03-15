@@ -14,7 +14,7 @@
 - **Geo Location Data** (Latitute, Longitude, Country and City)
 - **Routes and all its parameters**
 - **Events**
-- **Referers**
+- **Referers** (url, medium, source, search term...)
 - **Exceptions/Errors**
 - **Sql queries and all its bindings**
 - **Url queries and all its arguments**
