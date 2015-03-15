@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 ### Added
 - Parse referer to store marketing attribution data (medium, source and search term)
+
 ### Changed
 - Use ua-php instead of ua-parser directly
 - No need to execute tracker:updateparser during install anymore
