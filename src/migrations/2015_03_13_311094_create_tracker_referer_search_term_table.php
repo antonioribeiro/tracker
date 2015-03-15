@@ -25,7 +25,7 @@ class CreateTrackerRefererSearchTermTable extends Migration {
 			{
 				$table->bigIncrements('id');
 
-				$table->integer('referer_id')->unsigned()->index();
+				$table->bigInteger('referer_id')->unsigned()->index();
 				$table->string('search_term')->index();
 
 				$table->timestamp('created_at')->index();
