@@ -582,10 +582,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	private function getAppUrl()
 	{
-		// Is it possible to get this via Laravel?
-		// $this->app->make('request')->server('APP_URL');
-
-		return $_SERVER['APP_URL'];
+		return $this->app['request']->url();
 	}
 
 }
