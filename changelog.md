@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased][unreleased]
+### Changed
+- Use ua-php instead of ua-parser directly
+- No need to execute tracker:updateparser during install anymore
+
 ## [1.0.5] - 2015-03-10
 ### Added
 - Middleware filter to routes
