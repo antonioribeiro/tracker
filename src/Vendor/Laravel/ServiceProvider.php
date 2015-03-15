@@ -36,7 +36,6 @@ use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 use PragmaRX\Tracker\Vendor\Laravel\Artisan\Tables as TablesCommand;
 use PragmaRX\Tracker\Support\Exceptions\Handler as TrackerExceptionHandler;
-use PragmaRX\Tracker\Vendor\Laravel\Artisan\UpdateParser as UpdateParserCommand;
 
 class ServiceProvider extends PragmaRXServiceProvider {
 
@@ -95,8 +94,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 		    $this->registerTablesCommand();
 
-		    $this->registerUpdateParserCommand();
-
 		    $this->registerExecutionCallback();
 
 		    $this->registerUserCheckCallback();
@@ -110,8 +107,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		    $this->registerGlobalViewComposers();
 
 		    $this->commands('tracker.tables.command');
-
-		    $this->commands('tracker.updateparser.command');
 	    }
     }
 
@@ -329,16 +324,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
 			return new TablesCommand();
 		});
 	}
-
-    private function registerUpdateParserCommand()
-    {
-        $this->app['tracker.updateparser.command'] = $this->app->share(function($app)
-        {
-            return new UpdateParserCommand(
-	            $app['tracker.config']
-            );
-        });
-    }
 
 	private function registerExecutionCallback()
 	{

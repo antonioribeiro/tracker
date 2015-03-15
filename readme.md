@@ -448,10 +448,6 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 
     'enabled' => true,
 
-####Create the UA Parser regex file (every time you run `composer update` you must also execute this command):
-
-    php artisan tracker:updateparser
-
 ####Publish the migration
 
     php artisan tracker:tables
