@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.5] - 2015-03-10
+### Added
+- Middleware filter to routes
+
+## [1.0.4] - 2015-03-10
+### Fixed
+- Console exception handler
+
 ## [1.0.3] - 2015-03-08
 ### Fixed
 - Datatables bug
@@ -8,9 +16,9 @@
 ### Fixed
 - Migrations for MySQL
 
-## [1.0.0] - 2015-02-21
+## [1.0.1] - 2015-03-06
 ### Changed
-- Added support for Laravel 5
+- Use a stable version of datatables
 
 ## [1.0.0] - 2015-02-21
 ### Changed
