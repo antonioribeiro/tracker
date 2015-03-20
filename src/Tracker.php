@@ -90,12 +90,7 @@ class Tracker
 			'user_agent' => $this->dataRepositoryManager->getCurrentUserAgent(),
 		);
 
-		if ($this->sessionData && $this->sessionData !== $sessionData)
-		{
-			$this->dataRepositoryManager->updateSessionData($sessionData);
-		}
-
-		return $this->sessionData = $sessionData;
+		return $this->sessionData = $this->dataRepositoryManager->checkSessionData($sessionData, $this->sessionData);
 	}
 
 	/**
