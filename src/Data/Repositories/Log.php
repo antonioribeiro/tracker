@@ -8,12 +8,16 @@ class Log extends Repository {
 
 	public function updateRoute($route_path_id)
 	{
-		if ($this->getModel()->id)
-		{
-			$this->getModel()->route_path_id = $route_path_id;
+		$model = $this->getModel();
 
-			$this->getModel()->save();
+		if ($model->id)
+		{
+			$model->route_path_id = $route_path_id;
+
+			$model->save();
 		}
+
+		return $model;
 	}
 
 	public function updateError($error_id)
