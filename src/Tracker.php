@@ -419,8 +419,6 @@ class Tracker
 	{
 		if ( ! $this->getSessionData()['user_id'] && $user_id = $this->getUserId())
 		{
-			dd('has to update!');
-
 			return true;
 		}
 
