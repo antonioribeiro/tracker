@@ -9,7 +9,13 @@ use PragmaRX\Support\PhpSession;
 
 class Session extends Repository {
 
-    public function __construct($model, Config $config, PhpSession $session)
+	private $config;
+
+	private $session;
+
+	private $sessionInfo;
+
+	public function __construct($model, Config $config, PhpSession $session)
     {
         $this->config = $config;
 
@@ -40,7 +46,7 @@ class Session extends Repository {
         }
     }
 
-    public function generateSession($sessionInfo)
+    private function generateSession($sessionInfo)
     {
         $this->sessionInfo = $sessionInfo;
 
@@ -49,7 +55,7 @@ class Session extends Repository {
             $this->regenerateSystemSession();
         }
 
-        $this->sessionInfo['uuid'] = $this->getSystemSessionId();
+	    $this->checkSessionUuid();
     }
 
     private function sessionIsReliable()
@@ -145,16 +151,18 @@ class Session extends Repository {
                 : (string) UUID::uuid4();
     }
 
-    public function regenerateSystemSession()
+    private function regenerateSystemSession($data = null)
     {
-        if ($data = $this->getSessionData())
+	    $data = $data ?: $this->getSessionData();
+
+        if ($data)
         {
-            unset($data['uuid']);
+	        $this->resetSessionUuid($data);
 
-            $this->sessionInfo['uuid'] = null;
-
-            $this->putSessionData($data);
+	        $this->sessionIsKnownOrCreateSession();
         }
+
+	    return $this->sessionInfo;
     }
 
     private function getSessionData($variable = null)
@@ -221,7 +229,7 @@ class Session extends Repository {
 
 	public function updateSessionData($data)
 	{
-		$session = $this->find($this->getSessionData('id'));
+		$session = $this->checkIfUserChanged($data, $this->find($this->getSessionData('id')));
 
 		foreach($session->getAttributes() as $name => $value)
 		{
@@ -232,6 +240,43 @@ class Session extends Repository {
 		}
 
 		$session->save();
+
+		return $data;
+	}
+
+	private function checkIfUserChanged($data, $model)
+	{
+		if ( ! is_null($model->user_id) && ! is_null($data['user_id']) && $data['user_id'] !== $model->user_id)
+		{
+			$newSession = $this->regenerateSystemSession($data);
+
+			$model = $this->findByUuid($newSession['uuid']);
+		}
+
+		return $model;
+	}
+
+	private function checkSessionUuid()
+	{
+		if ( ! isset($this->sessionInfo['uuid']) || ! $this->sessionInfo['uuid'])
+		{
+			$this->sessionInfo['uuid'] = $this->getSystemSessionId();
+		}
+	}
+
+	private function resetSessionUuid($data = null)
+	{
+		$this->sessionInfo['uuid'] = null;
+
+		$data = $data ?: $this->sessionInfo;
+
+		unset($data['uuid']);
+
+		$this->putSessionData($data);
+
+		$this->checkSessionUuid();
+
+		return $data;
 	}
 
 }

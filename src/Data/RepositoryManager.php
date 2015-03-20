@@ -116,6 +116,8 @@ class RepositoryManager implements RepositoryManagerInterface {
 	 */
 	private $systemClassRepository;
 
+	private $userAgentParser;
+
 	public function __construct(
 		GeoIP $geoIp,
 		MobileDetect $mobileDetect,
@@ -542,7 +544,17 @@ class RepositoryManager implements RepositoryManagerInterface {
 
 	public function updateSessionData($data)
 	{
-		$this->sessionRepository->updateSessionData($data);
+		return $this->sessionRepository->updateSessionData($data);
+	}
+
+	public function checkSessionData($newData, $currentData)
+	{
+		if ($newData && $currentData && $newData !== $currentData)
+		{
+			$newData = $this->updateSessionData($newData);
+		}
+
+		return $newData;
 	}
 
 }
