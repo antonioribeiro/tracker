@@ -30,7 +30,7 @@ class Cookie extends Repository {
     {
         if ( ! $this->config->get('store_cookie_tracker'))
         {
-            return;
+            return null;
         }
 
         if ( ! $cookie = $this->request->cookie($this->config->get('tracker_cookie_name')))
