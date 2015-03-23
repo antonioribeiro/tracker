@@ -94,22 +94,14 @@ class Event extends Repository {
 
 	private function logEvent($event)
 	{
-		$evenId = $event['event']
-					? $this->findOrCreate(
-							array('name' => $event['event']),
-							array('name')
-						)
-					: null;
-
-		$classId = $this->getObject($event['object'])
-					? $this->systemClassRepository->findOrCreate(
-							array('name' => $this->getObject($event['object'])),
-							array('name')
-						)
-					: null;
+		$evenId = $this->getEventId($event);
 
 		if ($evenId)
 		{
+			$objectName = $this->getObjectName($event);
+
+			$classId = $this->getClassId($objectName);
+
 			$this->eventLogRepository->create(
 				array(
 					'log_id'   => $this->logRepository->getCurrentLogId(),
@@ -138,5 +130,50 @@ class Event extends Repository {
 	public function getAll($minutes, $results)
 	{
 		return $this->getModel()->allInThePeriod($minutes, $results);
+	}
+
+	/**
+	 * Get the object name from an event.
+	 *
+	 * @param $event
+	 * @return null|string
+	 */
+	private function getObjectName($event)
+	{
+		return isset($event['object'])
+			? $this->getObject($event['object'])
+			: null;
+	}
+
+	/**
+	 * Get the system class id by object name.
+	 *
+	 * @param $objectName
+	 * @return null
+	 */
+	private function getClassId($objectName)
+	{
+		return $objectName
+			? $this->systemClassRepository->findOrCreate(
+				array('name' => $objectName),
+				array('name')
+			)
+			: null;
+	}
+
+	/**
+	 * Get the event id.
+	 *
+	 * @param $event
+	 * @return null
+	 */
+	private function getEventId($event)
+	{
+		return $event['event']
+			?   $this->findOrCreate(
+					array('name' => $event['event']),
+					array('name')
+				)
+			: null;
 	}
 }
