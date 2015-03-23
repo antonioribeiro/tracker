@@ -414,6 +414,15 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 +----+------------------------------------------+-------------------------------------------------------------------------------------------------+-------+---------------+
 ```
 
+## Manually log things
+
+If your application has special needs, you can logs things like events and routes manually: 
+
+```
+Tracker::trackEvent(['name' => 'cart.add']);
+Tracker::trackEvent(['name' => 'cart.add', 'object' => 'App\Cart\Events\Add']);
+```
+
 ## Requirements
 
 - Laravel 4.1+ or 5+

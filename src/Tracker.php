@@ -296,7 +296,12 @@ class Tracker
 		}
 	}
 
-    public function sessions($minutes = 1440, $results = true)
+	public function trackEvent($event)
+	{
+		$this->dataRepositoryManager->logEvent($event);
+	}
+
+	public function sessions($minutes = 1440, $results = true)
     {
         return $this->dataRepositoryManager->getLastSessions(Minutes::make($minutes), $results);
     }

@@ -92,8 +92,10 @@ class Event extends Repository {
 			;
 	}
 
-	private function logEvent($event)
+	public function logEvent($event)
 	{
+		$event = $this->makeEventArray($event);
+
 		$evenId = $this->getEventId($event);
 
 		if ($evenId)
@@ -176,4 +178,18 @@ class Event extends Repository {
 				)
 			: null;
 	}
+
+	private function makeEventArray($event)
+	{
+		if (is_string($event))
+		{
+			$event = array(
+				'event' => $event,
+				'object' => null
+			);
+		}
+
+		return $event;
+	}
+
 }
