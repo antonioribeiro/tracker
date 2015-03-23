@@ -21,6 +21,7 @@ use PragmaRX\Tracker\Data\Repositories\Session;
 use PragmaRX\Tracker\Data\Repositories\EventLog;
 use PragmaRX\Tracker\Data\Repositories\SqlQuery;
 use PragmaRX\Tracker\Data\Repositories\RoutePath;
+use Illuminate\Routing\Router as IlluminateRouter;
 use Illuminate\Session\Store as IlluminateSession;
 use PragmaRX\Tracker\Data\Repositories\Connection;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryLog;
@@ -375,7 +376,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 			$created
 		);
 
-		if ($created && $route->current())
+		if ($created && $route instanceof IlluminateRouter && $route->current())
 		{
 			foreach ($route->current()->parameters() as $parameter => $value)
 			{
