@@ -175,7 +175,7 @@ class Tracker
 		    if ($log)
 		    {
 			    $this->dataRepositoryManager->updateRoute(
-				    $this->getRoutePathId($this->route->current())
+				    $this->getRoutePathId()
 			    );
 		    }
 	    }
