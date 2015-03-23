@@ -416,11 +416,25 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 
 ## Manually log things
 
-If your application has special needs, you can logs things like events and routes manually: 
+If your application has special needs, you can manually log things like:
+ 
+####Events  
 
 ```
 Tracker::trackEvent(['name' => 'cart.add']);
 Tracker::trackEvent(['name' => 'cart.add', 'object' => 'App\Cart\Events\Add']);
+```
+
+####Routes
+
+```
+Tracker::trackVisit(
+    [
+        'name' => 'my.dynamic.route.name', 
+        'action' => 'MyDynamic@url'
+    ], 
+    ['path' => 'my/dynamic/url']
+);
 ```
 
 ## Requirements

@@ -324,6 +324,13 @@ class RepositoryManager implements RepositoryManagerInterface {
 		return $this->logRepository->updateRoute($route_id);
 	}
 
+	public function trackRoute($route, $request)
+	{
+		$this->updateRoute(
+			$this->getRoutePathId($route, $request)
+		);
+	}
+
 	public function getDomainId($domain)
 	{
 		return $this->domainRepository->findOrCreate(
@@ -356,15 +363,15 @@ class RepositoryManager implements RepositoryManagerInterface {
 	public function getRoutePathId($route, $request)
 	{
 		$route_id = $this->getRouteId(
-			$route->currentRouteName() ?: '',
-			$route->currentRouteAction() ?: 'closure'
+			$this->getRouteName($route),
+			$this->getRouteAction($route) ?: 'closure'
 		);
 
 		$created = false;
 
 		$route_path_id = $this->getRoutePath(
 			$route_id,
-			$request->path(),
+			$this->getRequestPath($request),
 			$created
 		);
 
@@ -560,6 +567,63 @@ class RepositoryManager implements RepositoryManagerInterface {
 		}
 
 		return $newData;
+	}
+
+	/**
+	 * @param $route
+	 * @return string
+	 */
+	private function getRouteName($route)
+	{
+		if (is_string($route))
+		{
+			return $route;
+		}
+
+		if (is_array($route))
+		{
+			return $route['name'];
+		}
+
+		return $route->currentRouteName() ?: '';
+	}
+
+	/**
+	 * @param $route
+	 * @return mixed
+	 */
+	private function getRouteAction($route)
+	{
+		if (is_string($route))
+		{
+			return '';
+		}
+
+		if (is_array($route))
+		{
+			return $route['action'];
+		}
+
+		return $route->currentRouteAction();
+	}
+
+	/**
+	 * @param $request
+	 * @return mixed
+	 */
+	private function getRequestPath($request)
+	{
+		if (is_string($request))
+		{
+			return $request;
+		}
+
+		if (is_array($request))
+		{
+			return $request['path'];
+		}
+
+		return $request->path();
 	}
 
 }

@@ -193,6 +193,11 @@ class Tracker
 		}
 	}
 
+	public function trackVisit($route, $request)
+	{
+		$this->dataRepositoryManager->trackRoute($route, $request);
+	}
+
 	private function getRefererId()
 	{
 		return $this->config->get('log_referers')
