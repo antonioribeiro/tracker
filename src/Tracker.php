@@ -298,7 +298,7 @@ class Tracker
 
 	public function trackEvent($event)
 	{
-		$this->dataRepositoryManager->logEvent($event);
+		$this->dataRepositoryManager->trackEvent($event);
 	}
 
 	public function sessions($minutes = 1440, $results = true)

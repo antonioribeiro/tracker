@@ -507,7 +507,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 		$this->eventRepository->logEvents();
 	}
 
-	public function logEvent($event)
+	public function trackEvent($event)
 	{
 		$this->eventRepository->logEvent($event);
 	}
