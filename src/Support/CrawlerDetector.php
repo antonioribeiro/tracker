@@ -12,11 +12,12 @@ class CrawlerDetector {
 	private $detector;
 
 	/**
-	 * @param \Jaybizzle\CrawlerDetect\CrawlerDetect $detector
+	 * @param array $headers
+	 * @param $agent
 	 */
-	public function __construct(CrawlerDetect $detector)
+	public function __construct(array $headers, $agent)
 	{
-		$this->detector = $detector;
+		$this->detector = new CrawlerDetect($headers, $agent);
 	}
 
 	public function isRobot()

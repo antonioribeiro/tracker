@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel;
 
-use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use PragmaRX\Support\GeoIp;
 use PragmaRX\Tracker\Tracker;
 use PragmaRX\Support\PhpSession;
@@ -245,10 +244,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	        );
 
 	        $crawlerDetect = new CrawlerDetector(
-		        new CrawlerDetect(
-			        $app['request']->headers->all(),
-			        $app['request']->server('HTTP_USER_AGENT')
-		        )
+		        $app['request']->headers->all(),
+		        $app['request']->server('HTTP_USER_AGENT')
 	        );
 
 	        return new RepositoryManager(
