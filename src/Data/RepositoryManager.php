@@ -12,6 +12,7 @@ use PragmaRX\Tracker\Data\Repositories\Agent;
 use PragmaRX\Tracker\Services\Authentication;
 use PragmaRX\Tracker\Data\Repositories\Route;
 use PragmaRX\Tracker\Data\Repositories\Event;
+use PragmaRX\Tracker\Support\CrawlerDetector;
 use PragmaRX\Tracker\Data\Repositories\Error;
 use PragmaRX\Tracker\Data\Repositories\Device;
 use PragmaRX\Tracker\Data\Repositories\Cookie;
@@ -119,6 +120,11 @@ class RepositoryManager implements RepositoryManagerInterface {
 
 	private $userAgentParser;
 
+	/**
+	 * @var CrawlerDetector
+	 */
+	private $crawlerDetector;
+
 	public function __construct(
 		GeoIP $geoIp,
 		MobileDetect $mobileDetect,
@@ -148,7 +154,8 @@ class RepositoryManager implements RepositoryManagerInterface {
 		Connection $connectionRepository,
 		Event $eventRepository,
 		EventLog $eventLogRepository,
-		SystemClass $systemClassRepository
+		SystemClass $systemClassRepository,
+		CrawlerDetector $crawlerDetector
     )
     {
 	    $this->authentication = $authentication;
@@ -208,6 +215,8 @@ class RepositoryManager implements RepositoryManagerInterface {
 	    $this->eventLogRepository = $eventLogRepository;
 
 	    $this->systemClassRepository = $systemClassRepository;
+
+	    $this->crawlerDetector = $crawlerDetector;
     }
 
     public function createLog($data)
@@ -537,7 +546,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 
 	public function isRobot()
 	{
-		return $this->mobileDetect->isRobot();
+		return $this->crawlerDetector->isRobot();
 	}
 
 	public function logByRouteName($name, $minutes = null)

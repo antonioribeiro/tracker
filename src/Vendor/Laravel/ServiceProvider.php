@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel;
 
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use PragmaRX\Support\GeoIp;
 use PragmaRX\Tracker\Tracker;
 use PragmaRX\Support\PhpSession;
@@ -14,6 +15,7 @@ use PragmaRX\Tracker\Data\Repositories\Route;
 use PragmaRX\Tracker\Data\Repositories\Query;
 use PragmaRX\Tracker\Data\Repositories\Event;
 use PragmaRX\Tracker\Services\Authentication;
+use PragmaRX\Tracker\Support\CrawlerDetector;
 use PragmaRX\Tracker\Support\UserAgentParser;
 use PragmaRX\Tracker\Data\Repositories\Error;
 use PragmaRX\Tracker\Data\Repositories\Agent;
@@ -242,6 +244,13 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		        $app['tracker.config']
 	        );
 
+	        $crawlerDetect = new CrawlerDetector(
+		        new CrawlerDetect(
+			        $app['request']->headers->all(),
+			        $app['request']->server('HTTP_USER_AGENT')
+		        )
+	        );
+
 	        return new RepositoryManager(
 	            new GeoIp(),
 
@@ -304,7 +313,9 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	            $eventLogRepository,
 
-	            $systemClassRepository
+	            $systemClassRepository,
+
+		        $crawlerDetect
             );
         });
     }
