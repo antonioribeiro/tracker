@@ -23,7 +23,8 @@
         "jenssegers/agent": "~2.1",
         "ua-parser/uap-php" : "~3.4",
         "pragmarx/datatables": "1.4.10",
-        "snowplow/referer-parser": "~0.1"
+        "snowplow/referer-parser": "~0.1",
+        "jaybizzle/crawler-detect": "~1.0"
     },
 
     "suggest": {
