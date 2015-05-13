@@ -55,18 +55,18 @@ class Session extends Repository {
             $this->regenerateSystemSession();
         }
 
-	$this->checkSessionUuid();
+	    $this->checkSessionUuid();
     }
 
     private function sessionIsReliable()
     {
-	$data = $this->getSessionData();
+        $data = $this->getSessionData();
 
-	return  $data['user_id'] === $this->sessionInfo['user_id'] &&
-	        isset($data['client_ip']) &&
-	        $data['client_ip'] === $this->sessionInfo['client_ip'] &&
-	        isset($data['user_agent']) &&
-	        $data['user_agent'] === $this->sessionInfo['user_agent'];
+        return  isset($data['client_ip']) &&
+                $data['client_ip'] === $this->sessionInfo['client_ip'] &&
+
+                isset($data['user_agent']) &&
+                $data['user_agent'] === $this->sessionInfo['user_agent'];
     }
 
     private function sessionIsKnownOrCreateSession()
