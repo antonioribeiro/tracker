@@ -62,7 +62,10 @@ class Session extends Repository {
     {
         $data = $this->getSessionData();
 
-        return  isset($data['client_ip']) &&
+        return  isset($data['user_id']) &&
+                $data['user_id'] === $this->sessionInfo['user_id'] &&
+
+                isset($data['client_ip']) &&
                 $data['client_ip'] === $this->sessionInfo['client_ip'] &&
 
                 isset($data['user_agent']) &&
