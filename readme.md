@@ -531,7 +531,8 @@ And enabled in your config file:
 
 Only admins can view the stats, so if you don't have an is_admin attribute on your user model, you'll have to add one:
 
-    public function getIsAdminAttribute() {
+    public function getIsAdminAttribute()
+    {
         return true;
     }
 
