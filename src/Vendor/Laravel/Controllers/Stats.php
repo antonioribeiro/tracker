@@ -2,19 +2,22 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Controllers;
 
-use Bllim\Datatables\Facade\Datatables;
-use Illuminate\Support\Facades\Response;
-use PragmaRX\Tracker\Support\Minutes;
-use PragmaRX\Tracker\Vendor\Laravel\Facade as Tracker;
+use Auth;
 
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\View;
-
+use PragmaRX\Tracker\Support\Minutes;
 use Illuminate\Support\Facades\Input;
+use Bllim\Datatables\Facade\Datatables;
 use Illuminate\Support\Facades\Session;
+use PragmaRX\Tracker\Vendor\Laravel\Facade as Tracker;
 
-class Stats extends Controller {
+class Stats extends Controller
+{
+    private $adminProperties = [
+        'is_admin',
+        'is_root',
+    ];
 
 	public function __construct()
 	{
@@ -23,10 +26,27 @@ class Stats extends Controller {
 		Session::put('tracker.stats.page', $this->getValue('page', 'visits'));
 
 		$this->minutes = new Minutes(60 * 24 * Session::get('tracker.stats.days'));
+
+        $this->authentication = app()->make('tracker.authentication');
 	}
 
 	public function index()
 	{
+        if ( ! $this->isAuthenticated())
+        {
+            return View::make('pragmarx/tracker::message')->with('message', 'Authentication required');
+        }
+
+        if ( ! $this->hasAdminProperty())
+        {
+            return View::make('pragmarx/tracker::message')->with('message', 'User model misses admin property');
+        }
+
+        if ( ! $this->isAdmin())
+        {
+            return View::make('pragmarx/tracker::message')->with('message', 'You are not Admin');
+        }
+
 		return $this->showPage(Session::get('tracker.stats.page'));
 	}
 
@@ -330,5 +350,53 @@ class Stats extends Controller {
 				->make(true);
 	}
 
+    private function isAuthenticated()
+    {
+        return $this->authentication->check();
+    }
+
+    private function hasAdminProperty()
+    {
+        $user = $this->authentication->user();
+
+        foreach ($this->adminProperties as $property)
+        {
+            $propertyCamel = camel_case($property);
+
+            if (
+                    isset($user->$property) ||
+                    isset($user->$propertyCamel) ||
+                    method_exists($user, $property) ||
+                    method_exists($user, $propertyCamel)
+            )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isAdmin()
+    {
+        $user = $this->authentication->user();
+
+        foreach ($this->adminProperties as $property)
+        {
+            $propertyCamel = camel_case($property);
+
+            if (
+                (isset($user->$property) && $user->$property) ||
+                (isset($user->$propertyCamel) && $user->$propertyCamel) ||
+                (method_exists($user, $property) && $user->$property()) ||
+                (method_exists($user, $propertyCamel) && $user->$propertyCamel())
+            )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
