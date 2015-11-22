@@ -15,6 +15,8 @@ use PragmaRX\Tracker\Vendor\Laravel\Facade as Tracker;
 class Stats extends Controller
 {
     private $adminProperties = [
+        'admin',
+        'root',
         'is_admin',
         'is_root',
     ];

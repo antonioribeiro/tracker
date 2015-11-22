@@ -529,6 +529,14 @@ And enabled in your config file:
 
 	'stats_panel_enabled' => true,
 
+Only admins can view the stats, so if you don't have an is_admin attribute on your user model, you'll have to add one:
+
+    public function getIsAdminAttribute() {
+        return true;
+    }
+
+It can be 'admin', 'is_admin', 'root' or 'is_root'.
+
 ## Author
 
 [Antonio Carlos Ribeiro](http://twitter.com/iantonioribeiro)
