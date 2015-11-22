@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased][unreleased]
+## [1.0.6] - 2015-11-21
 ### Added
 - Referer parsing, to store marketing attribution data (medium, source and search term)
 - Tracker::trackVisit()
@@ -12,6 +12,7 @@
 - Correctly get the application url
 - Migrations for MySQL
 - Sessions now change when a different users logs in
+- isPhone compatibility
 ### Changed
 - Use ua-php instead of ua-parser directly
 - No need to execute tracker:updateparser during install anymore
