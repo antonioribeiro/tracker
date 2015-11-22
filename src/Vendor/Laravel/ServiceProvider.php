@@ -2,9 +2,9 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel;
 
-use PragmaRX\Support\GeoIp;
 use PragmaRX\Tracker\Tracker;
 use PragmaRX\Support\PhpSession;
+use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Eventing\EventStorage;
 use PragmaRX\Tracker\Data\Repositories\Log;

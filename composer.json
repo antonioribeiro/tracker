@@ -28,7 +28,8 @@
     },
 
     "suggest": {
-        "geoip/geoip": "~1.14"
+        "geoip/geoip": "~1.14",
+        "geoip2/geoip2": "~2.0"
     },
 
     "require-dev": {

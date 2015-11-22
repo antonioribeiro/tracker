@@ -2,8 +2,8 @@
 
 namespace PragmaRX\Tracker\Data;
 
-use PragmaRX\Support\GeoIp;
 use PragmaRX\Support\Config;
+use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Data\Repositories\Log;
 use PragmaRX\Tracker\Data\Repositories\Path;
@@ -481,10 +481,10 @@ class RepositoryManager implements RepositoryManagerInterface {
 	{
 		$id = null;
 
-		if($geoip = $this->geoIp->byAddr($clientIp))
+		if($geoIpData = $this->geoIp->searchAddr($clientIp))
 		{
 			$id = $this->geoIpRepository->findOrCreate(
-				$this->geoIp->byAddr($clientIp),
+                $geoIpData,
 				array('latitude', 'longitude')
 			);
 		}

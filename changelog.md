@@ -2,7 +2,9 @@
 
 ## [Unreleased][unreleased]
 ### Added
+- Support for GeoIp2
 ### Changed
+- Upgraded SB Admin 2 to 1.0.7
 ### Fixed
 ### Changed
 

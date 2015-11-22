@@ -441,7 +441,8 @@ Tracker::trackVisit(
 
 - Laravel 4.1+ or 5+
 - PHP 5.3.7+
-- Package "geoip/geoip":"~1.14" (If you are planning to store Geo IP information)
+- Package "geoip/geoip":"~1.14" or "geoip2/geoip2":"~2.0"
+  (If you are planning to store Geo IP information)
 
 ## Installing
 
@@ -499,6 +500,10 @@ Otherwise you'll have to
 ####If you are planning to store Geo IP information, also install the geoip package:
 
     composer require "geoip/geoip":"~1.14"
+
+    or
+
+    composer require "geoip2/geoip2":"~2.0"
 
 ####And make sure you don't have the PHP module installed. This is a Debian/Ubuntu example:
 
