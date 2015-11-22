@@ -516,9 +516,9 @@ It is responsible for logging page hits and sessions, basically the client IP ad
 
 To use the stats panel on your website you'll need to download the sb-admin 2 sources to your public folder:
 
-    wget --output-document=/tmp/sba2.zip https://github.com/IronSummitMedia/startbootstrap-sb-admin-2/archive/v1.0.5.zip
+    wget --output-document=/tmp/sba2.zip https://github.com/IronSummitMedia/startbootstrap-sb-admin-2/archive/v1.0.7.zip
     unzip /tmp/sba2.zip -d /tmp
-    mkdir -p public/templates; mv /tmp/startbootstrap-sb-admin-2-1.0.5 public/templates/sb-admin-2
+    mkdir -p public/templates; mv /tmp/startbootstrap-sb-admin-2-1.0.7 public/templates/sb-admin-2
 
 And enabled in your config file:
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased][unreleased]
+### Added
+### Changed
+### Fixed
+### Changed
+
 ## [1.0.6] - 2015-11-21
 ### Added
 - Referer parsing, to store marketing attribution data (medium, source and search term)
