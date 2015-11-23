@@ -63,7 +63,14 @@ abstract class Repository implements RepositoryInterface {
 			}
 		}
 
-		$model->save();
+        try
+        {
+            $model->save();
+        }
+		catch(\Exception $e)
+        {
+            $model->save();
+        }
 
 		return $model;
 	}

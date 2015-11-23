@@ -2,8 +2,8 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-class Log extends Repository {
-
+class Log extends Repository
+{
 	private $currentLogId = null;
 
 	public function updateRoute($route_path_id)
@@ -95,7 +95,8 @@ class Log extends Repository {
 
 	public function delete()
 	{
+        $this->currentLogId = null;
+
 		$this->getModel()->delete();
 	}
-
 }
