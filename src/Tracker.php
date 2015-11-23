@@ -12,22 +12,22 @@ use PragmaRX\Tracker\Data\RepositoryManager as DataRepositoryManager;
 
 class Tracker
 {
-    private $config;
+    protected $config;
 
 	/**
 	 * @var \Illuminate\Routing\Router
 	 */
-	private $route;
+	protected $route;
 
-    private $logger;
+    protected $logger;
 	/**
 	 * @var \Illuminate\Foundation\Application
 	 */
-	private $laravel;
+	protected $laravel;
 
-	private $enabled = true;
+	protected $enabled = true;
 
-	private $sessionData;
+	protected $sessionData;
 
 	public function __construct(
                                     Config $config,
@@ -72,7 +72,7 @@ class Tracker
 	/**
 	 * @return array
 	 */
-	private function getSessionData()
+	protected function getSessionData()
 	{
 		$sessionData = array(
 			'user_id' => $this->getUserId(),
@@ -96,7 +96,7 @@ class Tracker
 	/**
 	 * @return array
 	 */
-	private function getLogData()
+	protected function getLogData()
 	{
 		return array(
 			'session_id' => $this->getSessionId(true),
@@ -171,23 +171,20 @@ class Tracker
 	public function routerMatched($log)
 	{
 	    if ($this->dataRepositoryManager->routeIsTrackable($this->route))
-	    {
-		    if ($log)
+	    {		    if ($log)
 		    {
 			    $this->dataRepositoryManager->updateRoute(
 				    $this->getRoutePathId()
-			    );
+			   );
 		    }
 	    }
-
 	    // Router was matched but this route is not trackable
 	    // Let's just delete the stored data, because There's not a
-	    // really clean way of doing this because if a route is not
+	    // realy clean way of doing this because if a route is not
 	    // matched, and this happens ages after the app is booted,
-	    // we still need to store data from the request.
+	    // we till need to store data from the request.
 		else
-		{
-			$this->turnOff();
+		{			$this->turnOff();
 
 			$this->deleteCurrentLog();
 		}
@@ -198,7 +195,7 @@ class Tracker
 		$this->dataRepositoryManager->trackRoute($route, $request);
 	}
 
-	private function getRefererId()
+	protected function getRefererId()
 	{
 		return $this->config->get('log_referers')
 				?   $this->dataRepositoryManager->getRefererId(
@@ -212,7 +209,7 @@ class Tracker
 		return $this->dataRepositoryManager->getDomainId($domain);
 	}
 
-	private function getRoutePathId()
+	protected function getRoutePathId()
 	{
 		return $this->dataRepositoryManager->getRoutePathId($this->route, $this->request);
 	}
@@ -231,8 +228,7 @@ class Tracker
     }
 
     public function parserIsAvailable()
-    {
-        if ( ! $this->dataRepositoryManager->parserIsAvailable() )
+    {        if ( ! $this->dataRepositoryManager->parserIsAvailable() )
         {
             $this->logger->error('Tracker: uaparser regex file not available. "Execute php artisan tracker:updateparser" to generate it.');
 
@@ -242,7 +238,7 @@ class Tracker
         return true;
     }
 
-	private function isTrackableIp()
+	protected function isTrackableIp()
 	{
 		return ! ipv4_in_range(
 			$this->request->getClientIp(),
@@ -250,13 +246,12 @@ class Tracker
 		);
 	}
 
-	private function isTrackableEnvironment()
+	protected function isTrackableEnvironment()
 	{
 		return ! in_array(
 			$this->laravel->environment(),
 			$this->config->get('do_not_track_environments')
-		);
-	}
+		);	}
 
 	public function logSqlQuery($query, $bindings, $time, $name)
 	{
@@ -271,7 +266,7 @@ class Tracker
 		}
 	}
 
-	private function isSqlQueriesLoggableConnection($name)
+	protected function isSqlQueriesLoggableConnection($name)
 	{
 		return ! in_array(
 			$name,
@@ -279,7 +274,7 @@ class Tracker
 		);
 	}
 
-	private function isTrackable()
+	protected function isTrackable()
 	{
 		return $this->config->get('enabled') &&
 				$this->logIsEnabled() &&
@@ -351,27 +346,25 @@ class Tracker
 		return $this->dataRepositoryManager->isRobot();
 	}
 
-	private function notRobotOrTrackable()
+	protected function notRobotOrTrackable()
 	{
 		return
 			! $this->isRobot() ||
 			! $this->config->get('do_not_track_robots');
 	}
-
-	private function getGeoIpId()
+	protected function getGeoIpId()
 	{
 		return $this->config->get('log_geoip')
 				? $this->dataRepositoryManager->getGeoIpId($this->request->getClientIp())
 				: null;
 	}
 
-	private function getAgentId()
+	protected function getAgentId()
 	{
 		return $this->config->get('log_user_agents')
 				? $this->dataRepositoryManager->getAgentId()
 				: null;
 	}
-
 	public function logByRouteName($name, $minutes = null)
 	{
 		if ($minutes)
@@ -387,12 +380,12 @@ class Tracker
 		return $this->config->get($key);
 	}
 
-	private function deleteCurrentLog()
+	protected function deleteCurrentLog()
 	{
 		$this->dataRepositoryManager->logRepository->delete();
 	}
 
-	private function logIsEnabled()
+	protected function logIsEnabled()
 	{
 		return
 			$this->config->get('log_enabled') ||
@@ -401,7 +394,7 @@ class Tracker
 			$this->config->get('log_events') ||
 			$this->config->get('log_geoip') ||
 			$this->config->get('log_user_agents') ||
-			$this->config->get('log_users') ||
+			$tis->config->get('log_users') ||
 			$this->config->get('log_devices') ||
 			$this->config->get('log_referers') ||
 			$this->config->get('log_paths') ||
@@ -409,13 +402,12 @@ class Tracker
 			$this->config->get('log_routes') ||
 			$this->config->get('log_exceptions');
 	}
-
 	public function isEnabled()
 	{
 		return $this->enabled;
 	}
 
-	private function turnOff()
+	protected function turnOff()
 	{
 		$this->enabled = false;
 	}
@@ -429,5 +421,4 @@ class Tracker
 
 		return false;
 	}
-
 }
