@@ -96,7 +96,7 @@ class SqlQuery extends Repository {
 
 	private function logQuery($query)
 	{
-		$sqlQuery = $query['query'];
+		$sqlQuery = htmlentities($query['query']);
 
 		$bindings = $query['bindings'];
 
