@@ -33,110 +33,111 @@ use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
 use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
 
-class RepositoryManager implements RepositoryManagerInterface {
+class RepositoryManager implements RepositoryManagerInterface
+{
 
-	/**
-	 * @var Path
-	 */
-	private $pathRepository;
+    /**
+     * @var Path
+     */
+    private $pathRepository;
 
-	/**
-	 * @var Query
-	 */
+    /**
+     * @var Query
+     */
 
-	private $queryRepository;
-	/**
-	 * @var QueryArgument
-	 */
+    private $queryRepository;
+    /**
+     * @var QueryArgument
+     */
 
-	private $queryArgumentRepository;
-	/**
-	 * @var Domain
-	 */
-	private $domainRepository;
-	/**
-	 * @var Referer
-	 */
-	private $refererRepository;
-	/**
-	 * @var Repositories\Route
-	 */
-	private $routeRepository;
-	/**
-	 * @var Repositories\RoutePath
-	 */
-	private $routePathRepository;
-	/**
-	 * @var Repositories\RoutePathParameter
-	 */
-	private $routePathParameterRepository;
-	/**
-	 * @var Error
-	 */
-	private $errorRepository;
-	/**
-	 * @var GeoIP
-	 */
-	private $geoIp;
+    private $queryArgumentRepository;
+    /**
+     * @var Domain
+     */
+    private $domainRepository;
+    /**
+     * @var Referer
+     */
+    private $refererRepository;
+    /**
+     * @var Repositories\Route
+     */
+    private $routeRepository;
+    /**
+     * @var Repositories\RoutePath
+     */
+    private $routePathRepository;
+    /**
+     * @var Repositories\RoutePathParameter
+     */
+    private $routePathParameterRepository;
+    /**
+     * @var Error
+     */
+    private $errorRepository;
+    /**
+     * @var GeoIP
+     */
+    private $geoIp;
 
-	private $geoIpRepository;
+    private $geoIpRepository;
 
-	/**
-	 * @var Repositories\SqlQuery
-	 */
-	private $sqlQueryRepository;
+    /**
+     * @var Repositories\SqlQuery
+     */
+    private $sqlQueryRepository;
 
-	/**
-	 * @var Repositories\SqlQueryBinding
-	 */
-	private $sqlQueryBindingRepository;
+    /**
+     * @var Repositories\SqlQueryBinding
+     */
+    private $sqlQueryBindingRepository;
 
-	/**
-	 * @var Repositories\SqlQueryLog
-	 */
-	private $sqlQueryLogRepository;
+    /**
+     * @var Repositories\SqlQueryLog
+     */
+    private $sqlQueryLogRepository;
 
-	private $sqlQueryBindingParameterRepository;
+    private $sqlQueryBindingParameterRepository;
 
-	/**
-	 * @var Repositories\Connection
-	 */
-	private $connectionRepository;
+    /**
+     * @var Repositories\Connection
+     */
+    private $connectionRepository;
 
-	/**
-	 * @var Repositories\Event
-	 */
-	private $eventRepository;
+    /**
+     * @var Repositories\Event
+     */
+    private $eventRepository;
 
-	/**
-	 * @var Repositories\EventLog
-	 */
-	private $eventLogRepository;
+    /**
+     * @var Repositories\EventLog
+     */
+    private $eventLogRepository;
 
-	/**
-	 * @var Repositories\SystemClass
-	 */
-	private $systemClassRepository;
+    /**
+     * @var Repositories\SystemClass
+     */
+    private $systemClassRepository;
 
-	private $userAgentParser;
+    private $userAgentParser;
 
-	/**
-	 * @var CrawlerDetector
-	 */
-	private $crawlerDetector;
+    /**
+     * @var CrawlerDetector
+     */
+    private $crawlerDetector;
 
-	public function __construct(
-		GeoIP $geoIp,
-		MobileDetect $mobileDetect,
-		$userAgentParser,
-		Authentication $authentication,
-		IlluminateSession $session,
-		Config $config,
+    public function __construct(
+        GeoIP $geoIp,
+        MobileDetect $mobileDetect,
+        $userAgentParser,
+        Authentication $authentication,
+        IlluminateSession $session,
+        Config $config,
         Session $sessionRepository,
         Log $logRepository,
-		Path $pathRepository,
-		Query $queryRepository,
-		QueryArgument $queryArgumentRepository,
+        Path $pathRepository,
+        Query $queryRepository,
+        QueryArgument $queryArgumentRepository,
         Agent $agentRepository,
         Device $deviceRepository,
         Cookie $cookieRepository,
@@ -151,34 +152,33 @@ class RepositoryManager implements RepositoryManagerInterface {
         SqlQueryBinding $sqlQueryBindingRepository,
         SqlQueryBindingParameter $sqlQueryBindingParameterRepository,
         SqlQueryLog $sqlQueryLogRepository,
-		Connection $connectionRepository,
-		Event $eventRepository,
-		EventLog $eventLogRepository,
-		SystemClass $systemClassRepository,
-		CrawlerDetector $crawlerDetector
-    )
-    {
-	    $this->authentication = $authentication;
+        Connection $connectionRepository,
+        Event $eventRepository,
+        EventLog $eventLogRepository,
+        SystemClass $systemClassRepository,
+        CrawlerDetector $crawlerDetector
+    ) {
+        $this->authentication = $authentication;
 
-	    $this->mobileDetect = $mobileDetect;
+        $this->mobileDetect = $mobileDetect;
 
-	    $this->userAgentParser = $userAgentParser;
+        $this->userAgentParser = $userAgentParser;
 
-	    $this->session = $session;
+        $this->session = $session;
 
-	    $this->config = $config;
+        $this->config = $config;
 
-	    $this->geoIp = $geoIp;
+        $this->geoIp = $geoIp;
 
         $this->sessionRepository = $sessionRepository;
 
         $this->logRepository = $logRepository;
 
-	    $this->pathRepository = $pathRepository;
+        $this->pathRepository = $pathRepository;
 
-	    $this->queryRepository = $queryRepository;
+        $this->queryRepository = $queryRepository;
 
-	    $this->queryArgumentRepository = $queryArgumentRepository;
+        $this->queryArgumentRepository = $queryArgumentRepository;
 
         $this->agentRepository = $agentRepository;
 
@@ -186,91 +186,134 @@ class RepositoryManager implements RepositoryManagerInterface {
 
         $this->cookieRepository = $cookieRepository;
 
-	    $this->domainRepository = $domainRepository;
+        $this->domainRepository = $domainRepository;
 
-	    $this->refererRepository = $refererRepository;
+        $this->refererRepository = $refererRepository;
 
-	    $this->routeRepository = $routeRepository;
+        $this->routeRepository = $routeRepository;
 
-	    $this->routePathRepository = $routePathRepository;
+        $this->routePathRepository = $routePathRepository;
 
-	    $this->routePathParameterRepository = $routePathParameterRepository;
+        $this->routePathParameterRepository = $routePathParameterRepository;
 
-	    $this->errorRepository = $errorRepository;
+        $this->errorRepository = $errorRepository;
 
-	    $this->geoIpRepository = $geoIpRepository;
+        $this->geoIpRepository = $geoIpRepository;
 
-	    $this->sqlQueryRepository = $sqlQueryRepository;
+        $this->sqlQueryRepository = $sqlQueryRepository;
 
-	    $this->sqlQueryBindingRepository = $sqlQueryBindingRepository;
+        $this->sqlQueryBindingRepository = $sqlQueryBindingRepository;
 
-	    $this->sqlQueryBindingParameterRepository = $sqlQueryBindingParameterRepository;
+        $this->sqlQueryBindingParameterRepository = $sqlQueryBindingParameterRepository;
 
-	    $this->sqlQueryLogRepository = $sqlQueryLogRepository;
+        $this->sqlQueryLogRepository = $sqlQueryLogRepository;
 
-	    $this->connectionRepository = $connectionRepository;
+        $this->connectionRepository = $connectionRepository;
 
-	    $this->eventRepository = $eventRepository;
+        $this->eventRepository = $eventRepository;
 
-	    $this->eventLogRepository = $eventLogRepository;
+        $this->eventLogRepository = $eventLogRepository;
 
-	    $this->systemClassRepository = $systemClassRepository;
+        $this->systemClassRepository = $systemClassRepository;
 
-	    $this->crawlerDetector = $crawlerDetector;
+        $this->crawlerDetector = $crawlerDetector;
     }
 
-    public function createLog($data)
-    {
-	    $this->logRepository->createLog($data);
+    public function checkSessionData($newData, $currentData) {
+        if ($newData && $currentData && $newData !== $currentData) {
+            $newData = $this->updateSessionData($newData);
+        }
 
-	    $this->sqlQueryRepository->fire();
+        return $newData;
     }
 
-    public function findOrCreateSession($data)
-    {
-        return $this->sessionRepository->findOrCreate($data, array('uuid'));
+    public function createLog($data) {
+        $this->logRepository->createLog($data);
+
+        $this->sqlQueryRepository->fire();
     }
 
-	public function findOrCreatePath($path)
-	{
-		return $this->pathRepository->findOrCreate($path, array('path'));
-	}
-
-    public function findOrCreateAgent($data)
-    {
-        return $this->agentRepository->findOrCreate($data, array('name'));
+    private function createRoutePathParameter($route_path_id, $parameter, $value) {
+        return $this->routePathParameterRepository->create(
+            [
+                'route_path_id' => $route_path_id,
+                'parameter'     => $parameter,
+                'value'         => $value,
+            ]
+        );
     }
 
-    public function findOrCreateDevice($data)
-    {
-        return $this->deviceRepository->findOrCreate($data, array('kind', 'model', 'platform', 'platform_version'));
+    public function errors($minutes, $results) {
+        return $this->logRepository->getErrors($minutes, $results);
     }
 
-    public function getAgentId()
-    {
+    public function events($minutes, $results) {
+        return $this->eventRepository->getAll($minutes, $results);
+    }
+
+    public function findOrCreateAgent($data) {
+        return $this->agentRepository->findOrCreate($data, ['name']);
+    }
+
+    public function findOrCreateDevice($data) {
+        return $this->deviceRepository->findOrCreate($data, ['kind', 'model', 'platform', 'platform_version']);
+    }
+
+    public function findOrCreatePath($path) {
+        return $this->pathRepository->findOrCreate($path, ['path']);
+    }
+
+    public function findOrCreateQuery($data) {
+        $id = $this->queryRepository->findOrCreate($data, ['query'], $created);
+
+        if ($created) {
+            foreach ($data['arguments'] as $argument => $value) {
+                if (is_array($value)) {
+                    $value = multi_implode(',', $value);
+                }
+
+                $this->queryArgumentRepository->create(
+                    [
+                        'query_id' => $id,
+                        'argument' => $argument,
+                        'value'    => $value,
+                    ]
+                );
+            }
+        }
+
+        return $id;
+    }
+
+    public function findOrCreateSession($data) {
+        return $this->sessionRepository->findOrCreate($data, ['uuid']);
+    }
+
+    public function getAgentId() {
         return $this->findOrCreateAgent($this->getCurrentAgentArray());
     }
 
-    public function getCurrentUserAgent()
-    {
-        return $this->userAgentParser->originalUserAgent;
+    public function getAllSessions() {
+        return $this->sessionRepository->all();
     }
 
-    public function getCurrentAgentArray()
-    {
-        return array(
-                        'name' => $this->getCurrentUserAgent() ?: 'Other',
-
-                        'browser' => $this->userAgentParser->userAgent->family,
-
-                        'browser_version' => $this->userAgentParser->getUserAgentVersion(),
-                    );
+    public function getCookieId() {
+        return $this->cookieRepository->getId();
     }
 
-    public function getCurrentDeviceProperties()
-    {
-        if ($properties = $this->getDevice())
-        {
+    public function getCurrentAgentArray() {
+        return [
+            'name' => $this->getCurrentUserAgent()
+                ?: 'Other',
+
+            'browser' => $this->userAgentParser->userAgent->family,
+
+            'browser_version' => $this->userAgentParser->getUserAgentVersion(),
+        ];
+    }
+
+    public function getCurrentDeviceProperties() {
+        if ($properties = $this->getDevice()) {
             $properties['platform'] = $this->getOperatingSystemFamily();
 
             $properties['platform_version'] = $this->getOperatingSystemVersion();
@@ -279,366 +322,49 @@ class RepositoryManager implements RepositoryManagerInterface {
         return $properties;
     }
 
-    public function getCurrentUserId()
-    {
+    public function getCurrentUserAgent() {
+        return $this->userAgentParser->originalUserAgent;
+    }
+
+    public function getCurrentUserId() {
         return $this->authentication->getCurrentUserId();
     }
 
-    public function getSessionId($sessionInfo, $updateLastActivity)
-    {
-        return $this->sessionRepository->getCurrentId($sessionInfo, $updateLastActivity);
+    /**
+     * @return array
+     */
+    private function getDevice() {
+        try {
+            return $this->mobileDetect->detectDevice();
+        }
+        catch (\Exception $e) {
+            return null;
+        }
     }
 
-    public function getCookieId()
-    {
-        return $this->cookieRepository->getId();
+    public function getDomainId($domain) {
+        return $this->domainRepository->findOrCreate(
+            ['name' => $domain],
+            ['name']
+        );
     }
 
-	public function getQueryId($query)
-	{
-		if ( ! $query)
-		{
-			return null;
-		}
+    public function getGeoIpId($clientIp) {
+        $id = null;
 
-		return $this->findOrCreateQuery($query);
-	}
-
-	public function findOrCreateQuery($data)
-	{
-		$id = $this->queryRepository->findOrCreate($data, array('query'), $created);
-
-		if ($created)
-		{
-			foreach ($data['arguments'] as $argument => $value)
-			{
-				if (is_array($value))
-				{
-					$value = multi_implode(',', $value);
-				}
-
-				$this->queryArgumentRepository->create(
-					array(
-						'query_id' => $id,
-						'argument' => $argument,
-						'value' => $value,
-					)
-				);
-			}
-		}
-
-		return $id;
-	}
-
-	public function updateRoute($route_id)
-	{
-		return $this->logRepository->updateRoute($route_id);
-	}
-
-	public function trackRoute($route, $request)
-	{
-		$this->updateRoute(
-			$this->getRoutePathId($route, $request)
-		);
-	}
-
-	public function getDomainId($domain)
-	{
-		return $this->domainRepository->findOrCreate(
-			array('name' => $domain),
-			array('name')
-		);
-	}
-
-	public function getRefererId($referer)
-	{
-		if ($referer)
-		{
-			$url = parse_url($referer);
-
-			$parts = explode(".", $url['host']);
-
-			$domain = array_pop($parts);
-
-			if (sizeof($parts) > 0)
-			{
-				$domain = array_pop($parts) . "." . $domain;
-			}
-
-			$domain_id = $this->getDomainId($domain);
-
-			return $this->refererRepository->store($referer, $url['host'], $domain_id);
-		}
-	}
-
-	public function getRoutePathId($route, $request)
-	{
-		$route_id = $this->getRouteId(
-			$this->getRouteName($route),
-			$this->getRouteAction($route) ?: 'closure'
-		);
-
-		$created = false;
-
-		$route_path_id = $this->getRoutePath(
-			$route_id,
-			$this->getRequestPath($request),
-			$created
-		);
-
-		if ($created && $route instanceof IlluminateRouter && $route->current())
-		{
-			foreach ($route->current()->parameters() as $parameter => $value)
-			{
-				// When the parameter value is a whole model, we have
-				// two options left:
-				//
-				//  1) Return model id, if it's available as 'id'
-				//  2) Return null (not ideal, but, what could we do?)
-				//
-				// Should we store the whole model? Not really useful, right?
-
-				if ($value instanceof \Illuminate\Database\Eloquent\Model)
-				{
-					$model_id = null;
-
-					foreach ($this->config->get('id_columns_names', ['id']) as $column)
-					{
-						if (property_exists($value, $column))
-						{
-							$model_id = $value->$column;
-
-							break;
-						}
-					}
-
-					$value = $model_id;
-				}
-
-				if ($route_path_id && $parameter && $value)
-				{
-					$this->createRoutePathParameter($route_path_id, $parameter, $value);
-				}
-			}
-		}
-
-		return $route_path_id;
-	}
-
-	private function getRouteId($name, $action)
-	{
-		return $this->routeRepository->findOrCreate(
-			array('name' => $name, 'action' => $action),
-			array('name', 'action')
-		);
-	}
-
-	private function getRoutePath($route_id, $path, &$created = null)
-	{
-		return $this->routePathRepository->findOrCreate(
-			array('route_id' => $route_id, 'path' => $path),
-			array('route_id', 'path'),
-			$created
-		);
-	}
-
-	private function createRoutePathParameter($route_path_id, $parameter, $value)
-	{
-		return $this->routePathParameterRepository->create(
-			array(
-				'route_path_id' => $route_path_id,
-				'parameter' => $parameter,
-				'value' => $value,
-			)
-		);
-	}
-
-	public function handleException($exception)
-	{
-		$error_id = $this->errorRepository->findOrCreate(
-            [
-                'message' => $this->errorRepository->getMessageFromException($exception),
-                'code' => $this->errorRepository->getCodeFromException($exception)
-            ],
-            ['message', 'code']
-		);
-
-		return $this->logRepository->updateError($error_id);
-	}
-
-	public function getLastSessions($minutes, $results)
-	{
-		return $this->sessionRepository->last($minutes, $results);
-	}
-
-	public function getAllSessions()
-	{
-		return $this->sessionRepository->all();
-	}
-
-	public function parserIsAvailable()
-	{
-		return ! empty($this->userAgentParser);
-	}
-
-	public function getGeoIpId($clientIp)
-	{
-		$id = null;
-
-		if($geoIpData = $this->geoIp->searchAddr($clientIp))
-		{
-			$id = $this->geoIpRepository->findOrCreate(
+        if ($geoIpData = $this->geoIp->searchAddr($clientIp)) {
+            $id = $this->geoIpRepository->findOrCreate(
                 $geoIpData,
-				array('latitude', 'longitude')
-			);
-		}
+                ['latitude', 'longitude']
+            );
+        }
 
-		return $id;
-	}
+        return $id;
+    }
 
-	public function getSessionLog($uuid, $results = true)
-	{
-		$session = $this->sessionRepository->findByUuid($uuid);
-
-		return $this->logRepository->bySession($session->id, $results);
-	}
-
-	public function pageViews($minutes, $results)
-	{
-		return $this->logRepository->pageViews($minutes, $results);
-	}
-
-	public function pageViewsByCountry($minutes, $results)
-	{
-		return $this->logRepository->pageViewsByCountry($minutes, $results);
-	}
-
-	public function logSqlQuery($query, $bindings, $time, $name)
-	{
-		$this->sqlQueryRepository->push(array(
-			'query' => $query,
-			'bindings' => $bindings,
-			'time' => $time,
-			'name' => $name,
-		));
-	}
-
-	public function logEvents()
-	{
-		$this->eventRepository->logEvents();
-	}
-
-	public function trackEvent($event)
-	{
-		$this->eventRepository->logEvent($event);
-	}
-
-	public function users($minutes, $results)
-	{
-		return $this->sessionRepository->users($minutes, $results);
-	}
-
-	public function events($minutes, $results)
-	{
-		return $this->eventRepository->getAll($minutes, $results);
-	}
-
-	public function errors($minutes, $results)
-	{
-		return $this->logRepository->getErrors($minutes, $results);
-	}
-
-	public function isRobot()
-	{
-		return $this->crawlerDetector->isRobot();
-	}
-
-	public function logByRouteName($name, $minutes = null)
-	{
-		return $this->logRepository->allByRouteName($name, $minutes);
-	}
-
-	public function routeIsTrackable($route)
-	{
-		return $this->routeRepository->isTrackable($route);
-	}
-
-	public function setSessionData($data)
-	{
-		$this->sessionRepository->setSessionData($data);
-	}
-
-	public function updateSessionData($data)
-	{
-		return $this->sessionRepository->updateSessionData($data);
-	}
-
-	public function checkSessionData($newData, $currentData)
-	{
-		if ($newData && $currentData && $newData !== $currentData)
-		{
-			$newData = $this->updateSessionData($newData);
-		}
-
-		return $newData;
-	}
-
-	/**
-	 * @param $route
-	 * @return string
-	 */
-	private function getRouteName($route)
-	{
-		if (is_string($route))
-		{
-			return $route;
-		}
-
-		if (is_array($route))
-		{
-			return $route['name'];
-		}
-
-		return $route->currentRouteName() ?: '';
-	}
-
-	/**
-	 * @param $route
-	 * @return mixed
-	 */
-	private function getRouteAction($route)
-	{
-		if (is_string($route))
-		{
-			return '';
-		}
-
-		if (is_array($route))
-		{
-			return $route['action'];
-		}
-
-		return $route->currentRouteAction();
-	}
-
-	/**
-	 * @param $request
-	 * @return mixed
-	 */
-	private function getRequestPath($request)
-	{
-		if (is_string($request))
-		{
-			return $request;
-		}
-
-		if (is_array($request))
-		{
-			return $request['path'];
-		}
-
-		return $request->path();
-	}
+    public function getLastSessions($minutes, $results) {
+        return $this->sessionRepository->last($minutes, $results);
+    }
 
     /**
      * @return mixed
@@ -659,23 +385,237 @@ class RepositoryManager implements RepositoryManagerInterface {
         try {
             return $this->userAgentParser->getOperatingSystemVersion();
         }
-        catch (\Exception $e)
-        {
+        catch (\Exception $e) {
             return null;
         }
     }
 
-    /**
-     * @return array
-     */
-    private function getDevice() {
-        try {
-            return $this->mobileDetect->detectDevice();
-        }
-        catch (\Exception $e)
-        {
+    public function getQueryId($query) {
+        if (!$query) {
             return null;
         }
+
+        return $this->findOrCreateQuery($query);
+    }
+
+    public function getRefererId($referer) {
+        if ($referer) {
+            $url = parse_url($referer);
+
+            $parts = explode(".", $url['host']);
+
+            $domain = array_pop($parts);
+
+            if (sizeof($parts) > 0) {
+                $domain = array_pop($parts) . "." . $domain;
+            }
+
+            $domain_id = $this->getDomainId($domain);
+
+            return $this->refererRepository->store($referer, $url['host'], $domain_id);
+        }
+    }
+
+    /**
+     * @param $request
+     * @return mixed
+     */
+    private function getRequestPath($request) {
+        if (is_string($request)) {
+            return $request;
+        }
+
+        if (is_array($request)) {
+            return $request['path'];
+        }
+
+        return $request->path();
+    }
+
+    /**
+     * @param $route
+     * @return mixed
+     */
+    private function getRouteAction($route) {
+        if (is_string($route)) {
+            return '';
+        }
+
+        if (is_array($route)) {
+            return $route['action'];
+        }
+
+        return $route->currentRouteAction();
+    }
+
+    private function getRouteId($name, $action) {
+        return $this->routeRepository->findOrCreate(
+            ['name' => $name, 'action' => $action],
+            ['name', 'action']
+        );
+    }
+
+    /**
+     * @param $route
+     * @return string
+     */
+    private function getRouteName($route) {
+        if (is_string($route)) {
+            return $route;
+        }
+
+        if (is_array($route)) {
+            return $route['name'];
+        }
+
+        return $route->currentRouteName()
+            ?: '';
+    }
+
+    private function getRoutePath($route_id, $path, &$created = null) {
+        return $this->routePathRepository->findOrCreate(
+            ['route_id' => $route_id, 'path' => $path],
+            ['route_id', 'path'],
+            $created
+        );
+    }
+
+    public function getRoutePathId($route, $request) {
+        $route_id = $this->getRouteId(
+            $this->getRouteName($route),
+            $this->getRouteAction($route)
+                ?: 'closure'
+        );
+
+        $created = false;
+
+        $route_path_id = $this->getRoutePath(
+            $route_id,
+            $this->getRequestPath($request),
+            $created
+        );
+
+        if ($created && $route instanceof IlluminateRouter && $route->current()) {
+            foreach ($route->current()->parameters() as $parameter => $value) {
+                // When the parameter value is a whole model, we have
+                // two options left:
+                //
+                //  1) Return model id, if it's available as 'id'
+                //  2) Return null (not ideal, but, what could we do?)
+                //
+                // Should we store the whole model? Not really useful, right?
+
+                if ($value instanceof \Illuminate\Database\Eloquent\Model) {
+                    $model_id = null;
+
+                    foreach ($this->config->get('id_columns_names', ['id']) as $column) {
+                        if (property_exists($value, $column)) {
+                            $model_id = $value->$column;
+
+                            break;
+                        }
+                    }
+
+                    $value = $model_id;
+                }
+
+                if ($route_path_id && $parameter && $value) {
+                    $this->createRoutePathParameter($route_path_id, $parameter, $value);
+                }
+            }
+        }
+
+        return $route_path_id;
+    }
+
+    public function getSessionId($sessionInfo, $updateLastActivity) {
+        return $this->sessionRepository->getCurrentId($sessionInfo, $updateLastActivity);
+    }
+
+    public function getSessionLog($uuid, $results = true) {
+        $session = $this->sessionRepository->findByUuid($uuid);
+
+        return $this->logRepository->bySession($session->id, $results);
+    }
+
+    public function handleException($exception) {
+        $error_id = $this->errorRepository->findOrCreate(
+            [
+                'message' => $this->errorRepository->getMessageFromException($exception),
+                'code'    => $this->errorRepository->getCodeFromException($exception),
+            ],
+            ['message', 'code']
+        );
+
+        return $this->logRepository->updateError($error_id);
+    }
+
+    public function isRobot() {
+        return $this->crawlerDetector->isRobot();
+    }
+
+    public function logByRouteName($name, $minutes = null) {
+        return $this->logRepository->allByRouteName($name, $minutes);
+    }
+
+    public function logEvents() {
+        $this->eventRepository->logEvents();
+    }
+
+    public function logSqlQuery($query, $bindings, $time, $name) {
+        $this->sqlQueryRepository->push([
+                                            'query'    => $query,
+                                            'bindings' => $bindings,
+                                            'time'     => $time,
+                                            'name'     => $name,
+                                        ]);
+    }
+
+    public function pageViews($minutes, $results) {
+        return $this->logRepository->pageViews($minutes, $results);
+    }
+
+    public function pageViewsByCountry($minutes, $results) {
+        return $this->logRepository->pageViewsByCountry($minutes, $results);
+    }
+
+    public function parserIsAvailable() {
+        return !empty($this->userAgentParser);
+    }
+
+    public function routeIsTrackable($route) {
+        return $this->routeRepository->isTrackable($route);
+    }
+
+    public function setSessionData($data) {
+        $this->sessionRepository->setSessionData($data);
+    }
+
+    public function trackEvent($event) {
+        $this->eventRepository->logEvent($event);
+    }
+
+    public function trackRoute($route, $request) {
+        $this->updateRoute(
+            $this->getRoutePathId($route, $request)
+        );
+    }
+
+    public function updateRoute($route_id) {
+        return $this->logRepository->updateRoute($route_id);
+    }
+
+    public function updateSessionData($data) {
+        return $this->sessionRepository->updateSessionData($data);
+    }
+
+    public function userDevices($minutes, $results, $user_id) {
+        return $this->deviceRepository->userDevices($minutes, $results, $user_id
+            ?: $this->authentication->getCurrentUserId());
+    }
+
+    public function users($minutes, $results) {
+        return $this->sessionRepository->users($minutes, $results);
     }
 
 }
