@@ -87,6 +87,12 @@ foreach ($sessions as $session)
 $users = Tracker::users(60 * 24);
 ```
 
+#### User Devices
+
+```
+$users = Tracker::userDevices(60 * 24, $user->id);
+```
+
 #### Events
 
 ```
