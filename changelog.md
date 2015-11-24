@@ -9,6 +9,7 @@
 ### Added
 - Referer to tracker_log
 - Method Tracker::userDevices()
+- Range filter
 ### Fixed
 - Prevent migrations files from being overwritten
 
