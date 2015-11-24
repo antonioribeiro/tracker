@@ -1,6 +1,6 @@
 <?php
 
-use PragmaRX\Support\Migration;
+use PragmaRX\Tracker\Support\Migration;
 
 class CreateTrackerRoutesTable extends Migration {
 
