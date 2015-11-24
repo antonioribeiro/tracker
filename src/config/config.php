@@ -205,59 +205,59 @@ return [
 	 * ** IMPORTANT **
 	 *   Change the user model to your own.
 	 */
-	'user_model' => PragmaRX\Tracker\Vendor\Laravel\Models\User::class,
+	'user_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\User',
 
 	/**
 	 * You can use your own model for every single table Tracker has.
 	 */
 
-    'session_model' => PragmaRX\Tracker\Vendor\Laravel\Models\Session::class,
+    'session_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Session',
 
-    'log_model' => PragmaRX\Tracker\Vendor\Laravel\Models\Log::class,
+    'log_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Log',
 
-    'path_model' => PragmaRX\Tracker\Vendor\Laravel\Models\Path::class,
+    'path_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Path',
 
-    'query_model' => PragmaRX\Tracker\Vendor\Laravel\Models\Query::class,
+    'query_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Query',
 
-    'query_argument_model' => PragmaRX\Tracker\Vendor\Laravel\Models\QueryArgument::class,
+    'query_argument_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\QueryArgument',
 
-    'agent_model' => PragmaRX\Tracker\Vendor\Laravel\Models\Agent::class,
+    'agent_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Agent',
 
-    'device_model' => PragmaRX\Tracker\Vendor\Laravel\Models\Device::class,
+    'device_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Device',
 
-    'cookie_model' => PragmaRX\Tracker\Vendor\Laravel\Models\Cookie::class,
+    'cookie_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Cookie',
 
-    'domain_model' => PragmaRX\Tracker\Vendor\Laravel\Models\Domain::class,
+    'domain_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Domain',
 
-    'referer_model' => PragmaRX\Tracker\Vendor\Laravel\Models\Referer::class,
+    'referer_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Referer',
 
-    'referer_search_term_model' => PragmaRX\Tracker\Vendor\Laravel\Models\RefererSearchTerm::class,
+    'referer_search_term_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\RefererSearchTerm',
 
-    'route_model' => PragmaRX\Tracker\Vendor\Laravel\Models\Route::class,
+    'route_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Route',
 
-    'route_path_model' => PragmaRX\Tracker\Vendor\Laravel\Models\RoutePath::class,
+    'route_path_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\RoutePath',
 
-    'route_path_parameter_model' => PragmaRX\Tracker\Vendor\Laravel\Models\RoutePathParameter::class,
+    'route_path_parameter_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\RoutePathParameter',
 
-    'error_model' => PragmaRX\Tracker\Vendor\Laravel\Models\Error::class,
+    'error_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Error',
 
-    'geoip_model' => PragmaRX\Tracker\Vendor\Laravel\Models\GeoIp::class,
+    'geoip_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\GeoIp',
 
-    'sql_query_model' => PragmaRX\Tracker\Vendor\Laravel\Models\SqlQuery::class,
+    'sql_query_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQuery',
 
-    'sql_query_binding_model' => PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryBinding::class,
+    'sql_query_binding_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryBinding',
 
-    'sql_query_binding_parameter_model' => PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryBindingParameter::class,
+    'sql_query_binding_parameter_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryBindingParameter',
 
-    'sql_query_log_model' => PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryLog::class,
+    'sql_query_log_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryLog',
 
-    'connection_model' => PragmaRX\Tracker\Vendor\Laravel\Models\Connection::class,
+    'connection_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Connection',
 
-    'event_model' => PragmaRX\Tracker\Vendor\Laravel\Models\Event::class,
+    'event_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Event',
 
-    'event_log_model' => PragmaRX\Tracker\Vendor\Laravel\Models\EventLog::class,
+    'event_log_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\EventLog',
 
-    'system_class_model' => PragmaRX\Tracker\Vendor\Laravel\Models\SystemClass::class,
+    'system_class_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SystemClass',
 
 	/**
 	 * Laravel internal variables on user authentication and login.
