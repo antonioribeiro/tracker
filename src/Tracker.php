@@ -103,6 +103,7 @@ class Tracker
 			'method' => $this->request->method(),
 			'path_id' => $this->getPathId(),
 			'query_id' => $this->getQueryId(),
+            'referer_id' => $this->getRefererId(),
 			'is_ajax' => $this->request->ajax(),
 			'is_secure' => $this->request->isSecure(),
 			'is_json' => $this->request->isJson(),
