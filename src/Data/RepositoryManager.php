@@ -35,7 +35,6 @@ use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
 
 class RepositoryManager implements RepositoryManagerInterface
 {
-
     /**
      * @var Path
      */
@@ -617,5 +616,4 @@ class RepositoryManager implements RepositoryManagerInterface
     public function users($minutes, $results) {
         return $this->sessionRepository->users($minutes, $results);
     }
-
 }
