@@ -12,6 +12,7 @@ class Log extends Base {
 		'path_id',
 		'query_id',
 		'route_path_id',
+        'referer_id',
 		'is_ajax',
 		'is_secure',
 		'is_json',
