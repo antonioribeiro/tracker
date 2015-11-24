@@ -84,4 +84,25 @@ class Session extends Base {
 		return $query;
 	}
 
+    public function userDevices($minutes, $result, $user_id)
+    {
+        $query = $this
+            ->select(
+                'user_id',
+                $this->getConnection()->raw('max(updated_at) as updated_at')
+            )
+            ->groupBy('user_id')
+            ->from('tracker_sessions')
+            ->period($minutes)
+            ->whereNotNull('user_id')
+            ->orderBy($this->getConnection()->raw('max(updated_at)'), 'desc');
+
+        if ($result)
+        {
+            return $query->get();
+        }
+
+        return $query;
+    }
+
 }

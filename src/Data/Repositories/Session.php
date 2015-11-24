@@ -220,6 +220,25 @@ class Session extends Repository {
 	    return $query;
     }
 
+    public function userDevices($minutes, $user_id, $results) {
+        if ( ! $user_id)
+        {
+            return [];
+        }
+
+        $sessions = $this
+            ->getSessions()
+            ->period($minutes)
+            ->where('user_id', $user_id);
+
+        if ($results)
+        {
+            $sessions = $sessions->get()->pluck('device')->unique();
+        }
+
+        return $sessions;
+    }
+
     public function users($minutes, $results)
     {
          return $this->getModel()->users($minutes, $results);

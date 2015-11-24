@@ -368,8 +368,12 @@ class Tracker
         $this->enabled = false;
     }
 
-    public function userDevices($minutes, $results = true, $user_id = null) {
-        return $this->dataRepositoryManager->userDevices(Minutes::make($minutes), $results, $user_id);
+    public function userDevices($minutes, $user_id = null, $results = true) {
+        return $this->dataRepositoryManager->userDevices(
+            Minutes::make($minutes),
+            $user_id,
+            $results
+        );
     }
 
     public function users($minutes, $results = true) {

@@ -608,9 +608,12 @@ class RepositoryManager implements RepositoryManagerInterface
         return $this->sessionRepository->updateSessionData($data);
     }
 
-    public function userDevices($minutes, $results, $user_id) {
-        return $this->deviceRepository->userDevices($minutes, $results, $user_id
-            ?: $this->authentication->getCurrentUserId());
+    public function userDevices($minutes, $user_id, $results) {
+        return $this->sessionRepository->userDevices(
+            $minutes,
+            $user_id ?: $this->authentication->getCurrentUserId(),
+            $results
+        );
     }
 
     public function users($minutes, $results) {

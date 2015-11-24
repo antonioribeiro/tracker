@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-class Device extends Repository {
+class Device extends Repository
+{
 
 }
