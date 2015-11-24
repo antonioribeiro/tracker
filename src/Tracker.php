@@ -215,11 +215,11 @@ class Tracker
 		return $this->dataRepositoryManager->getRoutePathId($this->route, $this->request);
 	}
 
-	public function handleException($exception, $code)
+	public function handleException($exception)
 	{
 		if ($this->config->get('log_enabled'))
 		{
-			$this->dataRepositoryManager->handleException($exception, $code);
+			$this->dataRepositoryManager->handleException($exception);
 		}
 	}
 

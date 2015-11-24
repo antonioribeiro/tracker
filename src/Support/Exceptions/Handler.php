@@ -67,7 +67,7 @@ class Handler {
 	{
 		try
 		{
-			$this->tracker->handleException($e, $e->getCode());
+			$this->tracker->handleException($e);
 		}
 		catch(Exception $exception)
 		{

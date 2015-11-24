@@ -453,11 +453,14 @@ class RepositoryManager implements RepositoryManagerInterface {
 		);
 	}
 
-	public function handleException($exception, $code)
+	public function handleException($exception)
 	{
 		$error_id = $this->errorRepository->findOrCreate(
-			array('message' => $exception->getMessage(), 'code' => $code),
-			array('message', 'code')
+            [
+                'message' => $this->errorRepository->getMessageFromException($exception),
+                'code' => $this->errorRepository->getCodeFromException($exception)
+            ],
+            ['message', 'code']
 		);
 
 		return $this->logRepository->updateError($error_id);
