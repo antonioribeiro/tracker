@@ -25,7 +25,12 @@ class Minutes
      * Minutes constructor.
      * @param $minutes
      */
-    public function __construct($minutes) {
+    public function __construct($minutes = null) {
+        if ( ! $minutes)
+        {
+            return;
+        }
+
         $this->minutes = $minutes;
 
         if ($minutes instanceof Minutes) {
