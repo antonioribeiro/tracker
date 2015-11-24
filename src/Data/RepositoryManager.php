@@ -269,11 +269,12 @@ class RepositoryManager implements RepositoryManagerInterface {
 
     public function getCurrentDeviceProperties()
     {
-        $properties = $this->mobileDetect->detectDevice();
+        if ($properties = $this->getDevice())
+        {
+            $properties['platform'] = $this->getOperatingSystemFamily();
 
-        $properties['platform'] = $this->userAgentParser->operatingSystem->family;
-
-        $properties['platform_version'] = $this->userAgentParser->getOperatingSystemVersion();
+            $properties['platform_version'] = $this->getOperatingSystemVersion();
+        }
 
         return $properties;
     }
@@ -635,5 +636,43 @@ class RepositoryManager implements RepositoryManagerInterface {
 
 		return $request->path();
 	}
+
+    /**
+     * @return mixed
+     */
+    private function getOperatingSystemFamily() {
+        try {
+            return $this->userAgentParser->operatingSystem->family;
+        }
+        catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getOperatingSystemVersion() {
+        try {
+            return $this->userAgentParser->getOperatingSystemVersion();
+        }
+        catch (\Exception $e)
+        {
+            return null;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    private function getDevice() {
+        try {
+            return $this->mobileDetect->detectDevice();
+        }
+        catch (\Exception $e)
+        {
+            return null;
+        }
+    }
 
 }
