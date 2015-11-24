@@ -117,6 +117,20 @@ $pageViews = Tracker::pageViews(60 * 24 * 30);
 $pageViews = Tracker::pageViewsByCountry(60 * 24);
 ```
 
+#### Filter range
+
+You can send timestamp ranges to those methods using the Minutes class:
+
+```
+$range = new Minutes();
+
+$range->setStart(Carbon::now()->subDays(2));
+
+$range->setEnd(Carbon::now()->subDays(1));
+
+Tracker::userDevices($range);
+```
+
 #### Routes By Name
 
 Having a route of
