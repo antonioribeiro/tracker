@@ -1,15 +1,16 @@
 # Changelog
 
-## [1.0.9] - 2015-11-23
-### Notes ! This is a breaking change, unfortunately
+## [2.0.0] - 2015-11-23
+### Notes ! This is a breaking change
 - You must execute
     php artisan tracker:tables
   then
     php artisan migrate
+### Added
+- Referer to tracker_log
+- Method Tracker::userDevices()
 ### Fixed
 - Prevent migrations files from being overwritten
-### Added
-- referer to tracker_log
 
 ## [1.0.8] - 2015-11-23
 ### Fixed
