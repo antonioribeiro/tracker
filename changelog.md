@@ -1,6 +1,11 @@
 # Changelog
 
 ## [1.0.9] - 2015-11-23
+### Notes ! This is a breaking change, unfortunately
+- You must execute
+    php artisan tracker:tables
+  then
+    php artisan migrate
 ### Fixed
 - Prevent migrations files from being overwritten
 ### Added
