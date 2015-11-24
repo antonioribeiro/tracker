@@ -395,7 +395,7 @@ class Tracker
 			$this->config->get('log_events') ||
 			$this->config->get('log_geoip') ||
 			$this->config->get('log_user_agents') ||
-			$tis->config->get('log_users') ||
+			$this->config->get('log_users') ||
 			$this->config->get('log_devices') ||
 			$this->config->get('log_referers') ||
 			$this->config->get('log_paths') ||
