@@ -36,7 +36,6 @@ class CreateTrackerLogTable extends Migration {
 				$table->boolean('wants_json');
 				$table->bigInteger('error_id')->unsigned()->nullable()->index();
 				$table->bigInteger('referer_id')->unsigned()->nullable()->index();
-
 				$table->timestamp('created_at')->index();
 				$table->timestamp('updated_at')->index();
 			}
