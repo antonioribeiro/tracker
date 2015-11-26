@@ -28,6 +28,7 @@ class CreateTrackerLogTable extends Migration {
 				$table->bigInteger('session_id')->unsigned()->index();
 				$table->bigInteger('path_id')->unsigned()->nullable()->index();
 				$table->bigInteger('query_id')->unsigned()->nullable()->index();
+				$table->bigInteger('referer_id')->unsigned()->nullable()->index();
 				$table->string('method', 10)->index();
 				$table->bigInteger('route_path_id')->unsigned()->nullable()->index();
 				$table->boolean('is_ajax');
@@ -35,7 +36,6 @@ class CreateTrackerLogTable extends Migration {
 				$table->boolean('is_json');
 				$table->boolean('wants_json');
 				$table->bigInteger('error_id')->unsigned()->nullable()->index();
-				$table->bigInteger('referer_id')->unsigned()->nullable()->index();
 				$table->timestamp('created_at')->index();
 				$table->timestamp('updated_at')->index();
 			}
