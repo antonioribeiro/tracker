@@ -27,7 +27,6 @@ class CreateTrackerLogTable extends Migration {
 
 				$table->bigInteger('session_id')->unsigned()->index();
 				$table->bigInteger('path_id')->unsigned()->nullable()->index();
-				$table->bigInteger('referer_id')->unsigned()->nullable()->index();
 				$table->bigInteger('query_id')->unsigned()->nullable()->index();
 				$table->string('method', 10)->index();
 				$table->bigInteger('route_path_id')->unsigned()->nullable()->index();
