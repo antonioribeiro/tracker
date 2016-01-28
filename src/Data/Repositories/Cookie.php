@@ -4,7 +4,7 @@ namespace PragmaRX\Tracker\Data\Repositories;
 
 use PragmaRX\Support\Config;
 use Illuminate\Http\Request;
-use Rhumsaa\Uuid\Uuid as UUID;
+use Ramsey\Uuid\Uuid as UUID;
 use Illuminate\Cookie\CookieJar;
 
 class Cookie extends Repository {
