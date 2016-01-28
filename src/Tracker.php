@@ -233,7 +233,8 @@ class Tracker
         $this->parserIsAvailable() &&
         $this->isTrackableIp() &&
         $this->isTrackableEnvironment() &&
-        $this->notRobotOrTrackable();
+        $this->notRobot() &&
+        $this->isTrackableRoute();
     }
 
     protected function isTrackableEnvironment() {
@@ -296,10 +297,20 @@ class Tracker
         }
     }
 
-    protected function notRobotOrTrackable() {
+    protected function notRobot() {
         return
             !$this->isRobot() ||
             !$this->config->get('do_not_track_robots');
+    }
+
+    protected function isTrackableRoute() {
+        $routes = $this->config->get('do_not_track_routes');
+
+        foreach ($routes as $route) {
+            $match = preg_grep ('/'. $route .'/i', [$this->route->currentRouteName()]);
+        }
+
+        return empty($match);
     }
 
     public function pageViews($minutes, $results = true) {
