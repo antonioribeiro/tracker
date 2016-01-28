@@ -61,7 +61,7 @@ class Tracker
     }
 
     public function checkCurrentUser() {
-        if ($this->isTrackable() && !$this->getSessionData()['user_id'] && $user_id = $this->getUserId()) {
+        if (!$this->getSessionData()['user_id'] && $user_id = $this->getUserId()) {
             return true;
         }
 
@@ -304,10 +304,6 @@ class Tracker
     }
 
     protected function isTrackableRoute() {
-        if (is_null($this->route->currentRouteName())) {
-            return false;
-        }
-
         $routes = $this->config->get('do_not_track_routes');
 
         foreach ($routes as $route) {
