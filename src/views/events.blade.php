@@ -11,8 +11,8 @@
             'datatables_ajax_route' => route('tracker.stats.api.events'),
             'datatables_columns' =>
             '
-                { "data" : "name",  "title" : "Name", "orderable": true, "searchable": false },
-                { "data" : "total", "title" : "# of occurrences in the period", "orderable": true, "searchable": false },
+                { "data" : "name",  "title" : "'.trans('tracker::tracker.name').'", "orderable": true, "searchable": false },
+                { "data" : "total", "title" : "'.trans('tracker::tracker.no_occurrences_in_period').'", "orderable": true, "searchable": false },
             '
         )
     )

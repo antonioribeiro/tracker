@@ -11,11 +11,11 @@
             'datatables_ajax_route' => route('tracker.stats.api.errors'),
             'datatables_columns' =>
             '
-                { "data" : "error.code",     "title" : "Code", "orderable": true, "searchable": false },
-                { "data" : "session.uuid",   "title" : "Session", "orderable": true, "searchable": false },
-                { "data" : "error.message",  "title" : "Message", "orderable": true, "searchable": false },
-                { "data" : "path.path",      "title" : "Path", "orderable": true, "searchable": false },
-                { "data" : "updated_at",     "title" : "When?", "orderable": true, "searchable": false },
+                { "data" : "error.code",     "title" : "'.trans('tracker::tracker.code').'", "orderable": true, "searchable": false },
+                { "data" : "session.uuid",   "title" : "'.trans('tracker::tracker.session').'", "orderable": true, "searchable": false },
+                { "data" : "error.message",  "title" : "'.trans('tracker::tracker.message').'", "orderable": true, "searchable": false },
+                { "data" : "path.path",      "title" : "'.trans('tracker::tracker.path').'", "orderable": true, "searchable": false },
+                { "data" : "updated_at",     "title" : "'.trans('tracker::tracker.when').'", "orderable": true, "searchable": false },
             '
         )
     )

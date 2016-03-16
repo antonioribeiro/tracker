@@ -72,6 +72,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 		    $this->registerErrorHandler();
 
+			$this->loadTranslations();
+
 		    $this->bootTracker();
 	    }
     }
@@ -591,6 +593,11 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	private function getAppUrl()
 	{
 		return $this->app['request']->url();
+	}
+
+	public function loadTranslations()
+	{
+		$this->loadTranslationsFrom(__DIR__.'/../../lang', 'tracker');
 	}
 
 }
