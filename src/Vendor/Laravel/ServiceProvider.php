@@ -72,7 +72,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 		    $this->registerErrorHandler();
 
-		    $this->bootTracker();
+		    //$this->bootTracker();
 	    }
     }
 
