@@ -459,7 +459,7 @@ Tracker::trackVisit(
 
 ## Requirements
 
-- Laravel 4.1+ or 5+
+- Laravel 5.2
 - PHP 5.3.7+
 - Package "geoip/geoip":"~1.14" or "geoip2/geoip2":"~2.0"
   (If you are planning to store Geo IP information)
@@ -528,6 +528,10 @@ Otherwise you'll have to
 ####And make sure you don't have the PHP module installed. This is a Debian/Ubuntu example:
 
 	sudo apt-get purge php5-geoip
+	
+####Add TrackerMiddleware to your kernel.php file under the middleware array property
+	
+	\PragmaRX\Tracker\Vendor\Laravel\TrackerMiddleware::class,
 
 ## Everything Is Disabled By Default
 
