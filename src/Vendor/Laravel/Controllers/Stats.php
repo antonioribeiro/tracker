@@ -10,7 +10,7 @@ use PragmaRX\Tracker\Support\Minutes;
 use Illuminate\Support\Facades\Input;
 use Bllim\Datatables\Facade\Datatables;
 use Illuminate\Support\Facades\Session;
-use PragmaRX\Tracker\Vendor\Laravel\Facade as Tracker;
+use PragmaRX\Tracker\Vendor\Laravel\Tracker;
 
 class Stats extends Controller
 {
