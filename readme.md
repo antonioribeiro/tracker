@@ -476,7 +476,7 @@ Tracker::trackVisit(
 
 ####Add the alias to the facade on your app/config/app.php:
 
-    'Tracker' => 'PragmaRX\Tracker\Vendor\Laravel\Facade',
+    'Tracker' => 'PragmaRX\Tracker\Vendor\Laravel\Tracker',
 
 ####Publish tracker configuration:
 
