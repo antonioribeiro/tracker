@@ -26,7 +26,7 @@ class Minutes
      * @param $minutes
      */
     public function __construct($minutes = null) {
-        if ( ! $minutes)
+        if ( !isset($minutes) )
         {
             return;
         }
