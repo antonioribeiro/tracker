@@ -35,6 +35,7 @@ use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
 use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
 use PragmaRX\Tracker\Data\Repositories\Language;
 
+
 class RepositoryManager implements RepositoryManagerInterface
 {
     /**
@@ -141,7 +142,6 @@ class RepositoryManager implements RepositoryManagerInterface
     public function __construct(
         GeoIP $geoIp,
         MobileDetect $mobileDetect,
-        LanguageDetect $languageDetect,
         $userAgentParser,
         Authentication $authentication,
         IlluminateSession $session,
@@ -170,13 +170,12 @@ class RepositoryManager implements RepositoryManagerInterface
         EventLog $eventLogRepository,
         SystemClass $systemClassRepository,
         CrawlerDetector $crawlerDetector,
-        Language $languageRepository
+        Language $languageRepository,
+        LanguageDetect $languageDetect
     ) {
         $this->authentication = $authentication;
 
         $this->mobileDetect = $mobileDetect;
-
-        $this->languageDetect = $languageDetect;
 
         $this->userAgentParser = $userAgentParser;
 
@@ -235,6 +234,8 @@ class RepositoryManager implements RepositoryManagerInterface
         $this->crawlerDetector = $crawlerDetector;
 
         $this->languageRepository = $languageRepository;
+
+        $this->languageDetect = $languageDetect;
     }
 
     public function checkSessionData($newData, $currentData) {
