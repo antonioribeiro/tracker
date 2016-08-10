@@ -58,6 +58,15 @@ class CreateTrackerTablesRelations extends Migration {
 
 		$this->builder->table('tracker_sessions', function($table)
 		{
+			$table->foreign('language_id')
+				->references('id')
+				->on('tracker_languages')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		$this->builder->table('tracker_sessions', function($table)
+		{
 			$table->foreign('agent_id')
 				->references('id')
 				->on('tracker_agents')

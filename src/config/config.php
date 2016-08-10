@@ -259,6 +259,8 @@ return [
 
     'system_class_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SystemClass',
 
+		'language_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Language',
+
 	/**
 	 * Laravel internal variables on user authentication and login.
 	 */

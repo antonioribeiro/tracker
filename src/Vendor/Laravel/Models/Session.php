@@ -10,6 +10,7 @@ class Session extends Base {
 		'uuid',
 		'user_id',
 		'device_id',
+		'language_id',
 		'agent_id',
 		'client_ip',
 		'cookie_id',
@@ -31,6 +32,11 @@ class Session extends Base {
 	public function device()
 	{
 		return $this->belongsTo($this->getConfig()->get('device_model'));
+	}
+
+	public function language()
+	{
+		return $this->belongsTo($this->getConfig()->get('language_model'));
 	}
 
 	public function agent()

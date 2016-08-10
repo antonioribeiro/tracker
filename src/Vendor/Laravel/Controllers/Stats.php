@@ -276,7 +276,9 @@ class Stats extends Controller
                'uuid',
                'user_id',
                'device_id',
+               'language_id',
                'agent_id',
+               'lenguage_id'
                'client_ip',
                'referer_id',
                'cookie_id',
@@ -401,4 +403,3 @@ class Stats extends Controller
         return false;
     }
 }
-
