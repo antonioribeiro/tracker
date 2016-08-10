@@ -56,6 +56,9 @@ var_dump( $visitor->device->is_mobile );
 var_dump( $visitor->device->platform );
 
 var_dump( $visitor->geoIp->city );
+
+var_dump( $visitor->language->preference );
+
 ```
 
 #### Sessions (visits)
