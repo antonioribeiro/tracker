@@ -5,6 +5,7 @@ namespace PragmaRX\Tracker\Data;
 use PragmaRX\Support\Config;
 use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Tracker\Support\MobileDetect;
+use PragmaRX\Tracker\Support\LanguageDetect;
 use PragmaRX\Tracker\Data\Repositories\Log;
 use PragmaRX\Tracker\Data\Repositories\Path;
 use PragmaRX\Tracker\Data\Repositories\Query;
@@ -140,6 +141,7 @@ class RepositoryManager implements RepositoryManagerInterface
     public function __construct(
         GeoIP $geoIp,
         MobileDetect $mobileDetect,
+        LanguageDetect $languageDetect,
         $userAgentParser,
         Authentication $authentication,
         IlluminateSession $session,
@@ -173,6 +175,8 @@ class RepositoryManager implements RepositoryManagerInterface
         $this->authentication = $authentication;
 
         $this->mobileDetect = $mobileDetect;
+
+        $this->languageDetect = $languageDetect;
 
         $this->userAgentParser = $userAgentParser;
 
@@ -360,9 +364,7 @@ class RepositoryManager implements RepositoryManagerInterface
         }
     }
 
-    /**
-     * @return array
-     */
+
     private function getLanguage() {
         try {
             return $this->languageDetect->detectLanguage();
@@ -370,6 +372,16 @@ class RepositoryManager implements RepositoryManagerInterface
         catch (\Exception $e) {
             return null;
         }
+    }
+
+    public function getCurrentLanguage(){
+        if ($languages = $this->getLanguage()) {
+            $languages['preference'] = $this->getLanguagePreference();
+
+            $languages['language-range'] = $this->getLanguageRange();
+        }
+
+        return $languages;
     }
 
     public function getDomainId($domain) {
