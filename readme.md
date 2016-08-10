@@ -8,6 +8,7 @@
 - **Page Views (hits on routes)**
 - **Users (logged users)**
 - **Devices** (computer, smartphone, tablet...)
+- **Languages** (preference, language range)
 - **User Devices** (by, yeah, storing a cookie on each device)
 - **Browsers** (Chrome, Mozilla Firefox, Safari, Internet Explorer...)
 - **Operating Systems** (iOS, Mac OS, Linux, Windows...)
@@ -437,7 +438,7 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 ## Manually log things
 
 If your application has special needs, you can manually log things like:
- 
+
 ####Events  
 
 ```
@@ -450,9 +451,9 @@ Tracker::trackEvent(['name' => 'cart.add', 'object' => 'App\Cart\Events\Add']);
 ```
 Tracker::trackVisit(
     [
-        'name' => 'my.dynamic.route.name', 
+        'name' => 'my.dynamic.route.name',
         'action' => 'MyDynamic@url'
-    ], 
+    ],
     ['path' => 'my/dynamic/url']
 );
 ```
