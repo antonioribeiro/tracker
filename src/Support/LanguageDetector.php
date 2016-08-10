@@ -27,7 +27,7 @@ class LanguageDetect extends Agent {
 	public function getLanguagePreference()
 	{
 		$languages = $this->languages();
-		return count($language) ? array_keys($language, max($language))[0]) : 'en';
+		return count($languages) ? array_keys($languages, max($languages))[0] : 'en';
 	}
 
 	/**

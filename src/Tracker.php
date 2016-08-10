@@ -110,7 +110,7 @@ class Tracker
 
     public function getLanguageId() {
         return $this->config->get('log_languages')
-            ? $this->dataRepositoryManager->findOrCreateLanguage()
+            ? $this->dataRepositoryManager->findOrCreateLanguage($this->dataRepositoryManager->getCurrentLanguage())
             : null;
     }
 
@@ -183,7 +183,7 @@ class Tracker
         $sessionData = [
             'user_id'    => $this->getUserId(),
             'device_id'  => $this->getDeviceId(),
-            'Language_id'  => $this->getLanguageId(),
+            'language_id'  => $this->getLanguageId(),
             'client_ip'  => $this->request->getClientIp(),
             'geoip_id'   => $this->getGeoIpId(),
             'agent_id'   => $this->getAgentId(),
