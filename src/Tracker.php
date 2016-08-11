@@ -183,12 +183,12 @@ class Tracker
         $sessionData = [
             'user_id'    => $this->getUserId(),
             'device_id'  => $this->getDeviceId(),
-            'language_id'  => $this->getLanguageId(),
             'client_ip'  => $this->request->getClientIp(),
             'geoip_id'   => $this->getGeoIpId(),
             'agent_id'   => $this->getAgentId(),
             'referer_id' => $this->getRefererId(),
             'cookie_id'  => $this->getCookieId(),
+            'language_id'  => $this->getLanguageId(),
             'is_robot'   => $this->isRobot(),
 
             // The key user_agent is not present in the sessions table, but
@@ -286,6 +286,7 @@ class Tracker
             $this->config->get('log_user_agents') ||
             $this->config->get('log_users') ||
             $this->config->get('log_devices') ||
+            $this->config->get('log_languages') ||
             $this->config->get('log_referers') ||
             $this->config->get('log_paths') ||
             $this->config->get('log_queries') ||

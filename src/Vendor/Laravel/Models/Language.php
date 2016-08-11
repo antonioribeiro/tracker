@@ -6,6 +6,6 @@ class Language extends Base {
 
 	protected $table = 'tracker_languages';
 
-	protected $fillable = array('language-range', 'preference');
+	protected $fillable = array('preference', 'language-range');
 
 }

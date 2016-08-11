@@ -160,6 +160,11 @@ return [
 	 */
 	'log_devices' => false,
 
+    /**
+     * Do you wish to log languages?
+     */
+    'log_languages' => false,
+
 	/**
 	 * Do you wish to log HTTP referers?
 	 */
@@ -259,7 +264,7 @@ return [
 
     'system_class_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SystemClass',
 
-		'language_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Language',
+    'language_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Language',
 
 	/**
 	 * Laravel internal variables on user authentication and login.

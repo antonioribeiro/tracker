@@ -207,7 +207,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	        $systemClassModel = $this->instantiateModel('system_class_model');
 
-					$languageModel = $this->instantiateModel('language_model');
+            $languageModel = $this->instantiateModel('language_model');
 
 	        $logRepository = new Log($logModel);
 
