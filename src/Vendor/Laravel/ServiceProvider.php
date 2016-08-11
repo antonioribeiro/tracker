@@ -6,6 +6,7 @@ use PragmaRX\Tracker\Tracker;
 use PragmaRX\Support\PhpSession;
 use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Tracker\Support\MobileDetect;
+use PragmaRX\Tracker\Support\LanguageDetect;
 use PragmaRX\Tracker\Eventing\EventStorage;
 use PragmaRX\Tracker\Data\Repositories\Log;
 use PragmaRX\Tracker\Data\RepositoryManager;
@@ -278,8 +279,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
                 new Agent($agentModel),
 
-								new Language($languageModel),
-
                 new Device($deviceModel),
 
                 new Cookie($cookieModel,
@@ -317,7 +316,11 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	            $systemClassRepository,
 
-		        $crawlerDetect
+		        $crawlerDetect,
+
+                new Language($languageModel),
+
+                new LanguageDetect
             );
         });
     }
