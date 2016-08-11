@@ -75,6 +75,7 @@ class Stats extends Controller
                 { "data" : "user",        "title" : "User", "orderable": true, "searchable": true },
                 { "data" : "device",      "title" : "Device", "orderable": true, "searchable": true },
                 { "data" : "browser",     "title" : "Browser", "orderable": true, "searchable": true },
+                { "data" : "language",    "title" : "Language", "orderable": true, "searchable": true },
                 { "data" : "referer",     "title" : "Referer", "orderable": true, "searchable": true },
                 { "data" : "pageViews",   "title" : "Page Views", "orderable": true, "searchable": true },
                 { "data" : "lastActivity","title" : "Last Activity", "orderable": true, "searchable": true },
@@ -276,7 +277,6 @@ class Stats extends Controller
             'uuid',
             'user_id',
             'device_id',
-            'language_id',
             'agent_id',
             'client_ip',
             'referer_id',
@@ -332,6 +332,14 @@ class Stats extends Controller
             {
                 return $row->agent && $row->agent
                     ? $row->agent->browser . ' ('.$row->agent->browser_version.')'
+                    : '';
+
+            })
+
+            ->add_column('language', function($row) use ($username_column)
+            {
+                return $row->language && $row->language
+                    ? $row->language->preference
                     : '';
 
             })

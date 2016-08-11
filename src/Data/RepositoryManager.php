@@ -139,6 +139,11 @@ class RepositoryManager implements RepositoryManagerInterface
      */
     private $languageRepository;
 
+    /**
+     * @var Repositories\Language
+     */
+    private $languageDetect;
+
     public function __construct(
         GeoIP $geoIp,
         MobileDetect $mobileDetect,
@@ -377,9 +382,9 @@ class RepositoryManager implements RepositoryManagerInterface
 
     public function getCurrentLanguage(){
         if ($languages = $this->getLanguage()) {
-            $languages['preference'] = $this->getLanguagePreference();
+            $languages['preference'] = $this->languageDetect->getLanguagePreference();
 
-            $languages['language-range'] = $this->getLanguageRange();
+            $languages['language-range'] = $this->languageDetect->getLanguageRange();
         }
 
         return $languages;
@@ -607,11 +612,11 @@ class RepositoryManager implements RepositoryManagerInterface
 
     public function logSqlQuery($query, $bindings, $time, $name) {
         $this->sqlQueryRepository->push([
-                                            'query'    => $query,
-                                            'bindings' => $bindings,
-                                            'time'     => $time,
-                                            'name'     => $name,
-                                        ]);
+            'query'    => $query,
+            'bindings' => $bindings,
+            'time'     => $time,
+            'name'     => $name,
+        ]);
     }
 
     public function pageViews($minutes, $results) {
