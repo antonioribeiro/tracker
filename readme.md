@@ -488,6 +488,16 @@ Tracker::trackVisit(
 
     php artisan vendor:publish
 
+####Enable the Middleware (Laravel 5)
+
+    'use_middleware' => true,
+
+####Add the Middleware to Laravel Kernel (Laravel 5)
+
+Open the file `app/Http/Kernel.php` and add the following to your web middlewares:
+
+    \PragmaRX\Tracker\Vendor\Laravel\Middlewares\Tracker::class,
+
 ####Enable Tracker in your config.php (Laravel 4) or tracker.php (Laravel 5)
 
     'enabled' => true,
@@ -548,6 +558,10 @@ To use the stats panel on your website you'll need to download the sb-admin 2 so
 And enabled in your config file:
 
 	'stats_panel_enabled' => true,
+
+Set the web middleware for stats routes (Laravel 5)
+
+	'stats_routes_middleware' => 'web',
 
 Only admins can view the stats, so if you don't have an is_admin attribute on your user model, you'll have to add one:
 
