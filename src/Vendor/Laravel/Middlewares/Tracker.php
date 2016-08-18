@@ -4,7 +4,7 @@ namespace PragmaRX\Tracker\Vendor\Laravel\Middlewares;
 
 use Closure;
 
-class TrackVisitsMiddleware
+class Tracker
 {
     /**
      * Handle an incoming request.
@@ -16,6 +16,7 @@ class TrackVisitsMiddleware
     public function handle($request, Closure $next)
     {
         app('tracker')->boot();
+
         return $next($request);
     }
 }
