@@ -17,7 +17,7 @@ class Event extends Base {
 				->select(
 					'tracker_events.id',
 					'tracker_events.name',
-					$this->getConnection()->raw('count(tracker_events_log.id) as total')
+					$this->getConnection()->raw('count('.$this->getConnection()->getTablePrefix().'tracker_events_log.id) as total')
 				)
 				->from('tracker_events')
 				->period($minutes, 'tracker_events_log')
