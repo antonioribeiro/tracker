@@ -19,7 +19,7 @@
         "php": ">=5.3.7",
         "laravel/framework": "~4|~5",
         "pragmarx/support": "~0.6",
-        "ramsey/uuid": "~2.8",
+        "ramsey/uuid": "~3",
         "jenssegers/agent": "~2.1",
         "ua-parser/uap-php" : "~3.4",
         "pragmarx/datatables": "1.4.10",

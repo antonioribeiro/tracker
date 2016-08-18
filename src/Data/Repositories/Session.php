@@ -4,7 +4,7 @@ namespace PragmaRX\Tracker\Data\Repositories;
 
 use Carbon\Carbon;
 use PragmaRX\Support\Config;
-use Rhumsaa\Uuid\Uuid as UUID;
+use Ramsey\Uuid\Uuid as UUID;
 use PragmaRX\Support\PhpSession;
 
 class Session extends Repository {
