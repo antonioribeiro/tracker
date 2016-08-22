@@ -4,8 +4,8 @@ namespace PragmaRX\Tracker\Data\Repositories;
 
 use PragmaRX\Support\Config;
 
-class Route extends Repository {
-
+class Route extends Repository
+{
 	public function __construct($model, Config $config)
 	{
 		parent::__construct($model);
@@ -22,5 +22,4 @@ class Route extends Repository {
 			! $route->currentRouteName() ||
 			! in_array_wildcard($route->currentRouteName(), $forbidden);
 	}
-
 }
