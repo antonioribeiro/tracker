@@ -3,13 +3,10 @@
 namespace PragmaRX\Tracker\Vendor\Laravel\Controllers;
 
 use Auth;
-
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\View;
-use PragmaRX\Tracker\Support\Minutes;
-use Illuminate\Support\Facades\Input;
 use Bllim\Datatables\Facade\Datatables;
-use Illuminate\Support\Facades\Session;
+use PragmaRX\Tracker\Vendor\Laravel\Support\Session;
 use PragmaRX\Tracker\Vendor\Laravel\Facade as Tracker;
 
 class Stats extends Controller
@@ -23,16 +20,10 @@ class Stats extends Controller
 
 	public function __construct()
 	{
-		Session::put('tracker.stats.days', $this->getValue('days', 1));
-
-		Session::put('tracker.stats.page', $this->getValue('page', 'visits'));
-
-		$this->minutes = new Minutes(60 * 24 * Session::get('tracker.stats.days'));
-
         $this->authentication = app()->make('tracker.authentication');
 	}
 
-	public function index()
+	public function index(Session $session)
 	{
         if ( ! $this->isAuthenticated())
         {
@@ -49,20 +40,20 @@ class Stats extends Controller
             return View::make('pragmarx/tracker::message')->with('message', 'You are not Admin');
         }
 
-		return $this->showPage(Session::get('tracker.stats.page'));
+		return $this->showPage($session, $session->getValue('page'));
 	}
 
-	public function showPage($page)
+	public function showPage($session, $page)
 	{
 		$me = $this;
 
 		if (method_exists($me, $page))
 		{
-			return $this->$page();
+			return $this->$page($session);
 		}
 	}
 
-	public function visits()
+	public function visits(Session $session)
 	{
 		$datatables_data = array
 		(
@@ -82,7 +73,7 @@ class Stats extends Controller
 		);
 
 		return View::make('pragmarx/tracker::index')
-			->with('sessions', Tracker::sessions($this->minutes))
+			->with('sessions', Tracker::sessions($session->getMinutes()))
 			->with('title', 'Visits')
 			->with('username_column', Tracker::getConfig('authenticated_user_username_column'))
 			->with('datatables_data', $datatables_data);
@@ -102,14 +93,14 @@ class Stats extends Controller
 				->with('title', 'Page Views Summary');
 	}
 
-	public function apiPageviews()
+	public function apiPageviews(Session $session)
 	{
-		return Tracker::pageViews($this->minutes)->toJson();
+		return Tracker::pageViews($session->getMinutes())->toJson();
 	}
 
-	public function apiPageviewsByCountry()
+	public function apiPageviewsByCountry(Session $session)
 	{
-		return Tracker::pageViewsByCountry($this->minutes)->toJson();
+		return Tracker::pageViewsByCountry($session->getMinutes())->toJson();
 	}
 
 	public function apiLog($uuid)
@@ -189,45 +180,32 @@ class Stats extends Controller
 			->make(true);
 	}
 
-	public function getValue($variable, $default = null)
-	{
-		if (Input::has($variable))
-		{
-			$value = Input::get($variable);
-		}
-		else
-		{
-			$value = Session::get('tracker.stats.'.$variable, $default);
-		}
 
-		return $value;
-	}
-
-	public function users()
+	public function users(Session $session)
 	{
 		return View::make('pragmarx/tracker::users')
-			->with('users', Tracker::users($this->minutes))
+			->with('users', Tracker::users($session->getMinutes()))
 			->with('title', 'Users')
 			->with('username_column', Tracker::getConfig('authenticated_user_username_column'));
 	}
 
-	private function events()
+	private function events(Session $session)
 	{
 		return View::make('pragmarx/tracker::events')
-			->with('events', Tracker::events($this->minutes))
+			->with('events', Tracker::events($session->getMinutes()))
 			->with('title', 'Events');
 	}
 
-	public function errors()
+	public function errors(Session $session)
 	{
 		return View::make('pragmarx/tracker::errors')
-			->with('error_log', Tracker::errors($this->minutes))
+			->with('error_log', Tracker::errors($session->getMinutes()))
 			->with('title', 'Errors');
 	}
 
-	public function apiErrors()
+	public function apiErrors(Session $session)
 	{
-		$query = Tracker::errors($this->minutes, false);
+		$query = Tracker::errors($session->getMinutes(), false);
 
 		$query->select(array(
 			               'id',
@@ -244,18 +222,18 @@ class Stats extends Controller
 				->make(true);
 	}
 
-	public function apiEvents()
+	public function apiEvents(Session $session)
 	{
-		$query = Tracker::events($this->minutes, false);
+		$query = Tracker::events($session->getMinutes(), false);
 
 		return Datatables::of($query)->make(true);
 	}
 
-	public function apiUsers()
+	public function apiUsers(Session $session)
 	{
 		$username_column = Tracker::getConfig('authenticated_user_username_column');
 
-		return Datatables::of(Tracker::users($this->minutes, false))
+		return Datatables::of(Tracker::users($session->getMinutes(), false))
 				->edit_column('user_id', function($row) use ($username_column) {
 					return "{$row->user->$username_column}";
 				})
@@ -265,11 +243,11 @@ class Stats extends Controller
 				->make(true);
 	}
 
-	public function apiVisits()
+	public function apiVisits(Session $session)
 	{
 		$username_column = Tracker::getConfig('authenticated_user_username_column');
 
-		$query = Tracker::sessions($this->minutes, false);
+		$query = Tracker::sessions($session->getMinutes(), false);
 
 		$query->select(array(
                'id',
