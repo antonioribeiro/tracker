@@ -38,8 +38,8 @@ use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 use PragmaRX\Tracker\Vendor\Laravel\Artisan\Tables as TablesCommand;
 use PragmaRX\Tracker\Support\Exceptions\Handler as TrackerExceptionHandler;
 
-class ServiceProvider extends PragmaRXServiceProvider {
-
+class ServiceProvider extends PragmaRXServiceProvider
+{
 	protected $packageVendor = 'pragmarx';
 
 	protected $packageName = 'tracker';
@@ -340,7 +340,12 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	{
 		$me = $this;
 
-		$this->app['events']->listen('router.matched', function() use ($me)
+        $mathingEvents = [
+            'router.matched',
+            'Illuminate\Routing\Events\RouteMatched'
+        ];
+
+        $this->app['events']->listen($mathingEvents, function() use ($me)
 		{
 			$me->getTracker()->routerMatched($me->getConfig('log_routes'));
 		});
