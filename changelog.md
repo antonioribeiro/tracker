@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.3] - 2016-08-22
+### Fixed
+- Routes for stats are now being correctly ignored on Laravel 5.x
+
+## [2.0.2] - 2016-08-20
+### Add
+- Support for Laravel 5.3
+- Middleware for Laravel 5.x
+- Allow table to be prefixed
+### Fixed
+- SB Admin 2 install instructions
+
+## [2.0.1] - 2016-08-18
+### Changed
+- Upgraded Ramsey UUID to V3
+
 ## [2.0.0] - 2015-11-23
 ### Notes ! This is a breaking change
 - You must execute
