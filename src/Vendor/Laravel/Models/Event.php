@@ -45,5 +45,4 @@ class Event extends Base {
     {
         return $this->getConnection()->getTablePrefix();
     }
-
 }
