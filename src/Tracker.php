@@ -227,13 +227,15 @@ class Tracker
         );
     }
 
-    protected function isTrackable() {
+    protected function isTrackable()
+    {
         return $this->config->get('enabled') &&
-        $this->logIsEnabled() &&
-        $this->parserIsAvailable() &&
-        $this->isTrackableIp() &&
-        $this->isTrackableEnvironment() &&
-        $this->notRobotOrTrackable();
+                $this->logIsEnabled() &&
+                $this->parserIsAvailable() &&
+                $this->isTrackableIp() &&
+                $this->isTrackableEnvironment() &&
+                $this->routeIsTrackable() &&
+                $this->notRobotOrTrackable();
     }
 
     protected function isTrackableEnvironment() {
@@ -318,6 +320,16 @@ class Tracker
         }
 
         return true;
+    }
+
+    private function routeIsTrackable()
+    {
+        if (! $this->route)
+        {
+            return false;
+        }
+
+        return $this->dataRepositoryManager->routeIsTrackable($this->route);
     }
 
     public function routerMatched($log) {
