@@ -56,21 +56,20 @@ class Log extends Repository
 		return $this->currentLogId;
 	}
 
-	/**
-	 * @param null $currentLogId
-	 */
+    /**
+     * @param null|$currentLogId
+     * @return null|int
+     */
 	public function setCurrentLogId($currentLogId)
 	{
-		$this->currentLogId = $currentLogId;
+		return $this->currentLogId = $currentLogId;
 	}
 
 	public function createLog($data)
 	{
 		$log = $this->create($data);
 
-		$this->setCurrentLogId($log->id);
-
-		return $this->getCurrentLogId();
+        return $this->setCurrentLogId($log->id);
 	}
 
 	public function pageViews($minutes, $results)
