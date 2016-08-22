@@ -8,6 +8,7 @@
 - **Page Views (hits on routes)**
 - **Users (logged users)**
 - **Devices** (computer, smartphone, tablet...)
+- **Languages** (preference, language range)
 - **User Devices** (by, yeah, storing a cookie on each device)
 - **Browsers** (Chrome, Mozilla Firefox, Safari, Internet Explorer...)
 - **Operating Systems** (iOS, Mac OS, Linux, Windows...)
@@ -55,6 +56,9 @@ var_dump( $visitor->device->is_mobile );
 var_dump( $visitor->device->platform );
 
 var_dump( $visitor->geoIp->city );
+
+var_dump( $visitor->language->preference );
+
 ```
 
 #### Sessions (visits)
@@ -201,12 +205,12 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 ### sessions
 
 ```
-+-----+--------------------------------------+---------+-----------+----------+-----------------+------------+-----------+----------+
-| id  | uuid                                 | user_id | device_id | agent_id | client_ip       | referer_id | cookie_id | geoip_id |
-+-----+--------------------------------------+---------+-----------+----------+-----------------+------------+-----------+----------+
-| 1   | 09465be3-5930-4581-8711-5161f62c4373 | 1       | 1         | 1        | 186.228.127.245 | 2          | 1         | 2        |
-| 2   | 07399969-0a19-47f0-862d-43b06d7cde45 |         | 2         | 2        | 66.240.192.138  |            | 2         | 2        |
-+-----+--------------------------------------+---------+-----------+----------+-----------------+------------+-----------+----------+
++-----+--------------------------------------+---------+-----------+----------+-----------------+------------+-----------+----------+-------------+
+| id  | uuid                                 | user_id | device_id | agent_id | client_ip       | referer_id | cookie_id | geoip_id | language_id |
++-----+--------------------------------------+---------+-----------+----------+-----------------+------------+-----------+----------+-------------+
+| 1   | 09465be3-5930-4581-8711-5161f62c4373 | 1       | 1         | 1        | 186.228.127.245 | 2          | 1         | 2        | 3           |
+| 2   | 07399969-0a19-47f0-862d-43b06d7cde45 |         | 2         | 2        | 66.240.192.138  |            | 2         | 2        | 2           |
++-----+--------------------------------------+---------+-----------+----------+-----------------+------------+-----------+----------+-------------+
 ```
 
 ### devices
@@ -241,6 +245,19 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 | 8  | Mozilla/5.0 (iPhone; CPU iPhone OS 7_1 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile/11D169 Safari/9537.53 | Mobile Safari     | 7.0             |
 +----+-----------------------------------------------------------------------------------------------------------------------------------------+-------------------+-----------------+
 ```
+
+### languages
+
+```
++----+------------+----------------+
+| id | preference | language_range |
++----+------------+----------------+
+| 1  | en         | ru=0.8,es=0.5  |
+| 2  | es         | en=0.7,ru=0.3  |
+| 3  | ru         | en=0.5,es=0.5  |
++----+------------+----------------+
+```
+
 
 ### domains
 
@@ -437,7 +454,7 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 ## Manually log things
 
 If your application has special needs, you can manually log things like:
- 
+
 ####Events  
 
 ```
@@ -450,9 +467,9 @@ Tracker::trackEvent(['name' => 'cart.add', 'object' => 'App\Cart\Events\Add']);
 ```
 Tracker::trackVisit(
     [
-        'name' => 'my.dynamic.route.name', 
+        'name' => 'my.dynamic.route.name',
         'action' => 'MyDynamic@url'
-    ], 
+    ],
     ['path' => 'my/dynamic/url']
 );
 ```

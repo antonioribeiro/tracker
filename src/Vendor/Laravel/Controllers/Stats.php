@@ -259,6 +259,7 @@ class Stats extends Controller
                'referer_id',
                'cookie_id',
                'geoip_id',
+               'language_id',
                'is_robot',
                'updated_at',
 		));
@@ -311,6 +312,20 @@ class Stats extends Controller
 							: '';
 
 				})
+
+                ->add_column('language', function($row) use ($username_column)
+                {
+                    return $row->language && $row->language
+                        ? $row->language->preference
+                        : '';
+                })
+
+                ->add_column('language', function($row) use ($username_column)
+                {
+                    return $row->language && $row->language
+                        ? $row->language->preference
+                        : '';
+                })
 
 				->add_column('referer', function($row) use ($username_column)
 				{

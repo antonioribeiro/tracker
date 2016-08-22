@@ -5,6 +5,7 @@ namespace PragmaRX\Tracker\Data;
 use PragmaRX\Support\Config;
 use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Tracker\Support\MobileDetect;
+use PragmaRX\Tracker\Support\LanguageDetect;
 use PragmaRX\Tracker\Data\Repositories\Log;
 use PragmaRX\Tracker\Data\Repositories\Path;
 use PragmaRX\Tracker\Data\Repositories\Query;
@@ -32,6 +33,8 @@ use PragmaRX\Tracker\Data\Repositories\SqlQueryBinding;
 use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
 use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
+use PragmaRX\Tracker\Data\Repositories\Language;
+
 
 class RepositoryManager implements RepositoryManagerInterface
 {
@@ -43,37 +46,43 @@ class RepositoryManager implements RepositoryManagerInterface
     /**
      * @var Query
      */
-
     private $queryRepository;
+
     /**
      * @var QueryArgument
      */
-
     private $queryArgumentRepository;
+
     /**
      * @var Domain
      */
     private $domainRepository;
+
     /**
      * @var Referer
      */
     private $refererRepository;
+
     /**
      * @var Repositories\Route
      */
     private $routeRepository;
+
     /**
      * @var Repositories\RoutePath
      */
     private $routePathRepository;
+
     /**
      * @var Repositories\RoutePathParameter
      */
     private $routePathParameterRepository;
+
     /**
      * @var Error
      */
     private $errorRepository;
+
     /**
      * @var GeoIP
      */
@@ -125,6 +134,16 @@ class RepositoryManager implements RepositoryManagerInterface
      */
     private $crawlerDetector;
 
+    /**
+     * @var Repositories\Language
+     */
+    private $languageRepository;
+
+    /**
+     * @var Repositories\Language
+     */
+    private $languageDetect;
+
     public function __construct(
         GeoIP $geoIp,
         MobileDetect $mobileDetect,
@@ -155,7 +174,9 @@ class RepositoryManager implements RepositoryManagerInterface
         Event $eventRepository,
         EventLog $eventLogRepository,
         SystemClass $systemClassRepository,
-        CrawlerDetector $crawlerDetector
+        CrawlerDetector $crawlerDetector,
+        Language $languageRepository,
+        LanguageDetect $languageDetect
     ) {
         $this->authentication = $authentication;
 
@@ -216,6 +237,10 @@ class RepositoryManager implements RepositoryManagerInterface
         $this->systemClassRepository = $systemClassRepository;
 
         $this->crawlerDetector = $crawlerDetector;
+
+        $this->languageRepository = $languageRepository;
+
+        $this->languageDetect = $languageDetect;
     }
 
     public function checkSessionData($newData, $currentData) {
@@ -256,6 +281,10 @@ class RepositoryManager implements RepositoryManagerInterface
 
     public function findOrCreateDevice($data) {
         return $this->deviceRepository->findOrCreate($data, ['kind', 'model', 'platform', 'platform_version']);
+    }
+
+    public function findOrCreateLanguage($data) {
+        return $this->languageRepository->findOrCreate($data, ['preference', 'language-range']);
     }
 
     public function findOrCreatePath($path) {
@@ -339,6 +368,26 @@ class RepositoryManager implements RepositoryManagerInterface
         catch (\Exception $e) {
             return null;
         }
+    }
+
+
+    private function getLanguage() {
+        try {
+            return $this->languageDetect->detectLanguage();
+        }
+        catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    public function getCurrentLanguage(){
+        if ($languages = $this->getLanguage()) {
+            $languages['preference'] = $this->languageDetect->getLanguagePreference();
+
+            $languages['language-range'] = $this->languageDetect->getLanguageRange();
+        }
+
+        return $languages;
     }
 
     public function getDomainId($domain) {
@@ -563,11 +612,11 @@ class RepositoryManager implements RepositoryManagerInterface
 
     public function logSqlQuery($query, $bindings, $time, $name) {
         $this->sqlQueryRepository->push([
-                                            'query'    => $query,
-                                            'bindings' => $bindings,
-                                            'time'     => $time,
-                                            'name'     => $name,
-                                        ]);
+            'query'    => $query,
+            'bindings' => $bindings,
+            'time'     => $time,
+            'name'     => $name,
+        ]);
     }
 
     public function pageViews($minutes, $results) {

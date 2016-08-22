@@ -1,5 +1,15 @@
 # Laravel Stats Tracker Upgrading Guide
 
+## to 2.0.4
+
+####Run Artisan tracker:tables command
+
+php artisan tracker:tables
+
+####Migrate
+
+php artisan migrate
+
 ## to 0.6.0
 
 A [massive update happened at StartBootstrap](https://github.com/IronSummitMedia/startbootstrap/commit/66716399cf8eb5109498d41a2dad95a093c18f2b), you need to download and unzip the admin frontend again:
