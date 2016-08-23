@@ -82,6 +82,8 @@ class Stats extends Controller
 
 	public function log($uuid)
 	{
+        $session = Tracker::sessionLog($uuid);
+
 		return View::make('pragmarx/tracker::log')
 				->with('log', Tracker::sessionLog($uuid))
 				->with('uuid', $uuid)
@@ -125,6 +127,8 @@ class Stats extends Controller
 
 		return Datatables::of($query)
 			->edit_column('route_name', function($row) {
+			    $path = $row->routePath;
+
 					return 	$row->routePath
 							? $row->routePath->route->name . '<br>' . $row->routePath->route->action
 							: ($row->path ? $row->path->path : '');
