@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel;
 
+use Illuminate\Database\Events\QueryExecuted;
 use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Support\PhpSession;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
@@ -401,16 +402,41 @@ class ServiceProvider extends PragmaRXServiceProvider
     {
         $me = $this;
 
-        $this->app['events']->listen('illuminate.query', function ($query,
-                                                                  $bindings,
-                                                                  $time,
-                                                                  $name) use ($me) {
-            if ($me->getTracker()->isEnabled()) {
-                $me->getTracker()->logSqlQuery(
-                    $query, $bindings, $time, $name
-                );
+        if (! class_exists('Illuminate\Database\Events\QueryExecuted')) {
+            $this->app['events']->listen('illuminate.query', function ($query,
+                                                                       $bindings,
+                                                                       $time,
+                                                                       $name) use ($me) {
+                $me->logSqlQuery($query, $bindings, $time, $name);
+            });
+        } else {
+            $this->app['events']->listen('Illuminate\Database\Events\QueryExecuted', function ($query) use ($me) {
+                $me->logSqlQuery($query);
+            });
+        }
+    }
+
+    /**
+     * @param $query
+     * @param $bindings
+     * @param $time
+     * @param $name
+     * @param $me
+     */
+    function logSqlQuery($query, $bindings = null, $time = null, $connectionName = null)
+    {
+        if ($this->getTracker()->isEnabled()) {
+
+            if ($query instanceof \Illuminate\Database\Events\QueryExecuted)
+            {
+                $bindings = $query->bindings;
+                $time = $query->time;
+                $connectionName = $query->connectionName;
+                $query = $query->sql;
             }
-        });
+
+            $this->getTracker()->logSqlQuery($query, $bindings, $time, $connectionName);
+        }
     }
 
     private function registerGlobalEventLogger()
