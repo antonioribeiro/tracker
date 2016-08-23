@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.4] - 2016-08-22
+### Fixed
+- Route name on log
+### Added
+- Log languages (please check upgrade.md)
+
 ## [2.0.3] - 2016-08-22
 ### Fixed
 - Routes for stats are now being correctly ignored on Laravel 5.x
