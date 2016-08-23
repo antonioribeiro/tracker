@@ -9,27 +9,44 @@ class Authentication
 {
     private $config;
 
-    private $authentication;
+    private $authentication = [];
 
     public function __construct(Config $config, Application $app)
     {
         $this->config = $config;
 
-        $this->authentication = $app->make($this->config->get('authentication_ioc_binding'));
+        $this->instantiateAuthentication($app);
     }
 
     public function check()
     {
-        $method = $this->config->get('authenticated_check_method');
+        return $this->executeAuthMethod($this->config->get('authenticated_check_method'));
+    }
 
-        return $this->authentication->{$method}();
+    private function executeAuthMethod($method)
+    {
+        foreach ($this->authentication as $auth) {
+            if($data = $auth->{$method}()) {
+                return $data;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Application $app
+     */
+    private function instantiateAuthentication(Application $app)
+    {
+        foreach ((array) $this->config->get('authentication_ioc_binding') as $binding) {
+            $this->authentication[] = $app->make($binding);
+        }
     }
 
     public function user()
     {
-        $method = $this->config->get('authenticated_user_method');
-
-        return $this->authentication->{$method}();
+        return $this->executeAuthMethod($this->config->get('authenticated_user_method'));
     }
 
     public function getCurrentUserId()

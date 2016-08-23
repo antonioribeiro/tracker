@@ -274,7 +274,7 @@ return [
     /*
      * Laravel internal variables on user authentication and login.
      */
-    'authentication_ioc_binding' => 'auth', // defaults to 'auth' in Illuminate\Support\Facades\Auth
+    'authentication_ioc_binding' => ['auth'], // defaults to 'auth' in Illuminate\Support\Facades\Auth
 
     'authenticated_check_method' => 'check', // to Auth::check()
 
