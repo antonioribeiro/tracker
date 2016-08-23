@@ -368,6 +368,10 @@ class Tracker
         return $this->dataRepositoryManager->getLastSessions(Minutes::make($minutes), $results);
     }
 
+    public function onlineUsers($minutes = 3, $results = true) {
+        return $this->sessions(3);
+    }
+
     public function track() {
         $log = $this->getLogData();
 

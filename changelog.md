@@ -3,6 +3,7 @@
 ## [2.0.4] - 2016-08-22
 ### Fixed
 - Route name on log
+- Sessions for tracking visitors
 ### Added
 - Log languages (please check upgrade.md)
 - Localization

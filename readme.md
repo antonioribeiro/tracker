@@ -85,6 +85,14 @@ foreach ($sessions as $session)
 }
 ```
 
+#### Online Users 
+
+Brings all online sessions (logged and unlogged users)
+
+```
+$users = Tracker::onlineUsers(); // defaults to 3 minutes
+```
+
 #### Users
 
 ```
