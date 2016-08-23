@@ -23,34 +23,34 @@ class Minutes
 
     /**
      * Minutes constructor.
+     *
      * @param $minutes
      */
-    public function __construct($minutes = null) {
-        if ( !isset($minutes) )
-        {
+    public function __construct($minutes = null)
+    {
+        if (!isset($minutes)) {
             return;
         }
 
         $this->minutes = $minutes;
 
-        if ($minutes instanceof Minutes) {
+        if ($minutes instanceof self) {
             $this->start = $minutes->getStart();
 
             $this->end = $minutes->getEnd();
-        }
-        else {
+        } else {
             $this->calculateStartEnd();
         }
     }
 
     /**
-     * Calculate start and end dates
+     * Calculate start and end dates.
      */
-    private function calculateStartEnd() {
+    private function calculateStartEnd()
+    {
         if ($this->minutes == 0) {
             $this->setToday();
-        }
-        else {
+        } else {
             $this->start = Carbon::now()->subMinutes($this->minutes);
 
             $this->end = Carbon::now();
@@ -60,43 +60,50 @@ class Minutes
     /**
      * @return mixed
      */
-    public function getEnd() {
+    public function getEnd()
+    {
         return $this->end;
     }
 
     /**
      * @return mixed
      */
-    public function getStart() {
+    public function getStart()
+    {
         return $this->start;
     }
 
     /**
      * @param $minutes
+     *
      * @return static
      */
-    public static function make($minutes) {
+    public static function make($minutes)
+    {
         return new static($minutes);
     }
 
     /**
      * @param mixed $end
      */
-    public function setEnd($end) {
+    public function setEnd($end)
+    {
         $this->end = $end;
     }
 
     /**
      * @param mixed $start
      */
-    public function setStart($start) {
+    public function setStart($start)
+    {
         $this->start = $start;
     }
 
     /**
-     * Today
+     * Today.
      */
-    private function setToday() {
+    private function setToday()
+    {
         $this->start = Carbon::now()->setTime(0, 0, 0);
 
         $this->end = Carbon::now()->setTime(23, 59, 59);

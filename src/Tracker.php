@@ -2,13 +2,13 @@
 
 namespace PragmaRX\Tracker;
 
-use PragmaRX\Support\Config;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Router;
-use Illuminate\Log\Writer as Logger;
-use PragmaRX\Tracker\Support\Minutes;
 use Illuminate\Foundation\Application as Laravel;
+use Illuminate\Http\Request;
+use Illuminate\Log\Writer as Logger;
+use Illuminate\Routing\Router;
+use PragmaRX\Support\Config;
 use PragmaRX\Tracker\Data\RepositoryManager as DataRepositoryManager;
+use PragmaRX\Tracker\Support\Minutes;
 
 class Tracker
 {
@@ -50,17 +50,20 @@ class Tracker
         $this->laravel = $laravel;
     }
 
-    public function allSessions() {
+    public function allSessions()
+    {
         return $this->dataRepositoryManager->getAllSessions();
     }
 
-    public function boot() {
+    public function boot()
+    {
         if ($this->isTrackable()) {
             $this->track();
         }
     }
 
-    public function checkCurrentUser() {
+    public function checkCurrentUser()
+    {
         if (!$this->getSessionData()['user_id'] && $user_id = $this->getUserId()) {
             return true;
         }
@@ -68,39 +71,47 @@ class Tracker
         return false;
     }
 
-    public function currentSession() {
+    public function currentSession()
+    {
         return $this->dataRepositoryManager->sessionRepository->getCurrent();
     }
 
-    protected function deleteCurrentLog() {
+    protected function deleteCurrentLog()
+    {
         $this->dataRepositoryManager->logRepository->delete();
     }
 
-    public function errors($minutes, $results = true) {
+    public function errors($minutes, $results = true)
+    {
         return $this->dataRepositoryManager->errors(Minutes::make($minutes), $results);
     }
 
-    public function events($minutes, $results = true) {
+    public function events($minutes, $results = true)
+    {
         return $this->dataRepositoryManager->events(Minutes::make($minutes), $results);
     }
 
-    protected function getAgentId() {
+    protected function getAgentId()
+    {
         return $this->config->get('log_user_agents')
             ? $this->dataRepositoryManager->getAgentId()
             : null;
     }
 
-    public function getConfig($key) {
+    public function getConfig($key)
+    {
         return $this->config->get($key);
     }
 
-    public function getCookieId() {
+    public function getCookieId()
+    {
         return $this->config->get('store_cookie_tracker')
             ? $this->dataRepositoryManager->getCookieId()
             : null;
     }
 
-    public function getDeviceId() {
+    public function getDeviceId()
+    {
         return $this->config->get('log_devices')
             ? $this->dataRepositoryManager->findOrCreateDevice(
                 $this->dataRepositoryManager->getCurrentDeviceProperties()
@@ -108,17 +119,20 @@ class Tracker
             : null;
     }
 
-    public function getLanguageId() {
+    public function getLanguageId()
+    {
         return $this->config->get('log_languages')
             ? $this->dataRepositoryManager->findOrCreateLanguage($this->dataRepositoryManager->getCurrentLanguage())
             : null;
     }
 
-    public function getDomainId($domain) {
+    public function getDomainId($domain)
+    {
         return $this->dataRepositoryManager->getDomainId($domain);
     }
 
-    protected function getGeoIpId() {
+    protected function getGeoIpId()
+    {
         return $this->config->get('log_geoip')
             ? $this->dataRepositoryManager->getGeoIpId($this->request->getClientIp())
             : null;
@@ -127,7 +141,8 @@ class Tracker
     /**
      * @return array
      */
-    protected function getLogData() {
+    protected function getLogData()
+    {
         return [
             'session_id' => $this->getSessionId(true),
             'method'     => $this->request->method(),
@@ -141,7 +156,8 @@ class Tracker
         ];
     }
 
-    public function getPathId() {
+    public function getPathId()
+    {
         return $this->config->get('log_paths')
             ? $this->dataRepositoryManager->findOrCreatePath(
                 [
@@ -151,7 +167,8 @@ class Tracker
             : null;
     }
 
-    public function getQueryId() {
+    public function getQueryId()
+    {
         if ($this->config->get('log_queries')) {
             if (count($arguments = $this->request->query())) {
                 return $this->dataRepositoryManager->getQueryId(
@@ -164,7 +181,8 @@ class Tracker
         }
     }
 
-    protected function getRefererId() {
+    protected function getRefererId()
+    {
         return $this->config->get('log_referers')
             ? $this->dataRepositoryManager->getRefererId(
                 $this->request->headers->get('referer')
@@ -172,24 +190,26 @@ class Tracker
             : null;
     }
 
-    protected function getRoutePathId() {
+    protected function getRoutePathId()
+    {
         return $this->dataRepositoryManager->getRoutePathId($this->route, $this->request);
     }
 
     /**
      * @return array
      */
-    protected function makeSessionData() {
+    protected function makeSessionData()
+    {
         $sessionData = [
-            'user_id'    => $this->getUserId(),
-            'device_id'  => $this->getDeviceId(),
-            'client_ip'  => $this->request->getClientIp(),
-            'geoip_id'   => $this->getGeoIpId(),
-            'agent_id'   => $this->getAgentId(),
-            'referer_id' => $this->getRefererId(),
-            'cookie_id'  => $this->getCookieId(),
+            'user_id'      => $this->getUserId(),
+            'device_id'    => $this->getDeviceId(),
+            'client_ip'    => $this->request->getClientIp(),
+            'geoip_id'     => $this->getGeoIpId(),
+            'agent_id'     => $this->getAgentId(),
+            'referer_id'   => $this->getRefererId(),
+            'cookie_id'    => $this->getCookieId(),
             'language_id'  => $this->getLanguageId(),
-            'is_robot'   => $this->isRobot(),
+            'is_robot'     => $this->isRobot(),
 
             // The key user_agent is not present in the sessions table, but
             // it's internally used to check if the user agent changed
@@ -200,34 +220,40 @@ class Tracker
         return $this->sessionData = $this->dataRepositoryManager->checkSessionData($sessionData, $this->sessionData);
     }
 
-    public function getSessionId($updateLastActivity = false) {
+    public function getSessionId($updateLastActivity = false)
+    {
         return $this->dataRepositoryManager->getSessionId(
             $this->makeSessionData(),
             $updateLastActivity
         );
     }
 
-    public function getUserId() {
+    public function getUserId()
+    {
         return $this->config->get('log_users')
             ? $this->dataRepositoryManager->getCurrentUserId()
             : null;
     }
 
-    public function handleException($exception) {
+    public function handleException($exception)
+    {
         if ($this->config->get('log_enabled')) {
             $this->dataRepositoryManager->handleException($exception);
         }
     }
 
-    public function isEnabled() {
+    public function isEnabled()
+    {
         return $this->enabled;
     }
 
-    public function isRobot() {
+    public function isRobot()
+    {
         return $this->dataRepositoryManager->isRobot();
     }
 
-    protected function isSqlQueriesLoggableConnection($name) {
+    protected function isSqlQueriesLoggableConnection($name)
+    {
         return !in_array(
             $name,
             $this->config->get('do_not_log_sql_queries_connections')
@@ -245,21 +271,24 @@ class Tracker
                 $this->notRobotOrTrackable();
     }
 
-    protected function isTrackableEnvironment() {
+    protected function isTrackableEnvironment()
+    {
         return !in_array(
             $this->laravel->environment(),
             $this->config->get('do_not_track_environments')
         );
     }
 
-    protected function isTrackableIp() {
+    protected function isTrackableIp()
+    {
         return !ipv4_in_range(
             $this->request->getClientIp(),
             $this->config->get('do_not_track_ips')
         );
     }
 
-    public function logByRouteName($name, $minutes = null) {
+    public function logByRouteName($name, $minutes = null)
+    {
         if ($minutes) {
             $minutes = Minutes::make($minutes);
         }
@@ -267,7 +296,8 @@ class Tracker
         return $this->dataRepositoryManager->logByRouteName($name, $minutes);
     }
 
-    public function logEvents() {
+    public function logEvents()
+    {
         if (
             $this->isTrackable() &&
             $this->config->get('log_enabled') &&
@@ -277,7 +307,8 @@ class Tracker
         }
     }
 
-    protected function logIsEnabled() {
+    protected function logIsEnabled()
+    {
         return
             $this->config->get('log_enabled') ||
             $this->config->get('log_sql_queries') ||
@@ -295,7 +326,8 @@ class Tracker
             $this->config->get('log_exceptions');
     }
 
-    public function logSqlQuery($query, $bindings, $time, $name) {
+    public function logSqlQuery($query, $bindings, $time, $name)
+    {
         if (
             $this->isTrackable() &&
             $this->config->get('log_enabled') &&
@@ -306,21 +338,25 @@ class Tracker
         }
     }
 
-    protected function notRobotOrTrackable() {
+    protected function notRobotOrTrackable()
+    {
         return
             !$this->isRobot() ||
             !$this->config->get('do_not_track_robots');
     }
 
-    public function pageViews($minutes, $results = true) {
+    public function pageViews($minutes, $results = true)
+    {
         return $this->dataRepositoryManager->pageViews(Minutes::make($minutes), $results);
     }
 
-    public function pageViewsByCountry($minutes, $results = true) {
+    public function pageViewsByCountry($minutes, $results = true)
+    {
         return $this->dataRepositoryManager->pageViewsByCountry(Minutes::make($minutes), $results);
     }
 
-    public function parserIsAvailable() {
+    public function parserIsAvailable()
+    {
         if (!$this->dataRepositoryManager->parserIsAvailable()) {
             $this->logger->error(trans('tracker::tracker.regex_file_not_available'));
 
@@ -332,15 +368,15 @@ class Tracker
 
     private function routeIsTrackable()
     {
-        if (! $this->route)
-        {
+        if (!$this->route) {
             return false;
         }
 
         return $this->dataRepositoryManager->routeIsTrackable($this->route);
     }
 
-    public function routerMatched($log) {
+    public function routerMatched($log)
+    {
         if ($this->dataRepositoryManager->routeIsTrackable($this->route)) {
             if ($log) {
                 $this->dataRepositoryManager->updateRoute(
@@ -360,19 +396,23 @@ class Tracker
         }
     }
 
-    public function sessionLog($uuid, $results = true) {
+    public function sessionLog($uuid, $results = true)
+    {
         return $this->dataRepositoryManager->getSessionLog($uuid, $results);
     }
 
-    public function sessions($minutes = 1440, $results = true) {
+    public function sessions($minutes = 1440, $results = true)
+    {
         return $this->dataRepositoryManager->getLastSessions(Minutes::make($minutes), $results);
     }
 
-    public function onlineUsers($minutes = 3, $results = true) {
+    public function onlineUsers($minutes = 3, $results = true)
+    {
         return $this->sessions(3);
     }
 
-    public function track() {
+    public function track()
+    {
         $log = $this->getLogData();
 
         if ($this->config->get('log_enabled')) {
@@ -380,19 +420,23 @@ class Tracker
         }
     }
 
-    public function trackEvent($event) {
+    public function trackEvent($event)
+    {
         $this->dataRepositoryManager->trackEvent($event);
     }
 
-    public function trackVisit($route, $request) {
+    public function trackVisit($route, $request)
+    {
         $this->dataRepositoryManager->trackRoute($route, $request);
     }
 
-    protected function turnOff() {
+    protected function turnOff()
+    {
         $this->enabled = false;
     }
 
-    public function userDevices($minutes, $user_id = null, $results = true) {
+    public function userDevices($minutes, $user_id = null, $results = true)
+    {
         return $this->dataRepositoryManager->userDevices(
             Minutes::make($minutes),
             $user_id,
@@ -400,7 +444,8 @@ class Tracker
         );
     }
 
-    public function users($minutes, $results = true) {
+    public function users($minutes, $results = true)
+    {
         return $this->dataRepositoryManager->users(Minutes::make($minutes), $results);
     }
 }

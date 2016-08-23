@@ -2,6 +2,6 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-class GeoIp extends Repository {
-
+class GeoIp extends Repository
+{
 }

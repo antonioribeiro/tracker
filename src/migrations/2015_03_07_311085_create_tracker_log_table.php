@@ -2,54 +2,51 @@
 
 use PragmaRX\Tracker\Support\Migration;
 
-class CreateTrackerLogTable extends Migration {
+class CreateTrackerLogTable extends Migration
+{
+    /**
+     * Table related to this migration.
+     *
+     * @var string
+     */
+    private $table = 'tracker_log';
 
-	/**
-	 * Table related to this migration.
-	 *
-	 * @var string
-	 */
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function migrateUp()
+    {
+        $this->builder->create(
+            $this->table,
+            function ($table) {
+                $table->bigIncrements('id');
 
-	private $table = 'tracker_log';
+                $table->bigInteger('session_id')->unsigned()->index();
+                $table->bigInteger('path_id')->unsigned()->nullable()->index();
+                $table->bigInteger('query_id')->unsigned()->nullable()->index();
+                $table->string('method', 10)->index();
+                $table->bigInteger('route_path_id')->unsigned()->nullable()->index();
+                $table->boolean('is_ajax');
+                $table->boolean('is_secure');
+                $table->boolean('is_json');
+                $table->boolean('wants_json');
+                $table->bigInteger('error_id')->unsigned()->nullable()->index();
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function migrateUp()
-	{
-		$this->builder->create(
-			$this->table,
-			function ($table)
-			{
-				$table->bigIncrements('id');
+                $table->timestamp('created_at')->index();
+                $table->timestamp('updated_at')->index();
+            }
+        );
+    }
 
-				$table->bigInteger('session_id')->unsigned()->index();
-				$table->bigInteger('path_id')->unsigned()->nullable()->index();
-				$table->bigInteger('query_id')->unsigned()->nullable()->index();
-				$table->string('method', 10)->index();
-				$table->bigInteger('route_path_id')->unsigned()->nullable()->index();
-				$table->boolean('is_ajax');
-				$table->boolean('is_secure');
-				$table->boolean('is_json');
-				$table->boolean('wants_json');
-				$table->bigInteger('error_id')->unsigned()->nullable()->index();
-
-				$table->timestamp('created_at')->index();
-				$table->timestamp('updated_at')->index();
-			}
-		);
-	}
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function migrateDown()
-	{
-		$this->drop($this->table);
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function migrateDown()
+    {
+        $this->drop($this->table);
+    }
 }

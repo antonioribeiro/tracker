@@ -2,45 +2,42 @@
 
 use PragmaRX\Tracker\Support\Migration;
 
-class CreateTrackerCookiesTable extends Migration {
+class CreateTrackerCookiesTable extends Migration
+{
+    /**
+     * Table related to this migration.
+     *
+     * @var string
+     */
+    private $table = 'tracker_cookies';
 
-	/**
-	 * Table related to this migration.
-	 *
-	 * @var string
-	 */
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function migrateUp()
+    {
+        $this->builder->create(
+            $this->table,
+            function ($table) {
+                $table->bigIncrements('id');
 
-	private $table = 'tracker_cookies';
+                $table->string('uuid')->unique();
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function migrateUp()
-	{
-		$this->builder->create(
-			$this->table,
-			function ($table)
-			{
-				$table->bigIncrements('id');
+                $table->timestamp('created_at')->index();
+                $table->timestamp('updated_at')->index();
+            }
+        );
+    }
 
-				$table->string('uuid')->unique();
-
-				$table->timestamp('created_at')->index();
-				$table->timestamp('updated_at')->index();
-			}
-		);
-	}
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function migrateDown()
-	{
-		$this->drop($this->table);
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function migrateDown()
+    {
+        $this->drop($this->table);
+    }
 }

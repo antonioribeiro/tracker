@@ -2,6 +2,6 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-class Connection extends Repository {
-
+class Connection extends Repository
+{
 }

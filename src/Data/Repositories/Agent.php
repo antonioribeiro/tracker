@@ -2,6 +2,6 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-class Agent extends Repository {
-
+class Agent extends Repository
+{
 }
