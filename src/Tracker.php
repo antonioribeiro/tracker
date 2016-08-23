@@ -179,7 +179,7 @@ class Tracker
     /**
      * @return array
      */
-    protected function getSessionData() {
+    protected function makeSessionData() {
         $sessionData = [
             'user_id'    => $this->getUserId(),
             'device_id'  => $this->getDeviceId(),
@@ -202,7 +202,7 @@ class Tracker
 
     public function getSessionId($updateLastActivity = false) {
         return $this->dataRepositoryManager->getSessionId(
-            $this->getSessionData(),
+            $this->makeSessionData(),
             $updateLastActivity
         );
     }

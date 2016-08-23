@@ -62,14 +62,31 @@ class Session extends Repository {
     {
         $data = $this->getSessionData();
 
-        return  isset($data['user_id']) &&
-                $data['user_id'] === $this->sessionInfo['user_id'] &&
+        if (isset($data['user_id']))
+        {
+            if ($data['user_id'] !== $this->sessionInfo['user_id'])
+            {
+                return false;
+            }
+        }
 
-                isset($data['client_ip']) &&
-                $data['client_ip'] === $this->sessionInfo['client_ip'] &&
+        if(isset($data['client_ip']))
+        {
+            if($data['client_ip'] !== $this->sessionInfo['client_ip'])
+            {
+                return false;
+            }
+        }
 
-                isset($data['user_agent']) &&
-                $data['user_agent'] === $this->sessionInfo['user_agent'];
+        if (isset($data['user_agent']))
+        {
+            if ($data['user_agent'] !== $this->sessionInfo['user_agent'])
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function sessionIsKnownOrCreateSession()
@@ -94,7 +111,7 @@ class Session extends Repository {
 
     private function sessionIsKnown()
     {
-        return $this->session->has($this->getSessionIdentifier())
+        return $this->session->has($this->getSessionKey())
                 && $this->getSessionData('uuid') == $this->getSystemSessionId()
                 && $this->where('uuid', $this->getSessionData('uuid'))->first();
     }
@@ -149,9 +166,12 @@ class Session extends Repository {
     {
         $sessionData = $this->getSessionData();
 
-        return isset($sessionData['uuid'])
-                ? $sessionData['uuid']
-                : (string) UUID::uuid4();
+        if (isset($sessionData['uuid']))
+        {
+            return $sessionData['uuid'];
+        }
+
+        return (string) UUID::uuid4();
     }
 
     private function regenerateSystemSession($data = null)
@@ -170,19 +190,19 @@ class Session extends Repository {
 
     private function getSessionData($variable = null)
     {
-	    $id = $this->getSessionIdentifier();
+        $data = $this->session->get($this->getSessionKey());
 
-        $data = $this->session->get($id);
-
-        return $variable ? (isset($data[$variable]) ? $data[$variable] : null) : $data;
+        return $variable
+                ? (isset($data[$variable]) ? $data[$variable] : null)
+                : $data;
     }
 
     private function putSessionData($data)
     {
-        $this->session->put($this->getSessionIdentifier(), $data);
+        $this->session->put($this->getSessionKey(), $data);
     }
 
-    private function getSessionIdentifier()
+    private function getSessionKey()
     {
         return $this->config->get('tracker_session_name');
     }

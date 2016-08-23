@@ -587,8 +587,8 @@ class RepositoryManager implements RepositoryManagerInterface
         return $route_path_id;
     }
 
-    public function getSessionId($sessionInfo, $updateLastActivity) {
-        return $this->sessionRepository->getCurrentId($sessionInfo, $updateLastActivity);
+    public function getSessionId($sessionData, $updateLastActivity) {
+        return $this->sessionRepository->getCurrentId($sessionData, $updateLastActivity);
     }
 
     public function getSessionLog($uuid, $results = true) {
