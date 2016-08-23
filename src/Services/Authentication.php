@@ -26,7 +26,7 @@ class Authentication
     private function executeAuthMethod($method)
     {
         foreach ($this->authentication as $auth) {
-            if($data = $auth->{$method}()) {
+            if ($data = $auth->{$method}()) {
                 return $data;
             }
         }

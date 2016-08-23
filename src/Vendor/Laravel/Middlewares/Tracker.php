@@ -2,8 +2,8 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Middlewares;
 
-use Config;
 use Closure;
+use Config;
 
 class Tracker
 {
@@ -17,8 +17,7 @@ class Tracker
      */
     public function handle($request, Closure $next)
     {
-        if (Config::get('tracker.enabled'))
-        {
+        if (Config::get('tracker.enabled')) {
             app('tracker')->boot();
         }
 

@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel;
 
-use Illuminate\Database\Events\QueryExecuted;
 use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Support\PhpSession;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
@@ -402,7 +401,7 @@ class ServiceProvider extends PragmaRXServiceProvider
     {
         $me = $this;
 
-        if (! class_exists('Illuminate\Database\Events\QueryExecuted')) {
+        if (!class_exists('Illuminate\Database\Events\QueryExecuted')) {
             $this->app['events']->listen('illuminate.query', function ($query,
                                                                        $bindings,
                                                                        $time,
@@ -423,12 +422,10 @@ class ServiceProvider extends PragmaRXServiceProvider
      * @param $name
      * @param $me
      */
-    function logSqlQuery($query, $bindings = null, $time = null, $connectionName = null)
+    public function logSqlQuery($query, $bindings = null, $time = null, $connectionName = null)
     {
         if ($this->getTracker()->isEnabled()) {
-
-            if ($query instanceof \Illuminate\Database\Events\QueryExecuted)
-            {
+            if ($query instanceof \Illuminate\Database\Events\QueryExecuted) {
                 $bindings = $query->bindings;
                 $time = $query->time;
                 $connectionName = $query->connectionName;
