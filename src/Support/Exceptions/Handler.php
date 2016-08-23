@@ -4,8 +4,9 @@ namespace PragmaRX\Tracker\Support\Exceptions;
 
 use Exception;
 use PragmaRX\Tracker\Tracker;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 
-class Handler
+class Handler implements ExceptionHandler
 {
     private $tracker;
 
@@ -57,7 +58,7 @@ class Handler
         return call_user_func($this->originalErrorHandler, $err_severity, $err_msg, $err_file, $err_line);
     }
 
-    public function report($e)
+    public function report(Exception $e)
     {
         try {
             $this->tracker->handleException($e);
@@ -68,7 +69,7 @@ class Handler
         $this->illuminateHandler->report($e);
     }
 
-    public function render($request, $e)
+    public function render($request, Exception $e)
     {
         return $this->illuminateHandler->render($request, $e);
     }
