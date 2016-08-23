@@ -572,6 +572,12 @@ Tracker has a lot of logging options, but you need to decide what you want to lo
 
 It is responsible for logging page hits and sessions, basically the client IP address.
 
+## Multiple authentication drivers
+
+You just have to all your auth IOC bidings to the array:
+
+    'authentication_ioc_binding' => ['auth', 'admin'],
+
 ## Stats Panel
 
 To use the stats panel on your website you'll need to download the sb-admin 2 sources to your public folder:

@@ -1,6 +1,6 @@
 # Laravel Stats Tracker Upgrading Guide
 
-## to 2.0.4
+## from 2.0.x to 2.0.4 or 2.0.9 
 
 ####Run Artisan tracker:tables command
 

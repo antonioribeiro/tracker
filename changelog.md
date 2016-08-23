@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.9] - 2016-08-23
+### Added
+- Support for multiple authentication drivers
+### Fixed
+- Migrations for languages
+- Query log for Laravel 5.2 and Laravel 5.3
+
 ## [2.0.6] - 2016-08-23
 ### Added
 - Changed to PSR-2 using StyleCI
