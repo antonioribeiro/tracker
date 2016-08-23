@@ -458,8 +458,8 @@ If your application has special needs, you can manually log things like:
 ####Events  
 
 ```
-Tracker::trackEvent(['name' => 'cart.add']);
-Tracker::trackEvent(['name' => 'cart.add', 'object' => 'App\Cart\Events\Add']);
+Tracker::trackEvent(['event' => 'cart.add']);
+Tracker::trackEvent(['event' => 'cart.add', 'object' => 'App\Cart\Events\Add']);
 ```
 
 ####Routes
