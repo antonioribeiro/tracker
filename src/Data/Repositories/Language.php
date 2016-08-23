@@ -2,6 +2,6 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-class Language extends Repository {
-
+class Language extends Repository
+{
 }

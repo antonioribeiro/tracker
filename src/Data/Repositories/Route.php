@@ -6,20 +6,20 @@ use PragmaRX\Support\Config;
 
 class Route extends Repository
 {
-	public function __construct($model, Config $config)
-	{
-		parent::__construct($model);
+    public function __construct($model, Config $config)
+    {
+        parent::__construct($model);
 
-		$this->config = $config;
-	}
+        $this->config = $config;
+    }
 
-	public function isTrackable($route)
-	{
-		$forbidden = $this->config->get('do_not_track_routes');
+    public function isTrackable($route)
+    {
+        $forbidden = $this->config->get('do_not_track_routes');
 
-		return
-			! $forbidden ||
-			! $route->currentRouteName() ||
-			! in_array_wildcard($route->currentRouteName(), $forbidden);
-	}
+        return
+            !$forbidden ||
+            !$route->currentRouteName() ||
+            !in_array_wildcard($route->currentRouteName(), $forbidden);
+    }
 }

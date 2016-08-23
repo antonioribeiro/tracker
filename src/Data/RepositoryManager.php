@@ -2,39 +2,38 @@
 
 namespace PragmaRX\Tracker\Data;
 
+use Illuminate\Routing\Router as IlluminateRouter;
+use Illuminate\Session\Store as IlluminateSession;
 use PragmaRX\Support\Config;
 use PragmaRX\Support\GeoIp\GeoIp;
-use PragmaRX\Tracker\Support\MobileDetect;
-use PragmaRX\Tracker\Support\LanguageDetect;
+use PragmaRX\Tracker\Data\Repositories\Agent;
+use PragmaRX\Tracker\Data\Repositories\Connection;
+use PragmaRX\Tracker\Data\Repositories\Cookie;
+use PragmaRX\Tracker\Data\Repositories\Device;
+use PragmaRX\Tracker\Data\Repositories\Domain;
+use PragmaRX\Tracker\Data\Repositories\Error;
+use PragmaRX\Tracker\Data\Repositories\Event;
+use PragmaRX\Tracker\Data\Repositories\EventLog;
+use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
+use PragmaRX\Tracker\Data\Repositories\Language;
 use PragmaRX\Tracker\Data\Repositories\Log;
 use PragmaRX\Tracker\Data\Repositories\Path;
 use PragmaRX\Tracker\Data\Repositories\Query;
-use PragmaRX\Tracker\Data\Repositories\Agent;
-use PragmaRX\Tracker\Services\Authentication;
-use PragmaRX\Tracker\Data\Repositories\Route;
-use PragmaRX\Tracker\Data\Repositories\Event;
-use PragmaRX\Tracker\Support\CrawlerDetector;
-use PragmaRX\Tracker\Data\Repositories\Error;
-use PragmaRX\Tracker\Data\Repositories\Device;
-use PragmaRX\Tracker\Data\Repositories\Cookie;
-use PragmaRX\Tracker\Data\Repositories\Domain;
+use PragmaRX\Tracker\Data\Repositories\QueryArgument;
 use PragmaRX\Tracker\Data\Repositories\Referer;
-use PragmaRX\Tracker\Data\Repositories\Session;
-use PragmaRX\Tracker\Data\Repositories\EventLog;
-use PragmaRX\Tracker\Data\Repositories\SqlQuery;
+use PragmaRX\Tracker\Data\Repositories\Route;
 use PragmaRX\Tracker\Data\Repositories\RoutePath;
-use Illuminate\Routing\Router as IlluminateRouter;
-use Illuminate\Session\Store as IlluminateSession;
-use PragmaRX\Tracker\Data\Repositories\Connection;
+use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
+use PragmaRX\Tracker\Data\Repositories\Session;
+use PragmaRX\Tracker\Data\Repositories\SqlQuery;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryBinding;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryLog;
 use PragmaRX\Tracker\Data\Repositories\SystemClass;
-use PragmaRX\Tracker\Data\Repositories\QueryArgument;
-use PragmaRX\Tracker\Data\Repositories\SqlQueryBinding;
-use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
-use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
-use PragmaRX\Tracker\Data\Repositories\GeoIp as GeoIpRepository;
-use PragmaRX\Tracker\Data\Repositories\Language;
-
+use PragmaRX\Tracker\Services\Authentication;
+use PragmaRX\Tracker\Support\CrawlerDetector;
+use PragmaRX\Tracker\Support\LanguageDetect;
+use PragmaRX\Tracker\Support\MobileDetect;
 
 class RepositoryManager implements RepositoryManagerInterface
 {
@@ -243,7 +242,8 @@ class RepositoryManager implements RepositoryManagerInterface
         $this->languageDetect = $languageDetect;
     }
 
-    public function checkSessionData($newData, $currentData) {
+    public function checkSessionData($newData, $currentData)
+    {
         if ($newData && $currentData && $newData !== $currentData) {
             $newData = $this->updateSessionData($newData);
         }
@@ -251,13 +251,15 @@ class RepositoryManager implements RepositoryManagerInterface
         return $newData;
     }
 
-    public function createLog($data) {
+    public function createLog($data)
+    {
         $this->logRepository->createLog($data);
 
         $this->sqlQueryRepository->fire();
     }
 
-    private function createRoutePathParameter($route_path_id, $parameter, $value) {
+    private function createRoutePathParameter($route_path_id, $parameter, $value)
+    {
         return $this->routePathParameterRepository->create(
             [
                 'route_path_id' => $route_path_id,
@@ -267,31 +269,38 @@ class RepositoryManager implements RepositoryManagerInterface
         );
     }
 
-    public function errors($minutes, $results) {
+    public function errors($minutes, $results)
+    {
         return $this->logRepository->getErrors($minutes, $results);
     }
 
-    public function events($minutes, $results) {
+    public function events($minutes, $results)
+    {
         return $this->eventRepository->getAll($minutes, $results);
     }
 
-    public function findOrCreateAgent($data) {
+    public function findOrCreateAgent($data)
+    {
         return $this->agentRepository->findOrCreate($data, ['name']);
     }
 
-    public function findOrCreateDevice($data) {
+    public function findOrCreateDevice($data)
+    {
         return $this->deviceRepository->findOrCreate($data, ['kind', 'model', 'platform', 'platform_version']);
     }
 
-    public function findOrCreateLanguage($data) {
+    public function findOrCreateLanguage($data)
+    {
         return $this->languageRepository->findOrCreate($data, ['preference', 'language-range']);
     }
 
-    public function findOrCreatePath($path) {
+    public function findOrCreatePath($path)
+    {
         return $this->pathRepository->findOrCreate($path, ['path']);
     }
 
-    public function findOrCreateQuery($data) {
+    public function findOrCreateQuery($data)
+    {
         $id = $this->queryRepository->findOrCreate($data, ['query'], $created);
 
         if ($created) {
@@ -313,23 +322,28 @@ class RepositoryManager implements RepositoryManagerInterface
         return $id;
     }
 
-    public function findOrCreateSession($data) {
+    public function findOrCreateSession($data)
+    {
         return $this->sessionRepository->findOrCreate($data, ['uuid']);
     }
 
-    public function getAgentId() {
+    public function getAgentId()
+    {
         return $this->findOrCreateAgent($this->getCurrentAgentArray());
     }
 
-    public function getAllSessions() {
+    public function getAllSessions()
+    {
         return $this->sessionRepository->all();
     }
 
-    public function getCookieId() {
+    public function getCookieId()
+    {
         return $this->cookieRepository->getId();
     }
 
-    public function getCurrentAgentArray() {
+    public function getCurrentAgentArray()
+    {
         return [
             'name' => $this->getCurrentUserAgent()
                 ?: 'Other',
@@ -340,7 +354,8 @@ class RepositoryManager implements RepositoryManagerInterface
         ];
     }
 
-    public function getCurrentDeviceProperties() {
+    public function getCurrentDeviceProperties()
+    {
         if ($properties = $this->getDevice()) {
             $properties['platform'] = $this->getOperatingSystemFamily();
 
@@ -350,37 +365,39 @@ class RepositoryManager implements RepositoryManagerInterface
         return $properties;
     }
 
-    public function getCurrentUserAgent() {
+    public function getCurrentUserAgent()
+    {
         return $this->userAgentParser->originalUserAgent;
     }
 
-    public function getCurrentUserId() {
+    public function getCurrentUserId()
+    {
         return $this->authentication->getCurrentUserId();
     }
 
     /**
      * @return array
      */
-    private function getDevice() {
+    private function getDevice()
+    {
         try {
             return $this->mobileDetect->detectDevice();
-        }
-        catch (\Exception $e) {
-            return null;
+        } catch (\Exception $e) {
+            return;
         }
     }
 
-
-    private function getLanguage() {
+    private function getLanguage()
+    {
         try {
             return $this->languageDetect->detectLanguage();
-        }
-        catch (\Exception $e) {
-            return null;
+        } catch (\Exception $e) {
+            return;
         }
     }
 
-    public function getCurrentLanguage(){
+    public function getCurrentLanguage()
+    {
         if ($languages = $this->getLanguage()) {
             $languages['preference'] = $this->languageDetect->getLanguagePreference();
 
@@ -390,14 +407,16 @@ class RepositoryManager implements RepositoryManagerInterface
         return $languages;
     }
 
-    public function getDomainId($domain) {
+    public function getDomainId($domain)
+    {
         return $this->domainRepository->findOrCreate(
             ['name' => $domain],
             ['name']
         );
     }
 
-    public function getGeoIpId($clientIp) {
+    public function getGeoIpId($clientIp)
+    {
         $id = null;
 
         if ($geoIpData = $this->geoIp->searchAddr($clientIp)) {
@@ -410,52 +429,55 @@ class RepositoryManager implements RepositoryManagerInterface
         return $id;
     }
 
-    public function getLastSessions($minutes, $results) {
+    public function getLastSessions($minutes, $results)
+    {
         return $this->sessionRepository->last($minutes, $results);
     }
 
     /**
      * @return mixed
      */
-    private function getOperatingSystemFamily() {
+    private function getOperatingSystemFamily()
+    {
         try {
             return $this->userAgentParser->operatingSystem->family;
-        }
-        catch (\Exception $e) {
-            return null;
+        } catch (\Exception $e) {
+            return;
         }
     }
 
     /**
      * @return mixed
      */
-    private function getOperatingSystemVersion() {
+    private function getOperatingSystemVersion()
+    {
         try {
             return $this->userAgentParser->getOperatingSystemVersion();
-        }
-        catch (\Exception $e) {
-            return null;
+        } catch (\Exception $e) {
+            return;
         }
     }
 
-    public function getQueryId($query) {
+    public function getQueryId($query)
+    {
         if (!$query) {
-            return null;
+            return;
         }
 
         return $this->findOrCreateQuery($query);
     }
 
-    public function getRefererId($referer) {
+    public function getRefererId($referer)
+    {
         if ($referer) {
             $url = parse_url($referer);
 
-            $parts = explode(".", $url['host']);
+            $parts = explode('.', $url['host']);
 
             $domain = array_pop($parts);
 
-            if (sizeof($parts) > 0) {
-                $domain = array_pop($parts) . "." . $domain;
+            if (count($parts) > 0) {
+                $domain = array_pop($parts).'.'.$domain;
             }
 
             $domain_id = $this->getDomainId($domain);
@@ -466,9 +488,11 @@ class RepositoryManager implements RepositoryManagerInterface
 
     /**
      * @param $request
+     *
      * @return mixed
      */
-    private function getRequestPath($request) {
+    private function getRequestPath($request)
+    {
         if (is_string($request)) {
             return $request;
         }
@@ -482,9 +506,11 @@ class RepositoryManager implements RepositoryManagerInterface
 
     /**
      * @param $route
+     *
      * @return mixed
      */
-    private function getRouteAction($route) {
+    private function getRouteAction($route)
+    {
         if (is_string($route)) {
             return '';
         }
@@ -496,7 +522,8 @@ class RepositoryManager implements RepositoryManagerInterface
         return $route->currentRouteAction();
     }
 
-    private function getRouteId($name, $action) {
+    private function getRouteId($name, $action)
+    {
         return $this->routeRepository->findOrCreate(
             ['name' => $name, 'action' => $action],
             ['name', 'action']
@@ -505,9 +532,11 @@ class RepositoryManager implements RepositoryManagerInterface
 
     /**
      * @param $route
+     *
      * @return string
      */
-    private function getRouteName($route) {
+    private function getRouteName($route)
+    {
         if (is_string($route)) {
             return $route;
         }
@@ -516,22 +545,21 @@ class RepositoryManager implements RepositoryManagerInterface
             return $route['name'];
         }
 
-        if($name = $route->current()->getName())
-        {
+        if ($name = $route->current()->getName()) {
             return $name;
         }
 
         $action = $route->current()->getAction();
 
-        if($name = isset($action['as']) ? $action['as'] : null)
-        {
+        if ($name = isset($action['as']) ? $action['as'] : null) {
             return $name;
         }
 
         return '/'.$route->current()->getUri();
     }
 
-    private function getRoutePath($route_id, $path, &$created = null) {
+    private function getRoutePath($route_id, $path, &$created = null)
+    {
         return $this->routePathRepository->findOrCreate(
             ['route_id' => $route_id, 'path' => $path],
             ['route_id', 'path'],
@@ -539,7 +567,8 @@ class RepositoryManager implements RepositoryManagerInterface
         );
     }
 
-    public function getRoutePathId($route, $request) {
+    public function getRoutePathId($route, $request)
+    {
         $route_id = $this->getRouteId(
             $this->getRouteName($route),
             $this->getRouteAction($route)
@@ -587,17 +616,20 @@ class RepositoryManager implements RepositoryManagerInterface
         return $route_path_id;
     }
 
-    public function getSessionId($sessionData, $updateLastActivity) {
+    public function getSessionId($sessionData, $updateLastActivity)
+    {
         return $this->sessionRepository->getCurrentId($sessionData, $updateLastActivity);
     }
 
-    public function getSessionLog($uuid, $results = true) {
+    public function getSessionLog($uuid, $results = true)
+    {
         $session = $this->sessionRepository->findByUuid($uuid);
 
         return $this->logRepository->bySession($session->id, $results);
     }
 
-    public function handleException($exception) {
+    public function handleException($exception)
+    {
         $error_id = $this->errorRepository->findOrCreate(
             [
                 'message' => $this->errorRepository->getMessageFromException($exception),
@@ -609,19 +641,23 @@ class RepositoryManager implements RepositoryManagerInterface
         return $this->logRepository->updateError($error_id);
     }
 
-    public function isRobot() {
+    public function isRobot()
+    {
         return $this->crawlerDetector->isRobot();
     }
 
-    public function logByRouteName($name, $minutes = null) {
+    public function logByRouteName($name, $minutes = null)
+    {
         return $this->logRepository->allByRouteName($name, $minutes);
     }
 
-    public function logEvents() {
+    public function logEvents()
+    {
         $this->eventRepository->logEvents();
     }
 
-    public function logSqlQuery($query, $bindings, $time, $name) {
+    public function logSqlQuery($query, $bindings, $time, $name)
+    {
         $this->sqlQueryRepository->push([
             'query'    => $query,
             'bindings' => $bindings,
@@ -630,45 +666,55 @@ class RepositoryManager implements RepositoryManagerInterface
         ]);
     }
 
-    public function pageViews($minutes, $results) {
+    public function pageViews($minutes, $results)
+    {
         return $this->logRepository->pageViews($minutes, $results);
     }
 
-    public function pageViewsByCountry($minutes, $results) {
+    public function pageViewsByCountry($minutes, $results)
+    {
         return $this->logRepository->pageViewsByCountry($minutes, $results);
     }
 
-    public function parserIsAvailable() {
+    public function parserIsAvailable()
+    {
         return !empty($this->userAgentParser);
     }
 
-    public function routeIsTrackable($route) {
+    public function routeIsTrackable($route)
+    {
         return $this->routeRepository->isTrackable($route);
     }
 
-    public function setSessionData($data) {
+    public function setSessionData($data)
+    {
         $this->sessionRepository->setSessionData($data);
     }
 
-    public function trackEvent($event) {
+    public function trackEvent($event)
+    {
         $this->eventRepository->logEvent($event);
     }
 
-    public function trackRoute($route, $request) {
+    public function trackRoute($route, $request)
+    {
         $this->updateRoute(
             $this->getRoutePathId($route, $request)
         );
     }
 
-    public function updateRoute($route_id) {
+    public function updateRoute($route_id)
+    {
         return $this->logRepository->updateRoute($route_id);
     }
 
-    public function updateSessionData($data) {
+    public function updateSessionData($data)
+    {
         return $this->sessionRepository->updateSessionData($data);
     }
 
-    public function userDevices($minutes, $user_id, $results) {
+    public function userDevices($minutes, $user_id, $results)
+    {
         return $this->sessionRepository->userDevices(
             $minutes,
             $user_id ?: $this->authentication->getCurrentUserId(),
@@ -676,7 +722,8 @@ class RepositoryManager implements RepositoryManagerInterface
         );
     }
 
-    public function users($minutes, $results) {
+    public function users($minutes, $results)
+    {
         return $this->sessionRepository->users($minutes, $results);
     }
 }

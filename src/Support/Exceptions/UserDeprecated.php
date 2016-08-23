@@ -4,6 +4,6 @@ namespace PragmaRX\Tracker\Support\Exceptions;
 
 use Exception;
 
-class UserDeprecated extends Exception {
-
+class UserDeprecated extends Exception
+{
 }

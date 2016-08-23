@@ -4,7 +4,8 @@ namespace PragmaRX\Tracker\Data\Repositories;
 
 class Error extends Repository
 {
-    public function getMessageFromException($exception) {
+    public function getMessageFromException($exception)
+    {
         if ($message = $exception->getMessage()) {
             return $message;
         }
@@ -12,7 +13,8 @@ class Error extends Repository
         return $message;
     }
 
-    public function getCodeFromException($exception) {
+    public function getCodeFromException($exception)
+    {
         if (method_exists($exception, 'getCode') && $code = $exception->getCode()) {
             return $code;
         }
@@ -20,7 +22,5 @@ class Error extends Repository
         if (method_exists($exception, 'getStatusCode') && $code = $exception->getStatusCode()) {
             return $code;
         }
-
-        return null;
     }
 }
