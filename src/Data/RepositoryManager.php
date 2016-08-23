@@ -516,8 +516,19 @@ class RepositoryManager implements RepositoryManagerInterface
             return $route['name'];
         }
 
-        return $route->currentRouteName()
-            ?: '';
+        if($name = $route->current()->getName())
+        {
+            return $name;
+        }
+
+        $action = $route->current()->getAction();
+
+        if($name = isset($action['as']) ? $action['as'] : null)
+        {
+            return $name;
+        }
+
+        return '/'.$route->current()->getUri();
     }
 
     private function getRoutePath($route_id, $path, &$created = null) {

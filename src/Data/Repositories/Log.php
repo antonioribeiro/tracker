@@ -4,15 +4,22 @@ namespace PragmaRX\Tracker\Data\Repositories;
 
 class Log extends Repository
 {
-	private $currentLogId = null;
+	private $currentLogId;
 
-	public function updateRoute($route_path_id)
+    private $route_path_id;
+
+    public function updateRoute($route_path_id = null)
 	{
+	    if ($route_path_id)
+        {
+            $this->route_path_id = $route_path_id;
+        }
+
 		$model = $this->getModel();
 
-		if ($model->id)
+		if ($model->id && $this->route_path_id && ! $model->route_path_id)
 		{
-			$model->route_path_id = $route_path_id;
+			$model->route_path_id = $this->route_path_id;
 
 			$model->save();
 		}
@@ -68,6 +75,8 @@ class Log extends Repository
 	public function createLog($data)
 	{
 		$log = $this->create($data);
+
+        $this->updateRoute();
 
         return $this->setCurrentLogId($log->id);
 	}
