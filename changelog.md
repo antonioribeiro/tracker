@@ -5,6 +5,7 @@
 - Route name on log
 ### Added
 - Log languages (please check upgrade.md)
+- Localization
 
 ## [2.0.3] - 2016-08-22
 ### Fixed
