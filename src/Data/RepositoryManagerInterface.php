@@ -2,6 +2,6 @@
 
 namespace PragmaRX\Tracker\Data;
 
-interface RepositoryManagerInterface {
-
+interface RepositoryManagerInterface
+{
 }

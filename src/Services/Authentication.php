@@ -2,11 +2,11 @@
 
 namespace PragmaRX\Tracker\Services;
 
-use PragmaRX\Support\Config as Config;
 use Illuminate\Foundation\Application;
+use PragmaRX\Support\Config as Config;
 
-class Authentication {
-
+class Authentication
+{
     private $config;
 
     private $authentication;
@@ -34,12 +34,8 @@ class Authentication {
 
     public function getCurrentUserId()
     {
-        if ($this->check())
-        {
+        if ($this->check()) {
             return $this->user()->{$this->config->get('authenticated_user_id_column')};
         }
-
-        return null;
     }
-
 }

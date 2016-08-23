@@ -2,6 +2,6 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-class User extends Base {
-
+class User extends Base
+{
 }
