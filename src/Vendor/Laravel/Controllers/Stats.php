@@ -27,17 +27,17 @@ class Stats extends Controller
 	{
         if ( ! $this->isAuthenticated())
         {
-            return View::make('pragmarx/tracker::message')->with('message', 'Authentication required');
+            return View::make('pragmarx/tracker::message')->with('message', trans('tracker::tracker.auth_required'));
         }
 
         if ( ! $this->hasAdminProperty())
         {
-            return View::make('pragmarx/tracker::message')->with('message', 'User model misses admin property');
+            return View::make('pragmarx/tracker::message')->with('message', trans('tracker::tracker.miss_admin_prop'));
         }
 
         if ( ! $this->isAdmin())
         {
-            return View::make('pragmarx/tracker::message')->with('message', 'You are not Admin');
+            return View::make('pragmarx/tracker::message')->with('message', trans('tracker::tracker.not_admin'));
         }
 
 		return $this->showPage($session, $session->getValue('page'));
@@ -60,22 +60,22 @@ class Stats extends Controller
 			'datatables_ajax_route' => route('tracker.stats.api.visits'),
 			'datatables_columns' =>
 				'
-                { "data" : "id",          "title" : "Id", "orderable": true, "searchable": true },
-                { "data" : "client_ip",   "title" : "IP Address", "orderable": true, "searchable": true },
-                { "data" : "country",     "title" : "Country / City", "orderable": true, "searchable": true },
-                { "data" : "user",        "title" : "User", "orderable": true, "searchable": true },
-                { "data" : "device",      "title" : "Device", "orderable": true, "searchable": true },
-                { "data" : "browser",     "title" : "Browser", "orderable": true, "searchable": true },
-                { "data" : "language",    "title" : "Language", "orderable": true, "searchable": true },
-                { "data" : "referer",     "title" : "Referer", "orderable": true, "searchable": true },
-                { "data" : "pageViews",   "title" : "Page Views", "orderable": true, "searchable": true },
-                { "data" : "lastActivity","title" : "Last Activity", "orderable": true, "searchable": true },
+                { "data" : "id",          "title" : "'.trans("tracker::tracker.id").'", "orderable": true, "searchable": true },
+                { "data" : "client_ip",   "title" : "'.trans("tracker::tracker.ip_address").'", "orderable": true, "searchable": true },
+                { "data" : "country",     "title" : "'.trans("tracker::tracker.country_city").'", "orderable": true, "searchable": true },
+                { "data" : "user",        "title" : "'.trans("tracker::tracker.user").'", "orderable": true, "searchable": true },
+                { "data" : "device",      "title" : "'.trans("tracker::tracker.device").'", "orderable": true, "searchable": true },
+                { "data" : "browser",     "title" : "'.trans("tracker::tracker.browser").'", "orderable": true, "searchable": true },
+                { "data" : "language",    "title" : "'.trans("tracker::tracker.language").'", "orderable": true, "searchable": true },
+                { "data" : "referer",     "title" : "'.trans("tracker::tracker.referer").'", "orderable": true, "searchable": true },
+                { "data" : "pageViews",   "title" : "'.trans("tracker::tracker.page_views").'", "orderable": true, "searchable": true },
+                { "data" : "lastActivity","title" : "'.trans("tracker::tracker.last_activity").'", "orderable": true, "searchable": true },
             '
 		);
 
 		return View::make('pragmarx/tracker::index')
 			->with('sessions', Tracker::sessions($session->getMinutes()))
-			->with('title', 'Visits')
+			->with('title', ''.trans("tracker::tracker.visits").'')
 			->with('username_column', Tracker::getConfig('authenticated_user_username_column'))
 			->with('datatables_data', $datatables_data);
 	}
@@ -87,13 +87,13 @@ class Stats extends Controller
 		return View::make('pragmarx/tracker::log')
 				->with('log', Tracker::sessionLog($uuid))
 				->with('uuid', $uuid)
-				->with('title', 'Log');
+				->with('title', 'log');
 	}
 
 	public function summary()
 	{
 		return View::make('pragmarx/tracker::summary')
-				->with('title', 'Page Views Summary');
+				->with('title', ''.trans("tracker::tracker.page_views_summary").'');
 	}
 
 	public function apiPageviews(Session $session)
@@ -190,7 +190,7 @@ class Stats extends Controller
 	{
 		return View::make('pragmarx/tracker::users')
 			->with('users', Tracker::users($session->getMinutes()))
-			->with('title', 'Users')
+			->with('title', ''.trans("tracker::tracker.users").'')
 			->with('username_column', Tracker::getConfig('authenticated_user_username_column'));
 	}
 
@@ -198,14 +198,14 @@ class Stats extends Controller
 	{
 		return View::make('pragmarx/tracker::events')
 			->with('events', Tracker::events($session->getMinutes()))
-			->with('title', 'Events');
+			->with('title', ''.trans("tracker::tracker.events").'');
 	}
 
 	public function errors(Session $session)
 	{
 		return View::make('pragmarx/tracker::errors')
 			->with('error_log', Tracker::errors($session->getMinutes()))
-			->with('title', 'Errors');
+			->with('title', ''.trans("tracker::tracker.errors").'');
 	}
 
 	public function apiErrors(Session $session)
@@ -392,4 +392,3 @@ class Stats extends Controller
         return false;
     }
 }
-

@@ -322,7 +322,7 @@ class Tracker
 
     public function parserIsAvailable() {
         if (!$this->dataRepositoryManager->parserIsAvailable()) {
-            $this->logger->error('Tracker: uaparser regex file not available. "Execute php artisan tracker:updateparser" to generate it.');
+            $this->logger->error(trans('tracker::tracker.regex_file_not_available'));
 
             return false;
         }

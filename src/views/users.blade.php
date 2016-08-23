@@ -11,8 +11,8 @@
             'datatables_ajax_route' => route('tracker.stats.api.users'),
             'datatables_columns' =>
             '
-                { "data" : "user_id",    "title" : "Email", "orderable": true, "searchable": false },
-                { "data" : "updated_at", "title" : "Last seen", "orderable": true, "searchable": false },
+                { "data" : "user_id",    "title" : "'.trans('tracker::tracker.email').'", "orderable": true, "searchable": false },
+                { "data" : "updated_at", "title" : "'.trans('tracker::tracker.last_seen').'", "orderable": true, "searchable": false },
             '
         )
     )
