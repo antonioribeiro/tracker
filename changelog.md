@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.6] - 2016-08-23
+### Added
+- Changed to PSR-2 using StyleCI
+
+## [2.0.5] - 2016-08-23
+### Added
+- Add onlineUsers method
+
 ## [2.0.4] - 2016-08-22
 ### Fixed
 - Route name on log
