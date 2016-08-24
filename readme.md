@@ -30,6 +30,7 @@
 - [Table Schemas](#how-data-is-stored)
 - [System Requirements](#requirements)
 - [Installing](#installing)
+- [Upgrading](upgrading.md)
 - [Contributing](#contributing)
 
 ## Why?

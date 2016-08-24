@@ -1,6 +1,6 @@
 # Laravel Stats Tracker Upgrading Guide
 
-## To 3.0.0 
+## from 2.0.x to 3.0.0 
 
 Add cache_enabled key to your config\tracker.php:
 
