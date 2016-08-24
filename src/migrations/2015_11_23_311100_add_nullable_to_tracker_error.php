@@ -25,7 +25,8 @@ class AddNullableToTrackerError extends Migration
                     $table->string('code')->nullable()->change();
                 }
             );
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
     }
 
     /**
