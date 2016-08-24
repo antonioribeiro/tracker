@@ -4,8 +4,8 @@ namespace PragmaRX\Tracker\Data\Repositories;
 
 use Carbon\Carbon;
 use PragmaRX\Support\Config;
-use Ramsey\Uuid\Uuid as UUID;
 use PragmaRX\Support\PhpSession;
+use Ramsey\Uuid\Uuid as UUID;
 
 class Session extends Repository
 {
@@ -30,8 +30,7 @@ class Session extends Repository
     {
         list($model, $cacheKey) = $this->cache->findCached($uuid, 'uuid', 'PragmaRX\Tracker\Vendor\Laravel\Models\Session');
 
-        if (! $model)
-        {
+        if (!$model) {
             $model = $this->newQuery()->where('uuid', $uuid)->with($this->relations)->first();
 
             $this->cache->cachePut($cacheKey, $model);
@@ -111,19 +110,16 @@ class Session extends Repository
 
     private function sessionIsKnown()
     {
-        if (!$this->session->has($this->getSessionKey()))
-        {
+        if (!$this->session->has($this->getSessionKey())) {
             return false;
         }
 
 
-        if (! $this->getSessionData('uuid') == $this->getSystemSessionId())
-        {
+        if (!$this->getSessionData('uuid') == $this->getSystemSessionId()) {
             return false;
         }
 
-        if (! $this->findByUuid($this->getSessionData('uuid')))
-        {
+        if (!$this->findByUuid($this->getSessionData('uuid'))) {
             return false;
         }
 
@@ -235,12 +231,11 @@ class Session extends Repository
             ->period($minutes);
 
         if ($returnResults) {
-            $cacheKey = "last-sessions";
+            $cacheKey = 'last-sessions';
 
             $result = $this->cache->findCachedWithKey($cacheKey);
 
-            if (! $result)
-            {
+            if (!$result) {
                 $result = $query->get();
 
                 $this->cache->cachePut($cacheKey, $result, 1); // cache only for 1 minute
