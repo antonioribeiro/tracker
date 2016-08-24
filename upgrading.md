@@ -1,14 +1,23 @@
 # Laravel Stats Tracker Upgrading Guide
 
+## To 3.0.0 
+
+Add cache_enabled key to your config\tracker.php:
+
+    /*
+     * Enable cache?
+     */
+    'cache_enabled' => true,
+
 ## from 2.0.x to 2.0.4 or 2.0.9 
 
 ####Run Artisan tracker:tables command
 
-php artisan tracker:tables
+    php artisan tracker:tables
 
 ####Migrate
 
-php artisan migrate
+    php artisan migrate
 
 ####If you already have executed and get the error "1215 Cannot add foreign key constraint"
 

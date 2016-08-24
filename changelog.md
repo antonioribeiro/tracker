@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.0] - 2016-08-24
+### New
+- Cache
+
 ## [2.0.9] - 2016-08-23
 ### Added
 - Support for multiple authentication drivers
