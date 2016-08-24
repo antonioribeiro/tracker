@@ -22,8 +22,7 @@ class Cache
 
     public function cachePut($cacheKey, $model)
     {
-        if ($this->config->get('cache_enabled'))
-        {
+        if ($this->config->get('cache_enabled')) {
             IlluminateCache::put($cacheKey, $model, 10);
         }
     }
@@ -71,8 +70,7 @@ class Cache
      */
     public function findCachedWithKey($key)
     {
-        if ($this->config->get('cache_enabled'))
-        {
+        if ($this->config->get('cache_enabled')) {
             return IlluminateCache::get($key);
         }
     }
@@ -86,9 +84,8 @@ class Cache
 
     public function findCached($attributes, $keys, $identifier = null)
     {
-        if (! $this->config->get('cache_enabled'))
-        {
-            return null;
+        if (!$this->config->get('cache_enabled')) {
+            return;
         }
 
         $key = $this->makeCacheKey($attributes, $keys, $identifier);
