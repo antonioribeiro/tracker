@@ -21,7 +21,7 @@ class AddLanguageIdColumnToSessions extends Migration
         $this->builder->table(
             $this->table,
             function ($table) {
-                $table->integer('language_id')->unsigned()->nullable()->index();
+                $table->bigInteger('language_id')->unsigned()->nullable()->index();
             }
         );
     }
