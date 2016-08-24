@@ -27,18 +27,15 @@ class Cache
 
     private function extractAttributes($attributes)
     {
-        if (is_array($attributes) || is_string($attributes))
-        {
+        if (is_array($attributes) || is_string($attributes)) {
             return $attributes;
         }
 
-        if (is_string($attributes) || is_numeric($attributes))
-        {
+        if (is_string($attributes) || is_numeric($attributes)) {
             return (array) $attributes;
         }
 
-        if ($attributes instanceof Model)
-        {
+        if ($attributes instanceof Model) {
             return $attributes->getAttributes();
         }
     }
@@ -46,6 +43,7 @@ class Cache
     /**
      * @param $attributes
      * @param $keys
+     *
      * @return array
      */
     private function extractKeys($attributes, $keys)
@@ -65,6 +63,7 @@ class Cache
 
     /**
      * @param $key
+     *
      * @return array
      */
     public function findCachedWithKey($key)
@@ -85,7 +84,7 @@ class Cache
 
         return [
             $this->findCachedWithKey($key),
-            $key
+            $key,
         ];
     }
 
@@ -97,10 +96,8 @@ class Cache
 
         $keys = $this->extractKeys($attributes, $keys, $identifier);
 
-        foreach ($keys as $key)
-        {
-            if (isset($attributes[$key]))
-            {
+        foreach ($keys as $key) {
+            if (isset($attributes[$key])) {
                 $cacheKey .= "$key=$attributes[$key];";
             }
         }
