@@ -31,6 +31,7 @@ use PragmaRX\Tracker\Data\Repositories\SystemClass;
 use PragmaRX\Tracker\Data\RepositoryManager;
 use PragmaRX\Tracker\Eventing\EventStorage;
 use PragmaRX\Tracker\Services\Authentication;
+use PragmaRX\Tracker\Support\Cache;
 use PragmaRX\Tracker\Support\CrawlerDetector;
 use PragmaRX\Tracker\Support\Exceptions\Handler as TrackerExceptionHandler;
 use PragmaRX\Tracker\Support\LanguageDetect;
@@ -91,6 +92,8 @@ class ServiceProvider extends PragmaRXServiceProvider
 
         if ($this->getConfig('enabled')) {
             $this->registerAuthentication();
+
+            $this->registerCache();
 
             $this->registerRepositories();
 
@@ -325,6 +328,13 @@ class ServiceProvider extends PragmaRXServiceProvider
     {
         $this->app['tracker.authentication'] = $this->app->share(function ($app) {
             return new Authentication($app['tracker.config'], $app);
+        });
+    }
+
+    public function registerCache()
+    {
+        $this->app['tracker.cache'] = $this->app->share(function ($app) {
+            return new Cache($app['tracker.config'], $app);
         });
     }
 
