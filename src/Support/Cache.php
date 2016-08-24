@@ -22,7 +22,10 @@ class Cache
 
     public function cachePut($cacheKey, $model)
     {
-        IlluminateCache::put($cacheKey, $model, 10);
+        if ($this->config->get('cache_enabled'))
+        {
+            IlluminateCache::put($cacheKey, $model, 10);
+        }
     }
 
     private function extractAttributes($attributes)
@@ -68,7 +71,10 @@ class Cache
      */
     public function findCachedWithKey($key)
     {
-        return IlluminateCache::get($key);
+        if ($this->config->get('cache_enabled'))
+        {
+            return IlluminateCache::get($key);
+        }
     }
 
     public function makeKeyAndPut($model, $key)
@@ -80,6 +86,11 @@ class Cache
 
     public function findCached($attributes, $keys, $identifier = null)
     {
+        if (! $this->config->get('cache_enabled'))
+        {
+            return null;
+        }
+
         $key = $this->makeCacheKey($attributes, $keys, $identifier);
 
         return [
