@@ -2,13 +2,12 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-class Error extends Base {
+class Error extends Base
+{
+    protected $table = 'tracker_errors';
 
-	protected $table = 'tracker_errors';
-
-	protected $fillable = array(
-		'message',
-		'code',
-	);
-
+    protected $fillable = [
+        'message',
+        'code',
+    ];
 }

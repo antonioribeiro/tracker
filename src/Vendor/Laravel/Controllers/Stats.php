@@ -2,14 +2,12 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Controllers;
 
-use Auth;
-
+use Bllim\Datatables\Facade\Datatables;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use PragmaRX\Tracker\Support\Minutes;
-use Illuminate\Support\Facades\Input;
-use Bllim\Datatables\Facade\Datatables;
-use Illuminate\Support\Facades\Session;
 use PragmaRX\Tracker\Vendor\Laravel\Facade as Tracker;
 
 class Stats extends Controller
@@ -34,18 +32,15 @@ class Stats extends Controller
 
     public function index()
     {
-        if ( ! $this->isAuthenticated())
-        {
+        if (!$this->isAuthenticated()) {
             return View::make('pragmarx/tracker::message')->with('message', 'Authentication required');
         }
 
-        if ( ! $this->hasAdminProperty())
-        {
+        if (!$this->hasAdminProperty()) {
             return View::make('pragmarx/tracker::message')->with('message', 'User model misses admin property');
         }
 
-        if ( ! $this->isAdmin())
-        {
+        if (!$this->isAdmin()) {
             return View::make('pragmarx/tracker::message')->with('message', 'You are not Admin');
         }
 
@@ -56,19 +51,17 @@ class Stats extends Controller
     {
         $me = $this;
 
-        if (method_exists($me, $page))
-        {
+        if (method_exists($me, $page)) {
             return $this->$page();
         }
     }
 
     public function visits()
     {
-        $datatables_data = array
-        (
+        $datatables_data =
+        [
             'datatables_ajax_route' => route('tracker.stats.api.visits'),
-            'datatables_columns' =>
-                '
+            'datatables_columns'    => '
                 { "data" : "id",          "title" : "Id", "orderable": true, "searchable": true },
                 { "data" : "client_ip",   "title" : "IP Address", "orderable": true, "searchable": true },
                 { "data" : "country",     "title" : "Country / City", "orderable": true, "searchable": true },
@@ -79,8 +72,8 @@ class Stats extends Controller
                 { "data" : "referer",     "title" : "Referer", "orderable": true, "searchable": true },
                 { "data" : "pageViews",   "title" : "Page Views", "orderable": true, "searchable": true },
                 { "data" : "lastActivity","title" : "Last Activity", "orderable": true, "searchable": true },
-            '
-        );
+            ',
+        ];
 
         return View::make('pragmarx/tracker::index')
             ->with('sessions', Tracker::sessions($this->minutes))
@@ -117,7 +110,7 @@ class Stats extends Controller
     {
         $query = Tracker::sessionLog($uuid, false);
 
-        $query->select(array(
+        $query->select([
             'id',
             'session_id',
             'method',
@@ -130,61 +123,57 @@ class Stats extends Controller
             'wants_json',
             'error_id',
             'updated_at',
-        ));
+        ]);
 
         return Datatables::of($query)
-            ->edit_column('route_name', function($row) {
-                return 	$row->routePath
-                    ? $row->routePath->route->name . '<br>' . $row->routePath->route->action
+            ->edit_column('route_name', function ($row) {
+                return    $row->routePath
+                    ? $row->routePath->route->name.'<br>'.$row->routePath->route->action
                     : ($row->path ? $row->path->path : '');
             })
 
-            ->edit_column('route', function($row) {
+            ->edit_column('route', function ($row) {
                 $route = null;
 
-                if ($row->routePath)
-                {
-                    foreach ($row->routePath->parameters as $parameter)
-                    {
-                        $route .= ($route ? '<br>' : '') . $parameter->parameter . '=' . $parameter->value;
+                if ($row->routePath) {
+                    foreach ($row->routePath->parameters as $parameter) {
+                        $route .= ($route ? '<br>' : '').$parameter->parameter.'='.$parameter->value;
                     }
                 }
 
                 return $route;
             })
 
-            ->edit_column('query', function($row) {
+            ->edit_column('query', function ($row) {
                 $query = null;
 
-                if ($row->logQuery)
-                {
-                    foreach ($row->logQuery->arguments as $argument)
-                    {
-                        $query .= ($query ? '<br>' : '') . $argument->argument . '=' . $argument->value;
+                if ($row->logQuery) {
+                    foreach ($row->logQuery->arguments as $argument) {
+                        $query .= ($query ? '<br>' : '').$argument->argument.'='.$argument->value;
                     }
                 }
 
                 return $query;
             })
 
-            ->edit_column('is_ajax', function($row) {
-                return 	$row->is_ajax ? 'yes' : '';
+            ->edit_column('is_ajax', function ($row) {
+                return    $row->is_ajax ? 'yes' : '';
             })
 
-            ->edit_column('is_secure', function($row) {
-                return 	$row->is_secure ? 'yes' : '';
+            ->edit_column('is_secure', function ($row) {
+                return    $row->is_secure ? 'yes' : '';
             })
 
-            ->edit_column('is_json', function($row) {
-                return 	$row->is_json ? 'yes' : '';
+            ->edit_column('is_json', function ($row) {
+                return    $row->is_json ? 'yes' : '';
             })
 
-            ->edit_column('wants_json', function($row) {
-                return 	$row->wants_json ? 'yes' : '';
+            ->edit_column('wants_json', function ($row) {
+                return    $row->wants_json ? 'yes' : '';
             })
 
-            ->edit_column('error', function($row) {
-                return 	$row->error ? 'yes' : '';
+            ->edit_column('error', function ($row) {
+                return    $row->error ? 'yes' : '';
             })
 
             ->make(true);
@@ -192,12 +181,9 @@ class Stats extends Controller
 
     public function getValue($variable, $default = null)
     {
-        if (Input::has($variable))
-        {
+        if (Input::has($variable)) {
             $value = Input::get($variable);
-        }
-        else
-        {
+        } else {
             $value = Session::get('tracker.stats.'.$variable, $default);
         }
 
@@ -230,16 +216,16 @@ class Stats extends Controller
     {
         $query = Tracker::errors($this->minutes, false);
 
-        $query->select(array(
+        $query->select([
             'id',
             'error_id',
             'session_id',
             'path_id',
             'updated_at',
-        ));
+        ]);
 
         return Datatables::of($query)
-            ->edit_column('updated_at', function($row) {
+            ->edit_column('updated_at', function ($row) {
                 return "{$row->updated_at->diffForHumans()}";
             })
             ->make(true);
@@ -257,10 +243,10 @@ class Stats extends Controller
         $username_column = Tracker::getConfig('authenticated_user_username_column');
 
         return Datatables::of(Tracker::users($this->minutes, false))
-            ->edit_column('user_id', function($row) use ($username_column) {
+            ->edit_column('user_id', function ($row) use ($username_column) {
                 return "{$row->user->$username_column}";
             })
-            ->edit_column('updated_at', function($row) {
+            ->edit_column('updated_at', function ($row) {
                 return "{$row->updated_at->diffForHumans()}";
             })
             ->make(true);
@@ -272,7 +258,7 @@ class Stats extends Controller
 
         $query = Tracker::sessions($this->minutes, false);
 
-        $query->select(array(
+        $query->select([
             'id',
             'uuid',
             'user_id',
@@ -285,21 +271,19 @@ class Stats extends Controller
             'language_id',
             'is_robot',
             'updated_at',
-        ));
+        ]);
 
         return Datatables::of($query)
-            ->edit_column('id', function($row) use ($username_column)
-            {
+            ->edit_column('id', function ($row) use ($username_column) {
                 $uri = route('tracker.stats.log', $row->uuid);
 
                 return '<a href="'.$uri.'">'.$row->id.'</a>';
             })
 
-            ->add_column('country', function ($row)
-            {
+            ->add_column('country', function ($row) {
                 $cityName = $row->geoip && $row->geoip->city ? ' - '.$row->geoip->city : '';
 
-                $countryName = ($row->geoip ? $row->geoip->country_name : '') . $cityName;
+                $countryName = ($row->geoip ? $row->geoip->country_name : '').$cityName;
 
                 $countryCode = strtolower($row->geoip ? $row->geoip->country_code : '');
 
@@ -310,13 +294,11 @@ class Stats extends Controller
                 return "$flag $countryName";
             })
 
-            ->add_column('user', function($row) use ($username_column)
-            {
+            ->add_column('user', function ($row) use ($username_column) {
                 return $row->user ? $row->user->$username_column : 'guest';
             })
 
-            ->add_column('device', function($row) use ($username_column)
-            {
+            ->add_column('device', function ($row) use ($username_column) {
                 $model = ($row->device && $row->device->model && $row->device->model !== 'unavailable' ? '['.$row->device->model.']' : '');
 
                 $platform = ($row->device && $row->device->platform ? ' ['.trim($row->device->platform.' '.$row->device->platform_version).']' : '');
@@ -324,46 +306,37 @@ class Stats extends Controller
                 $mobile = ($row->device && $row->device->is_mobile ? ' [mobile device]' : '');
 
                 return $model || $platform || $mobile
-                    ? $row->device->kind . ' ' . $model . ' ' . $platform . ' ' . $mobile
+                    ? $row->device->kind.' '.$model.' '.$platform.' '.$mobile
                     : '';
             })
 
-            ->add_column('browser', function($row) use ($username_column)
-            {
+            ->add_column('browser', function ($row) use ($username_column) {
                 return $row->agent && $row->agent
-                    ? $row->agent->browser . ' ('.$row->agent->browser_version.')'
+                    ? $row->agent->browser.' ('.$row->agent->browser_version.')'
                     : '';
-
             })
 
-            ->add_column('language', function($row) use ($username_column)
-            {
+            ->add_column('language', function ($row) use ($username_column) {
                 return $row->language && $row->language
                     ? $row->language->preference
                     : '';
-
             })
 
-            ->add_column('language', function($row) use ($username_column)
-            {
+            ->add_column('language', function ($row) use ($username_column) {
                 return $row->language && $row->language
                     ? $row->language->preference
                     : '';
-
             })
 
-            ->add_column('referer', function($row) use ($username_column)
-            {
+            ->add_column('referer', function ($row) use ($username_column) {
                 return $row->referer ? $row->referer->domain->name : '';
             })
 
-            ->add_column('pageViews', function($row) use ($username_column)
-            {
+            ->add_column('pageViews', function ($row) use ($username_column) {
                 return $row->page_views;
             })
 
-            ->add_column('lastActivity', function($row) use ($username_column)
-            {
+            ->add_column('lastActivity', function ($row) use ($username_column) {
                 return $row->updated_at->diffForHumans();
             })
 
@@ -379,8 +352,7 @@ class Stats extends Controller
     {
         $user = $this->authentication->user();
 
-        foreach ($this->adminProperties as $property)
-        {
+        foreach ($this->adminProperties as $property) {
             $propertyCamel = camel_case($property);
 
             if (
@@ -388,8 +360,7 @@ class Stats extends Controller
                 isset($user->$propertyCamel) ||
                 method_exists($user, $property) ||
                 method_exists($user, $propertyCamel)
-            )
-            {
+            ) {
                 return true;
             }
         }
@@ -401,8 +372,7 @@ class Stats extends Controller
     {
         $user = $this->authentication->user();
 
-        foreach ($this->adminProperties as $property)
-        {
+        foreach ($this->adminProperties as $property) {
             $propertyCamel = camel_case($property);
 
             if (
@@ -410,8 +380,7 @@ class Stats extends Controller
                 (isset($user->$propertyCamel) && $user->$propertyCamel) ||
                 (method_exists($user, $property) && $user->$property()) ||
                 (method_exists($user, $propertyCamel) && $user->$propertyCamel())
-            )
-            {
+            ) {
                 return true;
             }
         }

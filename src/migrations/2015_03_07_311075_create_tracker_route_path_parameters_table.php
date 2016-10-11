@@ -2,47 +2,44 @@
 
 use PragmaRX\Tracker\Support\Migration;
 
-class CreateTrackerRoutePathParametersTable extends Migration {
+class CreateTrackerRoutePathParametersTable extends Migration
+{
+    /**
+     * Table related to this migration.
+     *
+     * @var string
+     */
+    private $table = 'tracker_route_path_parameters';
 
-	/**
-	 * Table related to this migration.
-	 *
-	 * @var string
-	 */
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function migrateUp()
+    {
+        $this->builder->create(
+            $this->table,
+            function ($table) {
+                $table->bigIncrements('id');
 
-	private $table = 'tracker_route_path_parameters';
+                $table->bigInteger('route_path_id')->unsigned()->index();
+                $table->string('parameter')->index();
+                $table->string('value')->index();
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function migrateUp()
-	{
-		$this->builder->create(
-			$this->table,
-			function ($table)
-			{
-				$table->bigIncrements('id');
+                $table->timestamp('created_at')->index();
+                $table->timestamp('updated_at')->index();
+            }
+        );
+    }
 
-				$table->bigInteger('route_path_id')->unsigned()->index();
-				$table->string('parameter')->index();
-				$table->string('value')->index();
-
-				$table->timestamp('created_at')->index();
-				$table->timestamp('updated_at')->index();
-			}
-		);
-	}
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function migrateDown()
-	{
-		$this->drop($this->table);
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function migrateDown()
+    {
+        $this->drop($this->table);
+    }
 }
