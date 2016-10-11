@@ -2,6 +2,6 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-class QueryArgument extends Repository {
-
+class QueryArgument extends Repository
+{
 }

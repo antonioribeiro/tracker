@@ -4,99 +4,96 @@ namespace PragmaRX\Tracker\Data\Repositories;
 
 class Log extends Repository
 {
-	private $currentLogId = null;
+    private $currentLogId = null;
 
-	public function updateRoute($route_path_id)
-	{
-		$model = $this->getModel();
+    public function updateRoute($route_path_id)
+    {
+        $model = $this->getModel();
 
-		if ($model->id)
-		{
-			$model->route_path_id = $route_path_id;
+        if ($model->id) {
+            $model->route_path_id = $route_path_id;
 
-			$model->save();
-		}
+            $model->save();
+        }
 
-		return $model;
-	}
+        return $model;
+    }
 
-	public function updateError($error_id)
-	{
-		$model = $this->getModel();
+    public function updateError($error_id)
+    {
+        $model = $this->getModel();
 
-		if ($model->id)
-		{
-			$model->error_id = $error_id;
+        if ($model->id) {
+            $model->error_id = $error_id;
 
-			$model->save();
-		}
+            $model->save();
+        }
 
-		return $model;
-	}
+        return $model;
+    }
 
-	public function bySession($sessionId, $results = true)
-	{
-		$query = $this
-					->getModel()
-					->where('session_id', $sessionId)->orderBy('updated_at', 'desc');
+    public function bySession($sessionId, $results = true)
+    {
+        $query = $this
+                    ->getModel()
+                    ->where('session_id', $sessionId)->orderBy('updated_at', 'desc');
 
-		if ($results)
-		{
-			return $query->get();
-		}
+        if ($results) {
+            return $query->get();
+        }
 
-		return $query;
-	}
+        return $query;
+    }
 
-	/**
-	 * @return null
-	 */
-	public function getCurrentLogId()
-	{
-		return $this->currentLogId;
-	}
+    /**
+     * @return null
+     */
+    public function getCurrentLogId()
+    {
+        return $this->currentLogId;
+    }
 
-	/**
-	 * @param null $currentLogId
-	 */
-	public function setCurrentLogId($currentLogId)
-	{
-		$this->currentLogId = $currentLogId;
-	}
+    /**
+     * @param null $currentLogId
+     */
+    public function setCurrentLogId($currentLogId)
+    {
+        $this->currentLogId = $currentLogId;
+    }
 
-	public function createLog($data)
-	{
-		$log = $this->create($data);
+    public function createLog($data)
+    {
+        $log = $this->create($data);
 
-		$this->setCurrentLogId($log->id);
+        $this->setCurrentLogId($log->id);
 
-		return $this->getCurrentLogId();
-	}
+        return $this->getCurrentLogId();
+    }
 
-	public function pageViews($minutes, $results)
-	{
-		 return $this->getModel()->pageViews($minutes, $results);
-	}
+    public function pageViews($minutes, $results)
+    {
+        return $this->getModel()->pageViews($minutes, $results);
+    }
 
-	public function pageViewsByCountry($minutes, $results)
-	{
-		 return $this->getModel()->pageViewsByCountry($minutes, $results);
-	}
+    public function pageViewsByCountry($minutes, $results)
+    {
+        return $this->getModel()->pageViewsByCountry($minutes, $results);
+    }
 
-	public function getErrors($minutes, $results)
-	{
-		return $this->getModel()->errors($minutes, $results);
-	}
+    public function getErrors($minutes, $results)
+    {
+        return $this->getModel()->errors($minutes, $results);
+    }
 
-	public function allByRouteName($name, $minutes = null)
-	{
-		return $this->getModel()->allByRouteName($name, $minutes);
-	}
+    public function allByRouteName($name, $minutes = null)
+    {
+        return $this->getModel()->allByRouteName($name, $minutes);
+    }
 
-	public function delete()
-	{
+    public function delete()
+    {
         $this->currentLogId = null;
 
-		$this->getModel()->delete();
-	}
+        $this->getModel()->delete();
+    }
 }

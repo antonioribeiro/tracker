@@ -4,6 +4,6 @@ namespace PragmaRX\Tracker\Support\Exceptions;
 
 use Exception;
 
-class UserWarning extends Exception {
-
+class UserWarning extends Exception
+{
 }

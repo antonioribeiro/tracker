@@ -2,10 +2,9 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-class Language extends Base {
+class Language extends Base
+{
+    protected $table = 'tracker_languages';
 
-	protected $table = 'tracker_languages';
-
-	protected $fillable = array('preference', 'language-range');
-
+    protected $fillable = ['preference', 'language-range'];
 }

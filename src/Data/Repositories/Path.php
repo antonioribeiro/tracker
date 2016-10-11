@@ -2,6 +2,6 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-class Path extends Repository {
-
+class Path extends Repository
+{
 }

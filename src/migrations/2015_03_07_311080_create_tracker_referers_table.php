@@ -2,47 +2,44 @@
 
 use PragmaRX\Tracker\Support\Migration;
 
-class CreateTrackerReferersTable extends Migration {
+class CreateTrackerReferersTable extends Migration
+{
+    /**
+     * Table related to this migration.
+     *
+     * @var string
+     */
+    private $table = 'tracker_referers';
 
-	/**
-	 * Table related to this migration.
-	 *
-	 * @var string
-	 */
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function migrateUp()
+    {
+        $this->builder->create(
+            $this->table,
+            function ($table) {
+                $table->bigIncrements('id');
 
-	private $table = 'tracker_referers';
+                $table->bigInteger('domain_id')->unsigned()->index();
+                $table->string('url')->index();
+                $table->string('host');
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function migrateUp()
-	{
-		$this->builder->create(
-			$this->table,
-			function ($table)
-			{
-				$table->bigIncrements('id');
+                $table->timestamp('created_at')->index();
+                $table->timestamp('updated_at')->index();
+            }
+        );
+    }
 
-				$table->bigInteger('domain_id')->unsigned()->index();
-				$table->string('url')->index();
-				$table->string('host');
-
-				$table->timestamp('created_at')->index();
-				$table->timestamp('updated_at')->index();
-			}
-		);
-	}
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function migrateDown()
-	{
-		$this->drop($this->table);
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function migrateDown()
+    {
+        $this->drop($this->table);
+    }
 }
