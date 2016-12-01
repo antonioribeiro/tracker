@@ -564,7 +564,7 @@ class RepositoryManager implements RepositoryManagerInterface
     }
 
     /**
-     * @param boolean $created
+     * @param bool $created
      */
     private function getRoutePath($route_id, $path, &$created = null)
     {

@@ -81,7 +81,7 @@ class RefererParser
     /**
      * Check if the referer is knwon.
      *
-     * @return boolean
+     * @return bool
      */
     public function isKnown()
     {
@@ -92,6 +92,7 @@ class RefererParser
      * Set the referer.
      *
      * @param \Snowplow\RefererParser\Referer $referer
+     *
      * @return RefererParser
      */
     public function setReferer($referer)

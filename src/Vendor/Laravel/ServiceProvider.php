@@ -135,7 +135,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerTracker()
     {
-        $this->app['tracker'] = $this->app->share(function($app) {
+        $this->app['tracker'] = $this->app->share(function ($app) {
             $app['tracker.loaded'] = true;
 
             return new Tracker(
@@ -151,7 +151,7 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     public function registerRepositories()
     {
-        $this->app['tracker.repositories'] = $this->app->share(function($app) {
+        $this->app['tracker.repositories'] = $this->app->share(function ($app) {
             try {
                 $uaParser = new UserAgentParser($app->make('path.base'));
             } catch (\Exception $exception) {
@@ -326,21 +326,21 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     public function registerAuthentication()
     {
-        $this->app['tracker.authentication'] = $this->app->share(function($app) {
+        $this->app['tracker.authentication'] = $this->app->share(function ($app) {
             return new Authentication($app['tracker.config'], $app);
         });
     }
 
     public function registerCache()
     {
-        $this->app['tracker.cache'] = $this->app->share(function($app) {
+        $this->app['tracker.cache'] = $this->app->share(function ($app) {
             return new Cache($app['tracker.config'], $app);
         });
     }
 
     private function registerTablesCommand()
     {
-        $this->app['tracker.tables.command'] = $this->app->share(function($app) {
+        $this->app['tracker.tables.command'] = $this->app->share(function ($app) {
             return new TablesCommand();
         });
     }
@@ -354,7 +354,7 @@ class ServiceProvider extends PragmaRXServiceProvider
             'Illuminate\Routing\Events\RouteMatched',
         ];
 
-        $this->app['events']->listen($mathingEvents, function() use ($me) {
+        $this->app['events']->listen($mathingEvents, function () use ($me) {
             $me->getTracker()->routerMatched($me->getConfig('log_routes'));
         });
     }
@@ -376,7 +376,7 @@ class ServiceProvider extends PragmaRXServiceProvider
                 $me = $this;
 
                 $this->app->error(
-                    function(\Exception $exception, $code) use ($me) {
+                    function (\Exception $exception, $code) use ($me) {
                         $me->app['tracker']->handleException($exception, $code);
                     }
                 );
@@ -453,11 +453,11 @@ class ServiceProvider extends PragmaRXServiceProvider
     {
         $me = $this;
 
-        $this->app['tracker.events'] = $this->app->share(function($app) {
+        $this->app['tracker.events'] = $this->app->share(function ($app) {
             return new EventStorage();
         });
 
-        $this->app['events']->listen('*', function($object = null) use ($me) {
+        $this->app['events']->listen('*', function ($object = null) use ($me) {
             if ($me->app['tracker.events']->isOff()) {
                 return;
             }
@@ -508,9 +508,9 @@ class ServiceProvider extends PragmaRXServiceProvider
 
         $router = $this->app->make('router');
 
-        $router->group(['namespace' => $namespace], function() use ($prefix, $router, $filters) {
-            $router->group($filters, function() use ($prefix, $router) {
-                $router->group(['prefix' => $prefix], function($router) {
+        $router->group(['namespace' => $namespace], function () use ($prefix, $router, $filters) {
+            $router->group($filters, function () use ($prefix, $router) {
+                $router->group(['prefix' => $prefix], function ($router) {
                     $router->get('/', ['as' => 'tracker.stats.index', 'uses' => 'Stats@index']);
 
                     $router->get('log/{uuid}', ['as' => 'tracker.stats.log', 'uses' => 'Stats@log']);
@@ -565,7 +565,7 @@ class ServiceProvider extends PragmaRXServiceProvider
     {
         $me = $this;
 
-        $this->app->make('view')->composer('pragmarx/tracker::*', function($view) use ($me) {
+        $this->app->make('view')->composer('pragmarx/tracker::*', function ($view) use ($me) {
             $view->with('stats_layout', $me->getConfig('stats_layout'));
 
             $template_path = url('/').$me->getConfig('stats_template_path');
@@ -578,7 +578,7 @@ class ServiceProvider extends PragmaRXServiceProvider
     {
         $me = $this;
 
-        $this->app['events']->listen('router.before', function($object = null) use ($me) {
+        $this->app['events']->listen('router.before', function ($object = null) use ($me) {
             if ($me->tracker &&
                 !$me->userChecked &&
                 $me->getConfig('log_users') &&

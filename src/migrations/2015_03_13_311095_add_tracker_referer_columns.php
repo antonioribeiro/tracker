@@ -22,14 +22,14 @@ class AddTrackerRefererColumns extends Migration
     {
         $this->builder->table(
             $this->table,
-            function($table) {
+            function ($table) {
                 $table->string('medium')->nullable()->index();
                 $table->string('source')->nullable()->index();
                 $table->string('search_terms_hash')->nullable()->index();
             }
         );
 
-        $this->builder->table($this->foreign, function($table) {
+        $this->builder->table($this->foreign, function ($table) {
             $table->foreign('referer_id', 'tracker_referers_referer_id_fk')
                 ->references('id')
                 ->on('tracker_referers')
@@ -47,7 +47,7 @@ class AddTrackerRefererColumns extends Migration
     {
         $this->builder->table(
             $this->table,
-            function($table) {
+            function ($table) {
                 $table->dropColumn('medium');
                 $table->dropColumn('source');
                 $table->dropColumn('search_terms_hash');
@@ -56,7 +56,7 @@ class AddTrackerRefererColumns extends Migration
 
         $this->builder->table(
             $this->foreign,
-            function($table) {
+            function ($table) {
                 $table->dropForeign('tracker_referers_referer_id_fk');
             }
         );
