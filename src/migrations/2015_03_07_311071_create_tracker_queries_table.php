@@ -20,7 +20,7 @@ class CreateTrackerQueriesTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function($table) {
+            function ($table) {
                 $table->bigIncrements('id');
 
                 $table->string('query')->index();

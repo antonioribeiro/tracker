@@ -20,7 +20,7 @@ class CreateTrackerSqlQueryBindingsParametersTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function($table) {
+            function ($table) {
                 $table->bigIncrements('id');
 
                 $table->bigInteger('sql_query_bindings_id')->unsigned()->nullable();

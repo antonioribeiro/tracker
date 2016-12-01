@@ -21,7 +21,7 @@ class AddNullableToTrackerError extends Migration
         try {
             $this->builder->table(
                 $this->table,
-                function($table) {
+                function ($table) {
                     $table->string('code')->nullable()->change();
                 }
             );
