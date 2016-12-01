@@ -20,7 +20,7 @@ class CreateTrackerGeoipTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function ($table) {
+            function($table) {
                 $table->bigIncrements('id');
 
                 $table->double('latitude')->nullable()->index();

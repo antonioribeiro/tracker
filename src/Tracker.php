@@ -235,6 +235,9 @@ class Tracker
             : null;
     }
 
+    /**
+     * @param \Exception $exception
+     */
     public function handleException($exception)
     {
         if ($this->config->get('log_enabled')) {

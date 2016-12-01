@@ -20,7 +20,7 @@ class CreateTrackerLogTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function ($table) {
+            function($table) {
                 $table->bigIncrements('id');
 
                 $table->bigInteger('session_id')->unsigned()->index();

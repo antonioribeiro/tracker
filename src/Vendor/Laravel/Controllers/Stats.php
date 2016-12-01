@@ -39,6 +39,9 @@ class Stats extends Controller
         return $this->showPage($session, $session->getValue('page'));
     }
 
+    /**
+     * @param Session $session
+     */
     public function showPage($session, $page)
     {
         $me = $this;
@@ -105,22 +108,22 @@ class Stats extends Controller
         $query = Tracker::sessionLog($uuid, false);
 
         $query->select([
-                           'id',
-                           'session_id',
-                           'method',
-                           'path_id',
-                           'query_id',
-                           'route_path_id',
-                           'is_ajax',
-                           'is_secure',
-                           'is_json',
-                           'wants_json',
-                           'error_id',
-                           'updated_at',
-                       ]);
+                            'id',
+                            'session_id',
+                            'method',
+                            'path_id',
+                            'query_id',
+                            'route_path_id',
+                            'is_ajax',
+                            'is_secure',
+                            'is_json',
+                            'wants_json',
+                            'error_id',
+                            'updated_at',
+                        ]);
 
         return Datatables::of($query)
-            ->edit_column('route_name', function ($row) {
+            ->edit_column('route_name', function($row) {
                 $path = $row->routePath;
 
                 return    $row->routePath
@@ -128,7 +131,7 @@ class Stats extends Controller
                             : ($row->path ? $row->path->path : '');
             })
 
-            ->edit_column('route', function ($row) {
+            ->edit_column('route', function($row) {
                 $route = null;
 
                 if ($row->routePath) {
@@ -140,7 +143,7 @@ class Stats extends Controller
                 return $route;
             })
 
-            ->edit_column('query', function ($row) {
+            ->edit_column('query', function($row) {
                 $query = null;
 
                 if ($row->logQuery) {
@@ -152,23 +155,23 @@ class Stats extends Controller
                 return $query;
             })
 
-            ->edit_column('is_ajax', function ($row) {
+            ->edit_column('is_ajax', function($row) {
                 return    $row->is_ajax ? 'yes' : '';
             })
 
-            ->edit_column('is_secure', function ($row) {
+            ->edit_column('is_secure', function($row) {
                 return    $row->is_secure ? 'yes' : '';
             })
 
-            ->edit_column('is_json', function ($row) {
+            ->edit_column('is_json', function($row) {
                 return    $row->is_json ? 'yes' : '';
             })
 
-            ->edit_column('wants_json', function ($row) {
+            ->edit_column('wants_json', function($row) {
                 return    $row->wants_json ? 'yes' : '';
             })
 
-            ->edit_column('error', function ($row) {
+            ->edit_column('error', function($row) {
                 return    $row->error ? 'yes' : '';
             })
 
@@ -202,15 +205,15 @@ class Stats extends Controller
         $query = Tracker::errors($session->getMinutes(), false);
 
         $query->select([
-                           'id',
-                           'error_id',
-                           'session_id',
-                           'path_id',
-                           'updated_at',
-                       ]);
+                            'id',
+                            'error_id',
+                            'session_id',
+                            'path_id',
+                            'updated_at',
+                        ]);
 
         return Datatables::of($query)
-                ->edit_column('updated_at', function ($row) {
+                ->edit_column('updated_at', function($row) {
                     return "{$row->updated_at->diffForHumans()}";
                 })
                 ->make(true);
@@ -228,10 +231,10 @@ class Stats extends Controller
         $username_column = Tracker::getConfig('authenticated_user_username_column');
 
         return Datatables::of(Tracker::users($session->getMinutes(), false))
-                ->edit_column('user_id', function ($row) use ($username_column) {
+                ->edit_column('user_id', function($row) use ($username_column) {
                     return "{$row->user->$username_column}";
                 })
-                ->edit_column('updated_at', function ($row) {
+                ->edit_column('updated_at', function($row) {
                     return "{$row->updated_at->diffForHumans()}";
                 })
                 ->make(true);
@@ -244,28 +247,28 @@ class Stats extends Controller
         $query = Tracker::sessions($session->getMinutes(), false);
 
         $query->select([
-               'id',
-               'uuid',
-               'user_id',
-               'device_id',
-               'agent_id',
-               'client_ip',
-               'referer_id',
-               'cookie_id',
-               'geoip_id',
-               'language_id',
-               'is_robot',
-               'updated_at',
+                'id',
+                'uuid',
+                'user_id',
+                'device_id',
+                'agent_id',
+                'client_ip',
+                'referer_id',
+                'cookie_id',
+                'geoip_id',
+                'language_id',
+                'is_robot',
+                'updated_at',
         ]);
 
         return Datatables::of($query)
-                ->edit_column('id', function ($row) use ($username_column) {
+                ->edit_column('id', function($row) use ($username_column) {
                     $uri = route('tracker.stats.log', $row->uuid);
 
                     return '<a href="'.$uri.'">'.$row->id.'</a>';
                 })
 
-                ->add_column('country', function ($row) {
+                ->add_column('country', function($row) {
                     $cityName = $row->geoip && $row->geoip->city ? ' - '.$row->geoip->city : '';
 
                     $countryName = ($row->geoip ? $row->geoip->country_name : '').$cityName;
@@ -279,11 +282,11 @@ class Stats extends Controller
                     return "$flag $countryName";
                 })
 
-                ->add_column('user', function ($row) use ($username_column) {
+                ->add_column('user', function($row) use ($username_column) {
                     return $row->user ? $row->user->$username_column : 'guest';
                 })
 
-                ->add_column('device', function ($row) use ($username_column) {
+                ->add_column('device', function($row) use ($username_column) {
                     $model = ($row->device && $row->device->model && $row->device->model !== 'unavailable' ? '['.$row->device->model.']' : '');
 
                     $platform = ($row->device && $row->device->platform ? ' ['.trim($row->device->platform.' '.$row->device->platform_version).']' : '');
@@ -295,27 +298,27 @@ class Stats extends Controller
                             : '';
                 })
 
-                ->add_column('browser', function ($row) use ($username_column) {
+                ->add_column('browser', function($row) use ($username_column) {
                     return $row->agent && $row->agent
                             ? $row->agent->browser.' ('.$row->agent->browser_version.')'
                             : '';
                 })
 
-                ->add_column('language', function ($row) use ($username_column) {
+                ->add_column('language', function($row) use ($username_column) {
                     return $row->language && $row->language
                         ? $row->language->preference
                         : '';
                 })
 
-                ->add_column('referer', function ($row) use ($username_column) {
+                ->add_column('referer', function($row) use ($username_column) {
                     return $row->referer ? $row->referer->domain->name : '';
                 })
 
-                ->add_column('pageViews', function ($row) use ($username_column) {
+                ->add_column('pageViews', function($row) use ($username_column) {
                     return $row->page_views;
                 })
 
-                ->add_column('lastActivity', function ($row) use ($username_column) {
+                ->add_column('lastActivity', function($row) use ($username_column) {
                     return $row->updated_at->diffForHumans();
                 })
 

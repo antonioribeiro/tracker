@@ -192,6 +192,9 @@ class Session extends Repository
         return $this->sessionInfo;
     }
 
+    /**
+     * @param string $variable
+     */
     private function getSessionData($variable = null)
     {
         $data = $this->session->get($this->getSessionKey());

@@ -11,12 +11,12 @@ class AddTrackerLanguageForeignKeyToSessions extends Migration
      */
     public function migrateUp()
     {
-        $this->builder->table('tracker_sessions', function ($table) {
+        $this->builder->table('tracker_sessions', function($table) {
             $table->foreign('language_id')
-                  ->references('id')
-                  ->on('tracker_languages')
-                  ->onUpdate('cascade')
-                  ->onDelete('cascade');
+                    ->references('id')
+                    ->on('tracker_languages')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
         });
     }
 
@@ -27,7 +27,7 @@ class AddTrackerLanguageForeignKeyToSessions extends Migration
      */
     public function migrateDown()
     {
-        $this->builder->table('tracker_sessions', function ($table) {
+        $this->builder->table('tracker_sessions', function($table) {
             $table->dropForeign(['language_id']);
         });
     }

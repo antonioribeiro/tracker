@@ -33,7 +33,7 @@ class RefererParser
     /**
      * Parse a referer.
      *
-     * @return mixed
+     * @return RefererParser
      */
     public function parse($refererUrl, $pageUrl)
     {
@@ -45,7 +45,7 @@ class RefererParser
     /**
      * Get the search medium.
      *
-     * @return mixed
+     * @return string|null
      */
     public function getMedium()
     {
@@ -57,7 +57,7 @@ class RefererParser
     /**
      * Get the search source.
      *
-     * @return mixed
+     * @return string|null
      */
     public function getSource()
     {
@@ -69,7 +69,7 @@ class RefererParser
     /**
      * Get the search term.
      *
-     * @return mixed
+     * @return string|null
      */
     public function getSearchTerm()
     {
@@ -81,7 +81,7 @@ class RefererParser
     /**
      * Check if the referer is knwon.
      *
-     * @return mixed
+     * @return boolean
      */
     public function isKnown()
     {
@@ -91,7 +91,8 @@ class RefererParser
     /**
      * Set the referer.
      *
-     * @return mixed
+     * @param \Snowplow\RefererParser\Referer $referer
+     * @return RefererParser
      */
     public function setReferer($referer)
     {

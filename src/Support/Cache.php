@@ -64,7 +64,7 @@ class Cache
     }
 
     /**
-     * @param $key
+     * @param string $key
      *
      * @return array
      */
@@ -82,6 +82,9 @@ class Cache
         $this->cachePut($key, $model);
     }
 
+    /**
+     * @param string $identifier
+     */
     public function findCached($attributes, $keys, $identifier = null)
     {
         if (!$this->config->get('cache_enabled')) {

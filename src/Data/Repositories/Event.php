@@ -140,7 +140,7 @@ class Event extends Repository
     /**
      * Get the system class id by object name.
      *
-     * @param $objectName
+     * @param null|string $objectName
      *
      * @return null
      */
