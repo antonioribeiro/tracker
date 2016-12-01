@@ -1,0 +1,4 @@
+# .scrutinizer.yml
+tools:
+    php_cs_fixer:
+        config: { level: psr2 } # or psr1 if you would just like to get fixes for PSR1
