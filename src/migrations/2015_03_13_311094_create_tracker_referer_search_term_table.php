@@ -20,7 +20,7 @@ class CreateTrackerRefererSearchTermTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function ($table) {
+            function($table) {
                 $table->bigIncrements('id');
 
                 $table->bigInteger('referer_id')->unsigned()->index();

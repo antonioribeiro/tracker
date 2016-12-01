@@ -20,7 +20,7 @@ class CreateTrackerDomainsTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function ($table) {
+            function($table) {
                 $table->bigIncrements('id');
 
                 $table->string('name')->index();

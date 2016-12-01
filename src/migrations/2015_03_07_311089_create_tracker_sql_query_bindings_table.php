@@ -20,7 +20,7 @@ class CreateTrackerSqlQueryBindingsTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function ($table) {
+            function($table) {
                 $table->bigIncrements('id');
 
                 $table->string('sha1', 40)->index();

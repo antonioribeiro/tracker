@@ -90,6 +90,9 @@ abstract class Repository implements RepositoryInterface
         return $this->getAttribute('id');
     }
 
+    /**
+     * @param string $attribute
+     */
     public function getAttribute($attribute)
     {
         return $this->result ? $this->result->{$attribute} : null;
@@ -105,6 +108,9 @@ abstract class Repository implements RepositoryInterface
         return $this->result->save();
     }
 
+    /**
+     * @param string[] $keys
+     */
     public function findOrCreate($attributes, $keys = null, &$created = false, $otherModel = null)
     {
         list($model, $cacheKey) = $this->cache->findCached($attributes, $keys, $this->className);

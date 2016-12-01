@@ -20,7 +20,7 @@ class AddTrackerRefererColumnToLog extends Migration
     {
         $this->builder->table(
             $this->table,
-            function ($table) {
+            function($table) {
                 $table->integer('referer_id')->unsigned()->nullable()->index();
             }
         );
@@ -35,7 +35,7 @@ class AddTrackerRefererColumnToLog extends Migration
     {
         $this->builder->table(
             $this->table,
-            function ($table) {
+            function($table) {
                 $table->dropColumn('referer_id');
             }
         );
