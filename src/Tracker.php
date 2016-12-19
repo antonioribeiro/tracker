@@ -64,7 +64,7 @@ class Tracker
 
     public function checkCurrentUser()
     {
-        if (!$this->getSessionData()['user_id'] && $user_id = $this->getUserId()) {
+        if (!$this->sessionData['user_id'] && $user_id = $this->getUserId()) {
             return true;
         }
 
