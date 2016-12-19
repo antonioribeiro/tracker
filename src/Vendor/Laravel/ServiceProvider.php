@@ -579,10 +579,22 @@ class ServiceProvider extends PragmaRXServiceProvider
         $me = $this;
 
         $this->app['events']->listen('router.before', function ($object = null) use ($me) {
+            
+            // get auth bindings to check
+            $bindings = $me->getConfig('authentication_ioc_binding');
+
+            // check if all bindings are resolved
+            $checked_bindings = array_map( function ($abstract) use ($me) {
+                return $me->app->resolved( $abstract );
+            }, $bindings);
+
+            $all_bindings_resolved = 
+                (!in_array(false, $checked_bindings, true)) ?: false ;
+
             if ($me->tracker &&
                 !$me->userChecked &&
                 $me->getConfig('log_users') &&
-                $me->app->resolved($me->getConfig('authentication_ioc_binding'))
+                $all_bindings_resolved
             ) {
                 $me->userChecked = $me->getTracker()->checkCurrentUser();
             }
