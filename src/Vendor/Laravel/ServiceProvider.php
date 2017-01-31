@@ -339,7 +339,7 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     public function registerCache()
     {
-        $this->app['tracker.cache'] = $this->app->share(function ($app) {
+        $this->app->singleton('tracker.cache', function ($app) {
             return new Cache($app['tracker.config'], $app);
         });
     }
