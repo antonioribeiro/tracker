@@ -310,7 +310,7 @@ return [
      * Stats Panel routes middleware
      *
      */
-    'stats_routes_middleware' => '',
+    'stats_routes_middleware' => 'web',
 
     /*
      * Stats Panel template path
