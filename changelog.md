@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.1.0] - 2017-01-31
+### New
+- Upgrade to Laravel 5.4
+
 ## [3.0.0] - 2016-08-24
 ### New
 - Cache
