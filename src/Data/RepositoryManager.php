@@ -475,8 +475,8 @@ class RepositoryManager implements RepositoryManagerInterface
         if ($referer) {
             $url = parse_url($referer);
 
-            if (! isset($url['host'])) {
-                return null;
+            if (!isset($url['host'])) {
+                return;
             }
 
             $parts = explode('.', $url['host']);
