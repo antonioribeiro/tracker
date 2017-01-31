@@ -114,7 +114,6 @@ class Session extends Repository
             return false;
         }
 
-
         if (!$this->getSessionData('uuid') == $this->getSystemSessionId()) {
             return false;
         }
