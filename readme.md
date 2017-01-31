@@ -582,9 +582,10 @@ You just have to all your auth IOC bidings to the array:
 
 To use the stats panel on your website you'll need to download the sb-admin 2 sources to your public folder:
 
-    wget --output-document=/tmp/sba2.zip https://github.com/BlackrockDigital/startbootstrap-sb-admin-2/archive/v1.0.8.zip
-    unzip /tmp/sba2.zip -d /tmp
-    mkdir -p public/templates; mv /tmp/startbootstrap-sb-admin-2-1.0.8 public/templates/sb-admin-2
+    git clone https://github.com/BlackrockDigital/startbootstrap-sb-admin-2.git public/templates/sb-admin-2
+    cd public/templates/sb-admin-2
+    git checkout tags/v3.3.7+1
+    git checkout -b v3.3.7+1
 
 And enabled in your config file:
 
