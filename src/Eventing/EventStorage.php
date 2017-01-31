@@ -5,6 +5,7 @@
  * Date: 03/06/2014
  * Time: 18:30.
  */
+
 namespace PragmaRX\Tracker\Eventing;
 
 class EventStorage
