@@ -19,6 +19,7 @@ use PragmaRX\Tracker\Data\Repositories\Log;
 use PragmaRX\Tracker\Data\Repositories\Path;
 use PragmaRX\Tracker\Data\Repositories\Query;
 use PragmaRX\Tracker\Data\Repositories\QueryArgument;
+use PragmaRX\Tracker\Data\Repositories\Referer;
 use PragmaRX\Tracker\Data\Repositories\Route;
 use PragmaRX\Tracker\Data\Repositories\RoutePath;
 use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
@@ -132,7 +133,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     private function registerTracker()
     {
-        $this->app['tracker'] = $this->app->share(function ($app) {
+        $this->app->singleton('tracker', function ($app) {
             $app['tracker.loaded'] = true;
 
             return new Tracker(
@@ -148,7 +149,7 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     public function registerRepositories()
     {
-        $this->app['tracker.repositories'] = $this->app->share(function ($app) {
+        $this->app->singleton('tracker.repositories', function ($app) {
             try {
                 $uaParser = new UserAgentParser($app->make('path.base'));
             } catch (\Exception $exception) {
@@ -284,7 +285,12 @@ class ServiceProvider extends PragmaRXServiceProvider
 
                 new Domain($domainModel),
 
-                $app->make('\PragmaRX\Tracker\Data\Repositories\Referer', [$refererModel, $refererSearchTermModel, $this->getAppUrl()]),
+                new Referer(
+                    $refererModel,
+                    $refererSearchTermModel,
+                    $this->getAppUrl(),
+                    $app->make('PragmaRX\Tracker\Support\RefererParser')
+                ),
 
                 $routeRepository,
 
@@ -323,14 +329,14 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     public function registerAuthentication()
     {
-        $this->app['tracker.authentication'] = $this->app->share(function ($app) {
+        $this->app->singleton('tracker.authentication', function ($app) {
             return new Authentication($app['tracker.config'], $app);
         });
     }
 
     private function registerTablesCommand()
     {
-        $this->app['tracker.tables.command'] = $this->app->share(function ($app) {
+        $this->app->singleton('tracker.tables.command', function ($app) {
             return new TablesCommand();
         });
     }
@@ -440,7 +446,7 @@ class ServiceProvider extends PragmaRXServiceProvider
     {
         $me = $this;
 
-        $this->app['tracker.events'] = $this->app->share(function ($app) {
+        $this->app->singleton('tracker.events', function ($app) {
             return new EventStorage();
         });
 
@@ -454,10 +460,11 @@ class ServiceProvider extends PragmaRXServiceProvider
             $me->app['tracker.events']->turnOff();
 
             // Log events even before application is ready
-            $me->app['tracker.events']->logEvent(
-                $me->app['events']->firing(),
-                $object
-            );
+            // $me->app['tracker.events']->logEvent(
+            //    $me->app['events']->firing(),
+            //    $object
+            // );
+            // TODO: we have to investigate a way of doing this
 
             // Can only send events to database after application is ready
             if (isset($me->app['tracker.loaded'])) {
