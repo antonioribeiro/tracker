@@ -33,7 +33,7 @@ class FixAgentName extends Migration
                 }
             );
         } catch (\Exception $e) {
-            dd($e);
+            dd($e->getMessage());
         }
     }
 
