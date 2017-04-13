@@ -2,7 +2,7 @@
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/pragmarx/tracker.svg?style=flat-square)](https://packagist.org/packages/pragmarx/tracker) [![License](https://img.shields.io/badge/license-BSD_3_Clause-brightgreen.svg?style=flat-square)](LICENSE) [![Downloads](https://img.shields.io/packagist/dt/pragmarx/tracker.svg?style=flat-square)](https://packagist.org/packages/pragmarx/tracker)
 
-###Tracker gathers a lot of information from your requests to identify and store:
+### Tracker gathers a lot of information from your requests to identify and store:
 
 - **Sessions**
 - **Page Views (hits on routes)**
@@ -21,7 +21,7 @@
 - **Url queries and all its arguments**
 - **Database connections**
 
-##Index
+## Index
 
 - [Why?](#why)
 - [How To Use It](#usage)
