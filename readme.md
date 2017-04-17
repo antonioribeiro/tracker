@@ -2,7 +2,7 @@
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/pragmarx/tracker.svg?style=flat-square)](https://packagist.org/packages/pragmarx/tracker) [![License](https://img.shields.io/badge/license-BSD_3_Clause-brightgreen.svg?style=flat-square)](LICENSE) [![Downloads](https://img.shields.io/packagist/dt/pragmarx/tracker.svg?style=flat-square)](https://packagist.org/packages/pragmarx/tracker)
 
-###Tracker gathers a lot of information from your requests to identify and store:
+### Tracker gathers a lot of information from your requests to identify and store:
 
 - **Sessions**
 - **Page Views (hits on routes)**
@@ -21,7 +21,7 @@
 - **Url queries and all its arguments**
 - **Database connections**
 
-##Index
+## Index
 
 - [Why?](#why)
 - [How To Use It](#usage)
@@ -465,14 +465,14 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 
 If your application has special needs, you can manually log things like:
 
-####Events  
+#### Events  
 
 ```
 Tracker::trackEvent(['event' => 'cart.add']);
 Tracker::trackEvent(['event' => 'cart.add', 'object' => 'App\Cart\Events\Add']);
 ```
 
-####Routes
+#### Routes
 
 ```
 Tracker::trackVisit(
@@ -495,19 +495,19 @@ For Laravel 4+ please use version 2.0.10.
 
 ## Installing
 
-####Require the `tracker` package by **executing** the following command in your command line:
+#### Require the `tracker` package by **executing** the following command in your command line:
 
     composer require pragmarx/tracker
 
-####Add the service provider to your app/config/app.php:
+#### Add the service provider to your app/config/app.php:
 
     'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
 
-####Add the alias to the facade on your app/config/app.php:
+#### Add the alias to the facade on your app/config/app.php:
 
     'Tracker' => 'PragmaRX\Tracker\Vendor\Laravel\Facade',
 
-####Publish tracker configuration:
+#### Publish tracker configuration:
 
 **Laravel 4**
 
@@ -517,27 +517,27 @@ For Laravel 4+ please use version 2.0.10.
 
     php artisan vendor:publish
 
-####Enable the Middleware (Laravel 5)
+#### Enable the Middleware (Laravel 5)
 
     'use_middleware' => true,
 
-####Add the Middleware to Laravel Kernel (Laravel 5)
+#### Add the Middleware to Laravel Kernel (Laravel 5)
 
 Open the file `app/Http/Kernel.php` and add the following to your web middlewares:
 
     \PragmaRX\Tracker\Vendor\Laravel\Middlewares\Tracker::class,
 
-####Enable Tracker in your config.php (Laravel 4) or tracker.php (Laravel 5)
+#### Enable Tracker in your config.php (Laravel 4) or tracker.php (Laravel 5)
 
     'enabled' => true,
 
-####Publish the migration
+#### Publish the migration
 
     php artisan tracker:tables
 
 This is only needed if you are on Laravel 4, because `vendor:publish` does it for you in Laravel 5.
 
-####Create a database connection for it on your `config/database.php`
+#### Create a database connection for it on your `config/database.php`
 
 	'tracker' => [
 		'driver'   => '...',
@@ -546,7 +546,7 @@ This is only needed if you are on Laravel 4, because `vendor:publish` does it fo
 		...
 	],
 
-####Migrate it
+#### Migrate it
 
 If you have set the default connection to `tracker`, you can
 
@@ -556,7 +556,7 @@ Otherwise you'll have to
 
     php artisan migrate --database=tracker
 
-####If you are planning to store Geo IP information, also install the geoip package:
+#### If you are planning to store Geo IP information, also install the geoip package:
 
     composer require "geoip/geoip":"~1.14"
 
@@ -564,7 +564,7 @@ Otherwise you'll have to
 
     composer require "geoip2/geoip2":"~2.0"
 
-####And make sure you don't have the PHP module installed. This is a Debian/Ubuntu example:
+#### And make sure you don't have the PHP module installed. This is a Debian/Ubuntu example:
 
 	sudo apt-get purge php5-geoip
 
