@@ -2,7 +2,7 @@
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/pragmarx/tracker.svg?style=flat-square)](https://packagist.org/packages/pragmarx/tracker) [![License](https://img.shields.io/badge/license-BSD_3_Clause-brightgreen.svg?style=flat-square)](LICENSE) [![Downloads](https://img.shields.io/packagist/dt/pragmarx/tracker.svg?style=flat-square)](https://packagist.org/packages/pragmarx/tracker)
 
-###Tracker gathers a lot of information from your requests to identify and store:
+### Tracker gathers a lot of information from your requests to identify and store:
 
 - **Sessions**
 - **Page Views (hits on routes)**
@@ -21,7 +21,7 @@
 - **Url queries and all its arguments**
 - **Database connections**
 
-##Index
+## Index
 
 - [Why?](#why)
 - [How To Use It](#usage)
@@ -44,13 +44,13 @@ As soon as you install and enable it, Tracker will start storing all information
 
 #### Current Session/Visitor
 
-```
+```php
 $visitor = Tracker::currentSession();
 ```
 
 Most of those methods return an Eloquent model or collection, so you can use not only its attributes, but also relational data:
 
-```
+```php
 var_dump( $visitor->client_ip );
 
 var_dump( $visitor->device->is_mobile );
@@ -65,11 +65,11 @@ var_dump( $visitor->language->preference );
 
 #### Sessions (visits)
 
-```
+```php
 $sessions = Tracker::sessions(60 * 24); // get sessions (visits) from the past day
 ```
 
-```
+```php
 foreach ($sessions as $session)
 {
     var_dump( $session->user->email );
@@ -91,43 +91,43 @@ foreach ($sessions as $session)
 
 Brings all online sessions (logged and unlogged users)
 
-```
+```php
 $users = Tracker::onlineUsers(); // defaults to 3 minutes
 ```
 
 #### Users
 
-```
+```php
 $users = Tracker::users(60 * 24);
 ```
 
 #### User Devices
 
-```
+```php
 $users = Tracker::userDevices(60 * 24, $user->id);
 ```
 
 #### Events
 
-```
+```php
 $events = Tracker::events(60 * 24);
 ```
 
 #### Errors
 
-```
+```php
 $errors = Tracker::errors(60 * 24);
 ```
 
 #### PageViews summary
 
-```
+```php
 $pageViews = Tracker::pageViews(60 * 24 * 30);
 ```
 
 #### PageViews By Country summary
 
-```
+```php
 $pageViews = Tracker::pageViewsByCountry(60 * 24);
 ```
 
@@ -135,7 +135,7 @@ $pageViews = Tracker::pageViewsByCountry(60 * 24);
 
 You can send timestamp ranges to those methods using the Minutes class:
 
-```
+```php
 $range = new Minutes();
 
 $range->setStart(Carbon::now()->subDays(2));
@@ -149,13 +149,13 @@ Tracker::userDevices($range);
 
 Having a route of
 
-```
+```php
 Route::get('user/{id}', ['as' => 'user.profile', 'use' => 'UsersController@profile']);
 ```
 
 You can use this method to select all hits on that particular route and count them using Laravel:
 
-```
+```php
 return Tracker::logByRouteName('user.profile')
         ->where(function($query)
         {
@@ -168,7 +168,7 @@ return Tracker::logByRouteName('user.profile')
 
 And if you need count how many unique visitors accessed that route, you can do:
 
-```
+```php
 return Tracker::logByRouteName('tracker.stats.log')
         ->where(function($query)
         {
@@ -467,14 +467,14 @@ If your application has special needs, you can manually log things like:
 
 ####Events  
 
-```
+```php
 Tracker::trackEvent(['event' => 'cart.add']);
 Tracker::trackEvent(['event' => 'cart.add', 'object' => 'App\Cart\Events\Add']);
 ```
 
 ####Routes
 
-```
+```php
 Tracker::trackVisit(
     [
         'name' => 'my.dynamic.route.name',
@@ -495,19 +495,19 @@ For Laravel 4+ please use version 2.0.10.
 
 ## Installing
 
-####Require the `tracker` package by **executing** the following command in your command line:
+#### Require the `tracker` package by **executing** the following command in your command line:
 
     composer require pragmarx/tracker
 
-####Add the service provider to your app/config/app.php:
+#### Add the service provider to your app/config/app.php:
 
     'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
 
-####Add the alias to the facade on your app/config/app.php:
+#### Add the alias to the facade on your app/config/app.php:
 
     'Tracker' => 'PragmaRX\Tracker\Vendor\Laravel\Facade',
 
-####Publish tracker configuration:
+#### Publish tracker configuration:
 
 **Laravel 4**
 
@@ -517,27 +517,27 @@ For Laravel 4+ please use version 2.0.10.
 
     php artisan vendor:publish
 
-####Enable the Middleware (Laravel 5)
+#### Enable the Middleware (Laravel 5)
 
     'use_middleware' => true,
 
-####Add the Middleware to Laravel Kernel (Laravel 5)
+#### Add the Middleware to Laravel Kernel (Laravel 5)
 
 Open the file `app/Http/Kernel.php` and add the following to your web middlewares:
 
     \PragmaRX\Tracker\Vendor\Laravel\Middlewares\Tracker::class,
 
-####Enable Tracker in your config.php (Laravel 4) or tracker.php (Laravel 5)
+#### Enable Tracker in your config.php (Laravel 4) or tracker.php (Laravel 5)
 
     'enabled' => true,
 
-####Publish the migration
+#### Publish the migration
 
     php artisan tracker:tables
 
 This is only needed if you are on Laravel 4, because `vendor:publish` does it for you in Laravel 5.
 
-####Create a database connection for it on your `config/database.php`
+#### Create a database connection for it on your `config/database.php`
 
 	'tracker' => [
 		'driver'   => '...',
@@ -546,7 +546,7 @@ This is only needed if you are on Laravel 4, because `vendor:publish` does it fo
 		...
 	],
 
-####Migrate it
+#### Migrate it
 
 If you have set the default connection to `tracker`, you can
 
@@ -556,7 +556,7 @@ Otherwise you'll have to
 
     php artisan migrate --database=tracker
 
-####If you are planning to store Geo IP information, also install the geoip package:
+#### If you are planning to store Geo IP information, also install the geoip package:
 
     composer require "geoip/geoip":"~1.14"
 
@@ -564,7 +564,7 @@ Otherwise you'll have to
 
     composer require "geoip2/geoip2":"~2.0"
 
-####And make sure you don't have the PHP module installed. This is a Debian/Ubuntu example:
+#### And make sure you don't have the PHP module installed. This is a Debian/Ubuntu example:
 
 	sudo apt-get purge php5-geoip
 
