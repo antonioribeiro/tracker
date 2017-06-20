@@ -501,11 +501,15 @@ For Laravel 4+ please use version 2.0.10.
 
 #### Add the service provider to your app/config/app.php:
 
-    'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
+```php
+'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
+```
 
 #### Add the alias to the facade on your app/config/app.php:
 
-    'Tracker' => 'PragmaRX\Tracker\Vendor\Laravel\Facade',
+```php
+'Tracker' => 'PragmaRX\Tracker\Vendor\Laravel\Facade',
+```
 
 #### Publish tracker configuration:
 
@@ -519,17 +523,23 @@ For Laravel 4+ please use version 2.0.10.
 
 #### Enable the Middleware (Laravel 5)
 
-    'use_middleware' => true,
+```php
+'use_middleware' => true,
+```
 
 #### Add the Middleware to Laravel Kernel (Laravel 5)
 
 Open the file `app/Http/Kernel.php` and add the following to your web middlewares:
 
-    \PragmaRX\Tracker\Vendor\Laravel\Middlewares\Tracker::class,
+```php
+\PragmaRX\Tracker\Vendor\Laravel\Middlewares\Tracker::class,
+```
 
 #### Enable Tracker in your config.php (Laravel 4) or tracker.php (Laravel 5)
 
-    'enabled' => true,
+```php
+'enabled' => true,
+```
 
 #### Publish the migration
 
@@ -539,12 +549,14 @@ This is only needed if you are on Laravel 4, because `vendor:publish` does it fo
 
 #### Create a database connection for it on your `config/database.php`
 
-	'tracker' => [
-		'driver'   => '...',
-		'host'     => '...',
-		'database' => ...,
-		...
-	],
+```php
+'tracker' => [
+	'driver'   => '...',
+	'host'     => '...',
+	'database' => ...,
+	...
+],
+```
 
 #### Migrate it
 
@@ -572,7 +584,9 @@ Otherwise you'll have to
 
 Tracker has a lot of logging options, but you need to decide what you want to log. Starting by enabling this one:
 
-    'log_enabled' => true,
+```php
+'log_enabled' => true,
+```
 
 It is responsible for logging page hits and sessions, basically the client IP address.
 
@@ -580,7 +594,9 @@ It is responsible for logging page hits and sessions, basically the client IP ad
 
 You just have to all your auth IOC bidings to the array:
 
-    'authentication_ioc_binding' => ['auth', 'admin'],
+```php
+'authentication_ioc_binding' => ['auth', 'admin'],
+```
 
 ## Stats Panel
 
@@ -593,18 +609,24 @@ To use the stats panel on your website you'll need to download the sb-admin 2 so
 
 And enabled in your config file:
 
-	'stats_panel_enabled' => true,
+```php
+'stats_panel_enabled' => true,
+```
 
 Set the web middleware for stats routes (Laravel 5)
 
-	'stats_routes_middleware' => 'web',
+```php
+'stats_routes_middleware' => 'web',
+```
 
 Only admins can view the stats, so if you don't have an is_admin attribute on your user model, you'll have to add one:
 
-    public function getIsAdminAttribute()
+```php
+public function getIsAdminAttribute()
     {
         return true;
     }
+```
 
 It can be 'admin', 'is_admin', 'root' or 'is_root'.
 
