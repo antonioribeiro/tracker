@@ -82,7 +82,7 @@
 
 @section('required-scripts-top')
 	<!-- Page-Level Plugin Scripts - Main -->
-	<script src="{{ $stats_template_path }}/bower_components/raphael/raphael-min.js"></script>
+	<script src="{{ $stats_template_path }}/bower_components/raphael/raphael.min.js"></script>
 	<script src="{{ $stats_template_path }}/bower_components/morrisjs/morris.min.js"></script>
 
 	<!-- Page-Level Plugin Scripts - Flot -->
