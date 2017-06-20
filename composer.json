@@ -45,6 +45,14 @@
     "extra": {
         "branch-alias": {
             "dev-master": "2.1.x-dev"
+        },
+        "laravel": {
+            "providers": [
+               "PragmaRX\\Tracker\\Vendor\\Laravel\\ServiceProvider"
+            ],
+            "aliases": {
+                "Tracker": "PragmaRX\\Tracker\\Vendor\\Laravel\\Facade"
+            }
         }
     },
 
