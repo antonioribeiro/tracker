@@ -465,14 +465,14 @@ All tables are prefixed by `tracker_`, and here's an extract of some of them, sh
 
 If your application has special needs, you can manually log things like:
 
-####Events  
+#### Events  
 
 ```php
 Tracker::trackEvent(['event' => 'cart.add']);
 Tracker::trackEvent(['event' => 'cart.add', 'object' => 'App\Cart\Events\Add']);
 ```
 
-####Routes
+#### Routes
 
 ```php
 Tracker::trackVisit(
