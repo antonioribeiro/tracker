@@ -699,6 +699,11 @@ class RepositoryManager implements RepositoryManagerInterface
         return $this->routeRepository->isTrackable($route);
     }
 
+    public function pathIsTrackable($path)
+    {
+        return $this->routeRepository->pathIsTrackable($path);
+    }
+
     public function setSessionData($data)
     {
         $this->sessionRepository->setSessionData($data);

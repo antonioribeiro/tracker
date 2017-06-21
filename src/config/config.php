@@ -37,6 +37,13 @@ return [
     ],
 
     /*
+     * Which route paths are not trackable?
+     */
+    'do_not_track_paths' => [
+        'api/*',
+    ],
+
+    /*
      * The Do Not Track Ips is used to disable Tracker for some IP addresses:
      *
      *     '127.0.0.1', '192.168.1.1'
@@ -51,6 +58,11 @@ return [
     'do_not_track_ips' => [
         '127.0.0.0/24', /// range 127.0.0.1 - 127.0.0.255
     ],
+
+    /**
+     * When an IP is not trackable, show a message in log.
+     */
+    'log_untrackable_sessions' => true,
 
     /*
      * Log every single access?
