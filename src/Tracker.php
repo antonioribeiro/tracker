@@ -204,7 +204,7 @@ class Tracker
 
     private function logUntrackable($item)
     {
-        if ($this->config->get('log_untrackable_sessions') && ! isset($this->loggedItems[$item])) {
+        if ($this->config->get('log_untrackable_sessions') && !isset($this->loggedItems[$item])) {
             $this->getLogger()->warning('TRACKER (unable to track item): '.$item);
 
             $this->loggedItems[$item] = $item;
@@ -298,7 +298,7 @@ class Tracker
             $this->config->get('do_not_track_environments')
         );
 
-        if (! $trackable) {
+        if (!$trackable) {
             $this->logUntrackable('environment '.$this->laravel->environment().' is not trackable.');
         }
 
@@ -312,7 +312,7 @@ class Tracker
             $this->config->get('do_not_track_ips')
         );
 
-        if (! $trackable) {
+        if (!$trackable) {
             $this->logUntrackable($ipAddress.' is not trackable.');
         }
 
@@ -357,7 +357,7 @@ class Tracker
             $this->config->get('log_routes') ||
             $this->config->get('log_exceptions');
 
-        if (! $enabled) {
+        if (!$enabled) {
             $this->logUntrackable('there are no log items enabled.');
         }
 
@@ -382,7 +382,7 @@ class Tracker
             !$this->isRobot() ||
             !$this->config->get('do_not_track_robots');
 
-        if (! $trackable) {
+        if (!$trackable) {
             $this->logUntrackable('tracking of robots is disabled.');
         }
 
@@ -401,7 +401,7 @@ class Tracker
 
     public function parserIsAvailable()
     {
-        if (! $this->dataRepositoryManager->parserIsAvailable()) {
+        if (!$this->dataRepositoryManager->parserIsAvailable()) {
             $this->logger->error(trans('tracker::tracker.regex_file_not_available'));
 
             return false;
@@ -412,11 +412,11 @@ class Tracker
 
     private function routeIsTrackable()
     {
-        if (! $this->route) {
+        if (!$this->route) {
             return false;
         }
 
-        if (! $trackable = $this->dataRepositoryManager->routeIsTrackable($this->route)) {
+        if (!$trackable = $this->dataRepositoryManager->routeIsTrackable($this->route)) {
             $this->logUntrackable('route '.$this->route->getCurrentRoute()->getName().' is not trackable.');
         }
 
@@ -425,7 +425,7 @@ class Tracker
 
     private function pathIsTrackable()
     {
-        if (! $trackable = $this->dataRepositoryManager->pathIsTrackable($this->request->path())) {
+        if (!$trackable = $this->dataRepositoryManager->pathIsTrackable($this->request->path())) {
             $this->logUntrackable('path '.$this->request->path().' is not trackable.');
         }
 
