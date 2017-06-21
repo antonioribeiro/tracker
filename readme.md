@@ -519,7 +519,7 @@ For Laravel 4+ please use version 2.0.10.
 
 **Laravel 5**
 
-    php artisan vendor:publish
+    php artisan vendor:publish --provider=PragmaRX\\Tracker\\Vendor\\Laravel\\ServiceProvider
 
 #### Enable the Middleware (Laravel 5)
 
