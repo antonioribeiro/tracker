@@ -59,7 +59,7 @@ return [
         '127.0.0.0/24', /// range 127.0.0.1 - 127.0.0.255
     ],
 
-    /**
+    /*
      * When an IP is not trackable, show a message in log.
      */
     'log_untrackable_sessions' => true,
