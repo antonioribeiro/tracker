@@ -351,6 +351,9 @@ class RepositoryManager implements RepositoryManagerInterface
             'name' => $this->getCurrentUserAgent()
                 ?: 'Other',
 
+            'hash' => hash('sha256', $this->getCurrentUserAgent()
+                ?: 'Other'),
+
             'browser' => $this->userAgentParser->userAgent->family,
 
             'browser_version' => $this->userAgentParser->getUserAgentVersion(),

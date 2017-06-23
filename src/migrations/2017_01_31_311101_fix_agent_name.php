@@ -29,7 +29,8 @@ class FixAgentName extends Migration
             $this->builder->table(
                 $this->table,
                 function ($table) {
-                    $table->mediumText('name')->unique()->change();
+                    $table->mediumText('name')->change();
+                    $table->string('hash')->after('name')->unique();
                 }
             );
         } catch (\Exception $e) {
@@ -50,9 +51,12 @@ class FixAgentName extends Migration
                 function ($table) {
                     $table->string('name', 255)->change();
                     $table->unique('name');
+                    $table->dropUnique('tracker_agents_hash_unique');
+                    $table->dropColumn('hash');
                 }
             );
         } catch (\Exception $e) {
+            dd($e->getMessage());
         }
     }
 }
