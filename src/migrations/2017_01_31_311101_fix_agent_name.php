@@ -29,7 +29,14 @@ class FixAgentName extends Migration
             $this->builder->table(
                 $this->table,
                 function ($table) {
-                    $table->mediumText('name')->unique()->change();
+                    $table->mediumText('name')->change();
+                }
+            );
+
+            $this->builder->table(
+                $this->table,
+                function ($table) {
+                    $table->unique('id', 'tracker_agents_name_unique'); // this is a dummy index
                 }
             );
         } catch (\Exception $e) {
