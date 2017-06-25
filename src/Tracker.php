@@ -29,7 +29,7 @@ class Tracker
 
     protected $sessionData;
 
-    private $loggedItems;
+    private $loggedItems = [];
 
     public function __construct(
         Config $config,

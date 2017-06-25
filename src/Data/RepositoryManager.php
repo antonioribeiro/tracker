@@ -284,7 +284,7 @@ class RepositoryManager implements RepositoryManagerInterface
 
     public function findOrCreateAgent($data)
     {
-        return $this->agentRepository->findOrCreate($data, ['name']);
+        return $this->agentRepository->findOrCreate($data, ['name_hash']);
     }
 
     public function findOrCreateDevice($data)
@@ -348,12 +348,13 @@ class RepositoryManager implements RepositoryManagerInterface
     public function getCurrentAgentArray()
     {
         return [
-            'name' => $this->getCurrentUserAgent()
-                ?: 'Other',
+            'name' => $name = $this->getCurrentUserAgent() ?: 'Other',
 
             'browser' => $this->userAgentParser->userAgent->family,
 
             'browser_version' => $this->userAgentParser->getUserAgentVersion(),
+
+            'name_hash' => hash('sha256', $name),
         ];
     }
 
