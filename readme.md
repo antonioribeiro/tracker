@@ -551,10 +551,13 @@ This is only needed if you are on Laravel 4, because `vendor:publish` does it fo
 
 ```php
 'tracker' => [
-	'driver'   => '...',
-	'host'     => '...',
-	'database' => ...,
-	...
+    'tracker' => [
+    	'driver'   => '...',
+    	'host'     => '...',
+    	'database' => ...,
+        'strict' => false,    // to avoid problems on some MySQL installs
+    	...
+    ],
 ],
 ```
 
@@ -629,6 +632,36 @@ public function getIsAdminAttribute()
 ```
 
 It can be 'admin', 'is_admin', 'root' or 'is_root'.
+
+## Troubleshooting
+
+#### SQLSTATE[42000]: Syntax error or access violation: 1067 Invalid default value for '<field name>' 
+
+This is probably related to SQL modes on MySQL, specifically with `NO_ZERO_IN_DATE` and `NO_ZERO_DATE` modes:
+
+https://stackoverflow.com/questions/36882149/error-1067-42000-invalid-default-value-for-created-at
+
+
+Because Laravel's defaults to  
+
+```sql
+set session sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'
+```
+
+You may need to change your Tracker database connection configuration to
+
+```php
+'connections' => [
+    ...
+
+    'tracker' => [
+        ...
+
+        'strict'    => false,
+    ],
+],
+
+```
 
 ## Author
 
