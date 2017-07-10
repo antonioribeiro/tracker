@@ -635,7 +635,7 @@ It can be 'admin', 'is_admin', 'root' or 'is_root'.
 
 ## Troubleshooting
 
-#### SQLSTATE[42000]: Syntax error or access violation: 1067 Invalid default value for '<field name>' 
+### SQLSTATE[42000]: Syntax error or access violation: 1067 Invalid default value for '<field name>' 
 
 This is probably related to SQL modes on MySQL, specifically with `NO_ZERO_IN_DATE` and `NO_ZERO_DATE` modes:
 
