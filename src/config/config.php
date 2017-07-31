@@ -82,7 +82,7 @@ return [
      * Log artisan commands?
      */
     'console_log_enabled' => false,
-    
+
     /*
      * Log SQL queries?
      *
