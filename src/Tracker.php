@@ -283,7 +283,7 @@ class Tracker
     {
         return $this->config->get('enabled') &&
                 $this->logIsEnabled() &&
-                $this->notConsole() &&
+                $this->allowConsole() &&
                 $this->parserIsAvailable() &&
                 $this->isTrackableIp() &&
                 $this->isTrackableEnvironment() &&
@@ -400,9 +400,12 @@ class Tracker
         return $this->dataRepositoryManager->pageViewsByCountry(Minutes::make($minutes), $results);
     }
 
-    public function notConsole()
+    public function allowConsole()
     {
-        return $this->laravel->runningInConsole();
+        return
+            (! $this->laravel->runningInConsole()) ||
+            $this->config->get('console_log_enabled', false)
+        ;
     }
 
     public function parserIsAvailable()

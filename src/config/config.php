@@ -79,6 +79,11 @@ return [
     'log_enabled' => false,
 
     /*
+     * Log artisan commands?
+     */
+    'console_log_enabled' => false,
+    
+    /*
      * Log SQL queries?
      *
      * Log must be enabled for this option to work.
