@@ -119,7 +119,7 @@ class Stats extends Controller
                             'is_json',
                             'wants_json',
                             'error_id',
-                            'updated_at',
+                            'created_at',
                         ]);
 
         return Datatables::of($query)
@@ -156,23 +156,23 @@ class Stats extends Controller
             })
 
             ->edit_column('is_ajax', function ($row) {
-                return    $row->is_ajax ? 'yes' : '';
+                return    $row->is_ajax ? 'yes' : 'no';
             })
 
             ->edit_column('is_secure', function ($row) {
-                return    $row->is_secure ? 'yes' : '';
+                return    $row->is_secure ? 'yes' : 'no';
             })
 
             ->edit_column('is_json', function ($row) {
-                return    $row->is_json ? 'yes' : '';
+                return    $row->is_json ? 'yes' : 'no';
             })
 
             ->edit_column('wants_json', function ($row) {
-                return    $row->wants_json ? 'yes' : '';
+                return    $row->wants_json ? 'yes' : 'no';
             })
 
             ->edit_column('error', function ($row) {
-                return    $row->error ? 'yes' : '';
+                return    $row->error ? 'yes' : 'no';
             })
 
             ->make(true);
