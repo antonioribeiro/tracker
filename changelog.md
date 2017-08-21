@@ -2,7 +2,11 @@
 
 ## [3.1.8] - 2017-07-31
 ### New
-- Added a config to disable console logging
+- Added a config to enable/disable console logging
+
+## [3.1.7] - 2017-07-31
+### New
+- Disable console logging
 
 ## [3.1.6] - 2017-07-31
 ### Fixed
