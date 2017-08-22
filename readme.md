@@ -560,6 +560,16 @@ This is only needed if you are on Laravel 4, because `vendor:publish` does it fo
     ],
 ],
 ```
+For laravel 5.x
+```php
+'tracker' => [
+    	'driver'   => '...',
+    	'host'     => '...',
+    	'database' => ...,
+        'strict' => false,    // to avoid problems on some MySQL installs
+    	...
+],
+```
 
 #### Migrate it
 
