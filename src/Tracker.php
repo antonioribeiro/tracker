@@ -9,6 +9,7 @@ use Illuminate\Routing\Router;
 use PragmaRX\Support\Config;
 use PragmaRX\Tracker\Data\RepositoryManager as DataRepositoryManager;
 use PragmaRX\Tracker\Support\Minutes;
+use PragmaRX\Support\IpAddress;
 
 class Tracker
 {
@@ -308,7 +309,7 @@ class Tracker
 
     protected function isTrackableIp()
     {
-        $trackable = !ipv4_in_range(
+        $trackable = !IpAddress::ipv4InRange(
             $ipAddress = $this->request->getClientIp(),
             $this->config->get('do_not_track_ips')
         );
