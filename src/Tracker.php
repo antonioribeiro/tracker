@@ -32,6 +32,8 @@ class Tracker
 
     private $loggedItems = [];
 
+    private $booted = false;
+
     public function __construct(
         Config $config,
         DataRepositoryManager $dataRepositoryManager,
@@ -60,9 +62,17 @@ class Tracker
 
     public function boot()
     {
+        if ($this->booted) {
+            return false;
+        }
+
+        $this->booted = true;
+
         if ($this->isTrackable()) {
             $this->track();
         }
+
+        return true;
     }
 
     public function checkCurrentUser()

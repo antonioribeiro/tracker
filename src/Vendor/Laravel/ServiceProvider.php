@@ -69,15 +69,19 @@ class ServiceProvider extends PragmaRXServiceProvider
     {
         parent::boot();
 
-        if ($this->getConfig('enabled')) {
-            $this->loadRoutes();
-
-            $this->registerErrorHandler();
-
-            $this->bootTracker();
-
-            $this->loadTranslations();
+        if (!$this->getConfig('enabled')) {
+            return false;
         }
+
+        $this->loadRoutes();
+
+        $this->registerErrorHandler();
+
+        if (!isLaravel5()) {
+            $this->bootTracker();
+        }
+
+        $this->loadTranslations();
     }
 
     /**
