@@ -550,7 +550,11 @@ This is only needed if you are on Laravel 4, because `vendor:publish` does it fo
 #### Create a database connection for it on your `config/database.php`
 
 ```php
-'tracker' => [
+'connections' => [
+    'mysql' => [
+        ...
+    ],
+    
     'tracker' => [
     	'driver'   => '...',
     	'host'     => '...',
