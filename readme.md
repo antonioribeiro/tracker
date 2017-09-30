@@ -521,12 +521,6 @@ For Laravel 4+ please use version 2.0.10.
 
     php artisan vendor:publish --provider=PragmaRX\\Tracker\\Vendor\\Laravel\\ServiceProvider
 
-#### Enable the Middleware (Laravel 5)
-
-```php
-'use_middleware' => true,
-```
-
 #### Add the Middleware to Laravel Kernel (Laravel 5)
 
 Open the file `app/Http/Kernel.php` and add the following to your web middlewares:
@@ -535,17 +529,25 @@ Open the file `app/Http/Kernel.php` and add the following to your web middleware
 \PragmaRX\Tracker\Vendor\Laravel\Middlewares\Tracker::class,
 ```
 
+#### Publish the migration (Larvel 4)
+
+    php artisan tracker:tables
+
+#### Publish the migration (Larvel 5)
+
+    php artisan vendor:publish
+
+#### Enable the Middleware in `config/tracker.php` (Laravel 5)
+
+```php
+'use_middleware' => true,
+```
+
 #### Enable Tracker in your config.php (Laravel 4) or tracker.php (Laravel 5)
 
 ```php
 'enabled' => true,
 ```
-
-#### Publish the migration
-
-    php artisan tracker:tables
-
-This is only needed if you are on Laravel 4, because `vendor:publish` does it for you in Laravel 5.
 
 #### Create a database connection for it on your `config/database.php`
 
