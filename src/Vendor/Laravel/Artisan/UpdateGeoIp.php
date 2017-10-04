@@ -35,7 +35,7 @@ class UpdateGeoIp extends Base
     }
 
     /**
-     * Handle the command
+     * Handle the command.
      *
      * @return void
      */
