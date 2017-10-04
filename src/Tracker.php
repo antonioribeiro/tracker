@@ -10,6 +10,8 @@ use PragmaRX\Support\Config;
 use PragmaRX\Support\IpAddress;
 use PragmaRX\Tracker\Data\RepositoryManager as DataRepositoryManager;
 use PragmaRX\Tracker\Support\Minutes;
+use PragmaRX\Support\GeoIp\Updater as GeoIpUpdater;
+use PragmaRX\Tracker\Repositories\Message as MessageRepository;
 
 class Tracker
 {
@@ -33,6 +35,10 @@ class Tracker
     private $loggedItems = [];
 
     private $booted = false;
+    /**
+     * @var MessageRepository
+     */
+    private $messageRepository;
 
     public function __construct(
         Config $config,
@@ -40,7 +46,8 @@ class Tracker
         Request $request,
         Router $route,
         Logger $logger,
-        Laravel $laravel
+        Laravel $laravel,
+        MessageRepository $messageRepository
     ) {
         $this->config = $config;
 
@@ -53,6 +60,8 @@ class Tracker
         $this->logger = $logger;
 
         $this->laravel = $laravel;
+
+        $this->messageRepository = $messageRepository;
     }
 
     public function allSessions()
@@ -523,5 +532,31 @@ class Tracker
     public function users($minutes, $results = true)
     {
         return $this->dataRepositoryManager->users(Minutes::make($minutes), $results);
+    }
+
+    /**
+     * Get the messages.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getMessages()
+    {
+        return $this->messageRepository->getMessages();
+    }
+
+    /**
+     * Update the GeoIp2 database.
+     *
+     * @return bool
+     */
+    public function updateGeoIp()
+    {
+        $updater = new GeoIpUpdater();
+
+        $success = $updater->updateGeoIpFiles($this->config->get('geoip_database_path'));
+
+        $this->messageRepository->addMessage($updater->getMessages());
+
+        return $success;
     }
 }

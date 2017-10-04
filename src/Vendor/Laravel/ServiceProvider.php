@@ -40,6 +40,8 @@ use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Support\UserAgentParser;
 use PragmaRX\Tracker\Tracker;
 use PragmaRX\Tracker\Vendor\Laravel\Artisan\Tables as TablesCommand;
+use PragmaRX\Tracker\Vendor\Laravel\Artisan\UpdateGeoIp;
+use PragmaRX\Tracker\Repositories\Message as MessageRepository;
 
 class ServiceProvider extends PragmaRXServiceProvider
 {
@@ -104,6 +106,8 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $this->registerTablesCommand();
 
+            $this->registerUpdateGeoIpCommand();
+
             $this->registerExecutionCallback();
 
             $this->registerUserCheckCallback();
@@ -114,9 +118,9 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $this->registerDatatables();
 
-            $this->registerGlobalViewComposers();
+            $this->registerMessageRepository();
 
-            $this->commands('tracker.tables.command');
+            $this->registerGlobalViewComposers();
         }
     }
 
@@ -147,7 +151,8 @@ class ServiceProvider extends PragmaRXServiceProvider
                                     $app['request'],
                                     $app['router'],
                                     $app['log'],
-                                    $app
+                                    $app,
+                                    $app['tracker.messages']
                                 );
         });
     }
@@ -255,7 +260,7 @@ class ServiceProvider extends PragmaRXServiceProvider
             );
 
             return new RepositoryManager(
-                new GeoIp(),
+                new GeoIp($this->getConfig('geoip_database_path')),
 
                 new MobileDetect(),
 
@@ -351,6 +356,8 @@ class ServiceProvider extends PragmaRXServiceProvider
         $this->app->singleton('tracker.tables.command', function ($app) {
             return new TablesCommand();
         });
+
+        $this->commands('tracker.tables.command');
     }
 
     protected function registerExecutionCallback()
@@ -583,6 +590,15 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
     }
 
+    protected function registerUpdateGeoIpCommand()
+    {
+        $this->app->singleton('tracker.updategeoip.command', function ($app) {
+            return new UpdateGeoIp();
+        });
+
+        $this->commands('tracker.updategeoip.command');
+    }
+
     protected function registerUserCheckCallback()
     {
         $me = $this;
@@ -635,5 +651,15 @@ class ServiceProvider extends PragmaRXServiceProvider
     public function loadTranslations()
     {
         $this->loadTranslationsFrom(__DIR__.'/../../lang', 'tracker');
+    }
+
+    /**
+     * Register the message repository.
+     */
+    protected function registerMessageRepository()
+    {
+        $this->app->singleton('tracker.messages', function () {
+            return new MessageRepository();
+        });
     }
 }
