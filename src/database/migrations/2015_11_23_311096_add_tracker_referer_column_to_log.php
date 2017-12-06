@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddTrackerRefererColumnToLog extends Migration
 {
@@ -21,8 +21,8 @@ class AddTrackerRefererColumnToLog extends Migration
     public function migrateUp()
     {
         Schema::table($this->table, function (Blueprint $table) {
-                $table->integer('referer_id')->unsigned()->nullable()->index();
-            }
+            $table->integer('referer_id')->unsigned()->nullable()->index();
+        }
         );
     }
 
