@@ -1,9 +1,11 @@
 {
     "name": "pragmarx/tracker",
 
-    "description": "A Laravel Visitor Tracker",
+    "description": "A Laravel Visitor Stats Tracker",
 
-    "keywords": ["tracker", "tracking", "visitor", "logging", "user agent", "mobile detection", "laravel", "pragmarx"],
+    "keywords": [
+      "tracker", "tracking", "visitor", "logging", "user agent", "mobile detection", "laravel", "pragmarx"
+    ],
 
     "license": "MIT",
 
@@ -16,45 +18,35 @@
     ],
 
     "require": {
-        "php": ">=5.3.7",
-        "laravel/framework": "~4|~5",
-        "pragmarx/support": "~0.6|~0.7",
-        "ramsey/uuid": "~3",
-        "jenssegers/agent": "~2.1",
-        "ua-parser/uap-php" : "~3.4",
+        "php": "^7.0",
+        "laravel/framework": "^5.5",
+        "jenssegers/agent": "^2.6",
         "pragmarx/datatables": "1.4.11",
-        "snowplow/referer-parser": "~0.1",
-        "jaybizzle/crawler-detect": "~1.0"
-    },
-
-    "suggest": {
-        "geoip/geoip": "~1.14",
-        "geoip2/geoip2": "~2.0"
+        "snowplow/referer-parser": "dev-master#r2017-06",
+        "jaybizzle/crawler-detect": "^1.2"
     },
 
     "require-dev": {
-        "mockery/mockery": "~0.8"
+        "phpunit/phpunit": "^6.4",
+        "orchestra/testbench": "^3.5"
     },
 
     "autoload": {
         "psr-4": {
-            "PragmaRX\\Tracker\\": "src/"
+            "PragmaRX\\Tracker\\Package\\": "src/package",
+            "PragmaRX\\Tracker\\Tests\\": "tests/"
         }
     },
 
     "extra": {
-        "branch-alias": {
-            "dev-master": "2.1.x-dev"
-        },
+        "component": "package",
         "laravel": {
             "providers": [
-               "PragmaRX\\Tracker\\Vendor\\Laravel\\ServiceProvider"
+                "PragmaRX\\Tracker\\Package\\ServiceProvider"
             ],
             "aliases": {
-                "Tracker": "PragmaRX\\Tracker\\Vendor\\Laravel\\Facade"
+                "Tracker": "PragmaRX\\Tracker\\Package\\Facade"
             }
         }
-    },
-
-    "minimum-stability": "dev"
+    }
 }
