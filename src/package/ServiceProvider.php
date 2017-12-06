@@ -14,6 +14,22 @@ class ServiceProvider extends IlluminateServiceProvider
     protected $defer = false;
 
     /**
+     * Boot Service Provider.
+     */
+    public function boot()
+    {
+        $this->publishConfiguration();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getConfigFile()
+    {
+        return config_path('tracker.yml');
+    }
+
+    /**
      * Register the service provider.
      *
      * @return void
@@ -24,12 +40,24 @@ class ServiceProvider extends IlluminateServiceProvider
     }
 
     /**
+     * Configure config path.
+     */
+    private function publishConfiguration()
+    {
+        $this->publishes([
+            __DIR__.'/../config/tracker.yml' => $this->getConfigFile(),
+        ]);
+    }
+
+    /**
      * Register service service.
      */
     private function registerService()
     {
         $this->app->singleton('pragmarx.tracker', function () {
-            return new Tracker();
+            //$tracker = new Tracker();
+
+            //$tracker->loadConfig($this->getConfigFile());t
         });
     }
 }

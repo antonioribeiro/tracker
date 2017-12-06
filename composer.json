@@ -23,6 +23,7 @@
         "jenssegers/agent": "^2.6",
         "pragmarx/datatables": "1.4.11",
         "snowplow/referer-parser": "dev-master#r2017-06",
+        "pragmarx/yaml": "^0.1",
         "jaybizzle/crawler-detect": "^1.2"
     },
 

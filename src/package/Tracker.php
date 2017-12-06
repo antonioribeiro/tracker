@@ -3,27 +3,19 @@
 namespace PragmaRX\Tracker\Package;
 
 use PragmaRX\Tracker\Package\Exceptions\MethodNotFound;
+use PragmaRX\Tracker\Package\Support\Config;
+use PragmaRX\Yaml\Package\Yaml;
 
 class Tracker
 {
     /**
      * Version constructor.
+     *
+     * @param Config $config
      */
-    public function __construct()
+    public function __construct(Config $config = null, Yaml $yaml = null)
     {
-        $this->instantiate();
-    }
-
-    /**
-     * Instantiate all dependencies.
-     */
-    protected function instantiate()
-    {
-//        $this->instantiateClass($file, 'file', File::class);
-//
-//        $this->instantiateClass($parser, 'parser', Parser::class);
-//
-//        $this->instantiateClass($resolver, 'resolver', Resolver::class);
+        $this->instantiate($config, $yaml);
     }
 
     /**
@@ -38,13 +30,31 @@ class Tracker
      */
     public function __call($name, array $arguments)
     {
-        foreach (['file', 'parser'] as $object) {
+        foreach (['config'] as $object) {
             if (method_exists($this->{$object}, $name)) {
                 return call_user_func_array([$this->{$object}, $name], $arguments);
             }
         }
 
         throw new MethodNotFound("Method '{$name}' doesn't exists in this object.");
+    }
+
+    /**
+     * Instantiate all dependencies.
+     *
+     * @param $config
+     * @param $yaml
+     */
+    protected function instantiate($config, $yaml)
+    {
+        $yaml = $this->instantiateClass($yaml, 'yaml', Yaml::class);
+
+        $config = $this->instantiateClass($config, 'config', Config::class, [$yaml]);
+
+//
+//        $this->instantiateClass($parser, 'parser', Parser::class);
+//
+//        $this->instantiateClass($resolver, 'resolver', Resolver::class);
     }
 
     /**
