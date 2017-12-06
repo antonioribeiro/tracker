@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Tracker\Tests;
 
-use Illuminate\Support\Collection;
 use PragmaRX\Tracker\Package\Facade as TrackerFacade;
 use PragmaRX\Tracker\Package\Tracker as TrackerService;
 
