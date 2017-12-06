@@ -8,7 +8,6 @@ class Tracker
 {
     /**
      * Version constructor.
-     *
      */
     public function __construct()
     {
@@ -17,7 +16,6 @@ class Tracker
 
     /**
      * Instantiate all dependencies.
-     *
      */
     protected function instantiate()
     {
