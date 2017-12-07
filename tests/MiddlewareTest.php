@@ -2,12 +2,10 @@
 
 namespace PragmaRX\Tracker\Tests;
 
-use Illuminate\Routing\Route;
-use Illuminate\Routing\Router;
 use Illuminate\Container\Container;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Http\Request;
-use PragmaRX\Tracker\Package\Facade as TrackerFacade;
+use Illuminate\Routing\Router;
 use PragmaRX\Tracker\Package\Tracker as TrackerService;
 
 class MiddlewareTest extends TestCase
@@ -41,9 +39,9 @@ class MiddlewareTest extends TestCase
 
     protected function getRouter()
     {
-        $container = new Container;
+        $container = new Container();
 
-        $router = new Router(new Dispatcher, $container);
+        $router = new Router(new Dispatcher(), $container);
 
         $container->singleton(Registrar::class, function () use ($router) {
             return $router;
