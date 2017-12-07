@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Tracker\Package;
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 class ServiceProvider extends IlluminateServiceProvider
@@ -22,14 +23,6 @@ class ServiceProvider extends IlluminateServiceProvider
     }
 
     /**
-     * @return string
-     */
-    protected function getConfigFile()
-    {
-        return config_path('tracker.yml');
-    }
-
-    /**
      * Register the service provider.
      *
      * @return void
@@ -45,7 +38,7 @@ class ServiceProvider extends IlluminateServiceProvider
     private function publishConfiguration()
     {
         $this->publishes([
-            __DIR__.'/../config/tracker.yml' => $this->getConfigFile(),
+            __DIR__.'/../config/tracker.php' => config_path('tracker.php'),
         ]);
     }
 
@@ -54,12 +47,8 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     private function registerService()
     {
-        $this->app->singleton('pragmarx.tracker', function () {
-            $tracker = new Tracker();
-
-            $tracker->loadConfig($this->getConfigFile());
-
-            return $tracker;
+        $this->app->singleton('pragmarx.tracker', function (Application $app) {
+            return $app->make(Tracker::class);
         });
     }
 }

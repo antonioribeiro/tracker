@@ -2,20 +2,38 @@
 
 namespace PragmaRX\Tracker\Package;
 
-use PragmaRX\Tracker\Package\Exceptions\MethodNotFound;
 use PragmaRX\Tracker\Package\Support\Config;
-use PragmaRX\Yaml\Package\Yaml;
+use PragmaRX\Tracker\Package\Support\Logger;
+use PragmaRX\Tracker\Package\Exceptions\MethodNotFound;
 
 class Tracker
 {
     /**
+     * @var bool
+     */
+    protected $booted = false;
+
+    /**
+     * @var Config
+     */
+    protected $config;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * Version constructor.
      *
      * @param Config $config
+     * @param Logger $logger
      */
-    public function __construct(Config $config = null, Yaml $yaml = null)
+    public function __construct(Config $config, Logger $logger)
     {
-        $this->instantiate($config, $yaml);
+        $this->config = $config;
+
+        $this->logger = $logger;
     }
 
     /**
@@ -40,38 +58,13 @@ class Tracker
     }
 
     /**
-     * Instantiate all dependencies.
+     * Config getter.
      *
-     * @param $config
-     * @param $yaml
+     * @return Config
      */
-    protected function instantiate($config, $yaml)
+    public function getConfig()
     {
-        $yaml = $this->instantiateClass($yaml, 'yaml', Yaml::class);
-
-        $config = $this->instantiateClass($config, 'config', Config::class, [$yaml]);
-
-//
-//        $this->instantiateClass($parser, 'parser', Parser::class);
-//
-//        $this->instantiateClass($resolver, 'resolver', Resolver::class);
-    }
-
-    /**
-     * Instantiate a class.
-     *
-     * @param $instance  object
-     * @param $property  string
-     * @param $class     string
-     * @param array $arguments
-     *
-     * @return object|Tracker
-     */
-    protected function instantiateClass($instance, $property, $class = null, $arguments = [])
-    {
-        return $this->{$property} = is_null($instance)
-            ? $instance = new $class(...$arguments)
-            : $instance;
+        return $this->config;
     }
 
     /**
@@ -82,5 +75,75 @@ class Tracker
     public function instance()
     {
         return $this;
+    }
+
+    /**
+     * Boot & track.
+     *
+     * @return bool
+     */
+    public function boot()
+    {
+        if ($this->booted) {
+            return false;
+        }
+
+        $this->setBooted(true);
+
+        return $this->track();
+    }
+
+    /**
+     * Check if Tracker is booted.
+     *
+     * @return bool
+     */
+    public function isBooted()
+    {
+        return $this->booted;
+    }
+
+    /**
+     * Check if the current request is trackable.
+     *
+     * @return mixed
+     */
+    protected function isTrackable()
+    {
+        dd($this->config->enabled, $this->config->logEnabled);
+        return $this->config->enabled &&
+               $this->config->logEnabled //&&
+
+//            $this->logIsEnabled() &&
+//            $this->allowConsole() &&
+//            $this->parserIsAvailable() &&
+//            $this->isTrackableIp() &&
+//            $this->isTrackableEnvironment() &&
+//            $this->routeIsTrackable() &&
+//            $this->pathIsTrackable() &&
+//            $this->notRobotOrTrackable()
+        ;
+    }
+
+    /**
+     * Booted setter.
+     *
+     * @param bool $booted
+     */
+    public function setBooted(bool $booted)
+    {
+        $this->booted = $booted;
+    }
+
+    /**
+     * Track current request.
+     *
+     * @return bool
+     */
+    public function track()
+    {
+        return !$this->isTrackable()
+            ? false
+            : $this->logger->log();
     }
 }

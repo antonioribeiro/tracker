@@ -22,6 +22,7 @@
         "laravel/framework": "^5.5",
         "jenssegers/agent": "^2.6",
         "pragmarx/datatables": "1.4.11",
+        "pragmarx/coollection": "^0.1",
         "snowplow/referer-parser": "dev-master#r2017-06",
         "pragmarx/yaml": "^0.1",
         "jaybizzle/crawler-detect": "^1.2"

@@ -3,6 +3,7 @@
 namespace PragmaRX\Tracker\Tests;
 
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Routing\Registrar;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
@@ -15,7 +16,7 @@ class MiddlewareTest extends TestCase
         $this->assertInstanceOf(TrackerService::class, $this->tracker);
     }
 
-    public function test_can_route()
+    public function test_can_use_routing_system()
     {
         $router = $this->getRouter();
 
@@ -28,13 +29,25 @@ class MiddlewareTest extends TestCase
 
     public function test_use_middleware()
     {
+        $this->assertFalse($this->tracker->isBooted());
+
         $router = $this->getRouter();
 
-        $router->get('/home', function () {
-            return 'working';
+        $router->get('/no-tracking', function () {
+            return 'not tracked';
+        });
+
+        $this->assertEquals('not tracked', $router->dispatch(Request::create('no-tracking', 'GET'))->getContent());
+
+        $this->assertFalse($this->tracker->isBooted());
+
+        $router->get('/tracking', function () {
+            return 'being tracked';
         })->middleware(\PragmaRX\Tracker\Package\Http\Middleware\Tracker::class);
 
-        $this->assertEquals('working', $router->dispatch(Request::create('home', 'GET'))->getContent());
+        $this->assertEquals('being tracked', $router->dispatch(Request::create('tracking', 'GET'))->getContent());
+
+        $this->assertTrue($this->tracker->isBooted());
     }
 
     protected function getRouter()

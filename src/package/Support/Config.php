@@ -2,54 +2,58 @@
 
 namespace PragmaRX\Tracker\Package\Support;
 
-use Illuminate\Support\Collection;
-use PragmaRX\Tracker\Package\Exceptions\MissingConfiguration;
-use PragmaRX\Yaml\Package\Yaml;
+use PragmaRX\Tracker\Package\Exceptions\MethodNotFound;
+use PragmaRX\Tracker\Package\Exceptions\PropertyNotFound;
 
 class Config
 {
     /**
-     * The config loader.
+     * Dynamically get config data.
      *
-     * @var \PragmaRX\Yaml\Package\Yaml
-     */
-    protected $yaml;
-
-    /**
-     * The config file stub.
+     * @param $name
+     * @param array $arguments
      *
-     * @var string
-     */
-    protected $configFileStub;
-
-    /**
-     * The config file.
+     * @throws MethodNotFound
      *
-     * @var string
+     * @return mixed
      */
-    protected $configFile;
-
-    /**
-     * Cache constructor.
-     *
-     * @param Yaml|null $yaml
-     */
-    public function __construct(Yaml $yaml)
+    public function __call($name, array $arguments)
     {
-        $this->yaml = $yaml;
+        if (!$this->hasVariable($name)) {
+            throw new MethodNotFound("Method '{$name}' doesn't exists in this object.");
+        }
+
+        return $this->get($name);
+    }
+
+    /**
+     * Generic getter.
+     *
+     * @param $name
+     * @return mixed
+     * @throws PropertyNotFound
+     */
+    public function __get($name)
+    {
+        if (!$this->hasVariable($name)) {
+            throw new PropertyNotFound("Method '{$name}' doesn't exists in this object.");
+        }
+
+        return $this->get($name);
     }
 
     /**
      * Get config value.
      *
-     * @param $string
+     * @param $var
      * @param mixed|null $default
-     *
      * @return \Illuminate\Config\Repository|mixed
      */
-    public function get($string, $default = null)
+    public function get($var, $default = null)
     {
-        return config("version.{$string}", $default);
+        $var = snake($var);
+
+        return coollect(config('tracker'))->$var;
     }
 
     /**
@@ -61,75 +65,19 @@ class Config
      */
     public function getRoot()
     {
-        return config('version');
+        return coollect(config('tracker'));
     }
 
     /**
-     * Set the config file stub.
+     * Check if config has a variable set.
      *
-     * @return string
+     * @param $name
+     * @return bool
      */
-    public function getConfigFileStub()
+    public function hasVariable($name)
     {
-        return $this->configFileStub;
-    }
-
-    /**
-     * Load YAML file to Laravel config.
-     *
-     * @param $path
-     *
-     * @return mixed
-     */
-    protected function loadToLaravelConfig($path)
-    {
-        return $this->yaml->loadToConfig($path, 'version');
-    }
-
-    /**
-     * Set the config file stub.
-     *
-     * @param string $configFileStub
-     */
-    public function setConfigFileStub($configFileStub)
-    {
-        $this->configFileStub = $configFileStub;
-    }
-
-    /**
-     * Load package YAML configuration.
-     *
-     * @param $path
-     *
-     * @return Collection
-     */
-    public function loadConfig($path = null)
-    {
-        return $this->loadToLaravelConfig(
-            $this->setConfigFile($this->getConfigFile($path))
-        );
-    }
-
-    /**
-     * Get the config file path.
-     *
-     * @param string|null $file
-     *
-     * @throws MissingConfiguration
-     *
-     * @return string
-     */
-    public function getConfigFile($file = null)
-    {
-        if (!empty($file) && !file_exists($file)) {
-            throw new MissingConfiguration("File {$file} does not exists.");
-        }
-
-        $file = $file ?: $this->configFile;
-
-        return !empty($file)
-            ? $file
-            : $this->getConfigFileStub();
+        return $this->getRoot()->has($name) ||
+            $this->getRoot()->has(snake($name));
     }
 
     /**
@@ -139,20 +87,6 @@ class Config
      */
     public function update($config)
     {
-        config(['version' => $config]);
-
-        $this->yaml->saveAsYaml($config, $this->configFile);
-    }
-
-    /**
-     * Set the current config file.
-     *
-     * @param $file
-     *
-     * @return mixed
-     */
-    public function setConfigFile($file)
-    {
-        return $this->configFile = $file;
+        config(['tracker' => $config]);
     }
 }
