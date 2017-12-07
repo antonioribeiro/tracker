@@ -55,9 +55,11 @@ class ServiceProvider extends IlluminateServiceProvider
     private function registerService()
     {
         $this->app->singleton('pragmarx.tracker', function () {
-            //$tracker = new Tracker();
+            $tracker = new Tracker();
 
-            //$tracker->loadConfig($this->getConfigFile());t
+            $tracker->loadConfig($this->getConfigFile());
+
+            return $tracker;
         });
     }
 }

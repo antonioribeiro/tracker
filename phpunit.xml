@@ -25,7 +25,7 @@
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true" processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
-            <exclude></exclude>
+            <exclude>src/TRACKER3</exclude>
         </whitelist>
     </filter>
     <php>

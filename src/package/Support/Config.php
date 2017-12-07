@@ -3,6 +3,7 @@
 namespace PragmaRX\Tracker\Package\Support;
 
 use Illuminate\Support\Collection;
+use PragmaRX\Tracker\Package\Exceptions\MissingConfiguration;
 use PragmaRX\Yaml\Package\Yaml;
 
 class Config
@@ -113,14 +114,18 @@ class Config
      * Get the config file path.
      *
      * @param string|null $file
-     *
      * @return string
+     * @throws MissingConfiguration
      */
     public function getConfigFile($file = null)
     {
+        if (!empty($file) && !file_exists($file)) {
+            throw new MissingConfiguration("File {$file} does not exists.");
+        }
+
         $file = $file ?: $this->configFile;
 
-        return file_exists($file)
+        return !empty($file)
             ? $file
             : $this->getConfigFileStub();
     }

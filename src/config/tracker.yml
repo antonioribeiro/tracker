@@ -1,0 +1,192 @@
+enabled: false
+
+
+#
+#
+#    'cache_enabled' => true,
+#
+#
+#    'use_middleware' => false,
+#
+#
+#    'do_not_track_robots' => false,
+#
+#
+#    'do_not_track_environments' => [
+#        // defaults to none
+#    ],
+#
+#
+#    'do_not_track_routes' => [
+#        'tracker.stats.*',
+#    ],
+#
+#
+#    'do_not_track_paths' => [
+#        'api'
+#    ],
+#
+#    'do_not_track_ips' => [
+#        '127.0.0.0/24', /// range 127.0.0.1 - 127.0.0.255
+#    ],
+#
+#
+#    'log_untrackable_sessions' => true,
+#
+#    'log_enabled' => false,
+#
+#    'console_log_enabled' => false,
+#
+#    'log_sql_queries' => false,
+#
+#    'connection' => 'tracker',
+#
+#    'do_not_log_sql_queries_connections' => [
+#        'tracker',
+#    ],
+#
+#    'geoip_database_path' => 'geoip',
+#
+#    'log_sql_queries_bindings' => false,
+#
+#    'log_events' => false,
+#
+#    'log_only_events' => [
+#        // defaults to logging all events
+#    ],
+#
+#    'id_columns_names' => [
+#        'id',
+#    ],
+#
+#    'do_not_log_events' => [
+#        'illuminate.log',
+#        'eloquent.*',
+#        'router.*',
+#        'composing: *',
+#        'creating: *',
+#    ],
+#
+#    'log_geoip' => false,
+#
+#    'log_user_agents' => false,
+#
+#    'log_users' => false,
+#
+#    'log_devices' => false,
+#
+#    'log_languages' => false,
+#
+#    'log_referers' => false,
+#
+#    'log_paths' => false,
+#
+#    'log_queries' => false,
+#
+#    'log_routes' => false,
+#
+#    'log_exceptions' => false,
+#
+#    'store_cookie_tracker' => false,
+#
+#
+#    'tracker_cookie_name' => 'please_change_this_cookie_name',
+#
+#
+#    'tracker_session_name' => 'tracker_session',
+#
+#
+#
+#    'user_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\User',
+#
+#
+#
+#    'session_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Session',
+#
+#    'log_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Log',
+#
+#    'path_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Path',
+#
+#    'query_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Query',
+#
+#    'query_argument_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\QueryArgument',
+#
+#    'agent_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Agent',
+#
+#    'device_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Device',
+#
+#    'cookie_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Cookie',
+#
+#    'domain_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Domain',
+#
+#    'referer_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Referer',
+#
+#    'referer_search_term_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\RefererSearchTerm',
+#
+#    'route_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Route',
+#
+#    'route_path_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\RoutePath',
+#
+#    'route_path_parameter_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\RoutePathParameter',
+#
+#    'error_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Error',
+#
+#    'geoip_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\GeoIp',
+#
+#    'sql_query_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQuery',
+#
+#    'sql_query_binding_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryBinding',
+#
+#    'sql_query_binding_parameter_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryBindingParameter',
+#
+#    'sql_query_log_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryLog',
+#
+#    'connection_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Connection',
+#
+#    'event_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Event',
+#
+#    'event_log_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\EventLog',
+#
+#    'system_class_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SystemClass',
+#
+#    'language_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Language',
+#
+#
+#    'authentication_ioc_binding' => ['auth'], // defaults to 'auth' in Illuminate\Support\Facades\Auth
+#
+#    'authenticated_check_method' => 'check', // to Auth::check()
+#
+#    'authenticated_user_method' => 'user', // to Auth::user()
+#
+#    'authenticated_user_id_column' => 'id', // to Auth::user()->id
+#
+#    'authenticated_user_username_column' => 'email', // to Auth::user()->email
+#
+#
+#    'stats_panel_enabled' => false,
+#
+#
+#
+#    'stats_routes_before_filter' => '',
+#
+#
+#
+#    'stats_routes_after_filter' => '',
+#
+#
+#
+#    'stats_routes_middleware' => 'web',
+#
+#
+#    'stats_template_path' => '/templates/sb-admin-2',
+#
+#
+#
+#    'stats_base_uri' => 'stats',
+#
+#
+#    'stats_layout' => 'pragmarx/tracker::layout',
+#
+#
+#    'stats_controllers_namespace' => 'PragmaRX\Tracker\Vendor\Laravel\Controllers',
+#
