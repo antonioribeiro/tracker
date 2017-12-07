@@ -114,8 +114,10 @@ class Config
      * Get the config file path.
      *
      * @param string|null $file
-     * @return string
+     *
      * @throws MissingConfiguration
+     *
+     * @return string
      */
     public function getConfigFile($file = null)
     {
