@@ -30,8 +30,10 @@ class Config
      * Generic getter.
      *
      * @param $name
-     * @return mixed
+     *
      * @throws PropertyNotFound
+     *
+     * @return mixed
      */
     public function __get($name)
     {
@@ -47,6 +49,7 @@ class Config
      *
      * @param $var
      * @param mixed|null $default
+     *
      * @return \Illuminate\Config\Repository|mixed
      */
     public function get($var, $default = null)
@@ -72,6 +75,7 @@ class Config
      * Check if config has a variable set.
      *
      * @param $name
+     *
      * @return bool
      */
     public function hasVariable($name)
@@ -98,7 +102,7 @@ class Config
     public function set($config)
     {
         config(
-            collect($config)->mapWithKeys(function($value, $key) {
+            collect($config)->mapWithKeys(function ($value, $key) {
                 return ["tracker.{$key}" => $value];
             })->toArray()
         );
