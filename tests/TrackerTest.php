@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Tracker\Tests;
 
-use PragmaRX\Tracker\Package\Exceptions\MissingConfiguration;
 use PragmaRX\Tracker\Package\Tracker as TrackerService;
 
 class TrackerTest extends TestCase

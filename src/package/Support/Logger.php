@@ -12,6 +12,5 @@ class Logger extends MonologLogger
      */
     protected function makeLogData()
     {
-
     }
 }

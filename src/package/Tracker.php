@@ -2,11 +2,10 @@
 
 namespace PragmaRX\Tracker\Package;
 
-use PragmaRX\Tracker\Data\Repositories\Data;
 use PragmaRX\Tracker\Data\Repositories\Manager;
+use PragmaRX\Tracker\Package\Exceptions\MethodNotFound;
 use PragmaRX\Tracker\Package\Support\Config;
 use PragmaRX\Tracker\Package\Support\Logger;
-use PragmaRX\Tracker\Package\Exceptions\MethodNotFound;
 
 class Tracker
 {
@@ -35,8 +34,8 @@ class Tracker
     /**
      * Version constructor.
      *
-     * @param Config $config
-     * @param Logger $logger
+     * @param Config  $config
+     * @param Logger  $logger
      * @param Manager $repositoryManager
      */
     public function __construct(Config $config, Logger $logger, Manager $repositoryManager)
@@ -131,13 +130,13 @@ class Tracker
 //            $this->routeIsTrackable() &&
 //            $this->pathIsTrackable() &&
 //            $this->notRobotOrTrackable()
-        ;
+;
     }
 
     /**
      * Booted setter.
      *
-z     * @param bool $booted
+     * z     * @param bool $booted
      */
     public function setBooted(bool $booted)
     {
