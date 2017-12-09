@@ -27,7 +27,7 @@ class MiddlewareTest extends TestCase
         $this->assertEquals('hello', $router->dispatch(Request::create('foo/bar', 'GET'))->getContent());
     }
 
-    public function test_use_middleware()
+    public function test_can_boot_tracker()
     {
         $this->assertFalse($this->tracker->isBooted());
 

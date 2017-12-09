@@ -19,8 +19,17 @@ class TrackerTest extends TestCase
         $this->assertInstanceOf(TrackerService::class, $this->tracker);
     }
 
-    public function test_can_detect_missing_configuration()
+    public function test_can_load_configuration()
     {
-        $this->tracker->track();
+        $this->assertTrue($this->tracker->getConfig()->enabled);
+    }
+
+    public function test_can_work_on_console()
+    {
+        $this->assertTrue($this->tracker->allowConsole());
+
+        $this->tracker->getConfig()->set(['console_log_enabled' => false]);
+
+        $this->assertFalse($this->tracker->allowConsole());
     }
 }

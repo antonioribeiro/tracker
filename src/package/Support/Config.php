@@ -89,4 +89,18 @@ class Config
     {
         config(['tracker' => $config]);
     }
+
+    /**
+     * Update the config file.
+     *
+     * @param $config
+     */
+    public function set($config)
+    {
+        config(
+            collect($config)->mapWithKeys(function($value, $key) {
+                return ["tracker.{$key}" => $value];
+            })->toArray()
+        );
+    }
 }

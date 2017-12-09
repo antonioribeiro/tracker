@@ -2,12 +2,21 @@
 
 namespace PragmaRX\Tracker\Package;
 
+use PragmaRX\Tracker\Data\Repositories\Data;
+use PragmaRX\Tracker\Data\Repositories\Manager;
 use PragmaRX\Tracker\Package\Support\Config;
 use PragmaRX\Tracker\Package\Support\Logger;
 use PragmaRX\Tracker\Package\Exceptions\MethodNotFound;
 
 class Tracker
 {
+    /**
+     * Repository manager.
+     *
+     * @var Manager
+     */
+    private $repository;
+
     /**
      * @var bool
      */
@@ -28,12 +37,15 @@ class Tracker
      *
      * @param Config $config
      * @param Logger $logger
+     * @param Manager $repositoryManager
      */
-    public function __construct(Config $config, Logger $logger)
+    public function __construct(Config $config, Logger $logger, Manager $repositoryManager)
     {
         $this->config = $config;
 
         $this->logger = $logger;
+
+        $this->repository = $repositoryManager;
     }
 
     /**
@@ -110,13 +122,10 @@ class Tracker
      */
     protected function isTrackable()
     {
-        dd($this->config->enabled, $this->config->logEnabled);
         return $this->config->enabled &&
-               $this->config->logEnabled //&&
-
-//            $this->logIsEnabled() &&
-//            $this->allowConsole() &&
-//            $this->parserIsAvailable() &&
+               $this->config->logEnabled &&
+               $this->allowConsole() &&
+               $this->userAgentParserIsAvailable() //&&
 //            $this->isTrackableIp() &&
 //            $this->isTrackableEnvironment() &&
 //            $this->routeIsTrackable() &&
@@ -128,7 +137,7 @@ class Tracker
     /**
      * Booted setter.
      *
-     * @param bool $booted
+z     * @param bool $booted
      */
     public function setBooted(bool $booted)
     {
@@ -144,6 +153,28 @@ class Tracker
     {
         return !$this->isTrackable()
             ? false
-            : $this->logger->log();
+            : $this->repository->log();
+    }
+
+    /**
+     * Check if Tracker can work on console.
+     *
+     * @return bool
+     */
+    public function allowConsole()
+    {
+        return
+            (!app()->runningInConsole()) ||
+            $this->config->consoleLogEnabled;
+    }
+
+    /**
+     * Check if parser is available.
+     *
+     * @return bool
+     */
+    public function userAgentParserIsAvailable()
+    {
+        return $this->repository->userAgentParserIsAvailable();
     }
 }

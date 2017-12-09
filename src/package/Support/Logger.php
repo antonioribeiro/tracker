@@ -2,18 +2,11 @@
 
 namespace PragmaRX\Tracker\Package\Support;
 
-class Logger
-{
-    /**
-     * Log data to database.
-     *
-     * @return bool
-     */
-    public function log()
-    {
-        return false;
-    }
+use Monolog\Logger as MonologLogger;
+use PragmaRX\Tracker\Data\Repositories\Data;
 
+class Logger extends MonologLogger
+{
     /**
      * Make the log data.
      */

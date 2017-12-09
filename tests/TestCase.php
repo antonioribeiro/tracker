@@ -29,6 +29,8 @@ abstract class TestCase extends OrchestraTestCase
         parent::setup();
 
         $this->tracker = TrackerFacade::instance();
+
+        $this->tracker->getConfig()->set(['console_log_enabled' => true]);
     }
 
     protected function getPackageProviders($app)
