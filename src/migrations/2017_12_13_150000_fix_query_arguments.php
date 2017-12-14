@@ -1,8 +1,6 @@
 <?php
 
 use PragmaRX\Tracker\Support\Migration;
-use PragmaRX\Tracker\Vendor\Laravel\Models\Agent;
-use PragmaRX\Tracker\Vendor\Laravel\Models\QueryArgument;
 
 class FixQueryArguments extends Migration
 {
@@ -24,10 +22,9 @@ class FixQueryArguments extends Migration
             $this->builder->table(
                 $this->table,
                 function ($table) {
-                    $table->string('value')->nullable()->index()->change();
+                    $table->string('value')->nullable()->change();
                 }
             );
-
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -44,10 +41,9 @@ class FixQueryArguments extends Migration
             $this->builder->table(
                 $this->table,
                 function ($table) {
-                    $table->string('value')->index()->change();
+                    $table->string('value')->change();
                 }
             );
-
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
