@@ -23,7 +23,8 @@ class Tables extends Base
      *
      * @return void
      */
-    public function handle(){
+    public function handle()
+    {
         $this->fire();
     }
 
