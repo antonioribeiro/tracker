@@ -25,8 +25,9 @@ class CreateTrackerQueriesTable extends Migration
 
                 $table->string('query')->index();
 
-                $table->timestamp('created_at')->index();
-                $table->timestamp('updated_at')->index();
+                $table->timestamps();
+                $table->index('created_at');
+                $table->index('updated_at');
             }
         );
     }
