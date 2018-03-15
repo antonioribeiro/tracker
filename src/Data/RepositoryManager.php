@@ -316,7 +316,7 @@ class RepositoryManager implements RepositoryManagerInterface
                     [
                         'query_id' => $id,
                         'argument' => $argument,
-                        'value'    => $value,
+                        'value'    => empty($value) ? '' : $value,
                     ]
                 );
             }
