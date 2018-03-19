@@ -502,7 +502,7 @@ For Laravel 4+ please use version 2.0.10.
 #### Add the service provider to your app/config/app.php:
 
 ```php
-'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
+ PragmaRX\Tracker\Vendor\Laravel\ServiceProvider::class,
 ```
 
 #### Add the alias to the facade on your app/config/app.php:
