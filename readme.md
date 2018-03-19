@@ -670,6 +670,7 @@ You may need to change your Tracker database connection configuration to
 ## Author
 
 [Antonio Carlos Ribeiro](http://twitter.com/iantonioribeiro)
+[All Contributors](https://github.com/antonioribeiro/tracker/graphs/contributors)
 
 ## License
 
