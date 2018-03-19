@@ -11,15 +11,15 @@ Add cache_enabled key to your config\tracker.php:
 
 ## from 2.0.x to 2.0.4 or 2.0.9 
 
-####Run Artisan tracker:tables command
+#### Run Artisan tracker:tables command
 
     php artisan tracker:tables
 
-####Migrate
+#### Migrate
 
     php artisan migrate
 
-####If you already have executed and get the error "1215 Cannot add foreign key constraint"
+#### If you already have executed and get the error "1215 Cannot add foreign key constraint"
 
 You'll have to upgrade your migrations:
 
@@ -48,20 +48,20 @@ A [massive update happened at StartBootstrap](https://github.com/IronSummitMedia
 
 ## to 0.5.1
 
-####As `tracker_route_paths.route_id` column was wrongly set to string, you need to change it to int8 or bigint. This is how you do this
+#### As `tracker_route_paths.route_id` column was wrongly set to string, you need to change it to int8 or bigint. This is how you do this
  
-#####In PostgreSQL 
+##### In PostgreSQL 
 ```
 ALTER TABLE "tracker_route_paths" ALTER COLUMN route_id TYPE BIGINT 
     USING CAST(CASE route_id WHEN '' THEN NULL ELSE route_id END AS BIGINT)
 ```
 
-#####In MySQL
+##### In MySQL
 ```
 ALTER TABLE tracker_route_paths CHANGE route_id route_id bigint unsigned NULL;
 ```
 
-####Add the following keys to your `app/config/packages/pragmarx/tracker/config.php`:
+#### Add the following keys to your `app/config/packages/pragmarx/tracker/config.php`:
 
 ```
 'log_exceptions' => true,
@@ -75,14 +75,14 @@ ALTER TABLE tracker_route_paths CHANGE route_id route_id bigint unsigned NULL;
    
 ## to 0.5.0
 
-####Download sb-panel v2, if you want to access the new Stats Panel:
+#### Download sb-panel v2, if you want to access the new Stats Panel:
 
 ```
 wget --output-document=/tmp/sba2.zip http://startbootstrap.com/downloads/sb-admin-v2.zip
 unzip /tmp/sba2.zip -d public/templates/
 ```
 
-####Add the following keys to your `app/config/packages/pragmarx/tracker/config.php`:
+#### Add the following keys to your `app/config/packages/pragmarx/tracker/config.php`:
 
 ```
 /**
@@ -123,7 +123,7 @@ unzip /tmp/sba2.zip -d public/templates/
 'stats_controllers_namespace' => 'PragmaRX\Tracker\Vendor\Laravel\Controllers',
 ```
 
-####The Stats Panel must be enabled in your config file
+#### The Stats Panel must be enabled in your config file
 
 ```
 'stats_panel_enabled' => true,
@@ -131,7 +131,7 @@ unzip /tmp/sba2.zip -d public/templates/
 
 ## to 0.4.0
 
-####Add the following keys to your `app/config/packages/pragmarx/tracker/config.php`:
+#### Add the following keys to your `app/config/packages/pragmarx/tracker/config.php`:
 
 ```
 'log_geoip' => true,
@@ -144,8 +144,8 @@ unzip /tmp/sba2.zip -d public/templates/
 'log_routes' => true,
 ```
 
-####On `tracker_sessions` table, alter columns `device_id` and `agent_id` to be nullable.
-####On `tracker_log` table, alter column `path_id` to be nullable.
+#### On `tracker_sessions` table, alter columns `device_id` and `agent_id` to be nullable.
+#### On `tracker_log` table, alter column `path_id` to be nullable.
 
 ## to 0.3.2
 

@@ -20,7 +20,7 @@ class CreateTrackerDevicesTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function($table) {
+            function ($table) {
                 $table->bigIncrements('id');
 
                 $table->string('kind', 16)->index();
@@ -31,8 +31,9 @@ class CreateTrackerDevicesTable extends Migration
 
                 $table->unique(['kind', 'model', 'platform', 'platform_version']);
 
-                $table->timestamp('created_at')->index();
-                $table->timestamp('updated_at')->index();
+                $table->timestamps();
+                $table->index('created_at');
+                $table->index('updated_at');
             }
         );
     }

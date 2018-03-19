@@ -20,14 +20,15 @@ class CreateTrackerSqlQueryBindingsTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function($table) {
+            function ($table) {
                 $table->bigIncrements('id');
 
                 $table->string('sha1', 40)->index();
                 $table->text('serialized');
 
-                $table->timestamp('created_at')->index();
-                $table->timestamp('updated_at')->index();
+                $table->timestamps();
+                $table->index('created_at');
+                $table->index('updated_at');
             }
         );
     }

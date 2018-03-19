@@ -20,7 +20,7 @@ class CreateTrackerGeoipTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function($table) {
+            function ($table) {
                 $table->bigIncrements('id');
 
                 $table->double('latitude')->nullable()->index();
@@ -37,8 +37,9 @@ class CreateTrackerGeoipTable extends Migration
                 $table->double('metro_code')->nullable();
                 $table->string('continent_code', 2)->nullable();
 
-                $table->timestamp('created_at')->index();
-                $table->timestamp('updated_at')->index();
+                $table->timestamps();
+                $table->index('created_at');
+                $table->index('updated_at');
             }
         );
     }

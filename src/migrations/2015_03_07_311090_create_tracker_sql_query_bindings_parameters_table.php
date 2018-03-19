@@ -20,15 +20,16 @@ class CreateTrackerSqlQueryBindingsParametersTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function($table) {
+            function ($table) {
                 $table->bigIncrements('id');
 
                 $table->bigInteger('sql_query_bindings_id')->unsigned()->nullable();
                 $table->string('name')->nullable()->index();
                 $table->text('value')->nullable();
 
-                $table->timestamp('created_at')->index();
-                $table->timestamp('updated_at')->index();
+                $table->timestamps();
+                $table->index('created_at');
+                $table->index('updated_at');
             }
         );
     }

@@ -11,11 +11,13 @@ class Authentication
 
     private $authentication = [];
 
+    private $app;
+
     public function __construct(Config $config, Application $app)
     {
-        $this->config = $config;
+        $this->app = $app;
 
-        $this->instantiateAuthentication($app);
+        $this->config = $config;
     }
 
     public function check()
@@ -25,23 +27,24 @@ class Authentication
 
     private function executeAuthMethod($method)
     {
-        foreach ($this->authentication as $auth) {
-            if ($data = $auth->{$method}()) {
-                return $data;
+        foreach ($this->getAuthentication() as $auth) {
+            if (is_callable([$auth, $method], true, $callable_name)) {
+                if ($data = $auth->$method()) {
+                    return $data;
+                }
             }
         }
 
         return false;
     }
 
-    /**
-     * @param Application $app
-     */
-    private function instantiateAuthentication(Application $app)
+    private function getAuthentication()
     {
         foreach ((array) $this->config->get('authentication_ioc_binding') as $binding) {
-            $this->authentication[] = $app->make($binding);
+            $this->authentication[] = $this->app->make($binding);
         }
+
+        return $this->authentication;
     }
 
     public function user()

@@ -2,14 +2,14 @@
 
 use PragmaRX\Tracker\Support\Migration;
 
-class AddNullableToTrackerError extends Migration
+class FixQueryArguments extends Migration
 {
     /**
      * Table related to this migration.
      *
      * @var string
      */
-    private $table = 'tracker_errors';
+    private $table = 'tracker_query_arguments';
 
     /**
      * Run the migrations.
@@ -22,10 +22,11 @@ class AddNullableToTrackerError extends Migration
             $this->builder->table(
                 $this->table,
                 function ($table) {
-                    $table->string('code')->nullable()->change();
+                    $table->string('value')->nullable()->change();
                 }
             );
         } catch (\Exception $e) {
+            dd($e->getMessage());
         }
     }
 
@@ -36,5 +37,15 @@ class AddNullableToTrackerError extends Migration
      */
     public function migrateDown()
     {
+        try {
+            $this->builder->table(
+                $this->table,
+                function ($table) {
+                    $table->string('value')->change();
+                }
+            );
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace PragmaRX\Tracker\Data;
 use Illuminate\Routing\Router as IlluminateRouter;
 use Illuminate\Session\Store as IlluminateSession;
 use PragmaRX\Support\Config;
+use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Tracker\Data\Repositories\Agent;
 use PragmaRX\Tracker\Data\Repositories\Connection;
 use PragmaRX\Tracker\Data\Repositories\Cookie;
@@ -283,7 +284,7 @@ class RepositoryManager implements RepositoryManagerInterface
 
     public function findOrCreateAgent($data)
     {
-        return $this->agentRepository->findOrCreate($data, ['name']);
+        return $this->agentRepository->findOrCreate($data, ['name_hash']);
     }
 
     public function findOrCreateDevice($data)
@@ -315,7 +316,7 @@ class RepositoryManager implements RepositoryManagerInterface
                     [
                         'query_id' => $id,
                         'argument' => $argument,
-                        'value'    => $value,
+                        'value'    => empty($value) ? '' : $value,
                     ]
                 );
             }
@@ -347,12 +348,13 @@ class RepositoryManager implements RepositoryManagerInterface
     public function getCurrentAgentArray()
     {
         return [
-            'name' => $this->getCurrentUserAgent()
-                ?: 'Other',
+            'name' => $name = $this->getCurrentUserAgent() ?: 'Other',
 
             'browser' => $this->userAgentParser->userAgent->family,
 
             'browser_version' => $this->userAgentParser->getUserAgentVersion(),
+
+            'name_hash' => hash('sha256', $name),
         ];
     }
 
@@ -474,6 +476,10 @@ class RepositoryManager implements RepositoryManagerInterface
         if ($referer) {
             $url = parse_url($referer);
 
+            if (!isset($url['host'])) {
+                return;
+            }
+
             $parts = explode('.', $url['host']);
 
             $domain = array_pop($parts);
@@ -560,11 +566,11 @@ class RepositoryManager implements RepositoryManagerInterface
             return $name;
         }
 
-        return '/'.$route->current()->getUri();
+        return '/'.$route->current()->uri();
     }
 
     /**
-     * @param boolean $created
+     * @param bool $created
      */
     private function getRoutePath($route_id, $path, &$created = null)
     {
@@ -692,6 +698,11 @@ class RepositoryManager implements RepositoryManagerInterface
     public function routeIsTrackable($route)
     {
         return $this->routeRepository->isTrackable($route);
+    }
+
+    public function pathIsTrackable($path)
+    {
+        return $this->routeRepository->pathIsTrackable($path);
     }
 
     public function setSessionData($data)

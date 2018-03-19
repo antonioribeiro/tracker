@@ -20,15 +20,16 @@ class CreateTrackerReferersTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function($table) {
+            function ($table) {
                 $table->bigIncrements('id');
 
                 $table->bigInteger('domain_id')->unsigned()->index();
                 $table->string('url')->index();
                 $table->string('host');
 
-                $table->timestamp('created_at')->index();
-                $table->timestamp('updated_at')->index();
+                $table->timestamps();
+                $table->index('created_at');
+                $table->index('updated_at');
             }
         );
     }

@@ -114,7 +114,6 @@ class Session extends Repository
             return false;
         }
 
-
         if (!$this->getSessionData('uuid') == $this->getSystemSessionId()) {
             return false;
         }
@@ -183,7 +182,7 @@ class Session extends Repository
     {
         $data = $data ?: $this->getSessionData();
 
-        if ($data) {
+        if (!$data) {
             $this->resetSessionUuid($data);
 
             $this->sessionIsKnownOrCreateSession();

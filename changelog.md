@@ -1,5 +1,43 @@
 # Changelog
 
+## [3.1.8] - 2017-07-31
+### New
+- Added a config to enable/disable console logging
+
+## [3.1.7] - 2017-07-31
+### New
+- Disable console logging
+
+## [3.1.6] - 2017-07-31
+### Fixed
+- Fix wrong date column being used in log view
+
+## [3.1.5] - 2017-07-30
+### Fixed
+- Fix multiple sessions for the same request
+
+## [3.1.4] - 2017-06-25
+### Fixed
+- Browser Agent name is now being hashed
+
+## [3.1.3] - 2017-06-20
+### New
+- Show untrackable items in log
+
+
+## [3.1.2] - 2017-01-31
+### New
+- Upgraded datatables
+
+## [3.1.1] - 2017-01-31
+### New
+- Upgraded to SBAdmin 2 3.3.7+1
+
+
+## [3.1.0] - 2017-01-31
+### New
+- Upgrade to Laravel 5.4
+
 ## [3.0.0] - 2016-08-24
 ### New
 - Cache
@@ -114,11 +152,11 @@
 - HTTP cache by removing PHP session_start
 
 ## [0.5.1] - 2014-07-03
-###Added
+### Added
 - A 'Today' filter option on Stats Panel
 - All stats tables are now Google Charts Tables (paginated)
 
 ## [0.5.0] - 2014-07-02
-###Changed
+### Changed
 - Moved pie charts from flot to Google Charts
  

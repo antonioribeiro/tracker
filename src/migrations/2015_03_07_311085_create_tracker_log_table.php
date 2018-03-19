@@ -20,7 +20,7 @@ class CreateTrackerLogTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function($table) {
+            function ($table) {
                 $table->bigIncrements('id');
 
                 $table->bigInteger('session_id')->unsigned()->index();
@@ -34,8 +34,9 @@ class CreateTrackerLogTable extends Migration
                 $table->boolean('wants_json');
                 $table->bigInteger('error_id')->unsigned()->nullable()->index();
 
-                $table->timestamp('created_at')->index();
-                $table->timestamp('updated_at')->index();
+                $table->timestamps();
+                $table->index('created_at');
+                $table->index('updated_at');
             }
         );
     }

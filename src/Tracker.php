@@ -4,11 +4,14 @@ namespace PragmaRX\Tracker;
 
 use Illuminate\Foundation\Application as Laravel;
 use Illuminate\Http\Request;
-use Illuminate\Log\Writer as Logger;
 use Illuminate\Routing\Router;
 use PragmaRX\Support\Config;
+use PragmaRX\Support\GeoIp\Updater as GeoIpUpdater;
+use PragmaRX\Support\IpAddress;
 use PragmaRX\Tracker\Data\RepositoryManager as DataRepositoryManager;
+use PragmaRX\Tracker\Repositories\Message as MessageRepository;
 use PragmaRX\Tracker\Support\Minutes;
+use Psr\Log\LoggerInterface;
 
 class Tracker
 {
@@ -29,13 +32,22 @@ class Tracker
 
     protected $sessionData;
 
+    private $loggedItems = [];
+
+    private $booted = false;
+    /**
+     * @var MessageRepository
+     */
+    private $messageRepository;
+
     public function __construct(
         Config $config,
         DataRepositoryManager $dataRepositoryManager,
         Request $request,
         Router $route,
-        Logger $logger,
-        Laravel $laravel
+        LoggerInterface $logger,
+        Laravel $laravel,
+        MessageRepository $messageRepository
     ) {
         $this->config = $config;
 
@@ -48,6 +60,8 @@ class Tracker
         $this->logger = $logger;
 
         $this->laravel = $laravel;
+
+        $this->messageRepository = $messageRepository;
     }
 
     public function allSessions()
@@ -57,14 +71,22 @@ class Tracker
 
     public function boot()
     {
+        if ($this->booted) {
+            return false;
+        }
+
+        $this->booted = true;
+
         if ($this->isTrackable()) {
             $this->track();
         }
+
+        return true;
     }
 
     public function checkCurrentUser()
     {
-        if (!$this->getSessionData()['user_id'] && $user_id = $this->getUserId()) {
+        if (!$this->sessionData['user_id'] && $user_id = $this->getUserId()) {
             return true;
         }
 
@@ -156,6 +178,11 @@ class Tracker
         ];
     }
 
+    private function getLogger()
+    {
+        return $this->logger;
+    }
+
     public function getPathId()
     {
         return $this->config->get('log_paths')
@@ -193,6 +220,15 @@ class Tracker
     protected function getRoutePathId()
     {
         return $this->dataRepositoryManager->getRoutePathId($this->route, $this->request);
+    }
+
+    private function logUntrackable($item)
+    {
+        if ($this->config->get('log_untrackable_sessions') && !isset($this->loggedItems[$item])) {
+            $this->getLogger()->warning('TRACKER (unable to track item): '.$item);
+
+            $this->loggedItems[$item] = $item;
+        }
     }
 
     /**
@@ -267,27 +303,41 @@ class Tracker
     {
         return $this->config->get('enabled') &&
                 $this->logIsEnabled() &&
+                $this->allowConsole() &&
                 $this->parserIsAvailable() &&
                 $this->isTrackableIp() &&
                 $this->isTrackableEnvironment() &&
                 $this->routeIsTrackable() &&
+                $this->pathIsTrackable() &&
                 $this->notRobotOrTrackable();
     }
 
     protected function isTrackableEnvironment()
     {
-        return !in_array(
+        $trackable = !in_array(
             $this->laravel->environment(),
             $this->config->get('do_not_track_environments')
         );
+
+        if (!$trackable) {
+            $this->logUntrackable('environment '.$this->laravel->environment().' is not trackable.');
+        }
+
+        return $trackable;
     }
 
     protected function isTrackableIp()
     {
-        return !ipv4_in_range(
-            $this->request->getClientIp(),
+        $trackable = !IpAddress::ipv4InRange(
+            $ipAddress = $this->request->getClientIp(),
             $this->config->get('do_not_track_ips')
         );
+
+        if (!$trackable) {
+            $this->logUntrackable($ipAddress.' is not trackable.');
+        }
+
+        return $trackable;
     }
 
     public function logByRouteName($name, $minutes = null)
@@ -312,7 +362,7 @@ class Tracker
 
     protected function logIsEnabled()
     {
-        return
+        $enabled =
             $this->config->get('log_enabled') ||
             $this->config->get('log_sql_queries') ||
             $this->config->get('log_sql_queries_bindings') ||
@@ -327,6 +377,12 @@ class Tracker
             $this->config->get('log_queries') ||
             $this->config->get('log_routes') ||
             $this->config->get('log_exceptions');
+
+        if (!$enabled) {
+            $this->logUntrackable('there are no log items enabled.');
+        }
+
+        return $enabled;
     }
 
     public function logSqlQuery($query, $bindings, $time, $name)
@@ -343,9 +399,15 @@ class Tracker
 
     protected function notRobotOrTrackable()
     {
-        return
+        $trackable =
             !$this->isRobot() ||
             !$this->config->get('do_not_track_robots');
+
+        if (!$trackable) {
+            $this->logUntrackable('tracking of robots is disabled.');
+        }
+
+        return $trackable;
     }
 
     public function pageViews($minutes, $results = true)
@@ -356,6 +418,13 @@ class Tracker
     public function pageViewsByCountry($minutes, $results = true)
     {
         return $this->dataRepositoryManager->pageViewsByCountry(Minutes::make($minutes), $results);
+    }
+
+    public function allowConsole()
+    {
+        return
+            (!$this->laravel->runningInConsole()) ||
+            $this->config->get('console_log_enabled', false);
     }
 
     public function parserIsAvailable()
@@ -375,7 +444,20 @@ class Tracker
             return false;
         }
 
-        return $this->dataRepositoryManager->routeIsTrackable($this->route);
+        if (!$trackable = $this->dataRepositoryManager->routeIsTrackable($this->route)) {
+            $this->logUntrackable('route '.$this->route->getCurrentRoute()->getName().' is not trackable.');
+        }
+
+        return $trackable;
+    }
+
+    private function pathIsTrackable()
+    {
+        if (!$trackable = $this->dataRepositoryManager->pathIsTrackable($this->request->path())) {
+            $this->logUntrackable('path '.$this->request->path().' is not trackable.');
+        }
+
+        return $trackable;
     }
 
     public function routerMatched($log)
@@ -450,5 +532,31 @@ class Tracker
     public function users($minutes, $results = true)
     {
         return $this->dataRepositoryManager->users(Minutes::make($minutes), $results);
+    }
+
+    /**
+     * Get the messages.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getMessages()
+    {
+        return $this->messageRepository->getMessages();
+    }
+
+    /**
+     * Update the GeoIp2 database.
+     *
+     * @return bool
+     */
+    public function updateGeoIp()
+    {
+        $updater = new GeoIpUpdater();
+
+        $success = $updater->updateGeoIpFiles($this->config->get('geoip_database_path'));
+
+        $this->messageRepository->addMessage($updater->getMessages());
+
+        return $success;
     }
 }

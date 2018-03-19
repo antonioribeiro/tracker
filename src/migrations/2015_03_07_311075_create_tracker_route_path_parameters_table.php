@@ -20,15 +20,16 @@ class CreateTrackerRoutePathParametersTable extends Migration
     {
         $this->builder->create(
             $this->table,
-            function($table) {
+            function ($table) {
                 $table->bigIncrements('id');
 
                 $table->bigInteger('route_path_id')->unsigned()->index();
                 $table->string('parameter')->index();
                 $table->string('value')->index();
 
-                $table->timestamp('created_at')->index();
-                $table->timestamp('updated_at')->index();
+                $table->timestamps();
+                $table->index('created_at');
+                $table->index('updated_at');
             }
         );
     }
