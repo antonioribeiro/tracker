@@ -17,6 +17,7 @@
 
     "require": {
         "php": ">=5.3.7",
+        "doctrine/dbal": "^2.6",
         "laravel/framework": "~4|~5",
         "pragmarx/support": "~0.6|~0.7",
         "ramsey/uuid": "~3",
