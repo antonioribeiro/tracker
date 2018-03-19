@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.3] - 2018-03-19
+### Fixed
+- Laravel 5.6 compatibility
+
 ## [3.1.8] - 2017-07-31
 ### New
 - Added a config to enable/disable console logging
