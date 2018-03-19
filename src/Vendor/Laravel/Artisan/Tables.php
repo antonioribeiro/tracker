@@ -27,7 +27,7 @@ class Tables extends Base
     {
         $this->fire();
     }
-    
+
     /**
      * Execute the command.
      *
