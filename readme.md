@@ -630,14 +630,30 @@ Only admins can view the stats, so if you don't have an is_admin attribute on yo
 
 ```php
 public function getIsAdminAttribute()
-    {
-        return true;
-    }
+{
+    return true;
+}
 ```
 
 It can be 'admin', 'is_admin', 'root' or 'is_root'.
 
 ## Troubleshooting
+
+### Is everything enabled?
+
+Make sure Tracker is enabled in the config file. Usually this is the source of most problems.
+
+### Tail your laravel.log file
+
+``` php
+tail -f storage/logs/laravel.log
+``` 
+
+Usually non-trackable IP addresses and other messages will appear in the log:
+
+```
+[2018-03-19 21:28:08] local.WARNING: TRACKER (unable to track item): 127.0.0.1 is not trackable.
+```
 
 ### SQLSTATE[42000]: Syntax error or access violation: 1067 Invalid default value for 'field name' 
 
@@ -679,4 +695,3 @@ Tracker is licensed under the BSD 3-Clause License - see the `LICENSE` file for 
 ## Contributing
 
 Pull requests and issues are more than welcome.
-
