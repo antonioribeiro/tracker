@@ -44,12 +44,6 @@ class Tables extends Base
                 $this->info("Migration created: $destination");
             }
         }
-
-        if (isLaravel5()) {
-            $this->call('optimize');
-        } else {
-            $this->call('dump-autoload');
-        }
     }
 
     /**
