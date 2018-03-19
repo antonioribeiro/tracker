@@ -19,7 +19,7 @@ class Tables extends Base
     protected $description = 'Create the migrations for Tracker database tables and columns';
 
     /**
-     * Execute the command (Compatibility with laravel 5.5).
+     * Execute the command.
      *
      * @return void
      */
