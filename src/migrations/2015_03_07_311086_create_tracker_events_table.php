@@ -25,8 +25,9 @@ class CreateTrackerEventsTable extends Migration
 
                 $table->string('name')->index();
 
-                $table->timestamp('created_at')->index();
-                $table->timestamp('updated_at')->index();
+                $table->timestamps();
+                $table->index('created_at');
+                $table->index('updated_at');
             }
         );
     }

@@ -26,8 +26,9 @@ class CreateTrackerRoutesPathsTable extends Migration
                 $table->bigInteger('route_id')->unsigned()->index();
                 $table->string('path')->index();
 
-                $table->timestamp('created_at')->index();
-                $table->timestamp('updated_at')->index();
+                $table->timestamps();
+                $table->index('created_at');
+                $table->index('updated_at');
             }
         );
     }
