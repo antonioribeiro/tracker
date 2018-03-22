@@ -40,7 +40,7 @@ Storing user tracking information, on indexed and normalized database tables, wa
 
 ## Usage
 
-As soon as you install and enable it, Tracker will start storing all information you tell it to, then you can in your application use the Tracker Facade to access everything. Here are some of the methods and relatioships available:
+As soon as you install and enable it, Tracker will start storing all information you tell it to, then you can in your application use the Tracker Facade to access everything. Here are some of the methods and relationships available:
 
 #### Current Session/Visitor
 
