@@ -29,16 +29,20 @@ class Authentication
     {
         $guards = $this->config->get('authentication_guards');
         // Make sure authentication_guards at least contains a null value to DRY code
-        if (empty($guards)) { $guards[] = null; }
+        if (empty($guards)) {
+            $guards[] = null;
+        }
 
         foreach ($this->getAuthentication() as $auth) {
             foreach ($guards as $guard) {
                 // Call guard() if not null
-                if ($guards != 'null') { $auth = $auth->guard($guard); }
+                if ($guards != 'null') {
+                    $auth = $auth->guard($guard);
+                }
 
                 if (is_callable([$auth, $method], true, $callable_name)) {
                     if ($data = $auth->$method()) {
-                      return $data;
+                        return $data;
                     }
                 }
             }
