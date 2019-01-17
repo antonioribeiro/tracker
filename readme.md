@@ -519,9 +519,20 @@ For Laravel 4+ please use version 2.0.10.
 
 **Laravel 5**
 
+Publish the Trackers configuration file:
+
     php artisan vendor:publish --provider=PragmaRX\\Tracker\\Vendor\\Laravel\\ServiceProvider
 
+If the Tracker.php does not publish into your `app\config` folder try:
+
+```
+php artisan vendor:publish --provider="PragmaRX\Tracker\Vendor\Laravel\ServiceProvider" --tag="config"
+
+```
+
 #### Enable the Middleware (Laravel 5)
+
+Open the newly published config file found at `app/config/tracker.php` and enable `use_middleware`:
 
 ```php
 'use_middleware' => true,
