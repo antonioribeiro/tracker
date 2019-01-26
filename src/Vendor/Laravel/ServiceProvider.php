@@ -51,6 +51,8 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     protected $packageNameCapitalized = 'Tracker';
 
+    protected $repositoryMangerIsBooted = false;
+
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -84,6 +86,16 @@ class ServiceProvider extends PragmaRXServiceProvider
         }
 
         $this->loadTranslations();
+    }
+
+    /**
+     * Check if the service provider is full booted.
+     *
+     * @return void
+     */
+    public function isFullyBooted()
+    {
+        return $this->repositoryMangerIsBooted;
     }
 
     /**
@@ -259,7 +271,7 @@ class ServiceProvider extends PragmaRXServiceProvider
                 $app['request']->server('HTTP_USER_AGENT')
             );
 
-            return new RepositoryManager(
+            $manager = new RepositoryManager(
                 new GeoIp($this->getConfig('geoip_database_path')),
 
                 new MobileDetect(),
@@ -334,6 +346,10 @@ class ServiceProvider extends PragmaRXServiceProvider
 
                 new LanguageDetect()
             );
+
+            $this->repositoryMangerIsBooted = true;
+
+            return $manager;
         });
     }
 
@@ -473,7 +489,7 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
 
         $this->app['events']->listen('*', function ($object = null) use ($me) {
-            if ($me->app['tracker.events']->isOff()) {
+            if ($me->app['tracker.events']->isOff() || !$me->isFullyBooted()) {
                 return;
             }
 
