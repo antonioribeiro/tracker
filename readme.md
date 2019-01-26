@@ -523,6 +523,8 @@ For Laravel 4+ please use version 2.0.10.
 
 #### Enable the Middleware (Laravel 5)
 
+Open the newly published config file found at `app/config/tracker.php` and enable `use_middleware`:
+
 ```php
 'use_middleware' => true,
 ```
