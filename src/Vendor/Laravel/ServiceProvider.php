@@ -51,7 +51,7 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     protected $packageNameCapitalized = 'Tracker';
 
-    protected $repositoryMangerIsBooted = false;
+    protected $repositoryManagerIsBooted = false;
 
     /**
      * Indicates if loading of the provider is deferred.
@@ -95,7 +95,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     public function isFullyBooted()
     {
-        return $this->repositoryMangerIsBooted;
+        return $this->repositoryManagerIsBooted;
     }
 
     /**
@@ -347,7 +347,7 @@ class ServiceProvider extends PragmaRXServiceProvider
                 new LanguageDetect()
             );
 
-            $this->repositoryMangerIsBooted = true;
+            $this->repositoryManagerIsBooted = true;
 
             return $manager;
         });
