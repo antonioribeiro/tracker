@@ -79,10 +79,7 @@ class Stats extends Controller
 
     public function log($uuid)
     {
-        $session = Tracker::sessionLog($uuid);
-
         return View::make('pragmarx/tracker::log')
-                ->with('log', Tracker::sessionLog($uuid))
                 ->with('uuid', $uuid)
                 ->with('title', 'log');
     }
