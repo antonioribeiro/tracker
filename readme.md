@@ -498,7 +498,7 @@ Tracker::trackVisit(
 - Package "geoip/geoip":"~1.14" or "geoip2/geoip2":"~2.0"
   (If you are planning to store Geo IP information)
 
-For Laravel 4+ please use version 3+.
+For Laravel 5+ please use version 3+.
 
 ## Installing
 
