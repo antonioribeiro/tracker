@@ -486,12 +486,19 @@ Tracker::trackVisit(
 
 ## Requirements
 
-- Laravel 5+
-- PHP 5.3.7+
+```
++---------+-------+---------+
+| Laravel | PHP   | Tracker |
++---------+-------+---------+
+| 4.x.x   | 5.5.x | 1.0     |
+| 5.x.x   | 7.x.x | 3.x     |
++---------+-----+-----------+
+```
+
 - Package "geoip/geoip":"~1.14" or "geoip2/geoip2":"~2.0"
   (If you are planning to store Geo IP information)
 
-For Laravel 4+ please use version 2.0.10.
+For Laravel 4+ please use version 3+.
 
 ## Installing
 
