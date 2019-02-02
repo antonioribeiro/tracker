@@ -685,6 +685,10 @@ You may need to change your Tracker database connection configuration to
 
 ```
 
+### Base table or view not found: 1146 Table 'tracker.users' doesn't exist
+
+Already discussed [here] (https://github.com/antonioribeiro/tracker/issues/258#issuecomment-317065397)
+
 ## Author
 
 [Antonio Carlos Ribeiro](http://twitter.com/iantonioribeiro)
