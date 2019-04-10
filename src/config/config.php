@@ -246,7 +246,12 @@ return [
 
     /*
      * ** IMPORTANT **
-     *   Change the user model to your own.
+     * Change the user model to your own.
+     * If the model is under a different connection, be specific.
+     * ...
+     * class ModelName {
+     *      protected $connection = 'mysql';
+     * ...
      */
     'user_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\User',
 
