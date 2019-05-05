@@ -69,6 +69,11 @@ class Handler implements ExceptionHandler
         $this->illuminateHandler->report($e);
     }
 
+    public function shouldReport(Exception $e)
+    {
+        return $this->illuminateHandler->shouldReport($e);
+    }
+
     public function render($request, Exception $e)
     {
         return $this->illuminateHandler->render($request, $e);
