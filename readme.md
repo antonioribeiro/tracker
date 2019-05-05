@@ -702,6 +702,22 @@ To create (or use a current) a User model:
 And configure the Connection related to your users table:
 
     protected $connection = 'mysql';
+    
+## Not able to track API's?
+
+In your kernel 
+
+    protected $middlewareGroups = [
+        'web' => [
+            .......
+            \PragmaRX\Tracker\Vendor\Laravel\Middlewares\Tracker::class,
+        ],
+
+        'api' => [
+           .......
+            \PragmaRX\Tracker\Vendor\Laravel\Middlewares\Tracker::class,
+        ],
+    ];
 
 
 ## Author
