@@ -685,6 +685,25 @@ You may need to change your Tracker database connection configuration to
 
 ```
 
+## Not able to track users?
+
+If you get an error like:
+
+    Base table or view not found: 1146 Table 'tracker.users' doesn't exist
+
+You probably need to change: 
+
+    'user_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\User',
+
+To create (or use a current) a User model:
+
+    'user_model' => 'App\TrackerUser',
+
+And configure the Connection related to your users table:
+
+    protected $connection = 'mysql';
+
+
 ## Author
 
 [Antonio Carlos Ribeiro](http://twitter.com/iantonioribeiro)
