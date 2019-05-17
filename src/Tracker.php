@@ -302,6 +302,7 @@ class Tracker
     protected function isTrackable()
     {
         return $this->config->get('enabled') &&
+                $this->excludeGtm() &&
                 $this->logIsEnabled() &&
                 $this->allowConsole() &&
                 $this->parserIsAvailable() &&
@@ -310,6 +311,14 @@ class Tracker
                 $this->routeIsTrackable() &&
                 $this->pathIsTrackable() &&
                 $this->notRobotOrTrackable();
+    }
+    
+    protected function excludeGtm()
+    {
+        if(($this->request->server('HTTP_REFERER')) === $this->request->getUri()){
+            return false;
+        }
+        return true;
     }
 
     protected function isTrackableEnvironment()
