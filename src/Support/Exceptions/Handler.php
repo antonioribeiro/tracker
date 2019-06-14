@@ -83,4 +83,7 @@ class Handler implements ExceptionHandler
     {
         return $this->illuminateHandler->renderForConsole($output, $e);
     }
+    public function shouldReport(Exception $e)
+    {
+    }
 }
