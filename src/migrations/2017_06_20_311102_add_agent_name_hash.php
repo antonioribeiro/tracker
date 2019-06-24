@@ -1,8 +1,9 @@
 <?php
 
 use PragmaRX\Tracker\Support\Migration;
+use PragmaRX\Tracker\Vendor\Laravel\Models\Agent;
 
-class FixAgentName extends Migration
+class AddAgentNameHash extends Migration
 {
     /**
      * Table related to this migration.
@@ -23,20 +24,21 @@ class FixAgentName extends Migration
                 $this->table,
                 function ($table) {
                     $table->dropUnique('tracker_agents_name_unique');
+
+                    $table->string('name_hash', 65)->nullable();
                 }
             );
+
+            Agent::all()->each(function ($agent) {
+                $agent->name_hash = hash('sha256', $agent->name);
+
+                $agent->save();
+            });
 
             $this->builder->table(
                 $this->table,
                 function ($table) {
-                    $table->mediumText('name')->change();
-                }
-            );
-
-            $this->builder->table(
-                $this->table,
-                function ($table) {
-                    $table->unique('id', 'tracker_agents_name_unique'); // this is a dummy index
+                    $table->unique('name_hash');
                 }
             );
         } catch (\Exception $e) {
@@ -55,8 +57,11 @@ class FixAgentName extends Migration
             $this->builder->table(
                 $this->table,
                 function ($table) {
-                    $table->string('name', 255)->change();
-                    $table->unique('name');
+                    $table->dropUnique('tracker_agents_name_hash_unique');
+
+                    $table->dropColumn('name_hash');
+
+                    $table->mediumText('name')->unique()->change();
                 }
             );
         } catch (\Exception $e) {

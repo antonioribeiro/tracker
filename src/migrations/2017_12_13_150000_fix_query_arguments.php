@@ -2,14 +2,14 @@
 
 use PragmaRX\Tracker\Support\Migration;
 
-class FixAgentName extends Migration
+class FixQueryArguments extends Migration
 {
     /**
      * Table related to this migration.
      *
      * @var string
      */
-    private $table = 'tracker_agents';
+    private $table = 'tracker_query_arguments';
 
     /**
      * Run the migrations.
@@ -22,21 +22,7 @@ class FixAgentName extends Migration
             $this->builder->table(
                 $this->table,
                 function ($table) {
-                    $table->dropUnique('tracker_agents_name_unique');
-                }
-            );
-
-            $this->builder->table(
-                $this->table,
-                function ($table) {
-                    $table->mediumText('name')->change();
-                }
-            );
-
-            $this->builder->table(
-                $this->table,
-                function ($table) {
-                    $table->unique('id', 'tracker_agents_name_unique'); // this is a dummy index
+                    $table->string('value')->nullable()->change();
                 }
             );
         } catch (\Exception $e) {
@@ -55,11 +41,11 @@ class FixAgentName extends Migration
             $this->builder->table(
                 $this->table,
                 function ($table) {
-                    $table->string('name', 255)->change();
-                    $table->unique('name');
+                    $table->string('value')->change();
                 }
             );
         } catch (\Exception $e) {
+            dd($e->getMessage());
         }
     }
 }

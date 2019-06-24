@@ -37,6 +37,13 @@ return [
     ],
 
     /*
+     * Which route paths are not trackable?
+     */
+    'do_not_track_paths' => [
+        'api/*',
+    ],
+
+    /*
      * The Do Not Track Ips is used to disable Tracker for some IP addresses:
      *
      *     '127.0.0.1', '192.168.1.1'
@@ -53,6 +60,11 @@ return [
     ],
 
     /*
+     * When an IP is not trackable, show a message in log.
+     */
+    'log_untrackable_sessions' => true,
+
+    /*
      * Log every single access?
      *
      * The log table can become huge if your site is popular, but...
@@ -65,6 +77,11 @@ return [
      *    - URL queries (including values)
      */
     'log_enabled' => false,
+
+    /*
+     * Log artisan commands?
+     */
+    'console_log_enabled' => false,
 
     /*
      * Log SQL queries?
@@ -97,6 +114,17 @@ return [
     'do_not_log_sql_queries_connections' => [
         'tracker',
     ],
+
+    /*
+     * GeoIp2 database path.
+     *
+     * To get a fresh version of this file, use the command
+     *
+     *      php artisan tracker:updategeoip
+     *
+     */
+
+    'geoip_database_path' => __DIR__.'/geoip', //storage_path('geoip'),
 
     /*
      * Also log SQL query bindings?
@@ -218,7 +246,12 @@ return [
 
     /*
      * ** IMPORTANT **
-     *   Change the user model to your own.
+     * Change the user model to your own.
+     * If the model is under a different connection, be specific.
+     * ...
+     * class ModelName {
+     *      protected $connection = 'mysql';
+     * ...
      */
     'user_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\User',
 

@@ -182,7 +182,7 @@ class Session extends Repository
     {
         $data = $data ?: $this->getSessionData();
 
-        if ($data) {
+        if (!$data) {
             $this->resetSessionUuid($data);
 
             $this->sessionIsKnownOrCreateSession();

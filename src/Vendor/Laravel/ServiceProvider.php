@@ -31,6 +31,7 @@ use PragmaRX\Tracker\Data\Repositories\SqlQueryLog;
 use PragmaRX\Tracker\Data\Repositories\SystemClass;
 use PragmaRX\Tracker\Data\RepositoryManager;
 use PragmaRX\Tracker\Eventing\EventStorage;
+use PragmaRX\Tracker\Repositories\Message as MessageRepository;
 use PragmaRX\Tracker\Services\Authentication;
 use PragmaRX\Tracker\Support\Cache;
 use PragmaRX\Tracker\Support\CrawlerDetector;
@@ -40,6 +41,7 @@ use PragmaRX\Tracker\Support\MobileDetect;
 use PragmaRX\Tracker\Support\UserAgentParser;
 use PragmaRX\Tracker\Tracker;
 use PragmaRX\Tracker\Vendor\Laravel\Artisan\Tables as TablesCommand;
+use PragmaRX\Tracker\Vendor\Laravel\Artisan\UpdateGeoIp;
 
 class ServiceProvider extends PragmaRXServiceProvider
 {
@@ -49,6 +51,8 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     protected $packageNameCapitalized = 'Tracker';
 
+    protected $repositoryManagerIsBooted = false;
+
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -56,9 +60,9 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     protected $defer = false;
 
-    private $userChecked = false;
+    protected $userChecked = false;
 
-    private $tracker;
+    protected $tracker;
 
     /**
      * Bootstrap the application events.
@@ -69,15 +73,29 @@ class ServiceProvider extends PragmaRXServiceProvider
     {
         parent::boot();
 
-        if ($this->getConfig('enabled')) {
-            $this->loadRoutes();
-
-            $this->registerErrorHandler();
-
-            $this->bootTracker();
-
-            $this->loadTranslations();
+        if (!$this->getConfig('enabled')) {
+            return false;
         }
+
+        $this->loadRoutes();
+
+        $this->registerErrorHandler();
+
+        if (!isLaravel5()) {
+            $this->bootTracker();
+        }
+
+        $this->loadTranslations();
+    }
+
+    /**
+     * Check if the service provider is full booted.
+     *
+     * @return void
+     */
+    public function isFullyBooted()
+    {
+        return $this->repositoryManagerIsBooted;
     }
 
     /**
@@ -100,6 +118,8 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $this->registerTablesCommand();
 
+            $this->registerUpdateGeoIpCommand();
+
             $this->registerExecutionCallback();
 
             $this->registerUserCheckCallback();
@@ -110,9 +130,9 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $this->registerDatatables();
 
-            $this->registerGlobalViewComposers();
+            $this->registerMessageRepository();
 
-            $this->commands('tracker.tables.command');
+            $this->registerGlobalViewComposers();
         }
     }
 
@@ -132,7 +152,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      *
      * @return void
      */
-    private function registerTracker()
+    protected function registerTracker()
     {
         $this->app->singleton('tracker', function ($app) {
             $app['tracker.loaded'] = true;
@@ -143,7 +163,8 @@ class ServiceProvider extends PragmaRXServiceProvider
                                     $app['request'],
                                     $app['router'],
                                     $app['log'],
-                                    $app
+                                    $app,
+                                    $app['tracker.messages']
                                 );
         });
     }
@@ -250,8 +271,8 @@ class ServiceProvider extends PragmaRXServiceProvider
                 $app['request']->server('HTTP_USER_AGENT')
             );
 
-            return new RepositoryManager(
-                new GeoIp(),
+            $manager = new RepositoryManager(
+                new GeoIp($this->getConfig('geoip_database_path')),
 
                 new MobileDetect(),
 
@@ -325,6 +346,10 @@ class ServiceProvider extends PragmaRXServiceProvider
 
                 new LanguageDetect()
             );
+
+            $this->repositoryManagerIsBooted = true;
+
+            return $manager;
         });
     }
 
@@ -342,14 +367,16 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
     }
 
-    private function registerTablesCommand()
+    protected function registerTablesCommand()
     {
         $this->app->singleton('tracker.tables.command', function ($app) {
             return new TablesCommand();
         });
+
+        $this->commands('tracker.tables.command');
     }
 
-    private function registerExecutionCallback()
+    protected function registerExecutionCallback()
     {
         $me = $this;
 
@@ -363,7 +390,7 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
     }
 
-    private function registerErrorHandler()
+    protected function registerErrorHandler()
     {
         if ($this->getConfig('log_exceptions')) {
             if (isLaravel5()) {
@@ -391,7 +418,7 @@ class ServiceProvider extends PragmaRXServiceProvider
     /**
      * @param string $modelName
      */
-    private function instantiateModel($modelName)
+    protected function instantiateModel($modelName)
     {
         $model = $this->getConfig($modelName);
 
@@ -414,7 +441,7 @@ class ServiceProvider extends PragmaRXServiceProvider
         return $model;
     }
 
-    private function registerSqlQueryLogWatcher()
+    protected function registerSqlQueryLogWatcher()
     {
         $me = $this;
 
@@ -453,7 +480,7 @@ class ServiceProvider extends PragmaRXServiceProvider
         }
     }
 
-    private function registerGlobalEventLogger()
+    protected function registerGlobalEventLogger()
     {
         $me = $this;
 
@@ -462,7 +489,7 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
 
         $this->app['events']->listen('*', function ($object = null) use ($me) {
-            if ($me->app['tracker.events']->isOff()) {
+            if ($me->app['tracker.events']->isOff() || !$me->isFullyBooted()) {
                 return;
             }
 
@@ -487,7 +514,7 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
     }
 
-    private function loadRoutes()
+    protected function loadRoutes()
     {
         if (!$this->getConfig('stats_panel_enabled')) {
             return false;
@@ -538,7 +565,7 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
     }
 
-    private function registerDatatables()
+    protected function registerDatatables()
     {
         $this->registerServiceProvider('Bllim\Datatables\DatatablesServiceProvider');
 
@@ -558,7 +585,7 @@ class ServiceProvider extends PragmaRXServiceProvider
     /**
      * Boot & Track.
      */
-    private function bootTracker()
+    protected function bootTracker()
     {
         $this->getTracker()->boot();
     }
@@ -566,7 +593,7 @@ class ServiceProvider extends PragmaRXServiceProvider
     /**
      * Register global view composers.
      */
-    private function registerGlobalViewComposers()
+    protected function registerGlobalViewComposers()
     {
         $me = $this;
 
@@ -579,15 +606,36 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
     }
 
-    private function registerUserCheckCallback()
+    protected function registerUpdateGeoIpCommand()
+    {
+        $this->app->singleton('tracker.updategeoip.command', function ($app) {
+            return new UpdateGeoIp();
+        });
+
+        $this->commands('tracker.updategeoip.command');
+    }
+
+    protected function registerUserCheckCallback()
     {
         $me = $this;
 
         $this->app['events']->listen('router.before', function ($object = null) use ($me) {
+
+            // get auth bindings to check
+            $bindings = $me->getConfig('authentication_ioc_binding');
+
+            // check if all bindings are resolved
+            $checked_bindings = array_map(function ($abstract) use ($me) {
+                return $me->app->resolved($abstract);
+            }, $bindings);
+
+            $all_bindings_resolved =
+                (!in_array(false, $checked_bindings, true)) ?: false;
+
             if ($me->tracker &&
                 !$me->userChecked &&
                 $me->getConfig('log_users') &&
-                $me->app->resolved($me->getConfig('authentication_ioc_binding'))
+                $all_bindings_resolved
             ) {
                 $me->userChecked = $me->getTracker()->checkCurrentUser();
             }
@@ -611,7 +659,7 @@ class ServiceProvider extends PragmaRXServiceProvider
         return __DIR__.'/../..';
     }
 
-    private function getAppUrl()
+    protected function getAppUrl()
     {
         return $this->app['request']->url();
     }
@@ -619,5 +667,15 @@ class ServiceProvider extends PragmaRXServiceProvider
     public function loadTranslations()
     {
         $this->loadTranslationsFrom(__DIR__.'/../../lang', 'tracker');
+    }
+
+    /**
+     * Register the message repository.
+     */
+    protected function registerMessageRepository()
+    {
+        $this->app->singleton('tracker.messages', function () {
+            return new MessageRepository();
+        });
     }
 }

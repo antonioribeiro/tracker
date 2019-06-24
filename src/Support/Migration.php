@@ -10,7 +10,7 @@ abstract class Migration extends PragmaRxMigration
     {
         $this->manager = app()->make('db');
 
-        $this->connection = $this->manager->connection('tracker');
+        $this->connection = $this->manager->connection(config('tracker.connection'));
 
         parent::checkConnection();
     }
