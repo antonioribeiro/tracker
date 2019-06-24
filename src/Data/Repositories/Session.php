@@ -131,7 +131,7 @@ class Session extends Repository
 
         $wasComplete = true;
 
-        foreach ($this->sessionInfo as $key => $value) {
+        foreach (collect($this->sessionInfo)->except('user_agent')->toArray() as $key => $value) {
             if ($sessionData[$key] !== $value) {
                 if (!isset($model)) {
                     $model = $this->find($this->sessionInfo['id']);
