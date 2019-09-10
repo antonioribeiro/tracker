@@ -68,7 +68,7 @@ class Handler implements ExceptionHandler
 
         $this->illuminateHandler->report($e);
     }
-    
+
     public function shouldReport(Exception $e)
     {
         return false;
