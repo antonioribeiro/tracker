@@ -314,6 +314,8 @@ return [
      */
     'authentication_ioc_binding' => ['auth'], // defaults to 'auth' in Illuminate\Support\Facades\Auth
 
+    'authentication_guards' => [], // defaults to []
+
     'authenticated_check_method' => 'check', // to Auth::check()
 
     'authenticated_user_method' => 'user', // to Auth::user()
