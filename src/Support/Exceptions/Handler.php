@@ -3,8 +3,8 @@
 namespace PragmaRX\Tracker\Support\Exceptions;
 
 use Exception;
-use Illuminate\Contracts\Debug\ExceptionHandler;
 use PragmaRX\Tracker\Tracker;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 
 class Handler implements ExceptionHandler
 {
@@ -71,11 +71,6 @@ class Handler implements ExceptionHandler
 
     public function shouldReport(Exception $e)
     {
-        return false;
-    }
-
-    public function shouldReport(Exception $e)
-    {
         return $this->illuminateHandler->shouldReport($e);
     }
 
@@ -87,9 +82,5 @@ class Handler implements ExceptionHandler
     public function renderForConsole($output, Exception $e)
     {
         return $this->illuminateHandler->renderForConsole($output, $e);
-    }
-
-    public function shouldReport(Exception $e)
-    {
     }
 }
