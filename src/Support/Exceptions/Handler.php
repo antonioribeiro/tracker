@@ -3,8 +3,8 @@
 namespace PragmaRX\Tracker\Support\Exceptions;
 
 use Exception;
-use PragmaRX\Tracker\Tracker;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use PragmaRX\Tracker\Tracker;
 
 class Handler implements ExceptionHandler
 {
