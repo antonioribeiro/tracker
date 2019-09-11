@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.4.1] - 2019-09-11
+### Fixed
+- Removed support for Laravel 4
+
+## [3.4.0] - 2019-09-10
+### New
+- Added support for Laravel 6
+
 ## [3.3] - 2018-03-19
 ### Fixed
 - Laravel 5.6 compatibility
