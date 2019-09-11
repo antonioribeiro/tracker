@@ -81,9 +81,7 @@ class ServiceProvider extends PragmaRXServiceProvider
 
         $this->registerErrorHandler();
 
-        if (!isLaravel5()) {
-            $this->bootTracker();
-        }
+        $this->bootTracker();
 
         $this->loadTranslations();
     }
@@ -393,25 +391,15 @@ class ServiceProvider extends PragmaRXServiceProvider
     protected function registerErrorHandler()
     {
         if ($this->getConfig('log_exceptions')) {
-            if (isLaravel5()) {
-                $illuminateHandler = 'Illuminate\Contracts\Debug\ExceptionHandler';
+            $illuminateHandler = 'Illuminate\Contracts\Debug\ExceptionHandler';
 
-                $handler = new TrackerExceptionHandler(
-                    $this->getTracker(),
-                    $this->app[$illuminateHandler]
-                );
+            $handler = new TrackerExceptionHandler(
+                $this->getTracker(),
+                $this->app[$illuminateHandler]
+            );
 
-                // Replace original Illuminate Exception Handler by Tracker's
-                $this->app[$illuminateHandler] = $handler;
-            } else {
-                $me = $this;
-
-                $this->app->error(
-                    function (\Exception $exception, $code) use ($me) {
-                        $me->app['tracker']->handleException($exception, $code);
-                    }
-                );
-            }
+            // Replace original Illuminate Exception Handler by Tracker's
+            $this->app[$illuminateHandler] = $handler;
         }
     }
 

@@ -67,11 +67,7 @@ class Tables extends Base
     {
         $path = 'database'.DIRECTORY_SEPARATOR.'migrations';
 
-        if (isLaravel5()) {
-            return base_path($path);
-        }
-
-        return app_path($path);
+        return base_path($path);
     }
 
     /**
