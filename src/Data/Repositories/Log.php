@@ -4,9 +4,9 @@ namespace PragmaRX\Tracker\Data\Repositories;
 
 class Log extends Repository
 {
-    private $currentLogId;
+    protected $currentLogId;
 
-    private $route_path_id;
+    protected $route_path_id;
 
     public function updateRoute($route_path_id = null)
     {

@@ -23,6 +23,7 @@ class Tracker
     protected $route;
 
     protected $logger;
+
     /**
      * @var \Illuminate\Foundation\Application
      */
@@ -32,13 +33,14 @@ class Tracker
 
     protected $sessionData;
 
-    private $loggedItems = [];
+    protected $loggedItems = [];
 
-    private $booted = false;
+    protected $booted = false;
+
     /**
      * @var MessageRepository
      */
-    private $messageRepository;
+    protected $messageRepository;
 
     public function __construct(
         Config $config,
@@ -113,7 +115,7 @@ class Tracker
         return $this->dataRepositoryManager->events(Minutes::make($minutes), $results);
     }
 
-    protected function getAgentId()
+    public function getAgentId()
     {
         return $this->config->get('log_user_agents')
             ? $this->dataRepositoryManager->getAgentId()
@@ -153,7 +155,7 @@ class Tracker
         return $this->dataRepositoryManager->getDomainId($domain);
     }
 
-    protected function getGeoIpId()
+    public function getGeoIpId()
     {
         return $this->config->get('log_geoip')
             ? $this->dataRepositoryManager->getGeoIpId($this->request->getClientIp())
@@ -163,7 +165,7 @@ class Tracker
     /**
      * @return array
      */
-    protected function getLogData()
+    public function getLogData()
     {
         return [
             'session_id' => $this->getSessionId(true),
@@ -178,7 +180,7 @@ class Tracker
         ];
     }
 
-    private function getLogger()
+    public function getLogger()
     {
         return $this->logger;
     }
@@ -208,7 +210,7 @@ class Tracker
         }
     }
 
-    protected function getRefererId()
+    public function getRefererId()
     {
         return $this->config->get('log_referers')
             ? $this->dataRepositoryManager->getRefererId(
@@ -217,12 +219,12 @@ class Tracker
             : null;
     }
 
-    protected function getRoutePathId()
+    public function getRoutePathId()
     {
         return $this->dataRepositoryManager->getRoutePathId($this->route, $this->request);
     }
 
-    private function logUntrackable($item)
+    protected function logUntrackable($item)
     {
         if ($this->config->get('log_untrackable_sessions') && !isset($this->loggedItems[$item])) {
             $this->getLogger()->warning('TRACKER (unable to track item): '.$item);
@@ -299,7 +301,7 @@ class Tracker
         );
     }
 
-    protected function isTrackable()
+    public function isTrackable()
     {
         return $this->config->get('enabled') &&
                 $this->logIsEnabled() &&
@@ -312,7 +314,7 @@ class Tracker
                 $this->notRobotOrTrackable();
     }
 
-    protected function isTrackableEnvironment()
+    public function isTrackableEnvironment()
     {
         $trackable = !in_array(
             $this->laravel->environment(),
@@ -326,7 +328,7 @@ class Tracker
         return $trackable;
     }
 
-    protected function isTrackableIp()
+    public function isTrackableIp()
     {
         $trackable = !IpAddress::ipv4InRange(
             $ipAddress = $this->request->getClientIp(),
@@ -360,7 +362,7 @@ class Tracker
         }
     }
 
-    protected function logIsEnabled()
+    public function logIsEnabled()
     {
         $enabled =
             $this->config->get('log_enabled') ||
@@ -438,7 +440,7 @@ class Tracker
         return true;
     }
 
-    private function routeIsTrackable()
+    public function routeIsTrackable()
     {
         if (!$this->route) {
             return false;
@@ -451,7 +453,7 @@ class Tracker
         return $trackable;
     }
 
-    private function pathIsTrackable()
+    public function pathIsTrackable()
     {
         if (!$trackable = $this->dataRepositoryManager->pathIsTrackable($this->request->path())) {
             $this->logUntrackable('path '.$this->request->path().' is not trackable.');
@@ -515,7 +517,7 @@ class Tracker
         $this->dataRepositoryManager->trackRoute($route, $request);
     }
 
-    protected function turnOff()
+    public function turnOff()
     {
         $this->enabled = false;
     }
