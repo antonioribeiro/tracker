@@ -23,7 +23,7 @@
         "ramsey/uuid": "~3",
         "jenssegers/agent": "~2.1",
         "ua-parser/uap-php" : "~3.4",
-        "pragmarx/datatables": "1.4.11",
+        "pragmarx/datatables": "^1.4.12",
         "snowplow/referer-parser": "~0.1",
         "jaybizzle/crawler-detect": "~1.0",
         "psr/log": "~1.0"
