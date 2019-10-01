@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\View;
 use PragmaRX\Tracker\Vendor\Laravel\Facade as Tracker;
 use PragmaRX\Tracker\Vendor\Laravel\Support\Session;
+use Illuminate\Support\Str;
 
 class Stats extends Controller
 {
@@ -332,7 +333,7 @@ class Stats extends Controller
         $user = $this->authentication->user();
 
         foreach ($this->adminProperties as $property) {
-            $propertyCamel = camel_case($property);
+            $propertyCamel = Str::camel($property);
 
             if (
                     isset($user->$property) ||
@@ -352,7 +353,7 @@ class Stats extends Controller
         $user = $this->authentication->user();
 
         foreach ($this->adminProperties as $property) {
-            $propertyCamel = camel_case($property);
+            $propertyCamel = Str::camel($property);
 
             if (
                 (isset($user->$property) && $user->$property) ||
