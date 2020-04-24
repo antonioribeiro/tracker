@@ -2,9 +2,9 @@
 
 namespace PragmaRX\Tracker\Support\Exceptions;
 
-use Throwable;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use PragmaRX\Tracker\Tracker;
+use Throwable;
 
 class Handler implements ExceptionHandler
 {
@@ -27,9 +27,9 @@ class Handler implements ExceptionHandler
 
     private function initializeHandlers()
     {
-        $this->originalExceptionHandler = set_exception_handler(array($this, 'handleThrowable'));
+        $this->originalExceptionHandler = set_exception_handler([$this, 'handleThrowable']);
 
-        $this->originalErrorHandler = set_error_handler(array($this, 'handleError'));
+        $this->originalErrorHandler = set_error_handler([$this, 'handleError']);
     }
 
     public function handleThrowable(Throwable $throwable)
