@@ -642,12 +642,12 @@ class RepositoryManager implements RepositoryManagerInterface
         return $this->logRepository->bySession($session->id, $results);
     }
 
-    public function handleException($exception)
+    public function handleThrowable($throwable)
     {
         $error_id = $this->errorRepository->findOrCreate(
             [
-                'message' => $this->errorRepository->getMessageFromException($exception),
-                'code'    => $this->errorRepository->getCodeFromException($exception),
+                'message' => $this->errorRepository->getMessageFromThrowable($throwable),
+                'code'    => $this->errorRepository->getCodeFromThrowable($throwable),
             ],
             ['message', 'code']
         );

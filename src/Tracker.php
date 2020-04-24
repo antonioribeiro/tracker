@@ -274,12 +274,12 @@ class Tracker
     }
 
     /**
-     * @param \Exception $exception
+     * @param \Throwable $throwable
      */
-    public function handleException($exception)
+    public function handleThrowable($throwable)
     {
         if ($this->config->get('log_enabled')) {
-            $this->dataRepositoryManager->handleException($exception);
+            $this->dataRepositoryManager->handleThrowable($throwable);
         }
     }
 
