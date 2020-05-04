@@ -33,7 +33,7 @@ class Cookie extends Repository
         }
 
         if (!$cookie = $this->request->cookie($this->config->get('tracker_cookie_name'))) {
-            $cookie = (string) UUID::uuid4();
+            $cookie = UUID::uuid4()->toString();
 
             $this->cookieJar->queue($this->config->get('tracker_cookie_name'), $cookie, 0);
         }

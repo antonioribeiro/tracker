@@ -178,7 +178,7 @@ class Session extends Repository
             return $sessionData['uuid'];
         }
 
-        return (string) UUID::uuid4();
+        return UUID::uuid4()->toString();
     }
 
     private function regenerateSystemSession($data = null)

@@ -16,11 +16,11 @@
     ],
 
     "require": {
-        "php": ">=5.3.7",
+        "php": ">=7.0",
         "doctrine/dbal": "^2.6",
-        "laravel/framework": "~4|~5|~6",
+        "laravel/framework": "~5|~6|~7",
         "pragmarx/support": "~0.6|~0.7|~0.8|~0.9",
-        "ramsey/uuid": "~3",
+        "ramsey/uuid": "^3 || ^4",
         "jenssegers/agent": "~2.1",
         "ua-parser/uap-php" : "~3.4",
         "pragmarx/datatables": "^1.4.12",
