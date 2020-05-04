@@ -38,7 +38,7 @@ class Authentication
                 // Call guard() if not null
                 if ($guard && $guard != 'null') {
                     $auth = $auth->guard($guard);
-                }                
+                }
             }
             if (is_callable([$auth, $method], true, $callable_name)) {
                 if ($data = $auth->$method()) {

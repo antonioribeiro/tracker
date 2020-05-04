@@ -48,8 +48,8 @@ class Log extends Base
     public function pageViews($minutes, $results)
     {
         $query = $this->select(
-                $this->getConnection()->raw('DATE(created_at) as date, count(*) as total')
-            )->groupBy(
+            $this->getConnection()->raw('DATE(created_at) as date, count(*) as total')
+        )->groupBy(
                 $this->getConnection()->raw('DATE(created_at)')
             )
             ->period($minutes)
@@ -67,7 +67,8 @@ class Log extends Base
         $query =
             $this
             ->select(
-                'tracker_geoip.country_name as label', $this->getConnection()->raw('count(tracker_log.id) as value')
+                'tracker_geoip.country_name as label',
+                $this->getConnection()->raw('count(tracker_log.id) as value')
             )
             ->join('tracker_sessions', 'tracker_log.session_id', '=', 'tracker_sessions.id')
             ->join('tracker_geoip', 'tracker_sessions.geoip_id', '=', 'tracker_geoip.id')

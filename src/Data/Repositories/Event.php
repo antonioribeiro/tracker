@@ -165,9 +165,9 @@ class Event extends Repository
     {
         return $event['event']
             ? $this->findOrCreate(
-                    ['name' => $event['event']],
-                    ['name']
-                )
+                ['name' => $event['event']],
+                ['name']
+            )
             : null;
     }
 

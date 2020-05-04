@@ -156,14 +156,14 @@ class ServiceProvider extends PragmaRXServiceProvider
             $app['tracker.loaded'] = true;
 
             return new Tracker(
-                                    $app['tracker.config'],
-                                    $app['tracker.repositories'],
-                                    $app['request'],
-                                    $app['router'],
-                                    $app['log'],
-                                    $app,
-                                    $app['tracker.messages']
-                                );
+                $app['tracker.config'],
+                $app['tracker.repositories'],
+                $app['request'],
+                $app['router'],
+                $app['log'],
+                $app,
+                $app['tracker.messages']
+            );
         });
     }
 
@@ -271,77 +271,50 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $manager = new RepositoryManager(
                 new GeoIp($this->getConfig('geoip_database_path')),
-
                 new MobileDetect(),
-
                 $uaParser,
-
                 $app['tracker.authentication'],
-
                 $app['session.store'],
-
                 $app['tracker.config'],
-
-                new Session($sessionModel,
-                            $app['tracker.config'],
-                            new PhpSession()),
-
+                new Session(
+                    $sessionModel,
+                    $app['tracker.config'],
+                    new PhpSession()
+                ),
                 $logRepository,
-
                 new Path($pathModel),
-
                 new Query($queryModel),
-
                 new QueryArgument($queryArgumentModel),
-
                 new Agent($agentModel),
-
                 new Device($deviceModel),
-
-                new Cookie($cookieModel,
-                            $app['tracker.config'],
-                            $app['request'],
-                            $app['cookie']),
-
+                new Cookie(
+                    $cookieModel,
+                    $app['tracker.config'],
+                    $app['request'],
+                    $app['cookie']
+                ),
                 new Domain($domainModel),
-
                 new Referer(
                     $refererModel,
                     $refererSearchTermModel,
                     $this->getAppUrl(),
                     $app->make('PragmaRX\Tracker\Support\RefererParser')
                 ),
-
                 $routeRepository,
-
                 new RoutePath($routePathModel),
-
                 new RoutePathParameter($routePathParameterModel),
-
                 new Error($errorModel),
-
                 new GeoIpRepository($geoipModel),
-
                 $sqlQueryRepository,
-
                 $sqlQueryBindingRepository,
-
                 $sqlQueryBindingParameterRepository,
-
                 $sqlQueryLogRepository,
-
                 $connectionRepository,
-
                 $eventRepository,
-
                 $eventLogRepository,
-
                 $systemClassRepository,
-
                 $crawlerDetect,
-
                 new Language($languageModel),
-
                 new LanguageDetect()
             );
 
@@ -434,10 +407,12 @@ class ServiceProvider extends PragmaRXServiceProvider
         $me = $this;
 
         if (!class_exists('Illuminate\Database\Events\QueryExecuted')) {
-            $this->app['events']->listen('illuminate.query', function ($query,
-                                                                        $bindings,
-                                                                        $time,
-                                                                        $name) use ($me) {
+            $this->app['events']->listen('illuminate.query', function (
+                $query,
+                $bindings,
+                $time,
+                $name
+            ) use ($me) {
                 $me->logSqlQuery($query, $bindings, $time, $name);
             });
         } else {
