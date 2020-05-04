@@ -38,13 +38,14 @@ class SqlQuery extends Repository
      */
     private $config;
 
-    public function __construct($model,
-                                SqlQueryLog $sqlQueryLogRepository,
-                                SqlQueryBinding $sqlQueryBindingRepository,
-                                SqlQueryBindingParameter $sqlQueryBindingParameterRepository,
-                                Connection $connectionRepository,
-                                Log $logRepository,
-                                Config $config
+    public function __construct(
+        $model,
+        SqlQueryLog $sqlQueryLogRepository,
+        SqlQueryBinding $sqlQueryBindingRepository,
+        SqlQueryBindingParameter $sqlQueryBindingParameterRepository,
+        Connection $connectionRepository,
+        Log $logRepository,
+        Config $config
     ) {
         parent::__construct($model);
 
