@@ -18,9 +18,10 @@ class UserAgentParser
 
     public function __construct($basePath, $userAgent = null)
     {
-        $userAgent = $_SERVER['HTTP_USER_AGENT'];
-        if (!$userAgent && isset($_SERVER['HTTP_USER_AGENT'])) {
-            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $defaultUserAgent = 'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0';
+
+        if (!$userAgent) {
+            $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : $defaultUserAgent;
         }
 
         $this->parser = Parser::create()->parse($userAgent);
