@@ -18,6 +18,8 @@ class UserAgentParser
 
     public function __construct($basePath, $userAgent = null)
     {
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+
         if (!$userAgent && isset($_SERVER['HTTP_USER_AGENT'])) {
             $userAgent = $_SERVER['HTTP_USER_AGENT'];
         }
@@ -37,15 +39,15 @@ class UserAgentParser
 
     public function getOperatingSystemVersion()
     {
-        return    $this->operatingSystem->major.
-                ($this->operatingSystem->minor !== null ? '.'.$this->operatingSystem->minor : '').
-                ($this->operatingSystem->patch !== null ? '.'.$this->operatingSystem->patch : '');
+        return $this->operatingSystem->major .
+            ($this->operatingSystem->minor !== null ? '.' . $this->operatingSystem->minor : '') .
+            ($this->operatingSystem->patch !== null ? '.' . $this->operatingSystem->patch : '');
     }
 
     public function getUserAgentVersion()
     {
-        return  $this->userAgent->major.
-                ($this->userAgent->minor !== null ? '.'.$this->userAgent->minor : '').
-                ($this->userAgent->patch !== null ? '.'.$this->userAgent->patch : '');
+        return $this->userAgent->major .
+            ($this->userAgent->minor !== null ? '.' . $this->userAgent->minor : '') .
+            ($this->userAgent->patch !== null ? '.' . $this->userAgent->patch : '');
     }
 }
