@@ -21,7 +21,9 @@ class UserAgentParser
         if (!$userAgent && isset($_SERVER['HTTP_USER_AGENT'])) {
             $userAgent = $_SERVER['HTTP_USER_AGENT'];
         }
-
+        
+        if(strlen($userAgent)===0) $userAgent = '';
+        
         $this->parser = Parser::create()->parse($userAgent);
 
         $this->userAgent = $this->parser->ua;
