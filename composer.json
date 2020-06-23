@@ -1,5 +1,5 @@
 {
-    "name": "pragmarx/tracker",
+    "name": "renderbit/tracker",
 
     "description": "A Laravel Visitor Tracker",
 
@@ -9,9 +9,9 @@
 
     "authors": [
         {
-            "name": "Antonio Carlos Ribeiro",
-            "email": "acr@antoniocarlosribeiro.com",
-            "role": "Creator & Designer"
+            "name": "Riju Pramanik",
+            "email": "riju@renderbit.com",
+            "role": "Forked from prgmarx/tracker "
         }
     ],
 
