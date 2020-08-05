@@ -1,7 +1,7 @@
 {
-    "name": "pragmarx/tracker",
+    "name": "origamiv/tracker",
 
-    "description": "A Laravel Visitor Tracker",
+    "description": "Fork and fix https://github.com/antonioribeiro/tracker/issues/490#issuecomment-624427591",
 
     "keywords": ["tracker", "tracking", "visitor", "logging", "user agent", "mobile detection", "laravel", "pragmarx"],
 
