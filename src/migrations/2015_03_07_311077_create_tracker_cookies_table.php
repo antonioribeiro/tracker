@@ -23,7 +23,7 @@ class CreateTrackerCookiesTable extends Migration
             function ($table) {
                 $table->bigIncrements('id');
 
-                $table->string('uuid')->unique();
+                $table->longText('uuid')->unique();
 
                 $table->timestamps();
                 $table->index('created_at');
