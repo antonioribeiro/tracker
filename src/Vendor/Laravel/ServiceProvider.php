@@ -126,8 +126,6 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $this->registerGlobalEventLogger();
 
-            $this->registerDatatables();
-
             $this->registerMessageRepository();
 
             $this->registerGlobalViewComposers();
