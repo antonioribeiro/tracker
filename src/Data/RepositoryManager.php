@@ -83,7 +83,7 @@ class RepositoryManager implements RepositoryManagerInterface
     private $errorRepository;
 
     /**
-     * @var GeoIP
+     * @var GeoFreeIp
      */
     private $geoIp;
 
@@ -147,7 +147,7 @@ class RepositoryManager implements RepositoryManagerInterface
      * @param \PragmaRX\Tracker\Support\UserAgentParser|null $userAgentParser
      */
     public function __construct(
-        GeoIP $geoIp,
+        GeoFreeIp $geoIp,
         MobileDetect $mobileDetect,
         $userAgentParser,
         Authentication $authentication,
