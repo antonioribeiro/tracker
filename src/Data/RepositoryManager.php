@@ -5,7 +5,7 @@ namespace PragmaRX\Tracker\Data;
 use Illuminate\Routing\Router as IlluminateRouter;
 use Illuminate\Session\Store as IlluminateSession;
 use PragmaRX\Support\Config;
-use PragmaRX\Tracker\Support\GeoIp;
+use PragmaRX\Tracker\Support\GeoFreeIp;
 use PragmaRX\Tracker\Data\Repositories\Agent;
 use PragmaRX\Tracker\Data\Repositories\Connection;
 use PragmaRX\Tracker\Data\Repositories\Cookie;

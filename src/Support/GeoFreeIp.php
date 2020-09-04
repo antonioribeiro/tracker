@@ -3,7 +3,7 @@
 namespace PragmaRX\Tracker\Support;
 use stdClass;
 
-class GeoIp
+class GeoFreeIp
 {
     private $geoIp;
     private $host = 'http://www.geoplugin.net/php.gp';

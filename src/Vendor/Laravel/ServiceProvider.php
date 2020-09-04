@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel;
 
-use PragmaRX\Tracker\Support\GeoIp;
+use PragmaRX\Tracker\Support\GeoFreeIp;
 use PragmaRX\Support\PhpSession;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 use PragmaRX\Tracker\Data\Repositories\Agent;
