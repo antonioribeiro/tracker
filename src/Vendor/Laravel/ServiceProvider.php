@@ -268,7 +268,7 @@ class ServiceProvider extends PragmaRXServiceProvider
             );
 
             $manager = new RepositoryManager(
-                new GeoIp($this->getConfig('geoip_database_path')),
+                new GeoFreeIp($this->getConfig('geoip_database_path')),
                 new MobileDetect(),
                 $uaParser,
                 $app['tracker.authentication'],
