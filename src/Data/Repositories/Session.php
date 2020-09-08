@@ -6,6 +6,9 @@ use Carbon\Carbon;
 use PragmaRX\Support\Config;
 use PragmaRX\Support\PhpSession;
 use Ramsey\Uuid\Uuid as UUID;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
+use PragmaRX\Tracker\Vendor\Laravel\Models\Cookie as ModelsCookie;
 
 class Session extends Repository
 {
@@ -17,11 +20,13 @@ class Session extends Repository
 
     protected $relations = ['device', 'user', 'log', 'language', 'agent', 'referer', 'geoIp', 'cookie'];
 
-    public function __construct($model, Config $config, PhpSession $session)
+    public function __construct($model, Config $config, PhpSession $session, ModelsCookie $cookie)
     {
         $this->config = $config;
 
         $this->session = $session;
+
+        $this->cookie =  $cookie;
 
         parent::__construct($model);
     }
@@ -94,14 +99,19 @@ class Session extends Repository
     private function sessionIsKnownOrCreateSession()
     {
         if (!$known = $this->sessionIsKnown()) {
-            $this->sessionSetId($this->findOrCreate($this->sessionInfo, ['uuid']));
+            $currentCookie = Cookie::get($this->config->get('tracker_cookie_name'));
+            if($cookie = $this->cookie->where('uuid', $currentCookie)->first()) {
+                $session = $this->newQuery()->where('cookie_id', $cookie->id)->with($this->relations)->first();
+                $session->updated_at = Carbon::now();
+                $session->save();
+                $this->sessionSetId($session->id);
+            } else {
+                $this->sessionSetId($this->findOrCreate($this->sessionInfo, ['uuid']));
+            }
         } else {
             $session = $this->find($this->getSessionData('id'));
-
             $session->updated_at = Carbon::now();
-
             $session->save();
-
             $this->sessionInfo['id'] = $this->getSessionData('id');
         }
 

@@ -5,6 +5,7 @@ namespace PragmaRX\Tracker\Data\Repositories;
 use Illuminate\Cookie\CookieJar;
 use Illuminate\Http\Request;
 use PragmaRX\Support\Config;
+use PragmaRX\Tracker\Vendor\Laravel\Models\Session;
 use Ramsey\Uuid\Uuid as UUID;
 
 class Cookie extends Repository
@@ -34,8 +35,7 @@ class Cookie extends Repository
 
         if (!$cookie = $this->request->cookie($this->config->get('tracker_cookie_name'))) {
             $cookie = UUID::uuid4()->toString();
-
-            $this->cookieJar->queue($this->config->get('tracker_cookie_name'), $cookie, 0);
+            $this->cookieJar->queue($this->config->get('tracker_cookie_name'), $cookie, 2628000);
         }
 
         return $this->findOrCreate(['uuid' => $cookie]);
