@@ -102,6 +102,12 @@ class Session extends Repository
             $currentCookie = Cookie::get($this->config->get('tracker_cookie_name'));
             if($cookie = $this->cookie->where('uuid', $currentCookie)->first()) {
                 $session = $this->newQuery()->where('cookie_id', $cookie->id)->with($this->relations)->first();
+
+                if (!$session) {
+                    $session = $this->findOrCreate($this->sessionInfo, ['uuid']);
+                    $this->sessionSetId($session);
+                }
+
                 $session->updated_at = Carbon::now();
                 $session->save();
                 $this->sessionSetId($session->id);
