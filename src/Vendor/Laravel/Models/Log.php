@@ -30,6 +30,11 @@ class Log extends Base
         return $this->belongsTo($this->getConfig()->get('path_model'));
     }
 
+    public function referer()
+    {
+        return $this->belongsTo($this->getConfig()->get('referer_model'));
+    }
+
     public function error()
     {
         return $this->belongsTo($this->getConfig()->get('error_model'));
