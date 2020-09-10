@@ -1,5 +1,8 @@
 language: php
 
+env:
+  - COMPOSER_MEMORY_LIMIT=-1
+
 php:
   - 5.3
   - 5.4
