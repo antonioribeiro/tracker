@@ -1,7 +1,7 @@
 {
-    "name": "pragmarx/tracker",
+    "name": "KevinLinggajaya/tracker",
 
-    "description": "A Laravel Visitor Tracker",
+    "description": "fork with fix to package",
 
     "keywords": ["tracker", "tracking", "visitor", "logging", "user agent", "mobile detection", "laravel", "pragmarx"],
 
