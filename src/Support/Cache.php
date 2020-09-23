@@ -23,13 +23,13 @@ class Cache
     public function cachePut($cacheKey, $model)
     {
         if ($this->config->get('cache_enabled')) {
-            IlluminateCache::put($cacheKey, $model, 10);
+            IlluminateCache::put($cacheKey, $model, $this->config->get('cache_ttl', 3600));
         }
     }
 
     private function extractAttributes($attributes)
     {
-        if (is_array($attributes) || is_string($attributes)) {
+        if (is_array($attributes)) {
             return $attributes;
         }
 

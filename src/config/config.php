@@ -13,6 +13,11 @@ return [
     'cache_enabled' => true,
 
     /*
+     * Cache timeout
+     */
+    'cache_ttl' => 86400,
+
+    /*
      * Deffer booting for middleware use
      */
     'use_middleware' => false,
