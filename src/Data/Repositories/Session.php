@@ -132,7 +132,7 @@ class Session extends Repository
         $wasComplete = true;
 
         foreach ($this->sessionInfo as $key => $value) {
-            if ($key === 'user_agent') {
+            if (in_array($key,  ['user_agent', 'user_type'])) {
                 continue;
             }
             if ($sessionData[$key] !== $value) {
