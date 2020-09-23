@@ -227,7 +227,7 @@ class Tracker
     protected function logUntrackable($item)
     {
         if ($this->config->get('log_untrackable_sessions') && !isset($this->loggedItems[$item])) {
-            $this->getLogger()->warning('TRACKER (unable to track item): '.$item);
+            $this->getLogger()->warning('TRACKER (unable to track item): ' . $item);
 
             $this->loggedItems[$item] = $item;
         }
@@ -239,20 +239,21 @@ class Tracker
     protected function makeSessionData()
     {
         $sessionData = [
-            'user_id'      => $this->getUserId(),
-            'device_id'    => $this->getDeviceId(),
-            'client_ip'    => $this->request->getClientIp(),
-            'geoip_id'     => $this->getGeoIpId(),
-            'agent_id'     => $this->getAgentId(),
-            'referer_id'   => $this->getRefererId(),
-            'cookie_id'    => $this->getCookieId(),
-            'language_id'  => $this->getLanguageId(),
-            'is_robot'     => $this->isRobot(),
+            'user_id'     => $this->getUserId(),
+            'user_type'   => $this->getUserType(),
+            'device_id'   => $this->getDeviceId(),
+            'client_ip'   => $this->request->getClientIp(),
+            'geoip_id'    => $this->getGeoIpId(),
+            'agent_id'    => $this->getAgentId(),
+            'referer_id'  => $this->getRefererId(),
+            'cookie_id'   => $this->getCookieId(),
+            'language_id' => $this->getLanguageId(),
+            'is_robot'    => $this->isRobot(),
 
             // The key user_agent is not present in the sessions table, but
             // it's internally used to check if the user agent changed
             // during a session.
-            'user_agent' => $this->dataRepositoryManager->getCurrentUserAgent(),
+            'user_agent'  => $this->dataRepositoryManager->getCurrentUserAgent(),
         ];
 
         return $this->sessionData = $this->dataRepositoryManager->checkSessionData($sessionData, $this->sessionData);
@@ -270,6 +271,13 @@ class Tracker
     {
         return $this->config->get('log_users')
             ? $this->dataRepositoryManager->getCurrentUserId()
+            : null;
+    }
+
+    public function getUserType()
+    {
+        return $this->config->get('log_users')
+            ? $this->dataRepositoryManager->getCurrentUserType()
             : null;
     }
 
@@ -304,14 +312,14 @@ class Tracker
     public function isTrackable()
     {
         return $this->config->get('enabled') &&
-                $this->logIsEnabled() &&
-                $this->allowConsole() &&
-                $this->parserIsAvailable() &&
-                $this->isTrackableIp() &&
-                $this->isTrackableEnvironment() &&
-                $this->routeIsTrackable() &&
-                $this->pathIsTrackable() &&
-                $this->notRobotOrTrackable();
+            $this->logIsEnabled() &&
+            $this->allowConsole() &&
+            $this->parserIsAvailable() &&
+            $this->isTrackableIp() &&
+            $this->isTrackableEnvironment() &&
+            $this->routeIsTrackable() &&
+            $this->pathIsTrackable() &&
+            $this->notRobotOrTrackable();
     }
 
     public function isTrackableEnvironment()
@@ -322,7 +330,7 @@ class Tracker
         );
 
         if (!$trackable) {
-            $this->logUntrackable('environment '.$this->laravel->environment().' is not trackable.');
+            $this->logUntrackable('environment ' . $this->laravel->environment() . ' is not trackable.');
         }
 
         return $trackable;
@@ -336,7 +344,7 @@ class Tracker
         );
 
         if (!$trackable) {
-            $this->logUntrackable($ipAddress.' is not trackable.');
+            $this->logUntrackable($ipAddress . ' is not trackable.');
         }
 
         return $trackable;
@@ -447,7 +455,7 @@ class Tracker
         }
 
         if (!$trackable = $this->dataRepositoryManager->routeIsTrackable($this->route)) {
-            $this->logUntrackable('route '.$this->route->getCurrentRoute()->getName().' is not trackable.');
+            $this->logUntrackable('route ' . $this->route->getCurrentRoute()->getName() . ' is not trackable.');
         }
 
         return $trackable;
@@ -456,7 +464,7 @@ class Tracker
     public function pathIsTrackable()
     {
         if (!$trackable = $this->dataRepositoryManager->pathIsTrackable($this->request->path())) {
-            $this->logUntrackable('path '.$this->request->path().' is not trackable.');
+            $this->logUntrackable('path ' . $this->request->path() . ' is not trackable.');
         }
 
         return $trackable;

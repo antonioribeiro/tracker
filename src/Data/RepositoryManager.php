@@ -379,6 +379,11 @@ class RepositoryManager implements RepositoryManagerInterface
         return $this->authentication->getCurrentUserId();
     }
 
+    public function getCurrentUserType()
+    {
+        return $this->authentication->user()->getMorphClass();
+    }
+
     /**
      * @return array
      */
