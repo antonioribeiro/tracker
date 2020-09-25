@@ -257,7 +257,9 @@ class RepositoryManager implements RepositoryManagerInterface
     public function createLog($data)
     {
         $this->logRepository->createLog($data);
-
+        if($this->logRepository->getCurrentLogId()){
+            $this->session->put('tracker_log_id', $this->logRepository->getCurrentLogId());
+        }
         $this->sqlQueryRepository->fire();
     }
 
