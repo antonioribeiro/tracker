@@ -375,5 +375,5 @@ return [
     /*
      * Set a default user agent
      */
-    'default_user_agent' => ''
+    'default_user_agent' => '',
 ];
