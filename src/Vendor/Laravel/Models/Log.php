@@ -50,8 +50,8 @@ class Log extends Base
         $query = $this->select(
             $this->getConnection()->raw('DATE(created_at) as date, count(*) as total')
         )->groupBy(
-                $this->getConnection()->raw('DATE(created_at)')
-            )
+            $this->getConnection()->raw('DATE(created_at)')
+        )
             ->period($minutes)
             ->orderBy('date');
 

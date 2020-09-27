@@ -260,7 +260,7 @@ class Stats extends Controller
         ]);
 
         return Datatables::of($query)
-                ->edit_column('id', function ($row) use ($username_column) {
+                ->edit_column('id', function ($row) {
                     $uri = route('tracker.stats.log', $row->uuid);
 
                     return '<a href="'.$uri.'">'.$row->id.'</a>';
@@ -284,7 +284,7 @@ class Stats extends Controller
                     return $row->user ? $row->user->$username_column : 'guest';
                 })
 
-                ->add_column('device', function ($row) use ($username_column) {
+                ->add_column('device', function ($row) {
                     $model = ($row->device && $row->device->model && $row->device->model !== 'unavailable' ? '['.$row->device->model.']' : '');
 
                     $platform = ($row->device && $row->device->platform ? ' ['.trim($row->device->platform.' '.$row->device->platform_version).']' : '');
@@ -296,27 +296,27 @@ class Stats extends Controller
                             : '';
                 })
 
-                ->add_column('browser', function ($row) use ($username_column) {
+                ->add_column('browser', function ($row) {
                     return $row->agent && $row->agent
                             ? $row->agent->browser.' ('.$row->agent->browser_version.')'
                             : '';
                 })
 
-                ->add_column('language', function ($row) use ($username_column) {
+                ->add_column('language', function ($row) {
                     return $row->language && $row->language
                         ? $row->language->preference
                         : '';
                 })
 
-                ->add_column('referer', function ($row) use ($username_column) {
+                ->add_column('referer', function ($row) {
                     return $row->referer ? $row->referer->domain->name : '';
                 })
 
-                ->add_column('pageViews', function ($row) use ($username_column) {
+                ->add_column('pageViews', function ($row) {
                     return $row->page_views;
                 })
 
-                ->add_column('lastActivity', function ($row) use ($username_column) {
+                ->add_column('lastActivity', function ($row) {
                     return $row->updated_at->diffForHumans();
                 })
 
