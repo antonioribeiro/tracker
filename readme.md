@@ -162,8 +162,7 @@ return Tracker::logByRouteName('user.profile')
             $query
                 ->where('parameter', 'id')
                 ->where('value', 1);
-        })
-        ->count();
+        })->count();
 ```
 
 And if you need count how many unique visitors accessed that route, you can do:
