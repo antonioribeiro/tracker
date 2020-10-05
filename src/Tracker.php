@@ -88,7 +88,7 @@ class Tracker
 
     public function checkCurrentUser()
     {
-        if (!$this->sessionData['user_id'] && $user_id = $this->getUserId()) {
+        if (!$this->sessionData['user_id'] && $user_id = $this->getUserId() && !$this->sessionData['user_type'] && $user_type = $this->getUserType()) {
             return true;
         }
 
@@ -530,11 +530,12 @@ class Tracker
         $this->enabled = false;
     }
 
-    public function userDevices($minutes, $user_id = null, $results = true)
+    public function userDevices($minutes, $user_id = null, $user_type = null, $results = true)
     {
         return $this->dataRepositoryManager->userDevices(
             Minutes::make($minutes),
             $user_id,
+            $user_type,
             $results
         );
     }

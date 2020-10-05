@@ -52,7 +52,7 @@ class Authentication
 
     private function getAuthentication()
     {
-        foreach ((array) $this->config->get('authentication_ioc_binding') as $binding) {
+        foreach ((array)$this->config->get('authentication_ioc_binding') as $binding) {
             $this->authentication[] = $this->app->make($binding);
         }
 
@@ -68,6 +68,13 @@ class Authentication
     {
         if ($this->check()) {
             return $this->user()->{$this->config->get('authenticated_user_id_column')};
+        }
+    }
+
+    public function getCurrentUserType()
+    {
+        if ($this->check()) {
+            return $this->user()->getMorphClass();
         }
     }
 }

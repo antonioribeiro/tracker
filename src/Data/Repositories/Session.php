@@ -70,8 +70,8 @@ class Session extends Repository
     {
         $data = $this->getSessionData();
 
-        if (isset($data['user_id'])) {
-            if ($data['user_id'] !== $this->sessionInfo['user_id']) {
+        if (isset($data['user_id']) && isset($data['user_type'])) {
+            if ($data['user_id'] !== $this->sessionInfo['user_id'] && $data['user_type'] !== $this->sessionInfo['user_type']) {
                 return false;
             }
         }
@@ -254,7 +254,7 @@ class Session extends Repository
         return $query;
     }
 
-    public function userDevices($minutes, $user_id, $results)
+    public function userDevices($minutes, $user_id, $user_type, $results)
     {
         if (!$user_id) {
             return [];
@@ -263,7 +263,8 @@ class Session extends Repository
         $sessions = $this
             ->getSessions()
             ->period($minutes)
-            ->where('user_id', $user_id);
+            ->where('user_id', $user_id)
+            ->where('user_type', $user_type);
 
         if ($results) {
             $sessions = $sessions->get()->pluck('device')->unique();
