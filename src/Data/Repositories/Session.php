@@ -185,7 +185,7 @@ class Session extends Repository
     {
         $data = $data ?: $this->getSessionData();
 
-        if (!$data) {
+        if (!$data || (!empty($data['user_id']) && !empty($data['user_type']) && is_null($this->sessionInfo['user_id']) && is_null($this->sessionInfo['user_type']))) {
             $this->resetSessionUuid($data);
 
             $this->sessionIsKnownOrCreateSession();
