@@ -2,12 +2,13 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Controllers;
 
-use Bllim\Datatables\Facade\Datatables;
-use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
-use PragmaRX\Tracker\Vendor\Laravel\Facade as Tracker;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
+use Bllim\Datatables\Facade\Datatables;
 use PragmaRX\Tracker\Vendor\Laravel\Support\Session;
+use PragmaRX\Tracker\Vendor\Laravel\Facade as Tracker;
 
 class Stats extends Controller
 {
@@ -325,12 +326,12 @@ class Stats extends Controller
 
     private function isAuthenticated()
     {
-        return $this->authentication->check();
+        return Auth::guard('admins')->check();
     }
 
     private function hasAdminProperty()
     {
-        $user = $this->authentication->user();
+        $user = Auth::guard('admins')->user();
 
         foreach ($this->adminProperties as $property) {
             $propertyCamel = Str::camel($property);
@@ -350,7 +351,7 @@ class Stats extends Controller
 
     private function isAdmin()
     {
-        $user = $this->authentication->user();
+        $user = Auth::guard('admins')->user();
 
         foreach ($this->adminProperties as $property) {
             $propertyCamel = Str::camel($property);
