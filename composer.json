@@ -1,7 +1,7 @@
 {
-    "name": "pragmarx/tracker",
+    "name": "rahernande96/tracker",
 
-    "description": "A Laravel Visitor Tracker",
+    "description": "A Laravel Visitor Tracker (Fork pragmarx/tracker)",
 
     "keywords": ["tracker", "tracking", "visitor", "logging", "user agent", "mobile detection", "laravel", "pragmarx"],
 
@@ -50,7 +50,7 @@
         },
         "laravel": {
             "providers": [
-               "PragmaRX\\Tracker\\Vendor\\Laravel\\ServiceProvider"
+                "PragmaRX\\Tracker\\Vendor\\Laravel\\ServiceProvider"
             ],
             "aliases": {
                 "Tracker": "PragmaRX\\Tracker\\Vendor\\Laravel\\Facade"
