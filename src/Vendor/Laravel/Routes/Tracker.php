@@ -1,9 +1,9 @@
 <?php
-namespace PragmaRX\Tracker\Vendor\Laravel\Controllers;
+namespace PragmaRX\Tracker\Vendor\Laravel\Routes;
 
 Class Tracker {
 
-protected function loadRoutes()
+public static function load()
     {
         if (!config('tracker.stats_panel_enabled')) {
             return false;
