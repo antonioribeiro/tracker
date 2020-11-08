@@ -76,9 +76,6 @@ class ServiceProvider extends PragmaRXServiceProvider
         if (!$this->getConfig('enabled')) {
             return false;
         }
-
-        $this->loadRoutes();
-
         $this->registerErrorHandler();
 
         if (!$this->getConfig('use_middleware')) {
@@ -479,57 +476,7 @@ class ServiceProvider extends PragmaRXServiceProvider
         });
     }
 
-    protected function loadRoutes()
-    {
-        if (!$this->getConfig('stats_panel_enabled')) {
-            return false;
-        }
-
-        $prefix = $this->getConfig('stats_base_uri');
-
-        $namespace = $this->getConfig('stats_controllers_namespace');
-
-        $filters = [];
-
-        if ($before = $this->getConfig('stats_routes_before_filter')) {
-            $filters['before'] = $before;
-        }
-
-        if ($after = $this->getConfig('stats_routes_after_filter')) {
-            $filters['after'] = $after;
-        }
-
-        if ($middleware = $this->getConfig('stats_routes_middleware')) {
-            $filters['middleware'] = $middleware;
-        }
-
-        $router = $this->app->make('router');
-
-        $router->group(['namespace' => $namespace], function () use ($prefix, $router, $filters) {
-            $router->group($filters, function () use ($prefix, $router) {
-                $router->group(['prefix' => $prefix], function ($router) {
-                    $router->get('/', ['as' => 'tracker.stats.index', 'uses' => 'Stats@index']);
-
-                    $router->get('log/{uuid}', ['as' => 'tracker.stats.log', 'uses' => 'Stats@log']);
-
-                    $router->get('api/pageviews', ['as' => 'tracker.stats.api.pageviews', 'uses' => 'Stats@apiPageviews']);
-
-                    $router->get('api/pageviewsbycountry', ['as' => 'tracker.stats.api.pageviewsbycountry', 'uses' => 'Stats@apiPageviewsByCountry']);
-
-                    $router->get('api/log/{uuid}', ['as' => 'tracker.stats.api.log', 'uses' => 'Stats@apiLog']);
-
-                    $router->get('api/errors', ['as' => 'tracker.stats.api.errors', 'uses' => 'Stats@apiErrors']);
-
-                    $router->get('api/events', ['as' => 'tracker.stats.api.events', 'uses' => 'Stats@apiEvents']);
-
-                    $router->get('api/users', ['as' => 'tracker.stats.api.users', 'uses' => 'Stats@apiUsers']);
-
-                    $router->get('api/visits', ['as' => 'tracker.stats.api.visits', 'uses' => 'Stats@apiVisits']);
-                });
-            });
-        });
-    }
-
+   
     protected function registerDatatables()
     {
         $this->registerServiceProvider('Bllim\Datatables\DatatablesServiceProvider');
