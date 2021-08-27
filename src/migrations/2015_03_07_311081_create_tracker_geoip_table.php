@@ -30,6 +30,7 @@ class CreateTrackerGeoipTable extends Migration
                 $table->string('country_code3', 3)->nullable()->index();
                 $table->string('country_name')->nullable()->index();
                 $table->string('region', 2)->nullable();
+                $table->string('region_name', 255)->nullable();
                 $table->string('city', 50)->nullable()->index();
                 $table->string('postal_code', 20)->nullable();
                 $table->bigInteger('area_code')->nullable();

@@ -6,6 +6,7 @@ use Illuminate\Routing\Router as IlluminateRouter;
 use Illuminate\Session\Store as IlluminateSession;
 use PragmaRX\Support\Config;
 use PragmaRX\Tracker\Support\GeoFreeIp;
+use PragmaRX\Tracker\Support\Ip2location;
 use PragmaRX\Tracker\Data\Repositories\Agent;
 use PragmaRX\Tracker\Data\Repositories\Connection;
 use PragmaRX\Tracker\Data\Repositories\Cookie;
@@ -86,6 +87,8 @@ class RepositoryManager implements RepositoryManagerInterface
      * @var GeoFreeIp
      */
     private $geoIp;
+
+    private $geoIp2;
 
     private $geoIpRepository;
 
@@ -191,6 +194,8 @@ class RepositoryManager implements RepositoryManagerInterface
         $this->config = $config;
 
         $this->geoIp = $geoIp;
+
+        $this->geoIp2 =  new Ip2location($this->config->get('geoip_ip2_key'));
 
         $this->sessionRepository = $sessionRepository;
 
@@ -422,15 +427,29 @@ class RepositoryManager implements RepositoryManagerInterface
     public function getGeoIpId($clientIp)
     {
         $id = null;
+        $clientIp = '189.115.93.130';
+        // $clientIp = '170.0.57.252';
+        if ($this->config->get('geoip_free')) {
+            if ($geoIpData = $this->geoIp->searchAddr($clientIp)) {
+                $id = $this->geoIpRepository->findOrCreate(
+                    $geoIpData,
+                    ['latitude', 'longitude']
+                );
+            }
 
-        if ($geoIpData = $this->geoIp->searchAddr($clientIp)) {
-            $id = $this->geoIpRepository->findOrCreate(
-                $geoIpData,
-                ['latitude', 'longitude']
-            );
+            return $id;
         }
 
-        return $id;
+        if ($this->config->get('geoip_ip2')) {
+            if ($geoIpData = $this->geoIp2->searchAddr($clientIp)) {
+                $id = $this->geoIpRepository->findOrCreate(
+                    $geoIpData,
+                    ['region', 'city']
+                );
+            }
+
+            return $id;
+        }
     }
 
     public function getLastSessions($minutes, $results)
