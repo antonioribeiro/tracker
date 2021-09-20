@@ -282,6 +282,21 @@ class Session extends Repository
         return $this->getModel();
     }
 
+    public function resetSession()
+    {
+        $this->sessionInfo['uuid'] = null;
+
+        $data = $this->sessionInfo;
+
+        unset($data['uuid']);
+
+        $this->putSessionData($data);
+
+        $this->checkSessionUuid();
+
+        return $data;
+    }
+
     public function updateSessionData($data)
     {
         $session = $this->checkIfUserChanged($data, $this->find($this->getSessionData('id')));

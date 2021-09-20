@@ -100,6 +100,11 @@ class Tracker
         return $this->dataRepositoryManager->sessionRepository->getCurrent();
     }
 
+    public function resetSession()
+    {
+        return $this->dataRepositoryManager->sessionRepository->resetSession();
+    }
+
     protected function deleteCurrentLog()
     {
         $this->dataRepositoryManager->logRepository->delete();
