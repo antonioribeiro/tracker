@@ -44,7 +44,7 @@ class Handler implements ExceptionHandler
         return call_user_func($this->originalExceptionHandler, $throwable);
     }
 
-    public function handleError($err_severity, $err_msg, $err_file, $err_line, array $err_context)
+    public function handleError($err_severity, $err_msg, $err_file, $err_line, array $err_context = [])
     {
         try {
             $error = ExceptionFactory::make($err_severity, $err_msg);
