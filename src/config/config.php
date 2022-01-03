@@ -250,6 +250,11 @@ return [
     'tracker_session_name' => 'tracker_session',
 
     /*
+     * The visit ends when no new events arrive from the visitor for a certain time.
+     */
+    'tracker_visit_close' => 30,
+
+    /*
      * ** IMPORTANT **
      * Change the user model to your own.
      * If the model is under a different connection, be specific.

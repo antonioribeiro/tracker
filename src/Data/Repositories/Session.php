@@ -98,11 +98,22 @@ class Session extends Repository
         } else {
             $session = $this->find($this->getSessionData('id'));
 
-            $session->updated_at = Carbon::now();
+            if ($this->config->get('tracker_visit_close') &&
+                (is_null($session->user_id)) &&
+                ($session->updated_at < Carbon::now()->subMinutes($this->config->get('tracker_visit_close')))
+            ) {
+                $this->resetSessionUuid();
 
-            $session->save();
+                $this->sessionSetId($this->findOrCreate($this->sessionInfo, ['uuid']));
 
-            $this->sessionInfo['id'] = $this->getSessionData('id');
+                $known = false;
+            } else {
+                $session->updated_at = Carbon::now();
+
+                $session->save();
+
+                $this->sessionInfo['id'] = $this->getSessionData('id');
+            }
         }
 
         return $known;
