@@ -174,6 +174,7 @@ class Tracker
     {
         return [
             'session_id' => $this->getSessionId(true),
+            'cookie_id'  => $this->getCookieId(),
             'method'     => $this->request->method(),
             'path_id'    => $this->getPathId(),
             'query_id'   => $this->getQueryId(),
@@ -244,6 +245,7 @@ class Tracker
     protected function makeSessionData()
     {
         $sessionData = [
+            'session_id'   => session_id(),
             'user_id'      => $this->getUserId(),
             'device_id'    => $this->getDeviceId(),
             'client_ip'    => $this->request->getClientIp(),
@@ -276,6 +278,13 @@ class Tracker
         return $this->config->get('log_users')
             ? $this->dataRepositoryManager->getCurrentUserId()
             : null;
+    }
+
+    public function setUserId($user_id)
+    {
+        $session = $this->dataRepositoryManager->sessionRepository->getCurrent();
+        $session->user_id = $user_id;
+        $session->save();
     }
 
     /**
