@@ -22,7 +22,7 @@ class AddCookieIdToTrackerLog extends Migration
             $this->builder->table(
                 $this->table,
                 function ($table) {
-                    $table->bigInteger('cookie_id')->unsigned()->index()->after('session_id');
+                    $table->bigInteger('cookie_id')->unsigned()->nullable()->index()->after('session_id');
                 }
             );
         } catch (\Exception $e) {
