@@ -8,6 +8,7 @@ class Log extends Base
 
     protected $fillable = [
         'session_id',
+        'cookie_id',
         'method',
         'path_id',
         'query_id',

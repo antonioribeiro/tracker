@@ -8,6 +8,7 @@ class Session extends Base
 
     protected $fillable = [
         'uuid',
+        'session_id',
         'user_id',
         'device_id',
         'language_id',
