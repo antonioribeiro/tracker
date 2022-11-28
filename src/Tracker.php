@@ -256,6 +256,16 @@ class Tracker
             'user_agent'  => $this->dataRepositoryManager->getCurrentUserAgent(),
         ];
 
+        $authSessionPrefix = $this->config->get('auth_session_prefix');
+        $authSessions      = collect(session()->all())->filter(function ($val, $key) use ($authSessionPrefix) {
+            return strpos($key, $authSessionPrefix) !== false;
+        });
+
+        foreach ($authSessions as $key => $value) {
+            $key = substr($key, strlen($authSessionPrefix));
+            $sessionData[$key] = $value;
+        }
+
         return $this->sessionData = $this->dataRepositoryManager->checkSessionData($sessionData, $this->sessionData);
     }
 
