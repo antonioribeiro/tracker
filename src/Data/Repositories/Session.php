@@ -41,9 +41,27 @@ class Session extends Repository
 
     public function getCurrentId($sessionInfo)
     {
-        $this->setSessionData($sessionInfo);
+        if ($sessionInfo['user_id'] && $this->getSessionResult($sessionInfo)) {
 
-        return $this->sessionGetId($sessionInfo);
+            $session = $this->find($this->getSessionResult($sessionInfo)->_id);
+
+            $session->updated_at = Carbon::now();
+
+            $session->save();
+
+            $this->getSessions()
+                ->where('user_id', null)
+                ->where('user_type', null)
+                ->delete();
+
+            return $this->getSessionResult($sessionInfo)->_id;
+        } else {
+
+            $this->setSessionData($sessionInfo);
+
+            return $this->sessionGetId($sessionInfo);
+        }
+
     }
 
     public function setSessionData($sessinInfo)
@@ -110,11 +128,6 @@ class Session extends Repository
 
     private function sessionIsKnown()
     {
-        if ($this->getSessionResult()) {
-            $this->sessionSetId($this->getSessionResult()->_id);
-            return true;
-        }
-
         if (!$this->session->has($this->getSessionKey())) {
             return false;
         }
@@ -130,24 +143,21 @@ class Session extends Repository
         return true;
     }
 
-    private function getSessionResult()
+    private function getSessionResult($sessionInfo)
     {
-        $session = $this
+        return $this
             ->getSessions()
-            ->where('user_id', $this->sessionInfo['user_id'])
-            ->where('user_type', $this->sessionInfo['user_type'])
-            ->where('device_id', $this->sessionInfo['device_id'])
-            ->where('client_ip', $this->sessionInfo['client_ip'])
-            ->where('geoip_id', $this->sessionInfo['geoip_id'])
-            ->where('agent_id', $this->sessionInfo['agent_id'])
-            ->where('referer_id', $this->sessionInfo['referer_id'])
-            ->where('cookie_id', $this->sessionInfo['cookie_id'])
-            ->where('language_id', $this->sessionInfo['language_id'])
-            ->where('is_robot', $this->sessionInfo['is_robot'])
+            ->where('user_id', $sessionInfo['user_id'])
+            ->where('user_type', $sessionInfo['user_type'])
+            ->where('device_id', $sessionInfo['device_id'])
+            ->where('client_ip', $sessionInfo['client_ip'])
+            ->where('geoip_id', $sessionInfo['geoip_id'])
+            ->where('agent_id', $sessionInfo['agent_id'])
+            ->where('cookie_id', $sessionInfo['cookie_id'])
+            ->where('language_id', $sessionInfo['language_id'])
+            ->where('is_robot', $sessionInfo['is_robot'])
             ->orderBy('updated_at', 'desc')
             ->first();
-
-        return $session;
     }
 
     private function ensureSessionDataIsComplete()
