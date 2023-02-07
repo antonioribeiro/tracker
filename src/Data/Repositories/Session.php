@@ -110,6 +110,11 @@ class Session extends Repository
 
     private function sessionIsKnown()
     {
+        if ($this->getSessionResult()) {
+            $this->sessionSetId($this->getSessionResult()->_id);
+            return true;
+        }
+
         if (!$this->session->has($this->getSessionKey())) {
             return false;
         }
@@ -123,6 +128,26 @@ class Session extends Repository
         }
 
         return true;
+    }
+
+    private function getSessionResult()
+    {
+        $session = $this
+            ->getSessions()
+            ->where('user_id', $this->sessionInfo['user_id'])
+            ->where('user_type', $this->sessionInfo['user_type'])
+            ->where('device_id', $this->sessionInfo['device_id'])
+            ->where('client_ip', $this->sessionInfo['client_ip'])
+            ->where('geoip_id', $this->sessionInfo['geoip_id'])
+            ->where('agent_id', $this->sessionInfo['agent_id'])
+            ->where('referer_id', $this->sessionInfo['referer_id'])
+            ->where('cookie_id', $this->sessionInfo['cookie_id'])
+            ->where('language_id', $this->sessionInfo['language_id'])
+            ->where('is_robot', $this->sessionInfo['is_robot'])
+            ->orderBy('updated_at', 'desc')
+            ->first();
+
+        return $session;
     }
 
     private function ensureSessionDataIsComplete()
