@@ -3,8 +3,8 @@
 namespace PragmaRX\Tracker\Data\Repositories;
 
 use Carbon\Carbon;
+use Illuminate\Session\SessionManager;
 use PragmaRX\Support\Config;
-use PragmaRX\Support\PhpSession;
 use Ramsey\Uuid\Uuid as UUID;
 
 class Session extends Repository
@@ -17,7 +17,7 @@ class Session extends Repository
 
     protected $relations = ['device', 'user', 'log', 'language', 'agent', 'referer', 'geoIp', 'cookie'];
 
-    public function __construct($model, Config $config, PhpSession $session)
+    public function __construct($model, Config $config, SessionManager $session)
     {
         $this->config = $config;
 
@@ -28,7 +28,7 @@ class Session extends Repository
 
     public function findByUuid($uuid)
     {
-        list($model, $cacheKey) = $this->cache->findCached($uuid, 'uuid', 'PragmaRX\Tracker\Vendor\Laravel\Models\Session');
+        [$model, $cacheKey] = $this->cache->findCached($uuid, 'uuid', 'PragmaRX\Tracker\Vendor\Laravel\Models\Session');
 
         if (!$model) {
             $model = $this->newQuery()->where('uuid', $uuid)->with($this->relations)->first();

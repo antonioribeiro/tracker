@@ -10,9 +10,9 @@ abstract class Repository implements RepositoryInterface
 
     protected $result;
 
-    protected $connection;
+    protected string $connection;
 
-    protected $className;
+    protected string $className;
 
     protected $relations;
 

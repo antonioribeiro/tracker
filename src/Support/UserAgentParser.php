@@ -3,20 +3,26 @@
 namespace PragmaRX\Tracker\Support;
 
 use UAParser\Parser;
+use UAParser\Result\Client;
+use UAParser\Result\Device;
+use UAParser\Result\OperatingSystem;
+use UAParser\Result\UserAgent;
 
 class UserAgentParser
 {
-    public $parser;
+    public Client $parser;
 
-    public $userAgent;
+    public UserAgent $userAgent;
 
-    public $operatingSystem;
+    public OperatingSystem $operatingSystem;
 
-    public $device;
+    public Device $device;
 
-    public $originalUserAgent;
+    public string $originalUserAgent;
 
-    public function __construct($basePath, $userAgent = '')
+    public string $basePath;
+
+    public function __construct(string $basePath, string $userAgent = '')
     {
         $this->parser = Parser::create()->parse($this->getUserAgent($userAgent));
 
@@ -31,14 +37,14 @@ class UserAgentParser
         $this->originalUserAgent = $this->parser->originalUserAgent;
     }
 
-    public function getOperatingSystemVersion()
+    public function getOperatingSystemVersion(): string
     {
-        return    $this->operatingSystem->major.
-                ($this->operatingSystem->minor !== null ? '.'.$this->operatingSystem->minor : '').
-                ($this->operatingSystem->patch !== null ? '.'.$this->operatingSystem->patch : '');
+        return $this->operatingSystem->major .
+            ($this->operatingSystem->minor !== null ? '.' . $this->operatingSystem->minor : '') .
+            ($this->operatingSystem->patch !== null ? '.' . $this->operatingSystem->patch : '');
     }
 
-    protected function getUserAgent($userAgent)
+    protected function getUserAgent(string $userAgent)
     {
         if (!empty($userAgent)) {
             return $userAgent;
@@ -51,10 +57,10 @@ class UserAgentParser
         return config('tracker.default_user_agent', '');
     }
 
-    public function getUserAgentVersion()
+    public function getUserAgentVersion(): string
     {
-        return  $this->userAgent->major.
-                ($this->userAgent->minor !== null ? '.'.$this->userAgent->minor : '').
-                ($this->userAgent->patch !== null ? '.'.$this->userAgent->patch : '');
+        return $this->userAgent->major .
+            ($this->userAgent->minor !== null ? '.' . $this->userAgent->minor : '') .
+            ($this->userAgent->patch !== null ? '.' . $this->userAgent->patch : '');
     }
 }

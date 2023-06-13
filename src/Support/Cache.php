@@ -13,17 +13,25 @@ class Cache
 
     private $config;
 
+    private $cache;
+
+    private int $ttl;
+
     public function __construct(Config $config, Application $app)
     {
         $this->config = $config;
 
         $this->app = $app;
+
+        $this->cache = IlluminateCache::store($this->config->get('cache_source'));
+
+        $this->ttl = $this->config->get('cache_ttl', 3600);
     }
 
     public function cachePut($cacheKey, $model)
     {
         if ($this->config->get('cache_enabled')) {
-            IlluminateCache::put($cacheKey, $model, $this->config->get('cache_ttl', 3600));
+            $this->cache->put($cacheKey, $model, $this->ttl);
         }
     }
 
@@ -71,7 +79,7 @@ class Cache
     public function findCachedWithKey($key)
     {
         if ($this->config->get('cache_enabled')) {
-            return IlluminateCache::get($key);
+            return $this->cache->get($key);
         }
     }
 
