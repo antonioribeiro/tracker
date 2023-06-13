@@ -22,17 +22,17 @@ class Log extends Base
 
     public function session()
     {
-        return $this->belongsTo($this->getConfig()->get('session_model'));
+        return $this->belongsTo($this->getConfig()->get('session_model'), 'session_id');
     }
 
     public function path()
     {
-        return $this->belongsTo($this->getConfig()->get('path_model'));
+        return $this->belongsTo($this->getConfig()->get('path_model'), 'path_id');
     }
 
     public function error()
     {
-        return $this->belongsTo($this->getConfig()->get('error_model'));
+        return $this->belongsTo($this->getConfig()->get('error_model'), 'error_id');
     }
 
     public function logQuery()
@@ -45,6 +45,11 @@ class Log extends Base
         return $this->belongsTo($this->getConfig()->get('route_path_model'), 'route_path_id');
     }
 
+    public function referer()
+    {
+        return $this->belongsTo($this->getConfig()->get('referer_model'), 'referer_id');
+    }
+    
     public function pageViews($minutes, $results)
     {
         $query = $this->select(

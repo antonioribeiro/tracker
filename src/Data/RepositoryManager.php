@@ -34,122 +34,47 @@ use PragmaRX\Tracker\Services\Authentication;
 use PragmaRX\Tracker\Support\CrawlerDetector;
 use PragmaRX\Tracker\Support\LanguageDetect;
 use PragmaRX\Tracker\Support\MobileDetect;
+use PragmaRX\Tracker\Support\UserAgentParser;
 
 class RepositoryManager implements RepositoryManagerInterface
 {
-    /**
-     * @var Path
-     */
-    private $pathRepository;
+    protected Path                     $pathRepository;
+    protected Query                    $queryRepository;
+    protected QueryArgument            $queryArgumentRepository;
+    protected Domain                   $domainRepository;
+    protected Referer                  $refererRepository;
+    protected Route                    $routeRepository;
+    protected RoutePath                $routePathRepository;
+    protected RoutePathParameter       $routePathParameterRepository;
+    protected Error                    $errorRepository;
+    protected GeoIp                    $geoIp;
+    protected GeoIpRepository          $geoIpRepository;
+    protected SqlQuery                 $sqlQueryRepository;
+    protected SqlQueryBinding          $sqlQueryBindingRepository;
+    protected SqlQueryLog              $sqlQueryLogRepository;
+    protected SqlQueryBindingParameter $sqlQueryBindingParameterRepository;
+    protected Connection               $connectionRepository;
+    protected Event                    $eventRepository;
+    protected EventLog                 $eventLogRepository;
+    protected SystemClass              $systemClassRepository;
+    protected ?UserAgentParser         $userAgentParser;
+    protected CrawlerDetector          $crawlerDetector;
+    protected Language                 $languageRepository;
+    protected LanguageDetect           $languageDetect;
+    protected Authentication           $authentication;
+    protected MobileDetect             $mobileDetect;
+    protected IlluminateSession        $session;
+    protected Config                   $config;
+    public Session                     $sessionRepository;
+    public Log                         $logRepository;
+    protected Cookie                   $cookieRepository;
+    private Device                     $deviceRepository;
+    protected Agent                    $agentRepository;
 
-    /**
-     * @var Query
-     */
-    private $queryRepository;
-
-    /**
-     * @var QueryArgument
-     */
-    private $queryArgumentRepository;
-
-    /**
-     * @var Domain
-     */
-    private $domainRepository;
-
-    /**
-     * @var Referer
-     */
-    private $refererRepository;
-
-    /**
-     * @var Repositories\Route
-     */
-    private $routeRepository;
-
-    /**
-     * @var Repositories\RoutePath
-     */
-    private $routePathRepository;
-
-    /**
-     * @var Repositories\RoutePathParameter
-     */
-    private $routePathParameterRepository;
-
-    /**
-     * @var Error
-     */
-    private $errorRepository;
-
-    /**
-     * @var GeoIP
-     */
-    private $geoIp;
-
-    private $geoIpRepository;
-
-    /**
-     * @var Repositories\SqlQuery
-     */
-    private $sqlQueryRepository;
-
-    /**
-     * @var Repositories\SqlQueryBinding
-     */
-    private $sqlQueryBindingRepository;
-
-    /**
-     * @var Repositories\SqlQueryLog
-     */
-    private $sqlQueryLogRepository;
-
-    private $sqlQueryBindingParameterRepository;
-
-    /**
-     * @var Repositories\Connection
-     */
-    private $connectionRepository;
-
-    /**
-     * @var Repositories\Event
-     */
-    private $eventRepository;
-
-    /**
-     * @var Repositories\EventLog
-     */
-    private $eventLogRepository;
-
-    /**
-     * @var Repositories\SystemClass
-     */
-    private $systemClassRepository;
-
-    private $userAgentParser;
-
-    /**
-     * @var CrawlerDetector
-     */
-    private $crawlerDetector;
-
-    /**
-     * @var Repositories\Language
-     */
-    private $languageRepository;
-
-    /**
-     * @var Repositories\Language
-     */
-    private $languageDetect;
-
-    /**
-     * @param \PragmaRX\Tracker\Support\UserAgentParser|null $userAgentParser
-     */
     public function __construct(
         GeoIP $geoIp,
         MobileDetect $mobileDetect,
-        $userAgentParser,
+        ?UserAgentParser $userAgentParser,
         Authentication $authentication,
         IlluminateSession $session,
         Config $config,
@@ -257,7 +182,7 @@ class RepositoryManager implements RepositoryManagerInterface
     public function createLog($data)
     {
         $this->logRepository->createLog($data);
-        if($this->logRepository->getCurrentLogId()){
+        if ($this->logRepository->getCurrentLogId()) {
             $this->session->put('tracker_log_id', $this->logRepository->getCurrentLogId());
         }
         $this->sqlQueryRepository->fire();
@@ -492,7 +417,7 @@ class RepositoryManager implements RepositoryManagerInterface
             $domain = array_pop($parts);
 
             if (count($parts) > 0) {
-                $domain = array_pop($parts).'.'.$domain;
+                $domain = array_pop($parts) . '.' . $domain;
             }
 
             $domain_id = $this->getDomainId($domain);
@@ -573,7 +498,7 @@ class RepositoryManager implements RepositoryManagerInterface
             return $name;
         }
 
-        return '/'.$route->current()->uri();
+        return '/' . $route->current()->uri();
     }
 
     /**

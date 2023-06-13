@@ -8,7 +8,7 @@ use Throwable;
 
 class Handler implements ExceptionHandler
 {
-    private $tracker;
+    private Tracker $tracker;
 
     private $illuminateHandler;
 
@@ -44,7 +44,7 @@ class Handler implements ExceptionHandler
         return call_user_func($this->originalExceptionHandler, $throwable);
     }
 
-    public function handleError($err_severity, $err_msg, $err_file, $err_line, array $err_context)
+    public function handleError($err_severity, $err_msg, $err_file, $err_line, array $err_context = [])
     {
         try {
             $error = ExceptionFactory::make($err_severity, $err_msg);
@@ -55,7 +55,7 @@ class Handler implements ExceptionHandler
         }
 
         // Call Laravel Exception Handler
-        return call_user_func($this->originalErrorHandler, $err_severity, $err_msg, $err_file, $err_line);
+        return call_user_func($this->originalErrorHandler, $err_severity, $err_msg, $err_file, $err_line, $err_context);
     }
 
     public function report(Throwable $e)

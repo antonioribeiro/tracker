@@ -21,27 +21,27 @@ class Session extends Base
 
     public function user()
     {
-        return $this->belongsTo($this->getConfig()->get('user_model'));
+        return $this->belongsTo($this->getConfig()->get('user_model'), 'user_id');
     }
 
     public function device()
     {
-        return $this->belongsTo($this->getConfig()->get('device_model'));
+        return $this->belongsTo($this->getConfig()->get('device_model'), 'device_id');
     }
 
     public function language()
     {
-        return $this->belongsTo($this->getConfig()->get('language_model'));
+        return $this->belongsTo($this->getConfig()->get('language_model'), 'language_id');
     }
 
     public function agent()
     {
-        return $this->belongsTo($this->getConfig()->get('agent_model'));
+        return $this->belongsTo($this->getConfig()->get('agent_model'), 'agent_id');
     }
 
     public function referer()
     {
-        return $this->belongsTo($this->getConfig()->get('referer_model'));
+        return $this->belongsTo($this->getConfig()->get('referer_model'), 'referer_id');
     }
 
     public function geoIp()
@@ -56,7 +56,7 @@ class Session extends Base
 
     public function log()
     {
-        return $this->hasMany($this->getConfig()->get('log_model'));
+        return $this->hasMany($this->getConfig()->get('log_model'), 'log_id');
     }
 
     public function getPageViewsAttribute()
