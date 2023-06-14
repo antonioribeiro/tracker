@@ -20,7 +20,7 @@ class Tracker
     protected LoggerInterface       $logger;
     protected Laravel               $laravel;
     protected bool                  $enabled     = true;
-    protected array                 $sessionData;
+    protected array                 $sessionData = [];
     protected array                 $loggedItems = [];
     protected bool                  $booted      = false;
     protected MessageRepository     $messageRepository;
