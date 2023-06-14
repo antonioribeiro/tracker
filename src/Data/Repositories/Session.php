@@ -28,7 +28,7 @@ class Session extends Repository
 
     public function findByUuid($uuid)
     {
-        [$model, $cacheKey] = $this->cache->findCached($uuid, 'uuid', 'PragmaRX\Tracker\Vendor\Laravel\Models\Session');
+        [$model, $cacheKey] = $this->cache->findCached($uuid, 'uuid', app()->make('tracker.config')->get('session_model'));
 
         if (!$model) {
             $model = $this->newQuery()->where('uuid', $uuid)->with($this->relations)->first();
