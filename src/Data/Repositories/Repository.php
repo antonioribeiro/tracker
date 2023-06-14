@@ -10,7 +10,7 @@ abstract class Repository implements RepositoryInterface
 
     protected $result;
 
-    protected string $connection;
+    protected string $connection = '';
 
     protected string $className;
 
@@ -50,7 +50,7 @@ abstract class Repository implements RepositoryInterface
 
     public function find($id)
     {
-        list($model, $cacheKey) = $this->cache->findCached($id, null, $this->className);
+        [$model, $cacheKey] = $this->cache->findCached($id, null, $this->className);
 
         if (!$model) {
             $model = $this->newQuery();
@@ -64,7 +64,7 @@ abstract class Repository implements RepositoryInterface
             }
         }
 
-        $this->model = $model;
+        $this->model  = $model;
         $this->result = $model;
 
         return $model;
@@ -113,7 +113,7 @@ abstract class Repository implements RepositoryInterface
      */
     public function findOrCreate($attributes, $keys = null, &$created = false, $otherModel = null)
     {
-        list($model, $cacheKey) = $this->cache->findCached($attributes, $keys, $this->className);
+        [$model, $cacheKey] = $this->cache->findCached($attributes, $keys, $this->className);
 
         if (!$model) {
             $model = $this->newQuery($otherModel);
