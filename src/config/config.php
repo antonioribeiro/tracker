@@ -175,6 +175,11 @@ return [
     ],
 
     /*
+     * Auth session prefix for extra session log
+     */
+    'auth_session_prefix' => 'tracker_auth_',
+
+    /*
      * Do you wish to log Geo IP data?
      *
      * You will need to install the geoip package
