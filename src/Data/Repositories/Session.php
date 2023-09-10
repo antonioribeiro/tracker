@@ -98,7 +98,7 @@ class Session extends Repository
         } else {
             $session = $this->find($this->getSessionData('id'));
 
-            if (!$session->updated_at || $session->updated_at->gte(now()->subMinutes(2))) {
+            if (!$session->updated_at || $session->updated_at->lte(now()->subMinutes(1))) {
                 $session->updated_at = Carbon::now();
 
                 $session->save();
@@ -187,7 +187,7 @@ class Session extends Repository
     {
         $data = $data ?: $this->getSessionData();
 
-        if (!$data || (!empty($data['user_id']) && !empty($data['user_type']) && is_null($this->sessionInfo['user_id']) && is_null($this->sessionInfo['user_type']))) {
+        if (!$data || ($data['user_id'] != $this->sessionInfo['user_id'] && $data['user_type'] != $this->sessionInfo['user_type'])) {
             $this->resetSessionUuid($data);
 
             $this->sessionIsKnownOrCreateSession();
