@@ -3,8 +3,8 @@
 namespace PragmaRX\Tracker\Data\Repositories;
 
 use Carbon\Carbon;
+use Illuminate\Session\SessionManager;
 use PragmaRX\Support\Config;
-use PragmaRX\Support\PhpSession;
 use Ramsey\Uuid\Uuid as UUID;
 
 class Session extends Repository
@@ -17,7 +17,7 @@ class Session extends Repository
 
     protected $relations = ['device', 'user', 'log', 'language', 'agent', 'referer', 'geoIp', 'cookie'];
 
-    public function __construct($model, Config $config, PhpSession $session)
+    public function __construct($model, Config $config, SessionManager $session)
     {
         $this->config = $config;
 
@@ -28,7 +28,7 @@ class Session extends Repository
 
     public function findByUuid($uuid)
     {
-        list($model, $cacheKey) = $this->cache->findCached($uuid, 'uuid', app()->make('tracker.config')->get('session_model'));
+        [$model, $cacheKey] = $this->cache->findCached($uuid, 'uuid', app()->make('tracker.config')->get('session_model'));
 
         if (!$model) {
             $model = $this->newQuery()->where('uuid', $uuid)->with($this->relations)->first();
@@ -204,8 +204,8 @@ class Session extends Repository
         $data = $this->session->get($this->getSessionKey());
 
         return $variable
-                ? (isset($data[$variable]) ? $data[$variable] : null)
-                : $data;
+            ? (isset($data[$variable]) ? $data[$variable] : null)
+            : $data;
     }
 
     private function putSessionData($data)
@@ -221,9 +221,9 @@ class Session extends Repository
     private function getSessions()
     {
         return $this
-                ->newQuery()
-                ->with($this->relations)
-                ->orderBy('updated_at', 'desc');
+            ->newQuery()
+            ->with($this->relations)
+            ->orderBy('updated_at', 'desc');
     }
 
     public function all()

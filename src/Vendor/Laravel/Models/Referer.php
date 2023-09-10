@@ -17,6 +17,6 @@ class Referer extends Base
 
     public function domain()
     {
-        return $this->belongsTo($this->getConfig()->get('domain_model'));
+        return $this->belongsTo($this->getConfig()->get('domain_model'), 'domain_id');
     }
 }

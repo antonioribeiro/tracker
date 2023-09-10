@@ -15,32 +15,17 @@ use Psr\Log\LoggerInterface;
 
 class Tracker
 {
-    protected $config;
-
-    /**
-     * @var \Illuminate\Routing\Router
-     */
-    protected $route;
-
-    protected $logger;
-
-    /**
-     * @var \Illuminate\Foundation\Application
-     */
-    protected $laravel;
-
-    protected $enabled = true;
-
-    protected $sessionData;
-
-    protected $loggedItems = [];
-
-    protected $booted = false;
-
-    /**
-     * @var MessageRepository
-     */
-    protected $messageRepository;
+    protected Config                $config;
+    protected Router                $route;
+    protected LoggerInterface       $logger;
+    protected Laravel               $laravel;
+    protected bool                  $enabled     = true;
+    protected array                 $sessionData = [];
+    protected array                 $loggedItems = [];
+    protected bool                  $booted      = false;
+    protected MessageRepository     $messageRepository;
+    protected DataRepositoryManager $dataRepositoryManager;
+    protected Request               $request;
 
     public function __construct(
         Config $config,

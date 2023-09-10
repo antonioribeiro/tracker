@@ -6,6 +6,11 @@ use PragmaRX\Support\Config;
 
 class Route extends Repository
 {
+    /**
+     * @var \PragmaRX\Support\Config
+     */
+    protected Config $config;
+
     public function __construct($model, Config $config)
     {
         parent::__construct($model);

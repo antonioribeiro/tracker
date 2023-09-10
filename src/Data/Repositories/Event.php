@@ -10,27 +10,27 @@ class Event extends Repository
     /**
      * @var EventLog
      */
-    private $eventLogRepository;
+    private EventLog $eventLogRepository;
 
     /**
      * @var SystemClass
      */
-    private $systemClassRepository;
+    private SystemClass $systemClassRepository;
 
     /**
      * @var Log
      */
-    private $logRepository;
+    private Log $logRepository;
 
     /**
      * @var \PragmaRX\Support\Config
      */
-    private $config;
+    private Config $config;
 
     /**
      * @var \PragmaRX\Tracker\Eventing\EventStorage
      */
-    private $eventStorage;
+    private EventStorage $eventStorage;
 
     public function __construct(
         $model,

@@ -3,7 +3,6 @@
 namespace PragmaRX\Tracker\Vendor\Laravel;
 
 use PragmaRX\Support\GeoIp\GeoIp;
-use PragmaRX\Support\PhpSession;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 use PragmaRX\Tracker\Data\Repositories\Agent;
 use PragmaRX\Tracker\Data\Repositories\Connection;
@@ -128,11 +127,11 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $this->registerGlobalEventLogger();
 
-//            $this->registerDatatables();
+            //            $this->registerDatatables();
 
             $this->registerMessageRepository();
 
-            $this->registerGlobalViewComposers();
+            //            $this->registerGlobalViewComposers();
         }
     }
 
@@ -281,7 +280,7 @@ class ServiceProvider extends PragmaRXServiceProvider
                 new Session(
                     $sessionModel,
                     $app['tracker.config'],
-                    new PhpSession()
+                    $app['session']
                 ),
                 $logRepository,
                 new Path($pathModel),
@@ -342,11 +341,13 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     protected function registerTablesCommand()
     {
-        $this->app->singleton('tracker.tables.command', function ($app) {
-            return new TablesCommand();
-        });
+        if ($this->app->runningInConsole()) {
+            $this->app->singleton('tracker.tables.command', function ($app) {
+                return new TablesCommand();
+            });
 
-        $this->commands('tracker.tables.command');
+            $this->commands('tracker.tables.command');
+        }
     }
 
     protected function registerExecutionCallback()
@@ -435,10 +436,10 @@ class ServiceProvider extends PragmaRXServiceProvider
     {
         if ($this->getTracker()->isEnabled()) {
             if ($query instanceof \Illuminate\Database\Events\QueryExecuted) {
-                $bindings = $query->bindings;
-                $time = $query->time;
+                $bindings       = $query->bindings;
+                $time           = $query->time;
                 $connectionName = $query->connectionName;
-                $query = $query->sql;
+                $query          = $query->sql;
             }
 
             $this->getTracker()->logSqlQuery($query, $bindings, $time, $connectionName);
@@ -544,7 +545,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      */
     public function getPackageDir()
     {
-        return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..';
+        return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..';
     }
 
     /**
@@ -565,7 +566,7 @@ class ServiceProvider extends PragmaRXServiceProvider
         $this->app->make('view')->composer('pragmarx/tracker::*', function ($view) use ($me) {
             $view->with('stats_layout', $me->getConfig('stats_layout'));
 
-            $template_path = url('/').$me->getConfig('stats_template_path');
+            $template_path = url('/') . $me->getConfig('stats_template_path');
 
             $view->with('stats_template_path', $template_path);
         });
@@ -573,11 +574,13 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     protected function registerUpdateGeoIpCommand()
     {
-        $this->app->singleton('tracker.updategeoip.command', function ($app) {
-            return new UpdateGeoIp();
-        });
+        if ($this->app->runningInConsole()) {
+            $this->app->singleton('tracker.updategeoip.command', function ($app) {
+                return new UpdateGeoIp();
+            });
 
-        $this->commands('tracker.updategeoip.command');
+            $this->commands('tracker.updategeoip.command');
+        }
     }
 
     protected function registerUserCheckCallback()
@@ -621,7 +624,7 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     public function getRootDirectory()
     {
-        return __DIR__.'/../..';
+        return __DIR__ . '/../..';
     }
 
     protected function getAppUrl()
@@ -631,7 +634,7 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     public function loadTranslations()
     {
-        $this->loadTranslationsFrom(__DIR__.'/../../lang', 'tracker');
+        $this->loadTranslationsFrom(__DIR__ . '/../../lang', 'tracker');
     }
 
     /**
