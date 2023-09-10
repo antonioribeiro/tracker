@@ -224,21 +224,22 @@ class Tracker
     protected function makeSessionData()
     {
         $sessionData = [
-            'user_id'     => $this->getUserId(),
-            'user_type'   => $this->getUserType(),
-            'device_id'   => $this->getDeviceId(),
-            'client_ip'   => $this->request->getClientIp(),
-            'geoip_id'    => $this->getGeoIpId(),
-            'agent_id'    => $this->getAgentId(),
-            'referer_id'  => $this->getRefererId(),
-            'cookie_id'   => $this->getCookieId(),
-            'language_id' => $this->getLanguageId(),
-            'is_robot'    => $this->isRobot(),
-
+            'user_id'          => $this->getUserId(),
+            'user_type'        => $this->getUserType(),
+            'device_id'        => $this->getDeviceId(),
+            'client_ip'        => $this->request->getClientIp(),
+            'geoip_id'         => $this->getGeoIpId(),
+            'agent_id'         => $this->getAgentId(),
+            'referer_id'       => $this->getRefererId(),
+            'cookie_id'        => $this->getCookieId(),
+            'language_id'      => $this->getLanguageId(),
+            'is_robot'         => $this->isRobot(),
+            'impersonation_id' => null,
+            
             // The key user_agent is not present in the sessions table, but
             // it's internally used to check if the user agent changed
             // during a session.
-            'user_agent'  => $this->dataRepositoryManager->getCurrentUserAgent(),
+            'user_agent'       => $this->dataRepositoryManager->getCurrentUserAgent(),
         ];
 
         $authSessionPrefix = $this->config->get('auth_session_prefix');
@@ -247,7 +248,7 @@ class Tracker
         });
 
         foreach ($authSessions as $key => $value) {
-            $key = substr($key, strlen($authSessionPrefix));
+            $key               = substr($key, strlen($authSessionPrefix));
             $sessionData[$key] = $value;
         }
 
