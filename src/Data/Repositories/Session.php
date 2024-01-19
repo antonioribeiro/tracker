@@ -3,7 +3,6 @@
 namespace PragmaRX\Tracker\Data\Repositories;
 
 use Carbon\Carbon;
-use Illuminate\Session\SessionManager;
 use PragmaRX\Support\Config;
 use Ramsey\Uuid\Uuid as UUID;
 
@@ -17,11 +16,11 @@ class Session extends Repository
 
     protected $relations = ['device', 'user', 'log', 'language', 'agent', 'referer', 'geoIp', 'cookie'];
 
-    public function __construct($model, Config $config, SessionManager $session)
+    public function __construct($model, Config $config)
     {
         $this->config = $config;
 
-        $this->session = $session;
+        $this->session = session();
 
         parent::__construct($model);
     }
